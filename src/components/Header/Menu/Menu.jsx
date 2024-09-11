@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
@@ -6,21 +9,26 @@ import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import MenuItem from '@mui/material/MenuItem';
 import MuiMenu from '@mui/material/Menu';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import SettingsIcon from '@mui/icons-material/Settings';
-import LogoutIcon from '@mui/icons-material/Logout';
-import TranslateIcon from '@mui/icons-material/Translate';
-import LanguageIcon from '@mui/icons-material/Language';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Typography } from '@mui/material';
 
-function Menu() {
-    const { t } = useTranslation('header');
+import Header from './Header';
+
+function Menu({ items, onChange }) {
     const [anchorEl, setAnchorEl] = useState(null);
+    const [history, setHistory] = useState([{ data: items }]);
+    const current = history[history.length - 1];
+    const { t } = useTranslation('header');
     const open = Boolean(anchorEl);
 
     const handleClick = (event) => setAnchorEl(event.currentTarget);
-    const handleClose = () => setAnchorEl(null);
+    const handleClose = () => {
+        setAnchorEl(null);
+        if (history.length > 1) {
+            handleBack();
+        }
+    };
+
+    const handleBack = () => setHistory((prev) => prev.slice(0, prev.length - 1));
 
     return (
         <Box>
@@ -51,46 +59,43 @@ function Menu() {
                     'aria-labelledby': 'basic-button',
                 }}
                 transformOrigin={{ vertical: -8, horizontal: 0 }}
+                sx={{
+                    '& .MuiAvatar-root': {
+                        width: 32,
+                        height: 32,
+                        ml: -0.5,
+                        mr: 1,
+                    },
+                }}
             >
-                <MenuItem sx={{ display: 'flex', gap: 1 }} onClick={handleClose}>
-                    <Avatar /> {t('menu.profile')}
-                </MenuItem>
-
-                <Divider />
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <PersonAddIcon fontSize="small" />
-                    </ListItemIcon>
-                    {t('menu.addAnotherAccount')}
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <LanguageIcon fontSize="small" />
-                    </ListItemIcon>
-                    {t('menu.appearance')}
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <TranslateIcon fontSize="small" />
-                    </ListItemIcon>
-                    {t('menu.language')}
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <SettingsIcon fontSize="small" />
-                    </ListItemIcon>
-                    {t('menu.settings')}
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <LogoutIcon fontSize="small" />
-                    </ListItemIcon>
-                    {t('menu.logout')}
-                </MenuItem>
+                {history.length > 1 && <Header title={current.title} onBack={handleBack} />}
+                {current.data.map((item, index) => {
+                    const isParent = !!item.children;
+                    return (
+                        <Box key={index}>
+                            {item.separate && <Divider sx={{ my: 1 }} />}
+                            <MenuItem
+                                sx={{ minWidth: '220px' }}
+                                onClick={() => {
+                                    if (isParent) {
+                                        setHistory((prev) => [...prev, item.children]);
+                                    } else onChange(item);
+                                }}
+                            >
+                                {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
+                                <Typography variant="span">{t(item.title)}</Typography>
+                            </MenuItem>
+                        </Box>
+                    );
+                })}
             </MuiMenu>
         </Box>
     );
 }
+
+Menu.propTypes = {
+    items: PropTypes.array.isRequired,
+    onChange: PropTypes.func,
+};
 
 export default Menu;

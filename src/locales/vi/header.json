@@ -2,15 +2,17 @@
     "create": "Tạo",
     "workspaces": "Không gian Làm việc",
     "recent": "Gần đây",
-    "starred": "Sao",
+    "starred": "Đánh dấu",
     "template": "Mẫu",
     "search": "Tìm Kiếm",
+    "inbox": { "title": "Hộp thư đến", "buttonTitle": "Đánh dấu đã đọc" },
     "menu": {
         "profile": "Trang cá nhân",
-        "addAnotherAccount": "Thêm tài khoản khác",
-        "appearance": "Giao diện",
+        "switchAccounts": "Chuyển đổi tài khoản",
+        "appearance": { "title": "Giao diện", "light": "Sáng", "dark": "Tối", "system": "Hệ thống" },
         "language": "Ngôn ngữ",
         "settings": "Cài đặt",
-        "logout": "Đăng xuất"
+        "logout": "Đăng xuất",
+        "login": "Đăng nhập"
     }
 }

@@ -5,12 +5,14 @@
     "starred": "Starred",
     "template": "Template",
     "search": "Search",
+    "inbox": { "title": "Inbox", "buttonTitle": "Mark as read" },
     "menu": {
         "profile": "Profile",
-        "addAnotherAccount": "Add another account",
-        "appearance": "Appearance",
+        "switchAccounts": "Switch accounts",
+        "appearance": { "title": "Appearance", "light": "Light", "dark": "Dark", "system": "System" },
         "language": "Language",
         "settings": "Settings",
-        "logout": "Logout"
+        "logout": "Logout",
+        "login": "Login"
     }
 }

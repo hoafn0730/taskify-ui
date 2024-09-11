@@ -16,7 +16,7 @@ import ContentPaste from '@mui/icons-material/ContentPaste';
 import Cloud from '@mui/icons-material/Cloud';
 import { useTranslation } from 'react-i18next';
 
-function Workspaces() {
+function Template() {
     const [anchorEl, setAnchorEl] = useState(null);
     const { t } = useTranslation('header');
 
@@ -28,9 +28,9 @@ function Workspaces() {
 
     return (
         <Box>
-            <Tooltip title={t('workspaces')}>
+            <Tooltip title={t('template')}>
                 <Button aria-describedby={id} endIcon={<KeyboardArrowDownIcon />} onClick={handleClick}>
-                    {t('workspaces')}
+                    {t('template')}
                 </Button>
             </Tooltip>
             <Popover
@@ -85,4 +85,4 @@ function Workspaces() {
     );
 }
 
-export default Workspaces;
+export default Template;

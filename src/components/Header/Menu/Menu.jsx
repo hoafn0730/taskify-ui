@@ -9,9 +9,13 @@ import MuiMenu from '@mui/material/Menu';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import TranslateIcon from '@mui/icons-material/Translate';
+import LanguageIcon from '@mui/icons-material/Language';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 function Menu() {
+    const { t } = useTranslation('header');
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
@@ -48,30 +52,41 @@ function Menu() {
                 }}
                 transformOrigin={{ vertical: -8, horizontal: 0 }}
             >
-                <MenuItem onClick={handleClose}>
-                    <Avatar /> Profile
+                <MenuItem sx={{ display: 'flex', gap: 1 }} onClick={handleClose}>
+                    <Avatar /> {t('menu.profile')}
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <Avatar /> My account
-                </MenuItem>
+
                 <Divider />
                 <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                         <PersonAddIcon fontSize="small" />
                     </ListItemIcon>
-                    Add another account
+                    {t('menu.addAnotherAccount')}
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                    <ListItemIcon>
+                        <LanguageIcon fontSize="small" />
+                    </ListItemIcon>
+                    {t('menu.appearance')}
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                    <ListItemIcon>
+                        <TranslateIcon fontSize="small" />
+                    </ListItemIcon>
+                    {t('menu.language')}
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                         <SettingsIcon fontSize="small" />
                     </ListItemIcon>
-                    Settings
+                    {t('menu.settings')}
                 </MenuItem>
+                <Divider />
                 <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                         <LogoutIcon fontSize="small" />
                     </ListItemIcon>
-                    Logout
+                    {t('menu.logout')}
                 </MenuItem>
             </MuiMenu>
         </Box>

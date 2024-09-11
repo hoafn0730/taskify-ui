@@ -1,0 +1,16 @@
+{
+    "create": "Tạo",
+    "workspaces": "Không gian Làm việc",
+    "recent": "Gần đây",
+    "starred": "Sao",
+    "template": "Mẫu",
+    "search": "Tìm Kiếm",
+    "menu": {
+        "profile": "Trang cá nhân",
+        "addAnotherAccount": "Thêm tài khoản khác",
+        "appearance": "Giao diện",
+        "language": "Ngôn ngữ",
+        "settings": "Cài đặt",
+        "logout": "Đăng xuất"
+    }
+}

@@ -6,19 +6,19 @@ import Popover from '@mui/material/Popover';
 import Divider from '@mui/material/Divider';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
-import Tooltip from '@mui/material/Tooltip';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ContentCut from '@mui/icons-material/ContentCut';
 import ContentCopy from '@mui/icons-material/ContentCopy';
 import ContentPaste from '@mui/icons-material/ContentPaste';
+import Tooltip from '@mui/material/Tooltip';
 import Cloud from '@mui/icons-material/Cloud';
 import { useTranslation } from 'react-i18next';
 
-function Workspaces() {
-    const [anchorEl, setAnchorEl] = useState(null);
+function Recent() {
     const { t } = useTranslation('header');
+    const [anchorEl, setAnchorEl] = useState(null);
 
     const handleClick = (event) => setAnchorEl(event.currentTarget);
     const handleClose = () => setAnchorEl(null);
@@ -28,9 +28,9 @@ function Workspaces() {
 
     return (
         <Box>
-            <Tooltip title={t('workspaces')}>
+            <Tooltip title={t('recent')}>
                 <Button aria-describedby={id} endIcon={<KeyboardArrowDownIcon />} onClick={handleClick}>
-                    {t('workspaces')}
+                    {t('recent')}
                 </Button>
             </Tooltip>
             <Popover
@@ -85,4 +85,4 @@ function Workspaces() {
     );
 }
 
-export default Workspaces;
+export default Recent;

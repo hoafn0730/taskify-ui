@@ -1,0 +1,16 @@
+{
+    "create": "Create",
+    "workspaces": "Workspaces",
+    "recent": "Recent",
+    "starred": "Starred",
+    "template": "Template",
+    "search": "Search",
+    "menu": {
+        "profile": "Profile",
+        "addAnotherAccount": "Add another account",
+        "appearance": "Appearance",
+        "language": "Language",
+        "settings": "Settings",
+        "logout": "Logout"
+    }
+}

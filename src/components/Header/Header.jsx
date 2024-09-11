@@ -3,15 +3,21 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
 import SvgIcon from '@mui/material/SvgIcon';
-import ModeSelect from '../ModeSelect';
+import { useTranslation } from 'react-i18next';
+
 import Workspaces from './Workspaces';
 import Search from './Search';
 import Link from '../Link';
 import Menu from './Menu/Menu';
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg';
 import Inbox from './Inbox';
+import Recent from './Recent';
+import Starred from './Starred';
+import Template from './Template';
 
 function Header() {
+    const { t } = useTranslation('header');
+
     return (
         <Box
             px={2}
@@ -52,15 +58,15 @@ function Header() {
                 </Link>
 
                 <Workspaces />
-                <Workspaces />
-                <Workspaces />
+                <Recent />
+                <Starred />
+                <Template />
                 <Button variant="outlined" startIcon={<AddIcon />}>
-                    Create
+                    {t('create')}
                 </Button>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                 <Search />
-                <ModeSelect />
                 <Inbox />
                 <Menu />
             </Box>

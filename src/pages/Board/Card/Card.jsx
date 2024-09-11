@@ -8,8 +8,22 @@ import GroupIcon from '@mui/icons-material/Group';
 import CommentIcon from '@mui/icons-material/Comment';
 import AttachmentIcon from '@mui/icons-material/Attachment';
 import PropTypes from 'prop-types';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
-function Card({ title, desc, image, memberIds, comments, attachments }) {
+function Card({ title, desc, image, memberIds, comments, attachments, data }) {
+    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+        id: data?.id,
+        data: { ...data },
+    });
+
+    const style = {
+        // touchAction: 'none',
+        transform: CSS.Translate.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : undefined,
+    };
+
     return (
         <MuiCard
             sx={{
@@ -18,6 +32,10 @@ function Card({ title, desc, image, memberIds, comments, attachments }) {
                 overflow: 'unset',
                 border: '1px solid rgba(0, 0, 0, 0.2)',
             }}
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            {...listeners}
         >
             {image && (
                 <CardMedia
@@ -31,7 +49,7 @@ function Card({ title, desc, image, memberIds, comments, attachments }) {
                 <Typography>{title}</Typography>
             </CardContent>
 
-            {!!memberIds.length && !!comments.length && !!attachments.length && (
+            {!!memberIds?.length && !!comments?.length && !!attachments?.length && (
                 <CardActions
                     sx={{
                         p: '0 4px 8px',
@@ -61,6 +79,7 @@ Card.propTypes = {
     memberIds: PropTypes.array,
     comments: PropTypes.array,
     attachments: PropTypes.array,
+    data: PropTypes.object,
 };
 
 export default Card;

@@ -15,6 +15,7 @@ import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-
 import Column from './Column';
 import { mapOrder } from '~/utils/sort';
 import Card from './Card';
+import { cloneDeep } from 'lodash';
 
 const ACTIVE_DRAG_ITEM_TYPE = {
     COLUMN: 'COLUMN',
@@ -50,6 +51,10 @@ function BoardContent({ data }) {
         setOrderedColumns(mapOrder(data?.columns, data?.columnOrderIds, 'id') || []);
     }, [data?.columnOrderIds, data?.columns]);
 
+    const findColumnByCardId = (cardId) => {
+        return orderedColumns.find((col) => col.cards.map((c) => c.id).includes(cardId));
+    };
+
     const handleDragStart = ({ active }) => {
         setActiveDragActiveId(active?.id);
         setActiveDragActiveData(active?.data?.current);
@@ -58,11 +63,28 @@ function BoardContent({ data }) {
         );
     };
 
-    const handleDragOver = ({ active, over }) => {};
+    const handleDragOver = ({ active, over }) => {
+        if (!active || !over) return;
+
+        const {
+            id: activeDraggingCardId,
+            data: { current: activeDraggingCardData },
+        } = active;
+        const { id: overCardId } = over;
+
+        const activeColumn = findColumnByCardId(activeDraggingCardId);
+        const overColumn = findColumnByCardId(overCardId);
+
+        if (!activeColumn || !overColumn) return;
+
+        if (activeColumn.id !== overColumn.id) {
+            //
+        }
+    };
 
     const handleDragEnd = ({ active, over }) => {
-        console.log('🚀 ~ handleDragEnd ~ over:', over);
-        console.log('🚀 ~ handleDragEnd ~ active:', active);
+        // console.log('🚀 ~ handleDragEnd ~ over:', over);
+        // console.log('🚀 ~ handleDragEnd ~ active:', active);
         if (!active || !over) return;
 
         // Handle drag columns
@@ -79,7 +101,40 @@ function BoardContent({ data }) {
 
         // Handle drag column
         if (activeDragActiveType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
-            //
+            const {
+                id: activeDraggingCardId,
+                data: { current: activeDraggingCardData },
+            } = active;
+            const { id: overCardId } = over;
+
+            const activeColumn = findColumnByCardId(activeDraggingCardId);
+            const overColumn = findColumnByCardId(overCardId);
+
+            if (!activeColumn || !overColumn) return;
+
+            if (activeColumn.id !== overColumn.id) {
+                //
+            }
+            // Drag cards in the same column
+            else {
+                const oldCardIndex = activeColumn.cards.findIndex((card) => card.id === activeDraggingCardId);
+                const newCardIndex = overColumn.cards.findIndex((card) => card.id === overCardId);
+
+                const orderedCards = arrayMove(activeColumn.cards, oldCardIndex, newCardIndex);
+                const orderedCardIds = orderedCards.map((card) => card.is);
+
+                setOrderedColumns((prev) => {
+                    const nextColumns = cloneDeep(prev);
+                    const targetColumn = nextColumns.find((col) => col.id === overColumn.id);
+
+                    targetColumn.cards = orderedCards;
+                    targetColumn.cardOrderIds = orderedCardIds;
+
+                    return nextColumns;
+                });
+
+                // Update to database
+            }
         }
 
         setActiveDragActiveId(null);

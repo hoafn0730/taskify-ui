@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next';
+import { useColorScheme, useMediaQuery, useTheme } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import SvgIcon from '@mui/material/SvgIcon';
-import Avatar from '@mui/material/Avatar';
-import AddIcon from '@mui/icons-material/Add';
+import Typography from '@mui/material/Typography';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import TranslateIcon from '@mui/icons-material/Translate';
@@ -13,6 +14,7 @@ import SyncIcon from '@mui/icons-material/Sync';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import Workspaces from './Workspaces';
 import Search from './Search';
@@ -24,7 +26,6 @@ import Recent from './Recent';
 import Starred from './Starred';
 import Template from './Template';
 import { locales } from '~/utils/i18n';
-import { useColorScheme } from '@mui/material';
 
 const MENU_ITEMS = [
     {
@@ -90,8 +91,10 @@ const MENU_ITEMS = [
 function Header() {
     const { t, i18n } = useTranslation('header');
     const { setMode } = useColorScheme();
-    const isLogin = true;
+    const theme = useTheme();
+    const isMatch = useMediaQuery(theme.breakpoints.down('md'));
 
+    const isLogin = false;
     const userMenu = [
         {
             title: 'menu.profile',
@@ -162,14 +165,24 @@ function Header() {
                         TaskFlow
                     </Typography>
                 </Link>
-
-                <Workspaces />
-                <Recent />
-                <Starred />
-                <Template />
-                <Button variant="outlined" startIcon={<AddIcon />}>
-                    {t('create')}
-                </Button>
+                {isMatch ? (
+                    <>
+                        <Button endIcon={<KeyboardArrowDownIcon />}>{t('more')}</Button>
+                        <Button variant="outlined" sx={{ minWidth: 0, p: 0.8 }}>
+                            <AddIcon fontSize="small" />
+                        </Button>
+                    </>
+                ) : (
+                    <>
+                        <Workspaces />
+                        <Recent />
+                        <Starred />
+                        <Template />
+                        <Button variant="outlined" startIcon={<AddIcon />}>
+                            {t('create')}
+                        </Button>
+                    </>
+                )}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                 <Search />

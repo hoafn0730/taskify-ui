@@ -1,10 +1,10 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
+import Tooltip from '@mui/material/Tooltip';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState } from 'react';
-import { Tooltip } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 
 function Search() {
     const { t } = useTranslation('header');

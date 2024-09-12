@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import MuiPopover from '@mui/material/Popover';
-import PropTypes from 'prop-types';
 import Header from './Header';
 
 function Popover({ children, render, open, anchorEl, anchorOrigin, onClose, ...props }) {

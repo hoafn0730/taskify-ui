@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Badge from '@mui/material/Badge';
+import Box from '@mui/material/Box';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
@@ -8,13 +9,12 @@ import MenuList from '@mui/material/MenuList';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import Cloud from '@mui/icons-material/Cloud';
-import ContentPaste from '@mui/icons-material/ContentPaste';
 import ContentCopy from '@mui/icons-material/ContentCopy';
 import ContentCut from '@mui/icons-material/ContentCut';
+import ContentPaste from '@mui/icons-material/ContentPaste';
 import InboxIcon from '@mui/icons-material/Inbox';
 
 import Popover from '../Popover';
-import { Box } from '@mui/material';
 
 function Inbox() {
     const { t } = useTranslation('header');
@@ -38,13 +38,13 @@ function Inbox() {
                     <Popover.Header title={t('inbox.title')} buttonTitle={t('inbox.buttonTitle')} />
                     <MenuList>
                         {/* Empty notifications */}
-                        {/* <Box
+                        <Box
                             sx={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 flexDirection: 'column',
                                 gap: 2,
-                                mt: '16px',
+                                height: '300px',
                                 justifyContent: 'center',
                             }}
                         >
@@ -52,8 +52,8 @@ function Inbox() {
                             <Typography variant="h3" sx={{ fontSize: '1.2rem' }}>
                                 No notifications
                             </Typography>
-                        </Box> */}
-                        {Array(1)
+                        </Box>
+                        {/* {Array(1)
                             .fill(0)
                             .map((item) => (
                                 <Box key={item}>
@@ -91,13 +91,13 @@ function Inbox() {
                                         <ListItemText>Web Clipboard</ListItemText>
                                     </MenuItem>
                                 </Box>
-                            ))}
+                            ))} */}
                     </MenuList>
                 </>
             }
             transformOrigin={{ vertical: -18, horizontal: 0 }}
         >
-            <Tooltip title={t('inbox')}>
+            <Tooltip title={t('inbox.title')}>
                 <Badge color="error" badgeContent={'9+'} sx={{ cursor: 'pointer' }}>
                     <InboxIcon onClick={handleClick} />
                 </Badge>

@@ -1,16 +1,17 @@
-import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
+import PropTypes from 'prop-types';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
-import Tooltip from '@mui/material/Tooltip';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import VpnLockIcon from '@mui/icons-material/VpnLock';
+import Chip from '@mui/material/Chip';
+import Tooltip from '@mui/material/Tooltip';
 import AddToDriveIcon from '@mui/icons-material/AddToDrive';
 import BoltIcon from '@mui/icons-material/Bolt';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PropTypes from 'prop-types';
+import VpnLockIcon from '@mui/icons-material/VpnLock';
+
 import { capitalizeFirstLetter } from '~/utils/formatters';
 
 const MENUS_STYLES = {

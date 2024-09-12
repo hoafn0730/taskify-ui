@@ -31,6 +31,7 @@ function Card({ title, desc, image, memberIds, comments, attachments, data }) {
                 boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
                 overflow: 'unset',
                 border: '1px solid rgba(0, 0, 0, 0.2)',
+                display: data?.FE_PlaceholderCard ? 'none' : 'block',
             }}
             ref={setNodeRef}
             style={style}
@@ -73,7 +74,7 @@ function Card({ title, desc, image, memberIds, comments, attachments, data }) {
 }
 
 Card.propTypes = {
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
     desc: PropTypes.string,
     image: PropTypes.string,
     memberIds: PropTypes.array,

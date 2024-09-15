@@ -20,19 +20,23 @@ import Column from './Column';
 import { mapOrder } from '~/utils/sort';
 import Card from './Card';
 import { generatePlaceholderCard } from '~/utils/formatters';
+import { moveColumns } from '~/store/actions/boardAction';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ACTIVE_DRAG_ITEM_TYPE = {
     COLUMN: 'COLUMN',
     CARD: 'CARD',
 };
 
-function BoardContent({ data }) {
+function BoardContent() {
+    const board = useSelector((state) => state.board.boardData);
     const [orderedColumns, setOrderedColumns] = useState([]);
     const [activeDragItemId, setActiveDragItemId] = useState(null);
     const [activeDragItemType, setActiveDragItemType] = useState(null);
     const [activeDragItemData, setActiveDragItemData] = useState(null);
     const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] = useState(null);
     const lastOverId = useRef(null);
+    const dispatch = useDispatch();
 
     const mouseSensor = useSensor(MouseSensor, {
         activationConstraint: { distance: 10 },
@@ -53,8 +57,8 @@ function BoardContent({ data }) {
     };
 
     useEffect(() => {
-        setOrderedColumns(mapOrder(data?.columns, data?.columnOrderIds, 'id') || []);
-    }, [data?.columnOrderIds, data?.columns]);
+        setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, 'id') || []);
+    }, [board]);
 
     const findColumnByCardId = (cardId) => {
         return orderedColumns.find((col) => col.cards.map((c) => c.id).includes(cardId));
@@ -110,8 +114,6 @@ function BoardContent({ data }) {
             }
 
             if (triggerFrom === 'handleDragEnd') {
-                console.log(123);
-
                 // moveCardDifferentColumn(
                 //     activeDraggingCardId,
                 //     oldColumnWhenDraggingCard._id,
@@ -174,9 +176,19 @@ function BoardContent({ data }) {
                 const oldColumnIndex = orderedColumns.findIndex((col) => col.id === active.id);
                 const newColumnIndex = orderedColumns.findIndex((col) => col.id === over.id);
 
-                setOrderedColumns(arrayMove(orderedColumns, oldColumnIndex, newColumnIndex));
+                const newOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex);
+
+                setOrderedColumns(newOrderedColumns);
 
                 // Update to database
+                dispatch(
+                    moveColumns({
+                        prevColumnId: active.id,
+                        nextColumnId: over.id,
+                        columns: newOrderedColumns,
+                        columnOrderIds: newOrderedColumns.map((c) => c.id),
+                    }),
+                );
             }
         }
 

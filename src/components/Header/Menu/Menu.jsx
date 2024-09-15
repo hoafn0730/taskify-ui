@@ -16,17 +16,16 @@ import Header from './Header';
 function Menu({ items, onChange }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [history, setHistory] = useState([{ data: items }]);
-    const current = history[history.length - 1];
     const { t } = useTranslation('header');
+    const current = history[history.length - 1];
     const open = Boolean(anchorEl);
 
-    const handleClick = (event) => setAnchorEl(event.currentTarget);
-    const handleClose = () => {
-        setAnchorEl(null);
-        if (history.length > 1) {
-            handleBack();
-        }
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+        setHistory([{ data: items }]);
     };
+
+    const handleClose = () => setAnchorEl(null);
 
     const handleBack = () => setHistory((prev) => prev.slice(0, prev.length - 1));
 

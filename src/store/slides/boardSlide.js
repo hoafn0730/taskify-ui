@@ -1,12 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-// export const fetchBoard = createAsyncThunk('users/fetchBoard', async () => {
-//     const res = await axios.get('http://localhost:8080/users/all');
-//     return res.data;
-// });
+import { fetchBoardDetail, moveColumns } from '../actions/boardAction';
 
 const initialState = {
-    data: {
+    boardData: {
         id: '',
         title: '',
         description: '',
@@ -16,6 +12,8 @@ const initialState = {
         columnOrderIds: [],
         columns: [],
     },
+    isLoading: false,
+    isError: false,
 };
 
 export const boardSlide = createSlice({
@@ -23,25 +21,35 @@ export const boardSlide = createSlice({
     initialState,
     reducers: {
         addBoardData: (state, action) => {
-            state.data = { ...action.payload };
+            state.boardData = { ...action.payload };
         },
     },
-    // extraReducers: (builder) => {
-    //     builder
-    //         .addCase(fetchAllUsers.pending, (state, action) => {
-    //             state.isLoading = true;
-    //             state.isError = false;
-    //         })
-    //         .addCase(fetchAllUsers.fulfilled, (state, action) => {
-    //             state.listUsers = action.payload;
-    //             state.isLoading = false;
-    //             state.isError = false;
-    //         })
-    //         .addCase(fetchAllUsers.rejected, (state, action) => {
-    //             state.isLoading = false;
-    //             state.isError = true;
-    //         });
-    // },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchBoardDetail.pending, (state, action) => {
+                state.isLoading = true;
+                state.isError = false;
+            })
+            .addCase(fetchBoardDetail.fulfilled, (state, action) => {
+                state.boardData = action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(fetchBoardDetail.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+            .addCase(moveColumns.fulfilled, (state, action) => {
+                console.log('🚀 ~ .addCase ~ action:', action);
+                state.boardData = { ...state.boardData, ...action.payload };
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(moveColumns.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            });
+    },
 });
 
 // Action creators are generated for each case reducer function

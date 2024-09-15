@@ -13,6 +13,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import VpnLockIcon from '@mui/icons-material/VpnLock';
 
 import { capitalizeFirstLetter } from '~/utils/formatters';
+import { useSelector } from 'react-redux';
 
 const MENUS_STYLES = {
     color: (theme) => (theme.palette.mode === 'dark' ? theme.palette.common.white : 'primary.main'),
@@ -24,7 +25,9 @@ const MENUS_STYLES = {
     },
 };
 
-function BoardBar({ boardData }) {
+function BoardBar() {
+    const board = useSelector((state) => state.board.boardData);
+
     return (
         <Box
             px={2}
@@ -40,13 +43,13 @@ function BoardBar({ boardData }) {
             }}
         >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Tooltip title={boardData.description}>
-                    <Chip sx={MENUS_STYLES} icon={<DashboardIcon />} label={boardData.title} onClick={() => {}} />
+                <Tooltip title={board?.description}>
+                    <Chip sx={MENUS_STYLES} icon={<DashboardIcon />} label={board?.title} onClick={() => {}} />
                 </Tooltip>
                 <Chip
                     sx={MENUS_STYLES}
                     icon={<VpnLockIcon />}
-                    label={capitalizeFirstLetter(boardData.type)}
+                    label={capitalizeFirstLetter(board?.type)}
                     onClick={() => {}}
                 />
                 <Chip sx={MENUS_STYLES} icon={<AddToDriveIcon />} label="Add To Google Drive" onClick={() => {}} />
@@ -88,7 +91,7 @@ function BoardBar({ boardData }) {
                         },
                     }}
                 >
-                    {boardData?.members.map((member) => (
+                    {board?.members?.map((member) => (
                         <Tooltip key={member.id} title={member.name}>
                             <Avatar alt={member.name} src={member.avatar} />
                         </Tooltip>

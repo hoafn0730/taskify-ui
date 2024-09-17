@@ -13,7 +13,7 @@ import { CSS } from '@dnd-kit/utilities';
 
 function Card({ title, desc, image, memberIds, comments, attachments, data }) {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-        id: data?.id,
+        id: data?.uuid,
         data: { ...data },
     });
 

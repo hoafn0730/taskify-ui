@@ -20,7 +20,7 @@ import Column from './Column';
 import { mapOrder } from '~/utils/sort';
 import Card from './Card';
 import { generatePlaceholderCard } from '~/utils/formatters';
-import { moveColumns } from '~/store/actions/boardAction';
+import { moveCardDifferentColumn, moveCardInSameColumn, moveColumns } from '~/store/actions/boardAction';
 import { useDispatch, useSelector } from 'react-redux';
 
 const ACTIVE_DRAG_ITEM_TYPE = {
@@ -57,11 +57,11 @@ function BoardContent() {
     };
 
     useEffect(() => {
-        setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, 'id') || []);
+        setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, 'uuid') || []);
     }, [board]);
 
     const findColumnByCardId = (cardId) => {
-        return orderedColumns.find((col) => col.cards.map((c) => c.id).includes(cardId));
+        return orderedColumns.find((col) => col.cards.map((c) => c.uuid).includes(cardId));
     };
 
     const moveCardBetweenDifferentColumns = (
@@ -75,7 +75,7 @@ function BoardContent() {
         triggerFrom,
     ) => {
         setOrderedColumns((prev) => {
-            const overCardIndex = overColumn?.cards.findIndex((card) => card.id === overCardId);
+            const overCardIndex = overColumn?.cards.findIndex((card) => card.uuid === overCardId);
 
             let newCardIndex;
 
@@ -87,21 +87,21 @@ function BoardContent() {
             newCardIndex = overCardIndex >= 0 ? overCardIndex + modifier : overColumn?.cards?.length + 1;
 
             const nextColumns = cloneDeep(prev);
-            const nextActiveColumn = nextColumns.find((col) => col.id === activeColumn.id);
-            const nextOverColumn = nextColumns.find((col) => col.id === overColumn.id);
+            const nextActiveColumn = nextColumns.find((col) => col.uuid === activeColumn.uuid);
+            const nextOverColumn = nextColumns.find((col) => col.uuid === overColumn.uuid);
 
             if (nextActiveColumn) {
-                nextActiveColumn.cards = nextActiveColumn.cards.filter((card) => card.id !== activeDraggingCardId);
+                nextActiveColumn.cards = nextActiveColumn.cards.filter((card) => card.uuid !== activeDraggingCardId);
 
                 if (isEmpty(nextActiveColumn.cards)) {
                     nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)];
                 }
 
-                nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map((card) => card.id);
+                nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map((card) => card.uuid);
             }
 
             if (nextOverColumn) {
-                nextOverColumn.cards = nextOverColumn.cards.filter((card) => card.id !== activeDraggingCardId);
+                nextOverColumn.cards = nextOverColumn.cards.filter((card) => card.uuid !== activeDraggingCardId);
 
                 nextOverColumn.cards = nextOverColumn.cards.toSpliced(newCardIndex, 0, {
                     ...activeDraggingCardData,
@@ -110,16 +110,18 @@ function BoardContent() {
 
                 nextOverColumn.cards = nextOverColumn.cards.filter((c) => !c.FE_PlaceholderCard);
 
-                nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card) => card.id);
+                nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card) => card.uuid);
             }
 
             if (triggerFrom === 'handleDragEnd') {
-                // moveCardDifferentColumn(
-                //     activeDraggingCardId,
-                //     oldColumnWhenDraggingCard._id,
-                //     nextOverColumn._id,
-                //     nextColumns,
-                // );
+                dispatch(
+                    moveCardDifferentColumn({
+                        currentCardId: nextOverColumn.cards.find((card) => card.uuid === activeDraggingCardId).id,
+                        prevColumnId: oldColumnWhenDraggingCard.id,
+                        nextColumnId: nextOverColumn.id,
+                        orderedColumns: nextColumns,
+                    }),
+                );
             }
 
             return nextColumns;
@@ -173,8 +175,8 @@ function BoardContent() {
         // Handle drag columns
         if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
             if (active.id !== over.id) {
-                const oldColumnIndex = orderedColumns.findIndex((col) => col.id === active.id);
-                const newColumnIndex = orderedColumns.findIndex((col) => col.id === over.id);
+                const oldColumnIndex = orderedColumns.findIndex((col) => col.uuid === active.id);
+                const newColumnIndex = orderedColumns.findIndex((col) => col.uuid === over.id);
 
                 const newOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex);
 
@@ -183,10 +185,7 @@ function BoardContent() {
                 // Update to database
                 dispatch(
                     moveColumns({
-                        prevColumnId: active.id,
-                        nextColumnId: over.id,
-                        columns: newOrderedColumns,
-                        columnOrderIds: newOrderedColumns.map((c) => c.id),
+                        columnOrderIds: newOrderedColumns.map((c) => c.uuid),
                     }),
                 );
             }
@@ -221,16 +220,16 @@ function BoardContent() {
             // Drag cards in the same column
             else {
                 const oldCardIndex = oldColumnWhenDraggingCard.cards.findIndex(
-                    (card) => card.id === activeDraggingCardId,
+                    (card) => card.uuid === activeDraggingCardId,
                 );
-                const newCardIndex = overColumn.cards.findIndex((card) => card.id === overCardId);
+                const newCardIndex = overColumn.cards.findIndex((card) => card.uuid === overCardId);
 
                 const orderedCards = arrayMove(oldColumnWhenDraggingCard.cards, oldCardIndex, newCardIndex);
-                const orderedCardIds = orderedCards.map((card) => card.is);
+                const orderedCardIds = orderedCards.map((card) => card.uuid);
 
                 setOrderedColumns((prev) => {
                     const nextColumns = cloneDeep(prev);
-                    const targetColumn = nextColumns.find((col) => col.id === overColumn.id);
+                    const targetColumn = nextColumns.find((col) => col.uuid === overColumn.uuid);
 
                     targetColumn.cards = orderedCards;
                     targetColumn.cardOrderIds = orderedCardIds;
@@ -239,6 +238,13 @@ function BoardContent() {
                 });
 
                 // Update to database
+                dispatch(
+                    moveCardInSameColumn({
+                        columnId: oldColumnWhenDraggingCard.id,
+                        orderedCards: orderedCards,
+                        orderedCardIds: orderedCardIds,
+                    }),
+                );
             }
         }
 
@@ -262,7 +268,7 @@ function BoardContent() {
             let overId = getFirstCollision(pointerIntersections, 'id');
 
             if (overId) {
-                const checkColumn = orderedColumns.find((col) => col._id === overId);
+                const checkColumn = orderedColumns.find((col) => col.uuid === overId);
 
                 if (checkColumn) {
                     overId = closestCorners({
@@ -270,7 +276,7 @@ function BoardContent() {
                         droppableContainers: args.droppableContainers.filter(
                             (container) => container.id !== overId && checkColumn?.cardOrderIds?.includes(container.id),
                         ),
-                    })[0].id;
+                    })[0]?.id;
                 }
 
                 lastOverId.current = overId;
@@ -308,14 +314,13 @@ function BoardContent() {
                         '&::-webkit-scrollbar-track': { m: 2 },
                     }}
                 >
-                    <SortableContext items={orderedColumns.map((c) => c.id)} strategy={horizontalListSortingStrategy}>
+                    <SortableContext items={orderedColumns.map((c) => c.uuid)} strategy={horizontalListSortingStrategy}>
                         {/* List Column */}
                         {orderedColumns.map((col) => (
                             <Column
                                 key={col.id}
-                                id={col.id}
                                 title={col.title}
-                                cards={mapOrder(col.cards, col.cardOrderIds, 'id')}
+                                cards={mapOrder(col.cards, col.cardOrderIds, 'uuid')}
                                 data={col}
                             />
                         ))}

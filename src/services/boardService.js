@@ -4,9 +4,17 @@ const getBoard = async (boardId) => {
     return await httpRequest.get('/boards/' + boardId);
 };
 
-const moveColumns = async (prevColumnId, nextColumnId) => {
-    const response = await httpRequest.put('/columns/moving_column', { prevColumnId, nextColumnId });
-    return response.data;
+const updateBoard = async (boardId, data) => {
+    return await httpRequest.put('/boards/' + boardId, {
+        ...data,
+    });
 };
 
-export const boardService = { getBoard, moveColumns };
+export const moveCardToDifferentColumn = async (data) => {
+    const response = await httpRequest.put('/boards/supports/moving_card', {
+        ...data,
+    });
+    return response;
+};
+
+export const boardService = { getBoard, updateBoard, moveCardToDifferentColumn };

@@ -9,7 +9,7 @@ import Card from '../Card';
 
 function Column({ title, cards, data }) {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-        id: data?.id,
+        id: data?.uuid,
         data: { ...data },
     });
 
@@ -38,7 +38,7 @@ function Column({ title, cards, data }) {
                 <Header title={title} />
 
                 {/* Box List Card */}
-                <SortableContext items={cards.map((c) => c.id)} strategy={verticalListSortingStrategy}>
+                <SortableContext items={cards.map((c) => c.uuid)} strategy={verticalListSortingStrategy}>
                     <Box
                         sx={{
                             p: 0.5,

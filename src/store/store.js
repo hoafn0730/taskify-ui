@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import counterReducer from './slides/counterSlide';
-import boardReducer from './slides/boardSlide';
+import counterReducer from './slices/counterSlice';
+import boardReducer from './slices/boardSlice';
 
 export const store = configureStore({
     reducer: {

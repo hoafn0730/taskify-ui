@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { decrement, increment } from '~/store/slides/counterSlide';
+import { decrement, increment } from '~/store/slices/counterSlice';
 import { locales } from '~/utils/i18n';
 
 function Home() {

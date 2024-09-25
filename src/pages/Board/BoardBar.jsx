@@ -1,19 +1,20 @@
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Tooltip from '@mui/material/Tooltip';
-import AddToDriveIcon from '@mui/icons-material/AddToDrive';
 import BoltIcon from '@mui/icons-material/Bolt';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import VpnLockIcon from '@mui/icons-material/VpnLock';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 import { capitalizeFirstLetter } from '~/utils/formatters';
-import { useSelector } from 'react-redux';
 
 const MENUS_STYLES = {
     color: (theme) => (theme.palette.mode === 'dark' ? theme.palette.common.white : 'primary.main'),
@@ -26,6 +27,7 @@ const MENUS_STYLES = {
 };
 
 function BoardBar() {
+    const { t } = useTranslation('board');
     const board = useSelector((state) => state.board.boardData);
 
     return (
@@ -42,7 +44,7 @@ function BoardBar() {
                 '&::-webkit-scrollbar-track': { m: 2 },
             }}
         >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Tooltip title={board?.description}>
                     <Chip sx={MENUS_STYLES} icon={<DashboardIcon />} label={board?.title} onClick={() => {}} />
                 </Tooltip>
@@ -52,11 +54,10 @@ function BoardBar() {
                     label={capitalizeFirstLetter(board?.type)}
                     onClick={() => {}}
                 />
-                <Chip sx={MENUS_STYLES} icon={<AddToDriveIcon />} label="Add To Google Drive" onClick={() => {}} />
-                <Chip sx={MENUS_STYLES} icon={<BoltIcon />} label="Automation" onClick={() => {}} />
-                <Chip sx={MENUS_STYLES} icon={<FilterListIcon />} label="Filters" onClick={() => {}} />
+                <Chip sx={MENUS_STYLES} icon={<BoltIcon />} label={t('automation')} onClick={() => {}} />
+                <Chip sx={MENUS_STYLES} icon={<FilterListIcon />} label={t('filter')} onClick={() => {}} />
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Button
                     variant="outlined"
                     sx={{
@@ -74,7 +75,7 @@ function BoardBar() {
                 </Button>
 
                 <AvatarGroup
-                    max={4}
+                    max={3}
                     sx={{
                         '& .MuiAvatar-root': {
                             borderColor: (theme) => theme.palette.common.white,
@@ -91,12 +92,28 @@ function BoardBar() {
                         },
                     }}
                 >
-                    {board?.members?.map((member) => (
+                    <Tooltip title={'Hoafn0730'}>
+                        <Avatar alt={'hoafn'} src={''} />
+                    </Tooltip>
+
+                    {Array(5)
+                        .fill(0)
+                        ?.map((member, index) => (
+                            <Tooltip key={index} title={member?.name}>
+                                <Avatar alt={member?.name} src={member?.avatar} />
+                            </Tooltip>
+                        ))}
+
+                    {/* {board?.members?.map((member) => (
                         <Tooltip key={member.id} title={member.name}>
                             <Avatar alt={member.name} src={member.avatar} />
                         </Tooltip>
-                    ))}
+                    ))} */}
                 </AvatarGroup>
+
+                <Button sx={{ p: '6px', minWidth: 'auto' }}>
+                    <MoreHorizIcon />
+                </Button>
             </Box>
         </Box>
     );

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
@@ -9,7 +9,7 @@ import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import MenuItem from '@mui/material/MenuItem';
 import MuiMenu from '@mui/material/Menu';
-import { Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 
 import Header from './Header';
 

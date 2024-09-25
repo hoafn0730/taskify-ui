@@ -1,4 +1,8 @@
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
 import {
     closestCorners,
@@ -6,22 +10,27 @@ import {
     DndContext,
     DragOverlay,
     getFirstCollision,
-    MouseSensor,
     pointerWithin,
-    TouchSensor,
     useSensor,
     useSensors,
 } from '@dnd-kit/core';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 import { cloneDeep, isEmpty } from 'lodash';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Column from './Column';
 import { mapOrder } from '~/utils/sort';
 import Card from './Card';
 import { generatePlaceholderCard } from '~/utils/formatters';
-import { moveCardDifferentColumn, moveCardInSameColumn, moveColumns } from '~/store/actions/boardAction';
-import { useDispatch, useSelector } from 'react-redux';
+import {
+    createNewColumn,
+    moveCardDifferentColumn,
+    moveCardInSameColumn,
+    moveColumns,
+} from '~/store/actions/boardAction';
+import { toast } from 'react-toastify';
+import { MouseSensor, TouchSensor } from '~/libs/dndKitSensors';
 
 const ACTIVE_DRAG_ITEM_TYPE = {
     COLUMN: 'COLUMN',
@@ -35,6 +44,8 @@ function BoardContent() {
     const [activeDragItemType, setActiveDragItemType] = useState(null);
     const [activeDragItemData, setActiveDragItemData] = useState(null);
     const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] = useState(null);
+    const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
+    const [newColumnTitle, setNewColumnTitle] = useState('');
     const lastOverId = useRef(null);
     const dispatch = useDispatch();
 
@@ -92,6 +103,7 @@ function BoardContent() {
 
             if (nextActiveColumn) {
                 nextActiveColumn.cards = nextActiveColumn.cards.filter((card) => card.uuid !== activeDraggingCardId);
+                console.log(nextActiveColumn);
 
                 if (isEmpty(nextActiveColumn.cards)) {
                     nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)];
@@ -116,7 +128,9 @@ function BoardContent() {
             if (triggerFrom === 'handleDragEnd') {
                 dispatch(
                     moveCardDifferentColumn({
-                        currentCardId: nextOverColumn.cards.find((card) => card.uuid === activeDraggingCardId).id,
+                        currentCardId: oldColumnWhenDraggingCard.cards.find(
+                            (card) => card.uuid === activeDraggingCardId,
+                        ).id,
                         prevColumnId: oldColumnWhenDraggingCard.id,
                         nextColumnId: nextOverColumn.id,
                         orderedColumns: nextColumns,
@@ -127,6 +141,42 @@ function BoardContent() {
             return nextColumns;
         });
     };
+
+    const collisionDetectionStrategy = useCallback(
+        (args) => {
+            if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
+                return closestCorners({ ...args });
+            }
+
+            const pointerIntersections = pointerWithin(args);
+
+            if (!pointerIntersections?.length) return;
+
+            // const intersections = !!pointerIntersections?.length ? pointerIntersections : rectIntersection(args);
+
+            let overId = getFirstCollision(pointerIntersections, 'id');
+
+            if (overId) {
+                const checkColumn = orderedColumns.find((col) => col.uuid === overId);
+
+                if (checkColumn) {
+                    overId = closestCorners({
+                        ...args,
+                        droppableContainers: args.droppableContainers.filter(
+                            (container) => container.id !== overId && checkColumn?.cardOrderIds?.includes(container.id),
+                        ),
+                    })[0]?.id;
+                }
+
+                lastOverId.current = overId;
+
+                return [{ id: overId }];
+            }
+
+            return lastOverId.current ? [{ id: lastOverId.current }] : [];
+        },
+        [activeDragItemType, orderedColumns],
+    );
 
     const handleDragStart = ({ active }) => {
         setActiveDragItemId(active?.id);
@@ -219,6 +269,8 @@ function BoardContent() {
             }
             // Drag cards in the same column
             else {
+                if (activeDraggingCardId === overCardId) return;
+
                 const oldCardIndex = oldColumnWhenDraggingCard.cards.findIndex(
                     (card) => card.uuid === activeDraggingCardId,
                 );
@@ -251,43 +303,27 @@ function BoardContent() {
         setActiveDragItemId(null);
         setActiveDragItemData(null);
         setActiveDragItemType(null);
+        setOldColumnWhenDraggingCard(null);
     };
 
-    const collisionDetectionStrategy = useCallback(
-        (args) => {
-            if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
-                return closestCorners({ ...args });
-            }
+    const handleAddNewColumn = () => {
+        if (newColumnTitle.startsWith(' ')) return;
+        if (!newColumnTitle) {
+            toast.error('Please enter column title!');
+            return;
+        }
+        const newColumnData = {
+            title: newColumnTitle,
+            boardId: board.id,
+        };
 
-            const pointerIntersections = pointerWithin(args);
+        dispatch(createNewColumn(newColumnData));
 
-            if (!pointerIntersections?.length) return;
+        toggleNewColumnForm();
+        setNewColumnTitle('');
+    };
 
-            // const intersections = !!pointerIntersections?.length ? pointerIntersections : rectIntersection(args);
-
-            let overId = getFirstCollision(pointerIntersections, 'id');
-
-            if (overId) {
-                const checkColumn = orderedColumns.find((col) => col.uuid === overId);
-
-                if (checkColumn) {
-                    overId = closestCorners({
-                        ...args,
-                        droppableContainers: args.droppableContainers.filter(
-                            (container) => container.id !== overId && checkColumn?.cardOrderIds?.includes(container.id),
-                        ),
-                    })[0]?.id;
-                }
-
-                lastOverId.current = overId;
-
-                return [{ id: overId }];
-            }
-
-            return lastOverId.current ? [{ id: lastOverId.current }] : [];
-        },
-        [activeDragItemType, orderedColumns],
-    );
+    const toggleNewColumnForm = () => setOpenNewColumnForm((prev) => !prev);
 
     return (
         <DndContext
@@ -325,6 +361,116 @@ function BoardContent() {
                             />
                         ))}
                     </SortableContext>
+
+                    {!openNewColumnForm ? (
+                        <Box
+                            sx={{
+                                minWidth: '250px',
+                                maxWidth: '250px',
+                                mx: 2,
+                                borderRadius: '6px',
+                                height: 'fit-content',
+                                bgcolor: '#ffffffed',
+                            }}
+                        >
+                            <Button
+                                sx={{
+                                    width: '100%',
+                                    justifyContent: 'flex-start',
+                                    pl: 2.5,
+                                    py: 1,
+                                    // bgcolor: 'rgba(255, 255, 255, 0.16)',
+                                    // color: (theme) =>
+                                    //     theme.palette.mode === 'dark' ? theme.palette.common.white : 'primary.main',
+                                    '&:hover': {
+                                        color: (theme) => theme.palette.mode === 'dark' && theme.palette.primary.main,
+                                        bgcolor: (theme) =>
+                                            theme.palette.mode === 'dark' && theme.palette.primary['50'],
+                                    },
+                                }}
+                                startIcon={<NoteAddIcon />}
+                                onClick={toggleNewColumnForm}
+                            >
+                                Add new column
+                            </Button>
+                        </Box>
+                    ) : (
+                        <Box
+                            sx={{
+                                minWidth: '250px',
+                                maxWidth: '250px',
+                                mx: 2,
+                                p: 1,
+                                borderRadius: '6px',
+                                height: 'fit-content',
+                                bgcolor: '#ffffffed',
+                            }}
+                        >
+                            <TextField
+                                value={newColumnTitle}
+                                label="Enter column title"
+                                type="text"
+                                variant="outlined"
+                                size="small"
+                                autoFocus
+                                sx={{
+                                    width: '100%',
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                            borderColor: (theme) =>
+                                                theme.palette.mode === 'dark'
+                                                    ? theme.palette.common.white
+                                                    : theme.palette.primary.main,
+                                        },
+                                        '&:hover fieldset': {
+                                            borderColor: (theme) =>
+                                                theme.palette.mode === 'dark'
+                                                    ? theme.palette.common.white
+                                                    : theme.palette.primary.main,
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: (theme) =>
+                                                theme.palette.mode === 'dark'
+                                                    ? theme.palette.common.white
+                                                    : theme.palette.primary.main,
+                                        },
+                                    },
+                                }}
+                                onChange={(e) => setNewColumnTitle(e.target.value)}
+                            />
+                            <Box sx={{ display: 'flex', marginTop: 1, alignItems: 'center', gap: 1 }}>
+                                <Button
+                                    variant="contained"
+                                    color="success"
+                                    size="small"
+                                    sx={{
+                                        color: 'white',
+                                        boxShadow: 'none',
+                                        border: '0.5px solid',
+                                        borderColor: (theme) => theme.palette.success.main,
+                                        '&:hover': { bgcolor: (theme) => theme.palette.success.main },
+                                    }}
+                                    onClick={handleAddNewColumn}
+                                >
+                                    Add Column
+                                </Button>
+                                <CloseIcon
+                                    sx={{
+                                        color: (theme) =>
+                                            theme.palette.mode === 'dark'
+                                                ? theme.palette.common.white
+                                                : theme.palette.primary.main,
+                                        cursor: 'pointer',
+                                        '&:hover': { color: (theme) => theme.palette.warning.light },
+                                    }}
+                                    onClick={() => {
+                                        toggleNewColumnForm();
+                                        setNewColumnTitle('');
+                                    }}
+                                />
+                            </Box>
+                        </Box>
+                    )}
                 </Box>
 
                 <DragOverlay dropAnimation={dropAnimation}>

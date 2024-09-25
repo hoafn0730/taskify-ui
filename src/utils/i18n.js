@@ -4,6 +4,8 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 import HOME_EN from '~/locales/en/home.json';
 import HOME_VI from '~/locales/vi/home.json';
+import BOARD_EN from '~/locales/en/board.json';
+import BOARD_VI from '~/locales/vi/board.json';
 import HEADER_EN from '~/locales/en/header.json';
 import HEADER_VI from '~/locales/vi/header.json';
 
@@ -11,12 +13,14 @@ export const locales = { en: 'English', vi: 'Tiếng Việt' };
 
 const resources = {
     en: {
-        home: HOME_EN,
         header: HEADER_EN,
+        home: HOME_EN,
+        board: BOARD_EN,
     },
     vi: {
-        home: HOME_VI,
         header: HEADER_VI,
+        home: HOME_VI,
+        board: BOARD_VI,
     },
 };
 

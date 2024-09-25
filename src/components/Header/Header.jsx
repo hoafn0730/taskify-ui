@@ -16,16 +16,16 @@ import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
-import Workspaces from './Workspaces';
-import Search from './Search';
-import Link from '../Link';
-import Menu from './Menu/Menu';
-import { ReactComponent as TrelloIcon } from '~/assets/trello.svg';
 import Inbox from './Inbox';
+import Link from '../Link';
+import Menu from './Menu';
 import Recent from './Recent';
+import Search from './Search';
 import Starred from './Starred';
 import Template from './Template';
+import Workspaces from './Workspaces';
 import { locales } from '~/utils/i18n';
+import { ReactComponent as TrelloIcon } from '~/assets/trello.svg';
 
 const MENU_ITEMS = [
     {
@@ -94,7 +94,7 @@ function Header() {
     const theme = useTheme();
     const isMatch = useMediaQuery(theme.breakpoints.down('md'));
 
-    const isLogin = false;
+    const isLoggedIn = true;
     const userMenu = [
         {
             title: 'menu.profile',
@@ -187,7 +187,7 @@ function Header() {
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                 <Search />
                 <Inbox />
-                <Menu items={isLogin ? userMenu : MENU_ITEMS} onChange={handleMenuChange} />
+                <Menu items={isLoggedIn ? userMenu : MENU_ITEMS} onChange={handleMenuChange} />
             </Box>
         </Box>
     );

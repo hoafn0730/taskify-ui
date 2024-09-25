@@ -1,32 +1,43 @@
 import Box from '@mui/material/Box';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 
 import DefaultLayout from '~/layouts/DefaultLayout';
 import { publicRoutes } from '~/routes';
+import CardDetail from './pages/CardDetail';
+import config from './config';
 
 function App() {
+    let location = useLocation();
+
+    const state = location.state;
+
     return (
         <Box>
-            <BrowserRouter>
-                <Routes>
-                    {publicRoutes.map((route, index) => {
-                        let Layout = DefaultLayout;
-                        const Page = route.component;
+            <Routes location={state?.backgroundLocation || location}>
+                {publicRoutes.map((route, index) => {
+                    let Layout = DefaultLayout;
+                    const Page = route.component;
 
-                        return (
-                            <Route
-                                key={index}
-                                path={route.path}
-                                element={
-                                    <Layout>
-                                        <Page />
-                                    </Layout>
-                                }
-                            />
-                        );
-                    })}
+                    return (
+                        <Route
+                            key={index}
+                            path={route.path}
+                            element={
+                                <Layout>
+                                    <Page />
+                                </Layout>
+                            }
+                        />
+                    );
+                })}
+                <Route path={config.paths.card} element={<CardDetail />} />
+            </Routes>
+
+            {state?.backgroundLocation && (
+                <Routes>
+                    <Route path={config.paths.card} element={<CardDetail />} />
                 </Routes>
-            </BrowserRouter>
+            )}
         </Box>
     );
 }

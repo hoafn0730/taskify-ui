@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const httpRequest = axios.create({
     baseURL: import.meta.env.VITE_APP_BACKEND_URL,
@@ -37,6 +38,9 @@ httpRequest.interceptors.response.use(
         // if (error.response.status === 405) {
         //     console.log('🚀 ~ error:', error);
         // }
+
+        toast.error(error?.response?.statusText);
+
         // Do something with response error
         if (error?.response?.data) {
             return error.response.data;

@@ -61,7 +61,7 @@ const theme = createTheme({
         MuiOutlinedInput: {
             styleOverrides: {
                 root: ({ theme }) => ({
-                    color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.primary.main,
+                    // color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.primary.main,
                     fontSize: '0.875rem',
 
                     '& fieldset': {

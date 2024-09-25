@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -6,18 +7,20 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Cloud from '@mui/icons-material/Cloud';
+import CloudOutlinedIcon from '@mui/icons-material/CloudOutlined';
 import Tooltip from '@mui/material/Tooltip';
+import TextField from '@mui/material/TextField';
 import ContentCut from '@mui/icons-material/ContentCut';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ContentCopy from '@mui/icons-material/ContentCopy';
 import ContentPaste from '@mui/icons-material/ContentPaste';
 import AddCard from '@mui/icons-material/AddCard';
-import PropTypes from 'prop-types';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
-function Header({ title }) {
+function Header({ title, setOpenNewCardForm, onDeleteColumn }) {
     const [anchorEl, setAnchorEl] = useState(null);
+    const [isRename, setIsRename] = useState(false);
 
     const open = Boolean(anchorEl);
 
@@ -34,16 +37,54 @@ function Header({ title }) {
                 justifyContent: 'space-between',
             }}
         >
-            <Typography
-                variant="h6"
-                sx={{
-                    fontSize: '1rem',
-                    fontWeight: 'bold',
-                    cursor: 'pointer',
-                }}
-            >
-                {title}
-            </Typography>
+            {!isRename ? (
+                <Typography
+                    variant="h6"
+                    sx={{
+                        fontSize: '1rem',
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                    }}
+                >
+                    {title}
+                </Typography>
+            ) : (
+                <TextField
+                    value={title}
+                    autoFocus
+                    data-no-dnd={true}
+                    maxRows={4}
+                    variant="outlined"
+                    sx={{
+                        width: '100%',
+                        ml: '-6px',
+                        '& .MuiOutlinedInput-root': {
+                            p: 0,
+                            fontSize: '1.1rem',
+                            width: '100%',
+
+                            '& fieldset': {
+                                borderWidth: '0 !important',
+                            },
+                            '&:hover fieldset': {
+                                borderWidth: '0 !important',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderWidth: '1px !important',
+                            },
+                        },
+                        '& .MuiOutlinedInput-input': {
+                            fontWeight: '700',
+                            fontSize: '1rem',
+                            p: '6px 6px',
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {},
+                    }}
+                    // onChange={(e) => setCardTitleValue(e.target.value)}
+                    onBlur={() => setIsRename(false)}
+                />
+            )}
+
             <Box>
                 <Tooltip title="More options">
                     <ExpandMoreIcon
@@ -64,11 +105,13 @@ function Header({ title }) {
                     open={open}
                     onClose={handleClose}
                     onClick={handleClose}
+                    disableEnforceFocus
+                    disableRestoreFocus
                     MenuListProps={{
                         'aria-labelledby': 'basic-column-dropdown',
                     }}
                 >
-                    <MenuItem>
+                    <MenuItem onClick={() => setOpenNewCardForm(true)}>
                         <ListItemIcon>
                             <AddCard fontSize="small" />
                         </ListItemIcon>
@@ -104,6 +147,19 @@ function Header({ title }) {
                             ⌘V
                         </Typography>
                     </MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            setIsRename(true);
+                        }}
+                    >
+                        <ListItemIcon>
+                            <DriveFileRenameOutlineIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>Rename</ListItemText>
+                        <Typography variant="body2" color="text.secondary">
+                            ⌘V
+                        </Typography>
+                    </MenuItem>
 
                     <Divider />
                     <MenuItem
@@ -115,6 +171,7 @@ function Header({ title }) {
                                 },
                             },
                         }}
+                        onClick={onDeleteColumn}
                     >
                         <ListItemIcon>
                             <DeleteForeverIcon className="delete-icon" fontSize="small" />
@@ -123,7 +180,7 @@ function Header({ title }) {
                     </MenuItem>
                     <MenuItem>
                         <ListItemIcon>
-                            <Cloud fontSize="small" />
+                            <CloudOutlinedIcon fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>Archive this column</ListItemText>
                     </MenuItem>
@@ -135,6 +192,9 @@ function Header({ title }) {
 
 Header.propTypes = {
     title: PropTypes.string,
+    openNewCardForm: PropTypes.bool,
+    setOpenNewCardForm: PropTypes.func,
+    onDeleteColumn: PropTypes.func,
 };
 
 export default Header;

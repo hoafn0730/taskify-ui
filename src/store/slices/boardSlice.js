@@ -1,5 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchBoardDetail, moveCardDifferentColumn, moveCardInSameColumn, moveColumns } from '../actions/boardAction';
+import {
+    archiveCard,
+    createNewCard,
+    createNewColumn,
+    deleteCard,
+    deleteColumn,
+    fetchBoardDetail,
+    moveCardDifferentColumn,
+    moveCardInSameColumn,
+    moveColumns,
+} from '../actions/boardAction';
 import { mapOrder } from '~/utils/sort';
 import { cloneDeep, isEmpty } from 'lodash';
 import { generatePlaceholderCard } from '~/utils/formatters';
@@ -41,7 +51,11 @@ export const boardSlice = createSlice({
                         col.cards = [generatePlaceholderCard(col)];
                         col.cardOrderIds = [generatePlaceholderCard(col).id];
                     } else {
-                        col.cards = mapOrder(col?.cards, col?.cardOrderIds, 'uuid');
+                        col.cards = mapOrder(
+                            col?.cards.filter((card) => card.archived === false),
+                            col?.cardOrderIds,
+                            'uuid',
+                        );
                     }
                 });
 
@@ -73,7 +87,7 @@ export const boardSlice = createSlice({
 
                 state.boardData = { ...state.boardData, ...newBoard };
                 state.isLoading = false;
-                state.isError = true;
+                state.isError = false;
             })
             .addCase(moveCardDifferentColumn.fulfilled, (state, action) => {
                 const newBoard = cloneDeep(state.boardData);
@@ -85,8 +99,90 @@ export const boardSlice = createSlice({
 
                 state.boardData = { ...state.boardData, ...newBoard };
                 state.isLoading = false;
-                state.isError = true;
+                state.isError = false;
+            })
+            .addCase(moveCardDifferentColumn.rejected, (state, action) => {
+                console.log('🚀 ~ .addCase ~ action:', action);
+
+                state.isLoading = false;
+                state.isError = false;
             });
+
+        builder
+            .addCase(createNewColumn.fulfilled, (state, action) => {
+                const newBoard = cloneDeep(state.boardData);
+                const createdColumn = action.payload.createdColumn;
+
+                createdColumn.cards = [generatePlaceholderCard(createNewColumn)];
+                createdColumn.cardOrderIds = [generatePlaceholderCard(createNewColumn).uuid];
+
+                // find column update
+                newBoard.columns.push(createdColumn);
+                newBoard.columnOrderIds.push(createdColumn.uuid);
+
+                state.boardData = { ...state.boardData, ...newBoard };
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(deleteColumn.fulfilled, (state, action) => {
+                const newBoard = cloneDeep(state.boardData);
+                const column = newBoard.columns.find((col) => col.id === action.payload.columnId);
+                newBoard.columns = newBoard.columns.filter((col) => col.id !== action.payload.columnId);
+                newBoard.columnOrderIds = newBoard.columnOrderIds.filter((colId) => colId !== column.uuid);
+
+                state.boardData = { ...state.boardData, ...newBoard };
+                state.isLoading = false;
+                state.isError = false;
+            });
+
+        builder
+            .addCase(createNewCard.fulfilled, (state, action) => {
+                const newBoard = cloneDeep(state.boardData);
+                const createdCard = action.payload.createdCard;
+                const columnToUpdate = newBoard.columns.find((col) => col.id === createdCard.columnId);
+
+                if (columnToUpdate) {
+                    if (columnToUpdate.cards.some((c) => c.FE_PlaceholderCard)) {
+                        columnToUpdate.cards = [createdCard];
+                        columnToUpdate.cardOrderIds = [createdCard.uuid];
+                    } else {
+                        columnToUpdate.cards.push(createdCard);
+                        columnToUpdate.cardOrderIds.push(createdCard.uuid);
+                    }
+                }
+
+                state.boardData = { ...state.boardData, ...newBoard };
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(deleteCard.fulfilled, (state, action) => {
+                const newBoard = cloneDeep(state.boardData);
+
+                const column = newBoard.columns.find((col) => col.id === action.payload.columnId);
+                const card = column.cards.find((card) => card.id === action.payload.cardId);
+
+                column.cards = column.cards.filter((card) => card.id !== action.payload.cardId);
+                column.cardOrderIds = column.cardOrderIds.filter((cardId) => cardId !== card.uuid);
+
+                state.boardData = { ...state.boardData, ...newBoard };
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(archiveCard.fulfilled, (state, action) => {
+                const newBoard = cloneDeep(state.boardData);
+
+                const column = newBoard.columns.find((col) => col.id === action.payload.columnId);
+                const card = column.cards.find((card) => card.id === action.payload.cardId);
+
+                column.cards = column.cards.filter((card) => card.id !== action.payload.cardId);
+                column.cardOrderIds = column.cardOrderIds.filter((cardId) => cardId !== card.uuid);
+
+                state.boardData = { ...state.boardData, ...newBoard };
+                state.isLoading = false;
+                state.isError = false;
+            });
+
+        // archiveCard
     },
 });
 

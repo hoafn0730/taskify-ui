@@ -10,7 +10,7 @@ const updateBoard = async (boardId, data) => {
     });
 };
 
-export const moveCardToDifferentColumn = async (data) => {
+const moveCardToDifferentColumn = async (data) => {
     const response = await httpRequest.put('/boards/supports/moving_card', {
         ...data,
     });

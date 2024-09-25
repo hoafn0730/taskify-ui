@@ -2,22 +2,40 @@ import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useState } from 'react';
+import { useConfirm } from 'material-ui-confirm';
 
 import Footer from './Footer';
 import Header from './Header';
 import Card from '../Card';
+import { useDispatch } from 'react-redux';
+import { deleteColumn } from '~/store/actions/boardAction';
 
 function Column({ title, cards, data }) {
+    const [openNewCardForm, setOpenNewCardForm] = useState(false);
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
         id: data?.uuid,
         data: { ...data },
     });
+    const confirm = useConfirm();
+    const dispatch = useDispatch();
 
     const style = {
         transform: CSS.Translate.toString(transform),
         transition,
         height: '100%',
         opacity: isDragging ? 0.5 : undefined,
+    };
+
+    const handleDeleteColumn = () => {
+        confirm({
+            title: 'Delete Column?',
+            description: 'This action permanently delete your Column and its Cards! Are you sure?',
+        })
+            .then(() => {
+                dispatch(deleteColumn({ columnId: data.id }));
+            })
+            .catch(() => {});
     };
 
     return (
@@ -35,7 +53,12 @@ function Column({ title, cards, data }) {
                 }}
                 {...listeners}
             >
-                <Header title={title} />
+                <Header
+                    title={title}
+                    openNewCardForm={openNewCardForm}
+                    setOpenNewCardForm={setOpenNewCardForm}
+                    onDeleteColumn={handleDeleteColumn}
+                />
 
                 {/* Box List Card */}
                 <SortableContext items={cards.map((c) => c.uuid)} strategy={verticalListSortingStrategy}>
@@ -45,7 +68,7 @@ function Column({ title, cards, data }) {
                             m: '0 5px',
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: 1,
+                            gap: 0.5,
                             overflowX: 'hidden',
                             overflowY: 'auto',
                             maxHeight: (theme) =>
@@ -66,7 +89,6 @@ function Column({ title, cards, data }) {
                             <Card
                                 key={card.id}
                                 title={card.title}
-                                desc={card.description}
                                 image={card.image}
                                 memberIds={card.memberIds}
                                 comments={card.comments}
@@ -78,7 +100,7 @@ function Column({ title, cards, data }) {
                 </SortableContext>
 
                 {/* Box Column Footer */}
-                <Footer />
+                <Footer columnId={data?.id} openNewCardForm={openNewCardForm} setOpenNewCardForm={setOpenNewCardForm} />
             </Box>
         </div>
     );

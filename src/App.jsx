@@ -1,14 +1,14 @@
 import Box from '@mui/material/Box';
 import { Route, Routes, useLocation } from 'react-router-dom';
+import { Fragment } from 'react';
 
+import CardDetail from '~/pages/CardDetail';
 import DefaultLayout from '~/layouts/DefaultLayout';
+import config from '~/config';
 import { publicRoutes } from '~/routes';
-import CardDetail from './pages/CardDetail';
-import config from './config';
 
 function App() {
-    let location = useLocation();
-
+    const location = useLocation();
     const state = location.state;
 
     return (
@@ -17,6 +17,12 @@ function App() {
                 {publicRoutes.map((route, index) => {
                     let Layout = DefaultLayout;
                     const Page = route.component;
+
+                    if (route.layout) {
+                        Layout = route.layout;
+                    } else if (route.layout === null) {
+                        Layout = Fragment;
+                    }
 
                     return (
                         <Route
@@ -30,7 +36,6 @@ function App() {
                         />
                     );
                 })}
-                <Route path={config.paths.card} element={<CardDetail />} />
             </Routes>
 
             {state?.backgroundLocation && (

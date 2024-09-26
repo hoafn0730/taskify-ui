@@ -20,7 +20,12 @@ function Search() {
             size="small"
             sx={{
                 minWidth: '120px',
-                maxWidth: '180px',
+                width: '180px',
+                transition: 'width 0.3s ease',
+
+                '&:focus-within': {
+                    width: '320px',
+                },
             }}
             InputProps={{
                 startAdornment: (

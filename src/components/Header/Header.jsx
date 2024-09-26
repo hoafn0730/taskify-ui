@@ -33,7 +33,6 @@ const MENU_ITEMS = [
         to: '/login',
         icon: <Avatar />,
     },
-
     {
         title: 'menu.appearance.title',
         icon: <LanguageIcon fontSize="small" />,
@@ -148,6 +147,7 @@ function Header() {
                     alignItems: 'center',
                     gap: 2,
                     color: 'primary.main',
+                    mr: 2,
                 }}
             >
                 <Link
@@ -159,7 +159,7 @@ function Header() {
                         variant="span"
                         sx={{
                             fontWeight: 'bold',
-                            fontSize: '1.2rem',
+                            fontSize: '1rem',
                         }}
                     >
                         TaskFlow

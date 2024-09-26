@@ -1,6 +1,8 @@
 const paths = {
-    home: '/home',
-    board: '/',
+    home: '/',
+    boards: '/boards',
+    templates: '/templates',
+    board: '/board/:slug',
     card: '/card/:slug',
 };
 

@@ -1,35 +1,35 @@
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { decrement, increment } from '~/store/slices/counterSlice';
-import { locales } from '~/utils/i18n';
+import Box from '@mui/material/Box';
+import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
+
+import Section from '~/components/Section';
+import Task from './Task';
 
 function Home() {
-    const count = useSelector((state) => state.counter.count);
-    const dispatch = useDispatch();
-    const { t, i18n } = useTranslation('home');
-    const currentLanguage = locales[i18n.language];
-
-    const handleChangeLanguage = (lng) => {
-        i18n.changeLanguage(lng);
-    };
-
     return (
-        <div>
-            <h1>Count: {count}</h1>
-            <div>{currentLanguage}</div>
-            <div>{t('hello')}</div>
-            <div>
-                <button onClick={() => handleChangeLanguage('en')}>English</button>
-                <button onClick={() => handleChangeLanguage('vi')}>Viet Nam</button>
-                <button aria-label="Increment value" onClick={() => dispatch(increment())}>
-                    Increment
-                </button>
-                <span>{count}</span>
-                <button aria-label="Decrement value" onClick={() => dispatch(decrement())}>
-                    Decrement
-                </button>
-            </div>
-        </div>
+        <Box sx={{ display: 'flex' }}>
+            <Box sx={{ width: '420px' }}>
+                <Section title="Up next" icon={<AccessTimeRoundedIcon />}>
+                    <Task />
+                    <Task />
+                </Section>
+            </Box>
+            <Box
+                sx={{
+                    height: '90vh',
+                    mt: '40px',
+                    maxWidth: '342px',
+                    overflowY: 'auto',
+                    pl: '50px',
+                    position: 'sticky',
+                    top: '40px',
+                    width: '100%',
+                }}
+            >
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur eum molestias laborum amet cumque
+                quibusdam odio veniam mollitia animi nostrum, quia possimus? Consectetur, vitae numquam? Corrupti rerum
+                possimus nobis distinctio.
+            </Box>
+        </Box>
     );
 }
 

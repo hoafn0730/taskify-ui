@@ -9,9 +9,20 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import AddIcon from '@mui/icons-material/Add';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
+import AttachmentIcon from '@mui/icons-material/Attachment';
+import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
+import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
+import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
+import Dates from './Actions/Dates';
 
 function TaskDetailHeader() {
     const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorElDate, setAnchorElDate] = useState(null);
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -95,37 +106,60 @@ function TaskDetailHeader() {
                 }}
                 sx={{ ml: 1 }}
             >
-                <MenuItem>
+                <MenuItem
+                    sx={{
+                        '&:hover': {
+                            '& .delete-icon': {
+                                color: 'warning.dark',
+                            },
+                        },
+                    }}
+                >
                     <ListItemIcon>
-                        <RemoveRedEyeOutlinedIcon fontSize="small" />
+                        <PersonAddAltOutlinedIcon fontSize="small" />
+                        {/* <PersonRemoveOutlinedIcon fontSize="small" className="delete-icon" /> */}
                     </ListItemIcon>
-                    <ListItemText>Open card</ListItemText>
+                    <ListItemText>Join</ListItemText>
+                    {/* <ListItemText>Leave</ListItemText> */}
                 </MenuItem>
                 <MenuItem>
                     <ListItemIcon>
-                        <RemoveRedEyeOutlinedIcon fontSize="small" />
+                        <PersonOutlineIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>Open card</ListItemText>
+                    <ListItemText>Members</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={(event) => setAnchorElDate(event.currentTarget)}>
+                    <ListItemIcon>
+                        <AccessTimeIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Dates</ListItemText>
                 </MenuItem>
                 <MenuItem>
                     <ListItemIcon>
-                        <RemoveRedEyeOutlinedIcon fontSize="small" />
+                        <LocalOfferOutlinedIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>Open card</ListItemText>
+                    <ListItemText>Labels</ListItemText>
                 </MenuItem>
                 <MenuItem>
                     <ListItemIcon>
-                        <RemoveRedEyeOutlinedIcon fontSize="small" />
+                        <CheckBoxOutlinedIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>Open card</ListItemText>
+                    <ListItemText>Checkbox</ListItemText>
                 </MenuItem>
                 <MenuItem>
                     <ListItemIcon>
-                        <RemoveRedEyeOutlinedIcon fontSize="small" />
+                        <AttachmentIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>Open card</ListItemText>
+                    <ListItemText>Attachment</ListItemText>
+                </MenuItem>
+                <MenuItem>
+                    <ListItemIcon>
+                        <AddPhotoAlternateOutlinedIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Cover</ListItemText>
                 </MenuItem>
             </Menu>
+            <Dates anchorEl={anchorElDate} onClose={() => setAnchorElDate(null)} />
         </Box>
     );
 }

@@ -4,8 +4,6 @@ import AddIcon from '@mui/icons-material/Add';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import SvgIcon from '@mui/material/SvgIcon';
-import Typography from '@mui/material/Typography';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import TranslateIcon from '@mui/icons-material/Translate';
@@ -17,7 +15,6 @@ import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import Inbox from './Inbox';
-import Link from '../Link';
 import Menu from './Menu';
 import Recent from './Recent';
 import Search from './Search';
@@ -25,7 +22,7 @@ import Starred from './Starred';
 import Template from './Template';
 import Workspaces from './Workspaces';
 import { locales } from '~/utils/i18n';
-import { ReactComponent as TrelloIcon } from '~/assets/trello.svg';
+import Logo from '../Logo';
 
 const MENU_ITEMS = [
     {
@@ -150,21 +147,7 @@ function Header() {
                     mr: 2,
                 }}
             >
-                <Link
-                    to={'/'}
-                    sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer', textDecoration: 'none' }}
-                >
-                    <SvgIcon component={TrelloIcon} inheritViewBox />
-                    <Typography
-                        variant="span"
-                        sx={{
-                            fontWeight: 'bold',
-                            fontSize: '1rem',
-                        }}
-                    >
-                        TaskFlow
-                    </Typography>
-                </Link>
+                <Logo />
                 {isMatch ? (
                     <>
                         <Button endIcon={<KeyboardArrowDownIcon />}>{t('more')}</Button>

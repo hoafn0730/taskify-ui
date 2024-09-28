@@ -35,6 +35,9 @@ const theme = createTheme({
     components: {
         MuiCssBaseline: {
             styleOverrides: {
+                html: {
+                    scrollBehavior: 'smooth',
+                },
                 body: {
                     '*::-webkit-scrollbar': { width: '6px', height: '6px' },
                     '*::-webkit-scrollbar-thumb': {

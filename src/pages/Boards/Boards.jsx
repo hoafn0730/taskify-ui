@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 
-import Section from '../../components/Section';
+import Section from '~/components/Section';
 import BoardItem from './BoardItem';
 
 function Boards() {

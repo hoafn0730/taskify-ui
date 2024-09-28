@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import HomeIcon from '@mui/icons-material/Home';
-import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+import DashboardCustomizeRoundedIcon from '@mui/icons-material/DashboardCustomizeRounded';
 import LinkTab from './LinkTab';
 
 function samePageLinkNavigation(event) {
@@ -47,10 +47,15 @@ function NavTabs() {
                 role="navigation"
                 onChange={handleChange}
             >
-                <LinkTab icon={<HomeIcon fontSize="small" />} iconPosition="start" label="Home" to="/" />
-                <LinkTab icon={<DashboardIcon fontSize="small" />} iconPosition="start" label="Boards" to="/boards" />
+                <LinkTab icon={<HomeRoundedIcon fontSize="small" />} iconPosition="start" label="Home" to="/" />
                 <LinkTab
-                    icon={<DashboardCustomizeIcon fontSize="small" />}
+                    icon={<DashboardRoundedIcon fontSize="small" />}
+                    iconPosition="start"
+                    label="Boards"
+                    to="/boards"
+                />
+                <LinkTab
+                    icon={<DashboardCustomizeRoundedIcon fontSize="small" />}
                     label="Templates"
                     iconPosition="start"
                     to="/templates"

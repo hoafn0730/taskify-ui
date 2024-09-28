@@ -1,5 +1,7 @@
 const paths = {
-    home: '/',
+    home: '/home',
+    blog: '/blog',
+    dashboard: '/',
     boards: '/boards',
     templates: '/templates',
     board: '/board/:slug',

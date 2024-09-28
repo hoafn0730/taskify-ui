@@ -1,36 +1,31 @@
+import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
-import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 
-import Section from '~/components/Section';
-import Task from './Task';
+import Hero from './Hero';
+import LogoCollection from './LogoCollection';
+import Highlights from './Highlights';
+import Pricing from './Pricing';
+import Features from './Features';
+import Testimonials from './Testimonials';
+import FAQ from './FAQ';
 
-function Home() {
+export default function Home() {
     return (
-        <Box sx={{ display: 'flex' }}>
-            <Box sx={{ width: '420px' }}>
-                <Section title="Up next" icon={<AccessTimeRoundedIcon />}>
-                    <Task />
-                    <Task />
-                </Section>
-            </Box>
-            <Box
-                sx={{
-                    height: '90vh',
-                    mt: '40px',
-                    maxWidth: '342px',
-                    overflowY: 'auto',
-                    pl: '50px',
-                    position: 'sticky',
-                    top: '40px',
-                    width: '100%',
-                }}
-            >
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur eum molestias laborum amet cumque
-                quibusdam odio veniam mollitia animi nostrum, quia possimus? Consectetur, vitae numquam? Corrupti rerum
-                possimus nobis distinctio.
+        <Box>
+            <Hero />
+            <Box>
+                <LogoCollection />
+                <Features />
+                <Divider />
+                <Testimonials />
+                <Divider />
+                <Highlights />
+                <Divider />
+                <Pricing />
+                <Divider />
+                <FAQ />
+                <Divider />
             </Box>
         </Box>
     );
 }
-
-export default Home;

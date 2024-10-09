@@ -8,7 +8,7 @@ import ListItemText from '@mui/material/ListItemText';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 
-import { archiveCard } from '~/store/actions/boardAction';
+import { updateCard } from '~/store/actions/boardAction';
 
 function ContextMenu({ anchorEl, data, onClose }) {
     const dispatch = useDispatch();
@@ -16,7 +16,7 @@ function ContextMenu({ anchorEl, data, onClose }) {
     const location = useLocation();
 
     const handleArchive = () => {
-        dispatch(archiveCard({ columnId: data.columnId, cardId: data.id }));
+        dispatch(updateCard({ columnId: data.columnId, cardId: data.id, data: { archived: true } }));
     };
 
     const handleOpen = () => {

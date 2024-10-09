@@ -1,7 +1,11 @@
 import httpRequest from '~/utils/httpRequest';
 
-const getBoard = async (boardId) => {
-    return await httpRequest.get('/boards/' + boardId);
+const getBoards = async () => {
+    return await httpRequest.get('/boards');
+};
+
+const getBoardBySlug = async (slug) => {
+    return await httpRequest.get('/boards/' + slug);
 };
 
 const updateBoard = async (boardId, data) => {
@@ -17,4 +21,4 @@ const moveCardToDifferentColumn = async (data) => {
     return response;
 };
 
-export const boardService = { getBoard, updateBoard, moveCardToDifferentColumn };
+export const boardService = { getBoards, getBoardBySlug, updateBoard, moveCardToDifferentColumn };

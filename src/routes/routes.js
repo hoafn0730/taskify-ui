@@ -11,6 +11,19 @@ import Templates from '~/pages/Templates/Templates';
 
 export const publicRoutes = [
     {
+        path: config.paths.home,
+        component: Home,
+        layout: HomeLayout,
+    },
+    {
+        path: config.paths.blog,
+        component: Blog,
+        layout: HomeLayout,
+    },
+];
+
+export const privateRoutes = [
+    {
         path: config.paths.dashboard,
         component: Dashboard,
         layout: HomeDashboardLayout,
@@ -28,15 +41,5 @@ export const publicRoutes = [
     {
         path: config.paths.board,
         component: Board,
-    },
-    {
-        path: config.paths.home,
-        component: Home,
-        layout: HomeLayout,
-    },
-    {
-        path: config.paths.blog,
-        component: Blog,
-        layout: HomeLayout,
     },
 ];

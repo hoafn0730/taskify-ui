@@ -85,7 +85,16 @@ function Task() {
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 1, width: '100%' }}>
                     <Button startIcon={<CheckRoundedIcon />}>Complete</Button>
-                    <Button startIcon={<CloseRoundedIcon />}>Dismiss</Button>
+                    <Button
+                        startIcon={<CloseRoundedIcon />}
+                        sx={{
+                            '&:hover': {
+                                color: 'warning.dark',
+                            },
+                        }}
+                    >
+                        Dismiss
+                    </Button>
                 </Box>
             </CardActions>
         </Card>

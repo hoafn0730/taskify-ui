@@ -4,6 +4,10 @@ const getCardDetail = async (cardId) => {
     return await httpRequest.get('/cards/' + cardId);
 };
 
+const getCardDetailBySlug = async (slug) => {
+    return await httpRequest.get('/cards/' + slug);
+};
+
 const createNewCard = async (data) => {
     const res = await httpRequest.post('/cards', {
         ...data,
@@ -21,4 +25,4 @@ const deleteCard = async (cardId) => {
     return await httpRequest.delete('/cards/' + cardId);
 };
 
-export const cardService = { getCardDetail, createNewCard, updateCard, deleteCard };
+export const cardService = { getCardDetail, getCardDetailBySlug, createNewCard, updateCard, deleteCard };

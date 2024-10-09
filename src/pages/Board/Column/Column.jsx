@@ -56,6 +56,7 @@ function Column({ title, cards, data }) {
                 <Header
                     title={title}
                     openNewCardForm={openNewCardForm}
+                    data={data}
                     setOpenNewCardForm={setOpenNewCardForm}
                     onDeleteColumn={handleDeleteColumn}
                 />

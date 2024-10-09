@@ -23,12 +23,15 @@ import Template from './Template';
 import Workspaces from './Workspaces';
 import { locales } from '~/utils/i18n';
 import Logo from '../Logo';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '~/store/actions/userAction';
 
 const MENU_ITEMS = [
     {
         title: 'menu.login',
-        to: '/login',
+        href: `${import.meta.env.VITE_APP_SSO_LOGIN}?serviceURL=${encodeURIComponent(window.location.origin)}`,
         icon: <Avatar />,
+        type: 'login',
     },
     {
         title: 'menu.appearance.title',
@@ -88,14 +91,16 @@ function Header() {
     const { t, i18n } = useTranslation('header');
     const { setMode } = useColorScheme();
     const theme = useTheme();
+    const dispatch = useDispatch();
     const isMatch = useMediaQuery(theme.breakpoints.down('md'));
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+    const userInfo = useSelector((state) => state.user.userInfo);
 
-    const isLoggedIn = true;
     const userMenu = [
         {
             title: 'menu.profile',
-            to: '/@hoafn0730',
-            icon: <Avatar />,
+            to: '/@' + userInfo?.username,
+            icon: <Avatar src={userInfo?.avatar} />,
         },
         {
             title: 'menu.switchAccounts',
@@ -105,7 +110,7 @@ function Header() {
         ...MENU_ITEMS.slice(1),
         {
             title: 'menu.logout',
-            to: '/logout',
+            type: 'logout',
             icon: <LogoutIcon fontSize="small" />,
             separate: true,
         },
@@ -118,6 +123,12 @@ function Header() {
                 break;
             case 'appearance':
                 setMode(menuItem.code);
+                break;
+            case 'login':
+                window.location.href = menuItem.href;
+                break;
+            case 'logout':
+                dispatch(logout());
                 break;
             default:
         }

@@ -10,7 +10,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import MenuItem from '@mui/material/MenuItem';
 import MuiMenu from '@mui/material/Menu';
 import Typography from '@mui/material/Typography';
-
+import { useSelector } from 'react-redux';
 import Header from './Header';
 
 function Menu({ items, onChange }) {
@@ -19,6 +19,7 @@ function Menu({ items, onChange }) {
     const { t } = useTranslation('header');
     const current = history[history.length - 1];
     const open = Boolean(anchorEl);
+    const userInfo = useSelector((state) => state.user.userInfo);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -39,10 +40,7 @@ function Menu({ items, onChange }) {
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
                 >
-                    <Avatar
-                        sx={{ width: 34, height: 34 }}
-                        src="https://avatars.githubusercontent.com/u/140341133?v=4"
-                    />
+                    <Avatar sx={{ width: 34, height: 34 }} src={userInfo?.avatar} />
                 </IconButton>
             </Tooltip>
             <MuiMenu
@@ -70,6 +68,7 @@ function Menu({ items, onChange }) {
                 {history.length > 1 && <Header title={current.title} onBack={handleBack} />}
                 {current.data.map((item, index) => {
                     const isParent = !!item.children;
+
                     return (
                         <Box key={index}>
                             {item.separate && <Divider sx={{ my: 1 }} />}

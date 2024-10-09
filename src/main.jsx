@@ -14,30 +14,30 @@ import i18n from '~/utils/i18n';
 import { BrowserRouter } from 'react-router-dom';
 
 createRoot(document.getElementById('root')).render(
-    <StrictMode>
-        <Provider store={store}>
-            <ThemeProvider theme={theme}>
-                <ConfirmProvider
-                    defaultOptions={{
-                        allowClose: false,
-                        dialogProps: {
-                            maxWidth: 'xs',
-                        },
-                        confirmationButtonProps: {
-                            color: 'secondary',
-                            variant: 'outlined',
-                        },
-                    }}
-                >
-                    <I18nextProvider i18n={i18n}>
-                        <BrowserRouter>
-                            <CssBaseline />
-                            <App />
-                            <ToastContainer />
-                        </BrowserRouter>
-                    </I18nextProvider>
-                </ConfirmProvider>
-            </ThemeProvider>
-        </Provider>
-    </StrictMode>,
+    // <StrictMode>
+    <Provider store={store}>
+        <ThemeProvider theme={theme}>
+            <ConfirmProvider
+                defaultOptions={{
+                    allowClose: false,
+                    dialogProps: {
+                        maxWidth: 'xs',
+                    },
+                    confirmationButtonProps: {
+                        color: 'secondary',
+                        variant: 'outlined',
+                    },
+                }}
+            >
+                <I18nextProvider i18n={i18n}>
+                    <BrowserRouter>
+                        <CssBaseline />
+                        <App />
+                        <ToastContainer />
+                    </BrowserRouter>
+                </I18nextProvider>
+            </ConfirmProvider>
+        </ThemeProvider>
+    </Provider>,
+    // </StrictMode>,
 );

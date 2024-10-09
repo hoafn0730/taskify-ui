@@ -2,27 +2,53 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
-import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import { useDebounce } from '@uidotdev/usehooks';
+import { useDispatch } from 'react-redux';
+import { updateCard } from '~/store/actions/boardAction';
 
-function Header() {
-    const [cardTitleValue, setCardTitleValue] = useState('--- Discuss During Next Meeting ---');
+function Header({ title = '', image, columnTitle, card }) {
+    const [cardTitleValue, setCardTitleValue] = useState(title);
+    const debouncedSearchTerm = useDebounce(cardTitleValue, 800);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        setCardTitleValue(title);
+    }, [title]);
+
+    useEffect(() => {
+        if (!debouncedSearchTerm?.trim()) {
+            return;
+        }
+        const updateData = { title: debouncedSearchTerm?.trim() };
+
+        if (updateData.title !== title) {
+            dispatch(updateCard({ columnId: card.columnId, cardId: card.id, data: updateData }));
+        }
+    }, [debouncedSearchTerm]);
+
+    const handleUpdateTitle = (e) => {
+        setCardTitleValue(e.target.value);
+    };
 
     return (
         <Box sx={{ mb: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Box
-                    component="img"
-                    sx={{
-                        height: '100%',
-                        width: 350,
-                        maxHeight: { xs: 233, md: 167 },
-                        maxWidth: { xs: 350, md: 250 },
-                        objectFit: 'contain',
-                    }}
-                    alt="The house from the offer."
-                    src="https://trello.com/1/cards/66c7227e1b6610ae2170f0de/attachments/66ec35f39526b220db751ebd/previews/66ec35f39526b220db751ec7/download/images.jpg"
-                    // src="https://trello.com/1/cards/66c7227e1b6610ae2170f0da/attachments/66c7227e1b6610ae2170f25d/previews/66c7227e1b6610ae2170f262/download/giphy.gif"
-                />
+                {image && (
+                    <Box
+                        component="img"
+                        sx={{
+                            height: '100%',
+                            width: 350,
+                            maxHeight: { xs: 233, md: 167 },
+                            maxWidth: { xs: 350, md: 250 },
+                            objectFit: 'contain',
+                        }}
+                        alt={title}
+                        src={image}
+                    />
+                )}
             </Box>
             <Box sx={{ mt: 2 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -39,7 +65,7 @@ function Header() {
                             display: 'none',
                         }}
                     >
-                        --- Discuss During Next Meeting ---
+                        {cardTitleValue}
                     </Typography>
                     <TextField
                         value={cardTitleValue}
@@ -71,15 +97,22 @@ function Header() {
                             },
                             '& .MuiOutlinedInput-notchedOutline': {},
                         }}
-                        onChange={(e) => setCardTitleValue(e.target.value)}
+                        onChange={handleUpdateTitle}
                     />
                 </Box>
                 <Typography variant="span" sx={{ fontSize: '14px', ml: '44px' }}>
-                    in list This Week 1
+                    in list {columnTitle}
                 </Typography>
             </Box>
         </Box>
     );
 }
+
+Header.propTypes = {
+    title: PropTypes.string,
+    image: PropTypes.string,
+    columnTitle: PropTypes.string,
+    card: PropTypes.object,
+};
 
 export default Header;

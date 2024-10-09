@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -17,12 +17,31 @@ import ContentCopy from '@mui/icons-material/ContentCopy';
 import ContentPaste from '@mui/icons-material/ContentPaste';
 import AddCard from '@mui/icons-material/AddCard';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import { useDebounce } from '@uidotdev/usehooks';
+import { useDispatch } from 'react-redux';
+import { updateColumn } from '~/store/actions/boardAction';
 
-function Header({ title, setOpenNewCardForm, onDeleteColumn }) {
+function Header({ title, data, setOpenNewCardForm, onDeleteColumn }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [isRename, setIsRename] = useState(false);
+    const [columnTitleValue, setColumnTitleValue] = useState(title);
+    const debouncedColumnTitleValue = useDebounce(columnTitleValue, 800);
+    const dispatch = useDispatch();
 
     const open = Boolean(anchorEl);
+
+    useEffect(() => {
+        if (!debouncedColumnTitleValue?.trim()) {
+            return;
+        }
+
+        const updateData = { title: debouncedColumnTitleValue?.trim() };
+
+        if (updateData.title !== title) {
+            console.log(123);
+            dispatch(updateColumn({ columnId: data.id, data: updateData }));
+        }
+    }, [data.id, debouncedColumnTitleValue, dispatch, title]);
 
     const handleClick = (event) => setAnchorEl(event.currentTarget);
     const handleClose = () => setAnchorEl(null);
@@ -50,7 +69,7 @@ function Header({ title, setOpenNewCardForm, onDeleteColumn }) {
                 </Typography>
             ) : (
                 <TextField
-                    value={title}
+                    value={columnTitleValue}
                     autoFocus
                     data-no-dnd={true}
                     maxRows={4}
@@ -80,7 +99,7 @@ function Header({ title, setOpenNewCardForm, onDeleteColumn }) {
                         },
                         '& .MuiOutlinedInput-notchedOutline': {},
                     }}
-                    // onChange={(e) => setCardTitleValue(e.target.value)}
+                    onChange={(e) => setColumnTitleValue(e.target.value)}
                     onBlur={() => setIsRename(false)}
                 />
             )}
@@ -192,6 +211,7 @@ function Header({ title, setOpenNewCardForm, onDeleteColumn }) {
 
 Header.propTypes = {
     title: PropTypes.string,
+    data: PropTypes.object,
     openNewCardForm: PropTypes.bool,
     setOpenNewCardForm: PropTypes.func,
     onDeleteColumn: PropTypes.func,

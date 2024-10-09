@@ -1,6 +1,6 @@
+import { cloneDeep, isEmpty } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
 import {
-    archiveCard,
     createNewCard,
     createNewColumn,
     deleteCard,
@@ -9,22 +9,14 @@ import {
     moveCardDifferentColumn,
     moveCardInSameColumn,
     moveColumns,
+    updateCard,
+    updateColumn,
 } from '../actions/boardAction';
 import { mapOrder } from '~/utils/sort';
-import { cloneDeep, isEmpty } from 'lodash';
 import { generatePlaceholderCard } from '~/utils/formatters';
 
 const initialState = {
-    boardData: {
-        id: '',
-        title: '',
-        description: '',
-        type: '',
-        ownerIds: [],
-        members: [],
-        columnOrderIds: [],
-        columns: [],
-    },
+    boardData: null,
     isLoading: false,
     isError: false,
 };
@@ -102,8 +94,6 @@ export const boardSlice = createSlice({
                 state.isError = false;
             })
             .addCase(moveCardDifferentColumn.rejected, (state, action) => {
-                console.log('🚀 ~ .addCase ~ action:', action);
-
                 state.isLoading = false;
                 state.isError = false;
             });
@@ -119,6 +109,17 @@ export const boardSlice = createSlice({
                 // find column update
                 newBoard.columns.push(createdColumn);
                 newBoard.columnOrderIds.push(createdColumn.uuid);
+
+                state.boardData = { ...state.boardData, ...newBoard };
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(updateColumn.fulfilled, (state, action) => {
+                const newBoard = cloneDeep(state.boardData);
+
+                const column = newBoard.columns.find((col) => col.id === action.payload.columnId);
+                const newData = action.payload.data;
+                Object.assign(column, newData);
 
                 state.boardData = { ...state.boardData, ...newBoard };
                 state.isLoading = false;
@@ -155,6 +156,24 @@ export const boardSlice = createSlice({
                 state.isLoading = false;
                 state.isError = false;
             })
+            .addCase(updateCard.fulfilled, (state, action) => {
+                const newBoard = cloneDeep(state.boardData);
+
+                const column = newBoard.columns.find((col) => col.id === action.payload.columnId);
+                const card = column.cards.find((card) => card.id === action.payload.cardId);
+
+                const newData = action.payload.data;
+                Object.assign(card, newData);
+
+                if (newData.archived) {
+                    column.cards = column.cards.filter((card) => card.id !== action.payload.cardId);
+                    column.cardOrderIds = column.cardOrderIds.filter((cardId) => cardId !== card.uuid);
+                }
+
+                state.boardData = { ...state.boardData, ...newBoard };
+                state.isLoading = false;
+                state.isError = false;
+            })
             .addCase(deleteCard.fulfilled, (state, action) => {
                 const newBoard = cloneDeep(state.boardData);
 
@@ -167,22 +186,7 @@ export const boardSlice = createSlice({
                 state.boardData = { ...state.boardData, ...newBoard };
                 state.isLoading = false;
                 state.isError = false;
-            })
-            .addCase(archiveCard.fulfilled, (state, action) => {
-                const newBoard = cloneDeep(state.boardData);
-
-                const column = newBoard.columns.find((col) => col.id === action.payload.columnId);
-                const card = column.cards.find((card) => card.id === action.payload.cardId);
-
-                column.cards = column.cards.filter((card) => card.id !== action.payload.cardId);
-                column.cardOrderIds = column.cardOrderIds.filter((cardId) => cardId !== card.uuid);
-
-                state.boardData = { ...state.boardData, ...newBoard };
-                state.isLoading = false;
-                state.isError = false;
             });
-
-        // archiveCard
     },
 });
 

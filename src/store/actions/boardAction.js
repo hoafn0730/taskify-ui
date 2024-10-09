@@ -4,8 +4,8 @@ import { boardService } from '~/services/boardService';
 import { cardService } from '~/services/cardService';
 import { columnService } from '~/services/columnService';
 
-export const fetchBoardDetail = createAsyncThunk('board/fetchBoardDetail', async (boardId) => {
-    const res = await boardService.getBoard(boardId);
+export const fetchBoardDetail = createAsyncThunk('board/fetchBoardDetail', async (slug) => {
+    const res = await boardService.getBoardBySlug(slug);
 
     return res.data;
 });
@@ -47,17 +47,26 @@ export const moveCardDifferentColumn = createAsyncThunk(
     },
 );
 
+// Column actions
+
 export const createNewColumn = createAsyncThunk('board/createNewColumn', async (data) => {
     const createdColumn = await columnService.createNewColumn(data);
 
     return { createdColumn };
 });
 
-export const deleteColumn = createAsyncThunk('board/deleteColumn', async ({ columnId }, thunkAPI) => {
+export const updateColumn = createAsyncThunk('board/updateColumn', async ({ columnId, data }) => {
+    const res = await columnService.updateColumn(columnId, data);
+
+    return { columnId, data };
+});
+
+export const deleteColumn = createAsyncThunk('board/deleteColumn', async ({ columnId }) => {
     columnService.deleteColumn(columnId).then((res) => toast.success(res.message));
     return { columnId };
 });
 
+// Card actions
 export const createNewCard = createAsyncThunk('board/createNewCard', async (data, thunkAPI) => {
     const state = thunkAPI.getState();
     const boardId = state?.board?.boardData?.id;
@@ -66,10 +75,10 @@ export const createNewCard = createAsyncThunk('board/createNewCard', async (data
     return { createdCard };
 });
 
-export const archiveCard = createAsyncThunk('board/archiveCard', async ({ columnId, cardId }) => {
-    const res = await cardService.updateCard(cardId, { archived: true }).then((res) => toast.success(res));
+export const updateCard = createAsyncThunk('board/updateCard', async ({ columnId, cardId, data }) => {
+    const res = await cardService.updateCard(cardId, data);
 
-    return { columnId, cardId };
+    return { columnId, cardId, data };
 });
 
 export const deleteCard = createAsyncThunk('board/deleteCard', async ({ columnId, cardId }) => {

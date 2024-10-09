@@ -1,24 +1,29 @@
-import { Card, CardContent, CardMedia, Typography } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import PropTypes from 'prop-types';
 import Link from '~/components/Link';
 
-function BoardItem() {
+function BoardItem({ title, slug, image }) {
     return (
         <Card sx={{ position: 'relative', width: '23.5%' }}>
-            <Link to={'/board/remote-team-meetings'}>
-                <CardMedia
-                    component="img"
-                    height="120"
-                    image="https://trello-backgrounds.s3.amazonaws.com/SharedBackground/480x480/1849a4a0cc47bd7f5c6e08a06cf3affa/photo-1516553174826-d05833723cd4.jpg"
-                    alt="Paella dish"
-                />
+            <Link to={'/board/' + slug}>
+                <CardMedia component="img" height="120" image={image} alt={title} />
                 <CardContent sx={{ position: 'absolute', inset: 0, bgcolor: '#0000004d' }}>
                     <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600', color: 'common.white' }}>
-                        Word of the Day
+                        {title}
                     </Typography>
                 </CardContent>
             </Link>
         </Card>
     );
 }
+
+BoardItem.propTypes = {
+    title: PropTypes.string,
+    slug: PropTypes.string,
+    image: PropTypes.string,
+};
 
 export default BoardItem;

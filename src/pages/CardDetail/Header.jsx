@@ -46,7 +46,7 @@ function Header({ title = '', image, columnTitle, card }) {
                             objectFit: 'contain',
                         }}
                         alt={title}
-                        src={image}
+                        src={image.fileUrl}
                     />
                 )}
             </Box>
@@ -110,7 +110,7 @@ function Header({ title = '', image, columnTitle, card }) {
 
 Header.propTypes = {
     title: PropTypes.string,
-    image: PropTypes.string,
+    image: PropTypes.object,
     columnTitle: PropTypes.string,
     card: PropTypes.object,
 };

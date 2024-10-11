@@ -103,7 +103,6 @@ function BoardContent() {
 
             if (nextActiveColumn) {
                 nextActiveColumn.cards = nextActiveColumn.cards.filter((card) => card.uuid !== activeDraggingCardId);
-                console.log(nextActiveColumn);
 
                 if (isEmpty(nextActiveColumn.cards)) {
                     nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)];

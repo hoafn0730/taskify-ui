@@ -7,7 +7,6 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
-
 import { updateCard } from '~/store/actions/boardAction';
 
 function ContextMenu({ anchorEl, data, onClose }) {

@@ -47,20 +47,15 @@ httpRequest.interceptors.response.use(
         return response?.data;
     },
     function (error) {
-        // if (error.response.status === 401) {
-        //     window.location.href = '/home';
-        // }
+        if (error?.response?.status !== 405) {
+            toast.error(error?.response?.data?.message);
+        }
 
-        if (error.response.status === 405) {
+        if (error?.response?.status === 405) {
             authService.refreshToken().catch((err) => {
                 return Promise.reject(err);
             });
             // return error.
-        }
-
-        // Do something with response error
-        if (error?.response?.data) {
-            return error.response.data;
         }
 
         // Any status codes that falls outside the range of 2xx cause this function to trigger

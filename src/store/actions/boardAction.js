@@ -78,7 +78,7 @@ export const createNewCard = createAsyncThunk('board/createNewCard', async (data
 export const updateCard = createAsyncThunk('board/updateCard', async ({ columnId, cardId, data }) => {
     const res = await cardService.updateCard(cardId, data);
 
-    return { columnId, cardId, data };
+    return { columnId, cardId, data: res };
 });
 
 export const deleteCard = createAsyncThunk('board/deleteCard', async ({ columnId, cardId }) => {

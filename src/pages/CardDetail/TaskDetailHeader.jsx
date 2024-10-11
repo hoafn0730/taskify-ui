@@ -19,7 +19,8 @@ import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import Dates from './Actions/Dates';
 
-function TaskDetailHeader() {
+// eslint-disable-next-line react/prop-types
+function TaskDetailHeader({ onUploadCover }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchorElDate, setAnchorElDate] = useState(null);
 
@@ -152,7 +153,7 @@ function TaskDetailHeader() {
                     </ListItemIcon>
                     <ListItemText>Attachment</ListItemText>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={onUploadCover}>
                     <ListItemIcon>
                         <AddPhotoAlternateOutlinedIcon fontSize="small" />
                     </ListItemIcon>

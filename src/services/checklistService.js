@@ -25,6 +25,13 @@ const deleteChecklist = async (checklistId) => {
     return await httpRequest.delete('/checklists/' + checklistId);
 };
 
+const createNewCheckItem = async (checklistId, data) => {
+    const res = await httpRequest.post('/checklists/' + checklistId + '/checkitems', {
+        ...data,
+    });
+    return res.data;
+};
+
 const updateCheckItem = async (checklistId, checkItemId, data) => {
     return await httpRequest.put('/checklists/' + checklistId + '/checkitems/' + checkItemId, {
         ...data,
@@ -41,6 +48,7 @@ export const checklistService = {
     createNewChecklist,
     updateChecklist,
     deleteChecklist,
+    createNewCheckItem,
     updateCheckItem,
     deleteCheckItem,
 };

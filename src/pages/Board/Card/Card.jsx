@@ -17,7 +17,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import Link from '~/components/Link';
 import ContextMenu from './ContextMenu';
 
-function Card({ title, image, memberIds, comments, attachments, data }) {
+function Card({ title, memberIds, comments, attachments, data }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
         id: data?.uuid,
@@ -57,17 +57,17 @@ function Card({ title, image, memberIds, comments, attachments, data }) {
                     {...listeners}
                     onContextMenu={handleOpenContextMenu}
                 >
-                    {image && (
+                    {data?.cover?.fileUrl && (
                         <CardMedia
                             sx={{
                                 minHeight: 160,
                                 width: '100%',
                                 borderTopLeftRadius: '4px',
                                 borderTopRightRadius: '4px',
-                                backgroundSize: 'contain',
+                                backgroundSize: 'cover',
                             }}
-                            image={image}
-                            title="green iguana"
+                            image={data?.cover?.fileUrl}
+                            title={title}
                             onClick={() => navigate(`/card/${data.slug}`, { state: { backgroundLocation: location } })}
                         />
                     )}
@@ -111,7 +111,6 @@ function Card({ title, image, memberIds, comments, attachments, data }) {
 Card.propTypes = {
     title: PropTypes.string,
     desc: PropTypes.string,
-    image: PropTypes.string,
     memberIds: PropTypes.array,
     comments: PropTypes.array,
     attachments: PropTypes.array,

@@ -38,7 +38,6 @@ function Header({ title, data, setOpenNewCardForm, onDeleteColumn }) {
         const updateData = { title: debouncedColumnTitleValue?.trim() };
 
         if (updateData.title !== title) {
-            console.log(123);
             dispatch(updateColumn({ columnId: data.id, data: updateData }));
         }
     }, [data.id, debouncedColumnTitleValue, dispatch, title]);

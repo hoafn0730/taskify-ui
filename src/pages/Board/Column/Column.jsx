@@ -4,11 +4,11 @@ import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-
 import { CSS } from '@dnd-kit/utilities';
 import { useState } from 'react';
 import { useConfirm } from 'material-ui-confirm';
+import { useDispatch } from 'react-redux';
 
 import Footer from './Footer';
 import Header from './Header';
 import Card from '../Card';
-import { useDispatch } from 'react-redux';
 import { deleteColumn } from '~/store/actions/boardAction';
 
 function Column({ title, cards, data }) {
@@ -90,7 +90,7 @@ function Column({ title, cards, data }) {
                             <Card
                                 key={card.id}
                                 title={card.title}
-                                image={card.image}
+                                image={card?.cover?.fileUrl}
                                 memberIds={card.memberIds}
                                 comments={card.comments}
                                 attachments={card.attachments}

@@ -17,7 +17,7 @@ function Description({ desc, isEditingDesc, setIsEditingDesc, card }) {
     }, [desc]);
 
     const handleSubmit = () => {
-        const updateData = { description: cardDescValue?.trim() };
+        const updateData = { title: card.title, description: cardDescValue?.trim() };
         dispatch(updateCard({ columnId: card.columnId, cardId: card.id, data: updateData }));
         setIsEditingDesc(false);
     };

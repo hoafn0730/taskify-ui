@@ -7,6 +7,7 @@ import Board from '~/pages/Board';
 import Boards from '~/pages/Boards';
 import Dashboard from '~/pages/Dashboard';
 import Home from '~/pages/Home';
+import Invite from '~/pages/Invite/Invite';
 import Templates from '~/pages/Templates/Templates';
 
 export const publicRoutes = [
@@ -41,5 +42,9 @@ export const privateRoutes = [
     {
         path: config.paths.board,
         component: Board,
+    },
+    {
+        path: config.paths.invite,
+        component: Invite,
     },
 ];

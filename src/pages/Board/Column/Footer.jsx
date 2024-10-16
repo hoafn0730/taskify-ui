@@ -10,8 +10,10 @@ import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { createNewCard } from '~/store/actions/boardAction';
+import { useTranslation } from 'react-i18next';
 
 function Footer({ columnId, openNewCardForm, setOpenNewCardForm }) {
+    const { t } = useTranslation('board');
     const [newCardTitle, setNewCardTitle] = useState('');
     const dispatch = useDispatch();
 
@@ -44,9 +46,9 @@ function Footer({ columnId, openNewCardForm, setOpenNewCardForm }) {
             {!openNewCardForm ? (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Button startIcon={<AddCard />} onClick={toggleNewCardForm}>
-                        Add new card
+                        {t('addNewCard')}
                     </Button>
-                    <Tooltip title="drag to move">
+                    <Tooltip title={t('dragToMove')}>
                         <DragHandleIcon
                             sx={{
                                 cursor: 'pointer',
@@ -67,7 +69,7 @@ function Footer({ columnId, openNewCardForm, setOpenNewCardForm }) {
                     <TextField
                         value={newCardTitle}
                         data-no-dnd={true}
-                        label="Enter card title"
+                        label={t('enterCardTitle')}
                         type="text"
                         variant="outlined"
                         size="small"
@@ -111,7 +113,7 @@ function Footer({ columnId, openNewCardForm, setOpenNewCardForm }) {
                             }}
                             onClick={handleAddNewCard}
                         >
-                            Add New Card
+                            {t('addCard')}
                         </Button>
                         <CloseIcon
                             sx={{

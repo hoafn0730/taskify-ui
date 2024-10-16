@@ -15,6 +15,8 @@ import VpnLockIcon from '@mui/icons-material/VpnLock';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 import { capitalizeFirstLetter } from '~/utils/formatters';
+import { useState } from 'react';
+import Invite from './Invite/Invite';
 
 const MENUS_STYLES = {
     color: (theme) => (theme.palette.mode === 'dark' ? theme.palette.common.white : 'primary.main'),
@@ -28,6 +30,7 @@ const MENUS_STYLES = {
 
 function BoardBar() {
     const { t } = useTranslation('board');
+    const [isOpen, setIsOpen] = useState(false);
     const board = useSelector((state) => state.board.boardData);
 
     return (
@@ -54,8 +57,8 @@ function BoardBar() {
                     label={capitalizeFirstLetter(board?.type)}
                     onClick={() => {}}
                 />
-                <Chip sx={MENUS_STYLES} icon={<BoltIcon />} label={t('automation')} onClick={() => {}} />
-                <Chip sx={MENUS_STYLES} icon={<FilterListIcon />} label={t('filter')} onClick={() => {}} />
+                <Chip sx={MENUS_STYLES} icon={<BoltIcon />} label={t('boardBar.automation')} onClick={() => {}} />
+                <Chip sx={MENUS_STYLES} icon={<FilterListIcon />} label={t('boardBar.filter')} onClick={() => {}} />
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Button
@@ -70,8 +73,9 @@ function BoardBar() {
                         },
                     }}
                     startIcon={<PersonAddIcon />}
+                    onClick={() => setIsOpen(true)}
                 >
-                    Invite
+                    {t('boardBar.invite')}
                 </Button>
 
                 <AvatarGroup
@@ -92,29 +96,26 @@ function BoardBar() {
                         },
                     }}
                 >
-                    <Tooltip title={'Hoafn0730'}>
+                    {/* <Tooltip title={'Hoafn0730'}>
                         <Avatar alt={'hoafn'} src={''} />
-                    </Tooltip>
+                    </Tooltip> */}
 
-                    {Array(5)
-                        .fill(0)
-                        ?.map((member, index) => (
-                            <Tooltip key={index} title={member?.name}>
-                                <Avatar alt={member?.name} src={member?.avatar} />
-                            </Tooltip>
-                        ))}
-
-                    {/* {board?.members?.map((member) => (
-                        <Tooltip key={member.id} title={member.name}>
-                            <Avatar alt={member.name} src={member.avatar} />
-                        </Tooltip>
-                    ))} */}
+                    {board?.members?.filter((member) => member.role).length > 0 &&
+                        board?.members
+                            ?.filter((member) => member.role)
+                            .map((member) => (
+                                <Tooltip key={member.id} title={member.user.fullName}>
+                                    <Avatar alt={member.user.fullName} src={member.user.avatar} />
+                                </Tooltip>
+                            ))}
                 </AvatarGroup>
 
                 <Button sx={{ p: '6px', minWidth: 'auto' }}>
                     <MoreHorizIcon />
                 </Button>
             </Box>
+
+            <Invite members={board?.members} open={isOpen} onClose={() => setIsOpen(false)} />
         </Box>
     );
 }

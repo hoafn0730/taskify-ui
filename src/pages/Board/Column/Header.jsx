@@ -20,8 +20,10 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import { useDebounce } from '@uidotdev/usehooks';
 import { useDispatch } from 'react-redux';
 import { updateColumn } from '~/store/actions/boardAction';
+// import { useTranslation } from 'react-i18next';
 
 function Header({ title, data, setOpenNewCardForm, onDeleteColumn }) {
+    // const { t } = useTranslation('board');
     const [anchorEl, setAnchorEl] = useState(null);
     const [isRename, setIsRename] = useState(false);
     const [columnTitleValue, setColumnTitleValue] = useState(title);

@@ -1,5 +1,25 @@
 {
-    "automation": "Automation",
-    "filter": "Filters",
-    "invite": "Invite"
+    "boardBar": {
+        "automation": "Automation",
+        "filter": "Filters",
+        "invite": "Invite",
+        "share": "Share",
+        "copied": "Copied",
+        "copy": "Copy",
+        "boardMembers": "Board members",
+        "joinRequests": "Join requests",
+        "noJoinRequests": "No join requests",
+        "member": "Member",
+        "admin": "Admin",
+        "owner": "Owner"
+    },
+    "addNewColumn": "Add new column",
+    "enterColumnTitle": "Enter column title",
+    "addColumn": "Add Column",
+    "addNewCard": "Add new card",
+    "dragToMove": "Drag to move",
+    "enterCardTitle": "Enter card title",
+    "addCard": "Add Card",
+    "openCard": "Open card",
+    "archive": "Archive"
 }

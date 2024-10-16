@@ -1,5 +1,9 @@
 import httpRequest from '~/utils/httpRequest';
 
+const getCards = async () => {
+    return await httpRequest.get('/cards');
+};
+
 const getCardDetail = async (cardId) => {
     return await httpRequest.get('/cards/' + cardId);
 };
@@ -25,4 +29,4 @@ const deleteCard = async (cardId) => {
     return await httpRequest.delete('/cards/' + cardId);
 };
 
-export const cardService = { getCardDetail, getCardDetailBySlug, createNewCard, updateCard, deleteCard };
+export const cardService = { getCards, getCardDetail, getCardDetailBySlug, createNewCard, updateCard, deleteCard };

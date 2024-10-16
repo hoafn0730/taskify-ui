@@ -33,7 +33,7 @@ createRoot(document.getElementById('root')).render(
                     <BrowserRouter>
                         <CssBaseline />
                         <App />
-                        <ToastContainer />
+                        <ToastContainer closeOnClick />
                     </BrowserRouter>
                 </I18nextProvider>
             </ConfirmProvider>

@@ -8,8 +8,10 @@ import ListItemText from '@mui/material/ListItemText';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import { updateCard } from '~/store/actions/boardAction';
+import { useTranslation } from 'react-i18next';
 
 function ContextMenu({ anchorEl, data, onClose }) {
+    const { t } = useTranslation('board');
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -48,13 +50,13 @@ function ContextMenu({ anchorEl, data, onClose }) {
                 <ListItemIcon>
                     <CreditCardIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Open card</ListItemText>
+                <ListItemText>{t('openCard')}</ListItemText>
             </MenuItem>
             <MenuItem onClick={handleArchive}>
                 <ListItemIcon>
                     <Inventory2OutlinedIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Archive</ListItemText>
+                <ListItemText>{t('archive')}</ListItemText>
             </MenuItem>
         </Menu>
     );

@@ -28,6 +28,18 @@ export const boardSlice = createSlice({
         addBoardData: (state, action) => {
             state.boardData = { ...action.payload };
         },
+        updateCardData: (state, action) => {
+            if (state?.boardData) {
+                const newBoard = cloneDeep(state.boardData);
+                const column = newBoard.columns.find((col) => col.id === action.payload.newCard.columnId);
+                const card = column.cards.find((card) => card.id === action.payload.newCard.id);
+                Object.assign(card, action.payload.newCard);
+
+                state.boardData = { ...state.boardData, ...newBoard };
+                state.isLoading = false;
+                state.isError = false;
+            }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -191,6 +203,6 @@ export const boardSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { addBoardData } = boardSlice.actions;
+export const { addBoardData, updateCardData } = boardSlice.actions;
 
 export default boardSlice.reducer;

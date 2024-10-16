@@ -15,14 +15,23 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import AttachmentIcon from '@mui/icons-material/Attachment';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
-import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
+// import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import Dates from './Actions/Dates';
+import Cover from './Actions/Cover';
+import { Checkbox } from '@mui/material';
+import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import { cloneDeep } from 'lodash';
+import { updateCard } from '~/store/actions/boardAction';
+import { useDispatch } from 'react-redux';
 
-// eslint-disable-next-line react/prop-types
-function TaskDetailHeader({ onUploadCover }) {
+function TaskDetailHeader({ card, setUrl, setCard }) {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [anchorElDate, setAnchorElDate] = useState(null);
+    const [anchorButtonActions, setAnchorButtonActions] = useState(null);
+    const [actionButton, setActionButton] = useState(null);
+
+    const dispatch = useDispatch();
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -30,70 +39,101 @@ function TaskDetailHeader({ onUploadCover }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    return (
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', pl: '40px' }}>
-            <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', columnGap: 1, rowGap: 1 }}>
-                {/* Members, Labels, Notifications, Due date */}
 
-                {/* Notifications */}
-                <Box component={'section'}>
-                    <Typography variant="span" sx={{ fontSize: '12px', fontWeight: '600' }}>
-                        Notifications
-                    </Typography>
-                    <Box sx={{ mt: 1.5 }}>
-                        <Button startIcon={<RemoveRedEyeOutlinedIcon fontSize="small" />}>Watch</Button>
-                    </Box>
-                </Box>
-                {/* Members */}
-                <Box component={'section'}>
-                    <Typography variant="span" sx={{ fontSize: '12px', fontWeight: '600' }}>
-                        Members
-                    </Typography>
-                    <Box sx={{ mt: 1.5 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <Avatar
-                                sx={{ width: 38, height: 38 }}
-                                alt="Remy Sharp"
-                                src="https://mui.com/static/images/avatar/1.jpg"
-                            />
-                            <Button sx={{ p: 0.5, width: 38, height: 38, minWidth: 'auto', borderRadius: '50%' }}>
-                                <AddIcon />
-                            </Button>
+    const handleCheckDueComplete = (e) => {
+        const newCard = cloneDeep(card);
+
+        newCard.dueComplete = e.target.checked;
+        setCard(newCard);
+
+        dispatch(
+            updateCard({
+                columnId: card?.columnId,
+                cardId: card?.id,
+                data: {
+                    title: card?.title,
+                    dueComplete: e.target.checked,
+                },
+            }),
+        );
+    };
+
+    return (
+        <>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', pl: '40px' }}>
+                <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', columnGap: 1, rowGap: 1 }}>
+                    {/* Members, Labels, Notifications, Due date */}
+
+                    {/* Notifications */}
+                    <Box component={'section'}>
+                        <Typography variant="span" sx={{ fontSize: '12px', fontWeight: '600' }}>
+                            Notifications
+                        </Typography>
+                        <Box sx={{ mt: 1.5 }}>
+                            <Button startIcon={<RemoveRedEyeOutlinedIcon fontSize="small" />}>Watch</Button>
                         </Box>
                     </Box>
-                </Box>
-                {/* Due date */}
-                {/* ! Todo */}
-                <Box component={'section'}>
-                    <Typography variant="span" sx={{ fontSize: '12px', fontWeight: '600' }}>
-                        Due date
-                    </Typography>
-                    <Box sx={{ mt: 1.5 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <Avatar
-                                sx={{ width: 38, height: 38 }}
-                                alt="Remy Sharp"
-                                src="https://mui.com/static/images/avatar/1.jpg"
-                            />
-                            <Button sx={{ p: 0.5, width: 38, height: 38, minWidth: 'auto', borderRadius: '50%' }}>
-                                <AddIcon />
-                            </Button>
+                    {/* Members */}
+                    <Box component={'section'}>
+                        <Typography
+                            variant="span"
+                            sx={{ fontSize: '12px', fontWeight: '600', alignItems: 'flex-start' }}
+                        >
+                            Members
+                        </Typography>
+                        <Box sx={{ mt: 1.5 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <Avatar
+                                    sx={{ width: 38, height: 38 }}
+                                    alt="Remy Sharp"
+                                    src="https://mui.com/static/images/avatar/1.jpg"
+                                />
+                                <Button sx={{ p: 0.5, width: 38, height: 38, minWidth: 'auto', borderRadius: '50%' }}>
+                                    <AddIcon />
+                                </Button>
+                            </Box>
                         </Box>
                     </Box>
+                    {/* Due date */}
+                    {card?.dueDate && (
+                        <Box component={'section'}>
+                            <Typography variant="span" sx={{ fontSize: '12px', fontWeight: '600' }}>
+                                Due date
+                            </Typography>
+                            <Box sx={{ mt: 1.5, display: 'flex', alignItems: 'center', gap: 1, height: '36px' }}>
+                                <Checkbox sx={{ p: 0 }} checked={card?.dueComplete} onChange={handleCheckDueComplete} />
+                                <Typography variant="span">{dayjs(card?.dueDate).format('MMM D, h:mm A')}</Typography>
+
+                                {card?.dueComplete && (
+                                    <Typography
+                                        variant="span"
+                                        sx={{
+                                            px: 1,
+                                            py: 0.5,
+                                            bgcolor: 'primary.main',
+                                            color: 'common.white',
+                                            borderRadius: 2,
+                                        }}
+                                    >
+                                        Complete
+                                    </Typography>
+                                )}
+                            </Box>
+                        </Box>
+                    )}
                 </Box>
+                <Button
+                    sx={{
+                        height: 'fit-content',
+                        minWidth: 'auto',
+                    }}
+                    onClick={handleClick}
+                >
+                    Actions
+                </Button>
             </Box>
-            <Button
-                sx={{
-                    height: 'fit-content',
-                    minWidth: 'auto',
-                }}
-                onClick={handleClick}
-            >
-                Actions
-            </Button>
+
             <Menu
-                id="positioned-menu"
-                aria-labelledby="positioned-button"
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
@@ -129,7 +169,12 @@ function TaskDetailHeader({ onUploadCover }) {
                     </ListItemIcon>
                     <ListItemText>Members</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={(event) => setAnchorElDate(event.currentTarget)}>
+                <MenuItem
+                    onClick={(event) => {
+                        setActionButton('Dates');
+                        setAnchorButtonActions(event.currentTarget);
+                    }}
+                >
                     <ListItemIcon>
                         <AccessTimeIcon fontSize="small" />
                     </ListItemIcon>
@@ -153,16 +198,41 @@ function TaskDetailHeader({ onUploadCover }) {
                     </ListItemIcon>
                     <ListItemText>Attachment</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={onUploadCover}>
+                <MenuItem
+                    onClick={(event) => {
+                        setActionButton('Cover');
+                        setAnchorButtonActions(event.currentTarget);
+                    }}
+                >
                     <ListItemIcon>
                         <AddPhotoAlternateOutlinedIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText>Cover</ListItemText>
                 </MenuItem>
             </Menu>
-            <Dates anchorEl={anchorElDate} onClose={() => setAnchorElDate(null)} />
-        </Box>
+            <Dates
+                title={actionButton}
+                anchorEl={anchorButtonActions}
+                card={card}
+                setCard={setCard}
+                onClose={() => setAnchorButtonActions(null)}
+            />
+
+            <Cover
+                title={actionButton}
+                anchorEl={anchorButtonActions}
+                card={card}
+                setUrl={setUrl}
+                onClose={() => setAnchorButtonActions(null)}
+            />
+        </>
     );
 }
+
+TaskDetailHeader.propTypes = {
+    card: PropTypes.object,
+    setUrl: PropTypes.func,
+    setCard: PropTypes.func,
+};
 
 export default TaskDetailHeader;

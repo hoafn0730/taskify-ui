@@ -17,9 +17,9 @@ function UploadFile({ isUploadCover, setUrl, cardId }) {
             setLoading(true);
 
             attachmentService
-                .createNewAttachment({ cardId, cover: isUploadCover, fileName: files[0].name, file: base64 })
+                .createNewAttachment({ cardId, cover: !!isUploadCover, fileName: files[0].name, file: base64 })
                 .then((res) => {
-                    setUrl(res);
+                    setUrl({ ...res, cover: !!isUploadCover });
                     setLoading(false);
                 });
         }

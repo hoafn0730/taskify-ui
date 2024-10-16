@@ -1,5 +1,25 @@
 {
-    "automation": "Tự động",
-    "filter": "Lọc",
-    "invite": "Mời"
+    "boardBar": {
+        "automation": "Tự động",
+        "filter": "Lọc",
+        "invite": "Mời",
+        "share": "Chia sẻ",
+        "copied": "Đã sao chép",
+        "copy": "Sao chép",
+        "boardMembers": "Thành viên bảng",
+        "joinRequests": "Yêu cầu tham gia",
+        "noJoinRequests": "Không có yêu cầu tham gia",
+        "member": "Thành viên",
+        "admin": "Quản trị viên",
+        "owner": "Người sở hữu"
+    },
+    "addNewColumn": "Thêm cột mới",
+    "enterColumnTitle": "Nhập tiêu đề cột",
+    "addColumn": "Thêm cột",
+    "addNewCard": "Thêm thẻ mới",
+    "dragToMove": "Kéo để di chuyển",
+    "enterCardTitle": "Nhập tiêu đề thẻ",
+    "addCard": "Thêm thẻ",
+    "openCard": "Mở thẻ",
+    "archive": "Lưu trữ"
 }

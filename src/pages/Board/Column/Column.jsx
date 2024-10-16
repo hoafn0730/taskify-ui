@@ -91,7 +91,8 @@ function Column({ title, cards, data }) {
                                 key={card.id}
                                 title={card.title}
                                 image={card?.cover?.fileUrl}
-                                memberIds={card.memberIds}
+                                members={card.members}
+                                checklists={card.checklists}
                                 comments={card.comments}
                                 attachments={card.attachments}
                                 data={card}

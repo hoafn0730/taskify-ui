@@ -1,22 +1,23 @@
-import { useLocation, useNavigate } from 'react-router-dom';
 import MuiModal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
 
-function Modal({ children }) {
-    const navigate = useNavigate();
-    const { state } = useLocation();
-
-    function handleDismiss() {
-        navigate(-1);
+function Modal({ size = 'normal', children, open, onClose }) {
+    let width;
+    if (size === 'normal') {
+        width = 750;
+    } else if (size === 'large') {
+        width = 1000;
+    } else if (size === 'small') {
+        width = 600;
     }
 
     return (
         <MuiModal
-            open={!!state}
-            onClose={handleDismiss}
+            open={open}
+            onClose={onClose}
             data-no-dnd={true}
             aria-labelledby="parent-modal-title"
             aria-describedby="parent-modal-description"
@@ -31,8 +32,7 @@ function Modal({ children }) {
             <Box
                 sx={{
                     position: 'relative',
-                    width: 768,
-                    minHeight: '600px',
+                    width: width,
                     bgcolor: 'background.paper',
                     boxShadow: 24,
                     borderRadius: 4,
@@ -52,7 +52,7 @@ function Modal({ children }) {
                         borderRadius: '50%',
                         minWidth: 'auto',
                     }}
-                    onClick={handleDismiss}
+                    onClick={onClose}
                 >
                     <CloseIcon />
                 </Button>
@@ -63,6 +63,9 @@ function Modal({ children }) {
 
 Modal.propTypes = {
     children: PropTypes.node.isRequired,
+    size: PropTypes.string,
+    open: PropTypes.bool,
+    onClose: PropTypes.func,
 };
 
 export default Modal;

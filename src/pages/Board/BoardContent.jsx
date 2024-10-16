@@ -31,6 +31,7 @@ import {
 } from '~/store/actions/boardAction';
 import { toast } from 'react-toastify';
 import { MouseSensor, TouchSensor } from '~/libs/dndKitSensors';
+import { useTranslation } from 'react-i18next';
 
 const ACTIVE_DRAG_ITEM_TYPE = {
     COLUMN: 'COLUMN',
@@ -38,6 +39,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 };
 
 function BoardContent() {
+    const { t } = useTranslation('board');
     const board = useSelector((state) => state.board.boardData);
     const [orderedColumns, setOrderedColumns] = useState([]);
     const [activeDragItemId, setActiveDragItemId] = useState(null);
@@ -390,7 +392,7 @@ function BoardContent() {
                                 startIcon={<NoteAddIcon />}
                                 onClick={toggleNewColumnForm}
                             >
-                                Add new column
+                                {t('addNewColumn')}
                             </Button>
                         </Box>
                     ) : (
@@ -407,7 +409,7 @@ function BoardContent() {
                         >
                             <TextField
                                 value={newColumnTitle}
-                                label="Enter column title"
+                                label={t('enterColumnTitle')}
                                 type="text"
                                 variant="outlined"
                                 size="small"
@@ -451,7 +453,7 @@ function BoardContent() {
                                     }}
                                     onClick={handleAddNewColumn}
                                 >
-                                    Add Column
+                                    {t('addColumn')}
                                 </Button>
                                 <CloseIcon
                                     sx={{

@@ -6,6 +6,7 @@ const paths = {
     templates: '/templates',
     board: '/board/:slug',
     card: '/card/:slug',
+    invite: '/invite/b/:slug',
 };
 
 export default paths;

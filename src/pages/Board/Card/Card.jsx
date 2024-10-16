@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -13,11 +13,14 @@ import Typography from '@mui/material/Typography';
 import AttachmentIcon from '@mui/icons-material/Attachment';
 import CommentIcon from '@mui/icons-material/Comment';
 import GroupIcon from '@mui/icons-material/Group';
+import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
+import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 
 import Link from '~/components/Link';
 import ContextMenu from './ContextMenu';
+import dayjs from 'dayjs';
 
-function Card({ title, memberIds, comments, attachments, data }) {
+function Card({ title, members, comments, checklists, attachments, data }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
         id: data?.uuid,
@@ -25,6 +28,17 @@ function Card({ title, memberIds, comments, attachments, data }) {
     });
     const location = useLocation();
     const navigate = useNavigate();
+
+    const completeItemCounts = useMemo(
+        () =>
+            data.checklists.reduce((prev, cur) => {
+                const completedCount = cur.checkItems.filter((item) => item.status === 'complete').length;
+
+                prev.push(completedCount);
+                return prev;
+            }, []),
+        [data.checklists],
+    );
 
     const style = {
         // touchAction: 'none',
@@ -82,23 +96,37 @@ function Card({ title, memberIds, comments, attachments, data }) {
                         </Link>
                     </CardContent>
 
-                    {!!memberIds?.length && !!comments?.length && !!attachments?.length && (
+                    {(attachments?.length || data?.dueDate || !!data.checklists?.length) && (
                         <CardActions
                             sx={{
                                 p: '0 4px 8px',
                             }}
                         >
-                            <Button size="small" startIcon={<GroupIcon />}>
+                            {data?.dueDate && (
+                                <Button
+                                    size="small"
+                                    variant={data?.dueComplete ? 'contained' : 'text'}
+                                    startIcon={<AccessTimeRoundedIcon />}
+                                >
+                                    {dayjs(data?.dueDate).format('MMM D')}
+                                </Button>
+                            )}
+
+                            {/* <Button size="small" startIcon={<GroupIcon />}>
                                 {2}
-                            </Button>
+                            </Button>*/}
 
-                            <Button size="small" startIcon={<CommentIcon />}>
-                                {3}
-                            </Button>
+                            {data.checklists?.map((checklist, index) => (
+                                <Button key={checklist.id} size="small" startIcon={<CheckBoxOutlinedIcon />}>
+                                    {completeItemCounts[index]}/{checklist.checkItems.length}
+                                </Button>
+                            ))}
 
-                            <Button size="small" startIcon={<AttachmentIcon />}>
-                                {3}
-                            </Button>
+                            {!!attachments?.length && (
+                                <Button size="small" startIcon={<AttachmentIcon />}>
+                                    {attachments?.length}
+                                </Button>
+                            )}
                         </CardActions>
                     )}
                 </MuiCard>
@@ -111,8 +139,9 @@ function Card({ title, memberIds, comments, attachments, data }) {
 Card.propTypes = {
     title: PropTypes.string,
     desc: PropTypes.string,
-    memberIds: PropTypes.array,
+    members: PropTypes.array,
     comments: PropTypes.array,
+    checklists: PropTypes.array,
     attachments: PropTypes.array,
     data: PropTypes.object,
 };

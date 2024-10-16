@@ -14,6 +14,8 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import Logo from '~/components/Logo';
 import config from '~/config';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     display: 'flex',
@@ -32,6 +34,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 function AppBar() {
     const [open, setOpen] = useState(false);
     const currentURL = window.location.href;
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
@@ -71,24 +74,32 @@ function AppBar() {
                             alignItems: 'center',
                         }}
                     >
-                        <Button
-                            color="primary"
-                            variant="text"
-                            size="small"
-                            href={`${import.meta.env.VITE_APP_SSO_LOGIN}?serviceURL=${encodeURIComponent(
-                                window.location.origin,
-                            )}`}
-                        >
-                            Sign in
-                        </Button>
-                        <Button
-                            color="primary"
-                            variant="contained"
-                            size="small"
-                            href={`http://localhost:3000/register?continue=${encodeURIComponent(currentURL)}`}
-                        >
-                            Sign up
-                        </Button>
+                        {isLoggedIn ? (
+                            <Button LinkComponent={Link} color="primary" variant="contained" size="small" to={'/'}>
+                                Go to my boards
+                            </Button>
+                        ) : (
+                            <>
+                                <Button
+                                    color="primary"
+                                    variant="text"
+                                    size="small"
+                                    href={`${import.meta.env.VITE_APP_SSO_LOGIN}?serviceURL=${encodeURIComponent(
+                                        window.location.origin,
+                                    )}`}
+                                >
+                                    Sign in
+                                </Button>
+                                <Button
+                                    color="primary"
+                                    variant="contained"
+                                    size="small"
+                                    href={`http://localhost:3000/register?continue=${encodeURIComponent(currentURL)}`}
+                                >
+                                    Sign up
+                                </Button>
+                            </>
+                        )}
                     </Box>
                     <Box sx={{ display: { sm: 'flex', md: 'none' } }}>
                         <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
@@ -114,28 +125,46 @@ function AppBar() {
                                 <MenuItem>Pricing</MenuItem>
                                 <MenuItem>FAQ</MenuItem>
                                 <MenuItem>Blog</MenuItem>
-                                <MenuItem>
-                                    <Button
-                                        color="primary"
-                                        variant="contained"
-                                        fullWidth
-                                        href={`http://localhost:3000/register?continue=${encodeURIComponent(
-                                            currentURL,
-                                        )}`}
-                                    >
-                                        Sign up
-                                    </Button>
-                                </MenuItem>
-                                <MenuItem>
-                                    <Button
-                                        color="primary"
-                                        variant="outlined"
-                                        fullWidth
-                                        href={`http://localhost:3000/login?continue=${encodeURIComponent(currentURL)}`}
-                                    >
-                                        Sign in
-                                    </Button>
-                                </MenuItem>
+                                {isLoggedIn ? (
+                                    <MenuItem>
+                                        <Button
+                                            LinkComponent={Link}
+                                            color="primary"
+                                            variant="contained"
+                                            fullWidth
+                                            to={'/'}
+                                        >
+                                            Go to my boards
+                                        </Button>
+                                    </MenuItem>
+                                ) : (
+                                    <>
+                                        <MenuItem>
+                                            <Button
+                                                color="primary"
+                                                variant="contained"
+                                                fullWidth
+                                                href={`http://localhost:3000/register?continue=${encodeURIComponent(
+                                                    currentURL,
+                                                )}`}
+                                            >
+                                                Sign up
+                                            </Button>
+                                        </MenuItem>
+                                        <MenuItem>
+                                            <Button
+                                                color="primary"
+                                                variant="outlined"
+                                                fullWidth
+                                                href={`http://localhost:3000/login?continue=${encodeURIComponent(
+                                                    currentURL,
+                                                )}`}
+                                            >
+                                                Sign in
+                                            </Button>
+                                        </MenuItem>
+                                    </>
+                                )}
                             </Box>
                         </Drawer>
                     </Box>

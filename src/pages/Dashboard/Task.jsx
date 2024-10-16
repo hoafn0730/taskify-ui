@@ -9,18 +9,48 @@ import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import Link from '~/components/Link';
+import dayjs from 'dayjs';
+import { cloneDeep } from 'lodash';
 
-function Task() {
+import { cardService } from '~/services/cardService';
+
+function Task({ title, image, slug, card, setTasks }) {
     const location = useLocation();
+
+    const handleDueComplete = () => {
+        const newCard = cloneDeep(card);
+
+        cardService.updateCard(card?.id, {
+            title: card?.title,
+            dueComplete: true,
+        });
+
+        setTasks((prev) => prev.filter((card) => card.id !== newCard?.id));
+    };
+
+    const handleDismiss = () => {
+        const newCard = cloneDeep(card);
+
+        cardService.updateCard(card?.id, {
+            title: card?.title,
+            dueDate: null,
+            dueComplete: false,
+            dueReminder: -1,
+        });
+
+        setTasks((prev) => prev.filter((card) => card.id !== newCard?.id));
+    };
 
     return (
         <Card sx={{ maxWidth: 420, position: 'relative', mb: 2 }}>
             <CardMedia
                 sx={{ height: 100 }}
-                image="https://trello-backgrounds.s3.amazonaws.com/SharedBackground/480x480/1849a4a0cc47bd7f5c6e08a06cf3affa/photo-1516553174826-d05833723cd4.jpg"
-                title="green iguana"
+                // image="https://trello-backgrounds.s3.amazonaws.com/SharedBackground/480x480/1849a4a0cc47bd7f5c6e08a06cf3affa/photo-1516553174826-d05833723cd4.jpg"
+                image={image}
+                title={title}
             />
             <CardContent
                 sx={{
@@ -31,7 +61,7 @@ function Task() {
                 }}
             >
                 <Link
-                    to={'/card/abc'}
+                    to={'/card/' + slug}
                     sx={{
                         display: 'flex',
                         flexDirection: 'column',
@@ -47,7 +77,7 @@ function Task() {
                             fontSize: '16px',
                         }}
                     >
-                        --- Discuss During Next Meeting ---
+                        {title}
                     </Typography>
                     <Box>
                         <Typography
@@ -62,7 +92,7 @@ function Task() {
                                 p: '2px',
                             }}
                         >
-                            <AccessTimeRoundedIcon fontSize="small" /> Sep 17
+                            <AccessTimeRoundedIcon fontSize="small" /> {dayjs(card?.dueDate).format('MMM D, h:mm A')}
                         </Typography>
                     </Box>
                 </Link>
@@ -81,10 +111,12 @@ function Task() {
                         mb: 1,
                     }}
                 >
-                    <AccessTimeRoundedIcon fontSize="small" /> Due Sep 27, 2024, 4:06 PM
+                    <AccessTimeRoundedIcon fontSize="small" /> Due {dayjs(card?.dueDate).format('MMM D, h:mm A')}
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 1, width: '100%' }}>
-                    <Button startIcon={<CheckRoundedIcon />}>Complete</Button>
+                    <Button startIcon={<CheckRoundedIcon />} onClick={handleDueComplete}>
+                        Complete
+                    </Button>
                     <Button
                         startIcon={<CloseRoundedIcon />}
                         sx={{
@@ -92,6 +124,7 @@ function Task() {
                                 color: 'warning.dark',
                             },
                         }}
+                        onClick={handleDismiss}
                     >
                         Dismiss
                     </Button>
@@ -100,5 +133,13 @@ function Task() {
         </Card>
     );
 }
+
+Task.propTypes = {
+    title: PropTypes.string,
+    image: PropTypes.string,
+    slug: PropTypes.string,
+    card: PropTypes.object,
+    setTasks: PropTypes.func,
+};
 
 export default Task;

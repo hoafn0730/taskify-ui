@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import ChecklistIcon from '@mui/icons-material/Checklist';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import NotesIcon from '@mui/icons-material/Notes';
 import AttachmentOutlinedIcon from '@mui/icons-material/AttachmentOutlined';
 // import ListItemIcon from '@mui/material/ListItemIcon';
 // import ListItemText from '@mui/material/ListItemText';
+import { cloneDeep } from 'lodash';
 
 import Activity from './Activity';
 import Attachment from './Attachment';
@@ -22,18 +21,20 @@ import TaskDetailHeader from './TaskDetailHeader';
 import Modal from '~/components/Modal';
 import { cardService } from '~/services/cardService';
 import { checklistService } from '~/services/checklistService';
-import UploadFile from './Attachment/UploadFile';
-import { Divider, TextField, Typography } from '@mui/material';
-import { cloneDeep } from 'lodash';
+import AttachmentAction from './Actions/AttachmentAction';
+import { useDispatch } from 'react-redux';
+import { updateCardData } from '~/store/slices/boardSlice';
 
 function CardDetail() {
+    const { state } = useLocation();
+    const navigate = useNavigate();
     const { slug } = useParams();
+    const dispatch = useDispatch();
     const [card, setCard] = useState();
     const [checklists, setChecklists] = useState([]);
     const [isEditingDesc, setIsEditingDesc] = useState(false);
-    const [anchorEl, setAnchorEl] = useState(null);
     const [url, setUrl] = useState(null);
-    const [isUploadCover, setIsUploadCover] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     useEffect(() => {
         // Tim board.id === card.boardId
@@ -47,24 +48,31 @@ function CardDetail() {
     useEffect(() => {
         if (url) {
             const newCard = cloneDeep(card);
-            newCard.cover = url;
-            newCard.image = url.id + '';
+
+            if (url.cover) {
+                newCard.cover = url;
+                newCard.image = url.id + '';
+                dispatch(updateCardData({ newCard }));
+            }
 
             newCard.attachments = [...newCard.attachments, url];
             setCard(newCard);
             setUrl(null);
             setAnchorEl(null);
-            setIsUploadCover(false);
         }
-    }, [card, url]);
+    }, [card, dispatch, url]);
 
     const handleDeleteChecklist = (checklistId) => {
         checklistService.deleteChecklist(checklistId);
         setChecklists((prev) => prev.filter((item) => item.id !== checklistId));
     };
 
+    function handleDismiss() {
+        navigate(-1);
+    }
+
     return (
-        <Modal>
+        <Modal open={!!state} onClose={handleDismiss}>
             {!card && (
                 <Box sx={{ display: 'flex', position: 'relative', height: '90vh' }}>
                     <CircularProgress sx={{ position: 'absolute', top: '50%', left: '50%' }} />
@@ -74,13 +82,10 @@ function CardDetail() {
                 <>
                     {/* Header card */}
                     <Header title={card?.title} image={card?.cover} columnTitle={card?.column?.title} card={card} />
+
+                    {/* Content */}
                     <Box>
-                        <TaskDetailHeader
-                            onUploadCover={(event) => {
-                                setAnchorEl(event.currentTarget);
-                                setIsUploadCover(true);
-                            }}
-                        />
+                        <TaskDetailHeader card={card} setUrl={setUrl} setCard={setCard} />
 
                         <Section
                             title={'Description'}
@@ -94,13 +99,18 @@ function CardDetail() {
                                 card={card}
                             />
                         </Section>
-                        <Section
-                            title={'Attachments'}
-                            icon={<AttachmentOutlinedIcon />}
-                            button={<Button onClick={(event) => setAnchorEl(event.currentTarget)}>Add</Button>}
-                        >
-                            <Attachment card={card} attachments={card.attachments} />
-                        </Section>
+
+                        {/* Attachment */}
+                        {card?.attachments.length > 0 && (
+                            <Section
+                                title={'Attachments'}
+                                icon={<AttachmentOutlinedIcon />}
+                                button={<Button onClick={(e) => setAnchorEl(e.currentTarget)}>Add</Button>}
+                            >
+                                <Attachment card={card} attachments={card.attachments} />
+                            </Section>
+                        )}
+
                         {/* Checklist */}
                         {checklists?.length > 0 &&
                             checklists.map((checklist) => (
@@ -114,6 +124,7 @@ function CardDetail() {
                                 </Section>
                             ))}
 
+                        {/* Activity */}
                         <Section
                             title={'Activity'}
                             icon={<FormatListBulletedIcon />}
@@ -121,62 +132,14 @@ function CardDetail() {
                         >
                             <Activity />
                         </Section>
-                        <Menu
-                            id="basic-menu"
-                            anchorEl={anchorEl}
-                            open={Boolean(anchorEl)}
-                            onClose={() => setAnchorEl(null)}
-                            MenuListProps={{
-                                'aria-labelledby': 'basic-button',
-                            }}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'right',
-                            }}
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                        >
-                            <MenuItem sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                                <Typography variant="h3" sx={{ fontSize: '14px', mb: 1 }}>
-                                    Attach a file from your computer
-                                </Typography>
-                                <Typography sx={{ fontSize: '12px', mb: 3 }}>
-                                    You can also drag and drop files to upload them.
-                                </Typography>
-                                <UploadFile cardId={card.id} isUploadCover={isUploadCover} setUrl={setUrl} />
-                            </MenuItem>
-                            <Divider />
-                            <MenuItem sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                                <Typography variant="h3" sx={{ fontSize: '14px', mb: 1 }}>
-                                    Search or paste a link
-                                </Typography>
-
-                                <TextField
-                                    // value={itemValue}
-                                    data-no-dnd={true}
-                                    variant="outlined"
-                                    placeholder="Find recent links or paste a new link"
-                                    sx={{
-                                        mb: 1,
-                                        width: '100%',
-                                        '& .MuiOutlinedInput-root': {
-                                            p: 0,
-                                            fontSize: '1.1rem',
-                                            width: '100%',
-                                        },
-                                        '& .MuiOutlinedInput-input': {
-                                            fontSize: '14px',
-                                            p: '8px 16px',
-                                        },
-                                        '& .MuiOutlinedInput-notchedOutline': {},
-                                    }}
-                                    // onChange={(e) => setItemValue(e.target.value)}
-                                />
-                            </MenuItem>
-                        </Menu>
                     </Box>
+                    <AttachmentAction
+                        title={'Attachment'}
+                        card={card}
+                        setUrl={setUrl}
+                        anchorEl={anchorEl}
+                        onClose={() => setAnchorEl(null)}
+                    />
                 </>
             )}
         </Modal>

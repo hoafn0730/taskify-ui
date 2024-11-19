@@ -24,7 +24,7 @@ createRoot(document.getElementById('root')).render(
                         maxWidth: 'xs',
                     },
                     confirmationButtonProps: {
-                        color: 'secondary',
+                        color: 'primary',
                         variant: 'outlined',
                     },
                 }}

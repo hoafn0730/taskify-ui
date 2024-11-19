@@ -20,24 +20,32 @@ import Link from '~/components/Link';
 import ContextMenu from './ContextMenu';
 import dayjs from 'dayjs';
 
-function Card({ title, members, comments, checklists, attachments, data }) {
+function Card({ title, card }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-        id: data?.uuid,
-        data: { ...data },
+        id: card?.uuid,
+        data: { ...card },
     });
     const location = useLocation();
     const navigate = useNavigate();
+    const timeDifference = dayjs(card?.dueDate).valueOf() - dayjs().valueOf();
 
     const completeItemCounts = useMemo(
         () =>
-            data.checklists.reduce((prev, cur) => {
+            card?.checklists?.reduce((prev, cur) => {
                 const completedCount = cur.checkItems.filter((item) => item.status === 'complete').length;
 
-                prev.push(completedCount);
-                return prev;
-            }, []),
-        [data.checklists],
+                return prev + completedCount;
+            }, 0),
+        [card?.checklists],
+    );
+
+    const totalItem = useMemo(
+        () =>
+            card?.checklists?.reduce((prev, cur) => {
+                return prev + cur.checkItems.length;
+            }, 0),
+        [card?.checklists],
     );
 
     const style = {
@@ -63,7 +71,7 @@ function Card({ title, members, comments, checklists, attachments, data }) {
                         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
                         border: '1px solid rgba(0, 0, 0, 0.2)',
                         overflow: 'unset',
-                        display: data?.FE_PlaceholderCard ? 'none' : 'block',
+                        display: card?.FE_PlaceholderCard ? 'none' : 'block',
                     }}
                     ref={setNodeRef}
                     style={style}
@@ -71,7 +79,7 @@ function Card({ title, members, comments, checklists, attachments, data }) {
                     {...listeners}
                     onContextMenu={handleOpenContextMenu}
                 >
-                    {data?.cover?.fileUrl && (
+                    {card?.cover?.fileUrl && (
                         <CardMedia
                             sx={{
                                 minHeight: 160,
@@ -80,35 +88,41 @@ function Card({ title, members, comments, checklists, attachments, data }) {
                                 borderTopRightRadius: '4px',
                                 backgroundSize: 'cover',
                             }}
-                            image={data?.cover?.fileUrl}
+                            image={card?.cover?.fileUrl}
                             title={title}
-                            onClick={() => navigate(`/card/${data.slug}`, { state: { backgroundLocation: location } })}
+                            onClick={() => navigate(`/card/${card?.slug}`, { state: { backgroundLocation: location } })}
                         />
                     )}
 
                     <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
                         <Link
                             sx={{ textDecoration: 'none', color: 'inherit' }}
-                            to={`/card/${data.slug}`}
+                            to={`/card/${card?.slug}`}
                             state={{ backgroundLocation: location }}
                         >
                             <Typography>{title}</Typography>
                         </Link>
                     </CardContent>
 
-                    {(attachments?.length || data?.dueDate || !!data.checklists?.length) && (
+                    {(card?.attachments?.length || card?.dueDate || !!card?.checklists?.length) && (
                         <CardActions
                             sx={{
                                 p: '0 4px 8px',
                             }}
                         >
-                            {data?.dueDate && (
+                            {card?.dueDate && (
                                 <Button
                                     size="small"
-                                    variant={data?.dueComplete ? 'contained' : 'text'}
+                                    variant={card?.dueComplete ? 'contained' : 'text'}
                                     startIcon={<AccessTimeRoundedIcon />}
+                                    sx={{
+                                        color:
+                                            (card?.dueComplete && 'common.white') ||
+                                            (timeDifference > 0 && timeDifference < 300000 && 'orange') ||
+                                            (dayjs(card?.dueDate).valueOf() < dayjs(new Date()).valueOf() && 'red'),
+                                    }}
                                 >
-                                    {dayjs(data?.dueDate).format('MMM D')}
+                                    {dayjs(card?.dueDate).format('MMM D')}
                                 </Button>
                             )}
 
@@ -116,21 +130,19 @@ function Card({ title, members, comments, checklists, attachments, data }) {
                                 {2}
                             </Button>*/}
 
-                            {data.checklists?.map((checklist, index) => (
-                                <Button key={checklist.id} size="small" startIcon={<CheckBoxOutlinedIcon />}>
-                                    {completeItemCounts[index]}/{checklist.checkItems.length}
-                                </Button>
-                            ))}
+                            <Button size="small" startIcon={<CheckBoxOutlinedIcon />}>
+                                {completeItemCounts}/{totalItem}
+                            </Button>
 
-                            {!!attachments?.length && (
+                            {!!card?.attachments?.length && (
                                 <Button size="small" startIcon={<AttachmentIcon />}>
-                                    {attachments?.length}
+                                    {card?.attachments?.length}
                                 </Button>
                             )}
                         </CardActions>
                     )}
                 </MuiCard>
-                <ContextMenu anchorEl={anchorEl} onClose={handleCloseContextMenu} data={data} />
+                <ContextMenu anchorEl={anchorEl} onClose={handleCloseContextMenu} card={card} />
             </Box>
         </>
     );
@@ -138,12 +150,7 @@ function Card({ title, members, comments, checklists, attachments, data }) {
 
 Card.propTypes = {
     title: PropTypes.string,
-    desc: PropTypes.string,
-    members: PropTypes.array,
-    comments: PropTypes.array,
-    checklists: PropTypes.array,
-    attachments: PropTypes.array,
-    data: PropTypes.object,
+    card: PropTypes.object,
 };
 
 export default Card;

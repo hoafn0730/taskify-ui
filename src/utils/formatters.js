@@ -9,7 +9,7 @@ export const generatePlaceholderCard = (column) => {
         uuid: `${column.id}-placeholder-card`,
         boardId: column.boardId,
         columnId: column.id,
-        archived: false,
+        archivedAt: null,
         FE_PlaceholderCard: true,
     };
 };

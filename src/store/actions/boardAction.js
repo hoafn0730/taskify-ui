@@ -48,7 +48,6 @@ export const moveCardDifferentColumn = createAsyncThunk(
 );
 
 // Column actions
-
 export const createNewColumn = createAsyncThunk('board/createNewColumn', async (data) => {
     const createdColumn = await columnService.createNewColumn(data);
 
@@ -61,9 +60,14 @@ export const updateColumn = createAsyncThunk('board/updateColumn', async ({ colu
     return { columnId, data };
 });
 
-export const deleteColumn = createAsyncThunk('board/deleteColumn', async ({ columnId }) => {
-    columnService.deleteColumn(columnId).then((res) => toast.success(res.message));
-    return { columnId };
+export const deleteColumn = createAsyncThunk('board/deleteColumn', async ({ columnId }, thunkAPI) => {
+    try {
+        const res = await columnService.deleteColumn(columnId);
+        toast.success(res.message);
+        return { columnId };
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
 });
 
 // Card actions

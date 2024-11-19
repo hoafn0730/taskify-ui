@@ -30,8 +30,9 @@ function Dashboard() {
                             <Task
                                 key={task.id}
                                 title={task.title}
-                                image={task.cover.fileUrl}
+                                image={task?.cover?.fileUrl || 'https://placehold.co/600x400.png'}
                                 slug={task.slug}
+                                attachments={task.attachments}
                                 card={task}
                                 setTasks={setTasks}
                             />

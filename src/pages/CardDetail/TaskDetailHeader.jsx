@@ -17,19 +17,22 @@ import AttachmentIcon from '@mui/icons-material/Attachment';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 // import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
-import Dates from './Actions/Dates';
-import Cover from './Actions/Cover';
 import { Checkbox } from '@mui/material';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
-import { updateCard } from '~/store/actions/boardAction';
 import { useDispatch } from 'react-redux';
+
+import { updateCard } from '~/store/actions/boardAction';
+import Dates from './Actions/Dates';
+import ChecklistAction from './Actions/ChecklistAction';
+import AttachmentAction from './Actions/AttachmentAction';
 
 function TaskDetailHeader({ card, setUrl, setCard }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchorButtonActions, setAnchorButtonActions] = useState(null);
     const [actionButton, setActionButton] = useState(null);
+    const timeDifference = dayjs(card?.dueDate).valueOf() - dayjs().valueOf();
 
     const dispatch = useDispatch();
 
@@ -109,13 +112,43 @@ function TaskDetailHeader({ card, setUrl, setCard }) {
                                         variant="span"
                                         sx={{
                                             px: 1,
-                                            py: 0.5,
+                                            py: 0.1,
                                             bgcolor: 'primary.main',
                                             color: 'common.white',
-                                            borderRadius: 2,
+                                            borderRadius: 1,
                                         }}
                                     >
                                         Complete
+                                    </Typography>
+                                )}
+
+                                {timeDifference > 0 && timeDifference < 300000 && !card?.dueComplete && (
+                                    <Typography
+                                        variant="span"
+                                        sx={{
+                                            px: 1,
+                                            py: 0.1,
+                                            bgcolor: 'orange',
+                                            color: 'common.white',
+                                            borderRadius: 1,
+                                        }}
+                                    >
+                                        Due soon
+                                    </Typography>
+                                )}
+
+                                {dayjs(card?.dueDate).valueOf() < dayjs(new Date()).valueOf() && !card?.dueComplete && (
+                                    <Typography
+                                        variant="span"
+                                        sx={{
+                                            px: 1,
+                                            py: 0.1,
+                                            bgcolor: 'red',
+                                            color: 'common.white',
+                                            borderRadius: 1,
+                                        }}
+                                    >
+                                        Overdue
                                     </Typography>
                                 )}
                             </Box>
@@ -186,13 +219,23 @@ function TaskDetailHeader({ card, setUrl, setCard }) {
                     </ListItemIcon>
                     <ListItemText>Labels</ListItemText>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                    onClick={(event) => {
+                        setActionButton('Checklist');
+                        setAnchorButtonActions(event.currentTarget);
+                    }}
+                >
                     <ListItemIcon>
                         <CheckBoxOutlinedIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>Checkbox</ListItemText>
+                    <ListItemText>Checklist</ListItemText>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                    onClick={(event) => {
+                        setActionButton('Attachment');
+                        setAnchorButtonActions(event.currentTarget);
+                    }}
+                >
                     <ListItemIcon>
                         <AttachmentIcon fontSize="small" />
                     </ListItemIcon>
@@ -218,11 +261,19 @@ function TaskDetailHeader({ card, setUrl, setCard }) {
                 onClose={() => setAnchorButtonActions(null)}
             />
 
-            <Cover
+            <AttachmentAction
+                isCover={actionButton === 'Cover'}
                 title={actionButton}
                 anchorEl={anchorButtonActions}
                 card={card}
                 setUrl={setUrl}
+                onClose={() => setAnchorButtonActions(null)}
+            />
+            <ChecklistAction
+                title={actionButton}
+                anchorEl={anchorButtonActions}
+                card={card}
+                setCard={setCard}
                 onClose={() => setAnchorButtonActions(null)}
             />
         </>

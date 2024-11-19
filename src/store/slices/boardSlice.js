@@ -56,7 +56,7 @@ export const boardSlice = createSlice({
                         col.cardOrderIds = [generatePlaceholderCard(col).id];
                     } else {
                         col.cards = mapOrder(
-                            col?.cards.filter((card) => card.archived === false),
+                            col?.cards.filter((card) => !card.archivedAt),
                             col?.cardOrderIds,
                             'uuid',
                         );
@@ -146,6 +146,10 @@ export const boardSlice = createSlice({
                 state.boardData = { ...state.boardData, ...newBoard };
                 state.isLoading = false;
                 state.isError = false;
+            })
+            .addCase(deleteColumn.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
             });
 
         builder
@@ -177,7 +181,7 @@ export const boardSlice = createSlice({
                 const newData = action.payload.data;
                 Object.assign(card, newData);
 
-                if (newData.archived) {
+                if (newData.archivedAt) {
                     column.cards = column.cards.filter((card) => card.id !== action.payload.cardId);
                     column.cardOrderIds = column.cardOrderIds.filter((cardId) => cardId !== card.uuid);
                 }

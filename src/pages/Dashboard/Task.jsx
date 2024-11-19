@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import AttachmentIcon from '@mui/icons-material/Attachment';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -17,7 +18,7 @@ import { cloneDeep } from 'lodash';
 
 import { cardService } from '~/services/cardService';
 
-function Task({ title, image, slug, card, setTasks }) {
+function Task({ title, image, slug, attachments = [], card, setTasks }) {
     const location = useLocation();
 
     const handleDueComplete = () => {
@@ -79,7 +80,7 @@ function Task({ title, image, slug, card, setTasks }) {
                     >
                         {title}
                     </Typography>
-                    <Box>
+                    <Box sx={{ display: 'flex', gap: 1 }}>
                         <Typography
                             variant="span"
                             sx={{
@@ -87,12 +88,26 @@ function Task({ title, image, slug, card, setTasks }) {
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: 0.5,
-                                color: 'orange',
+                                // color: 'orange',
                                 width: 'fit-content',
                                 p: '2px',
                             }}
                         >
-                            <AccessTimeRoundedIcon fontSize="small" /> {dayjs(card?.dueDate).format('MMM D, h:mm A')}
+                            <AccessTimeRoundedIcon fontSize="small" /> {dayjs(card?.dueDate).format('MMM D')}
+                        </Typography>
+                        <Typography
+                            variant="span"
+                            sx={{
+                                fontSize: '14px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 0.5,
+                                // color: 'orange',
+                                width: 'fit-content',
+                                p: '2px',
+                            }}
+                        >
+                            <AttachmentIcon fontSize="small" /> {attachments?.length}
                         </Typography>
                     </Box>
                 </Link>
@@ -113,6 +128,8 @@ function Task({ title, image, slug, card, setTasks }) {
                 >
                     <AccessTimeRoundedIcon fontSize="small" /> Due {dayjs(card?.dueDate).format('MMM D, h:mm A')}
                 </Typography>
+                {/* actions */}
+
                 <Box sx={{ display: 'flex', gap: 1, width: '100%' }}>
                     <Button startIcon={<CheckRoundedIcon />} onClick={handleDueComplete}>
                         Complete
@@ -139,6 +156,7 @@ Task.propTypes = {
     image: PropTypes.string,
     slug: PropTypes.string,
     card: PropTypes.object,
+    attachments: PropTypes.array,
     setTasks: PropTypes.func,
 };
 

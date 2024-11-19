@@ -17,6 +17,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { capitalizeFirstLetter } from '~/utils/formatters';
 import { useState } from 'react';
 import Invite from './Invite/Invite';
+import BoardMenu from './BoardMenu';
 
 const MENUS_STYLES = {
     color: (theme) => (theme.palette.mode === 'dark' ? theme.palette.common.white : 'primary.main'),
@@ -32,6 +33,7 @@ function BoardBar() {
     const { t } = useTranslation('board');
     const [isOpen, setIsOpen] = useState(false);
     const board = useSelector((state) => state.board.boardData);
+    const [open, setOpen] = useState(false);
 
     return (
         <Box
@@ -110,9 +112,12 @@ function BoardBar() {
                             ))}
                 </AvatarGroup>
 
-                <Button sx={{ p: '6px', minWidth: 'auto' }}>
-                    <MoreHorizIcon />
-                </Button>
+                {!open && (
+                    <Button sx={{ p: '6px', minWidth: 'auto' }} onClick={() => setOpen(true)}>
+                        <MoreHorizIcon />
+                    </Button>
+                )}
+                <BoardMenu open={open} onClose={() => setOpen(false)} />
             </Box>
 
             <Invite members={board?.members} open={isOpen} onClose={() => setIsOpen(false)} />

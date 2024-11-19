@@ -31,6 +31,9 @@ function Column({ title, cards, data }) {
         confirm({
             title: 'Delete Column?',
             description: 'This action permanently delete your Column and its Cards! Are you sure?',
+            confirmationButtonProps: {
+                color: 'warning',
+            },
         })
             .then(() => {
                 dispatch(deleteColumn({ columnId: data.id }));
@@ -87,16 +90,7 @@ function Column({ title, cards, data }) {
                     >
                         {/* List cards */}
                         {cards.map((card) => (
-                            <Card
-                                key={card.id}
-                                title={card.title}
-                                image={card?.cover?.fileUrl}
-                                members={card.members}
-                                checklists={card.checklists}
-                                comments={card.comments}
-                                attachments={card.attachments}
-                                data={card}
-                            />
+                            <Card key={card.id} title={card.title} card={card} />
                         ))}
                     </Box>
                 </SortableContext>

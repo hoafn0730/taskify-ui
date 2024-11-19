@@ -10,18 +10,18 @@ import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import { updateCard } from '~/store/actions/boardAction';
 import { useTranslation } from 'react-i18next';
 
-function ContextMenu({ anchorEl, data, onClose }) {
+function ContextMenu({ anchorEl, card, onClose }) {
     const { t } = useTranslation('board');
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
 
     const handleArchive = () => {
-        dispatch(updateCard({ columnId: data.columnId, cardId: data.id, data: { archived: true } }));
+        dispatch(updateCard({ columnId: card.columnId, cardId: card.id, data: { archivedAt: new Date() } }));
     };
 
     const handleOpen = () => {
-        navigate(`/card/${data.slug}`, { state: { backgroundLocation: location } });
+        navigate(`/card/${card.slug}`, { state: { backgroundLocation: location } });
     };
 
     return (
@@ -64,7 +64,7 @@ function ContextMenu({ anchorEl, data, onClose }) {
 
 ContextMenu.propTypes = {
     anchorEl: PropTypes.node,
-    data: PropTypes.object,
+    card: PropTypes.object,
     onClose: PropTypes.func,
 };
 

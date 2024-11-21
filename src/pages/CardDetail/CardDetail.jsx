@@ -10,6 +10,7 @@ import AttachmentOutlinedIcon from '@mui/icons-material/AttachmentOutlined';
 // import ListItemIcon from '@mui/material/ListItemIcon';
 // import ListItemText from '@mui/material/ListItemText';
 import { cloneDeep } from 'lodash';
+import { useDispatch } from 'react-redux';
 
 import Activity from './Activity';
 import Attachment from './Attachment';
@@ -22,7 +23,6 @@ import Modal from '~/components/Modal';
 import { cardService } from '~/services/cardService';
 import { checklistService } from '~/services/checklistService';
 import AttachmentAction from './Actions/AttachmentAction';
-import { useDispatch } from 'react-redux';
 import { updateCardData } from '~/store/slices/boardSlice';
 
 function CardDetail() {

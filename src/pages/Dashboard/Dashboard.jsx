@@ -1,24 +1,24 @@
 import Box from '@mui/material/Box';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import StarOutlineRoundedIcon from '@mui/icons-material/StarOutlineRounded';
+import { Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import Section from '~/components/Section';
 import Task from './Task';
-import { Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
 import { cardService } from '~/services/cardService';
 import { boardService } from '~/services/boardService';
-import { Link } from 'react-router-dom';
 
 function Dashboard() {
     const [tasks, setTasks] = useState([]);
     const [boards, setBoards] = useState([]);
 
     useEffect(() => {
-        cardService
-            .getCards()
-            .then((res) => setTasks(res.data.data.filter((card) => card.dueDate && !card.dueComplete)));
-        boardService.getBoards().then((res) => setBoards(res.data.data));
+        cardService.getCards().then((res) => setTasks(res.data.filter((card) => card.dueDate && !card.dueComplete)));
+        boardService.getBoards().then((res) => {
+            return setBoards(res.data);
+        });
     }, []);
 
     return (
@@ -37,6 +37,12 @@ function Dashboard() {
                                 setTasks={setTasks}
                             />
                         ))}
+
+                    {!tasks?.length && (
+                        <Typography variant="span" fontSize={'small'}>
+                            Stay on track and up to date
+                        </Typography>
+                    )}
                 </Section>
             </Box>
             <Box

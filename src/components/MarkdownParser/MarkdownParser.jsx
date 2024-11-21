@@ -4,12 +4,13 @@ import parse from 'html-react-parser';
 import MarkdownIt from 'markdown-it';
 import markdownItIns from 'markdown-it-ins';
 import hljs from 'highlight.js';
+import Box from '@mui/material/Box';
 
 hljs.configure({
     classPrefix: 'token ',
 });
 
-function MarkdownParser({ content, style, className }) {
+function MarkdownParser({ content, style }) {
     const mdParser = useMemo(
         () =>
             new MarkdownIt({
@@ -24,7 +25,8 @@ function MarkdownParser({ content, style, className }) {
                                 hljs.highlight(str, { language: lang, ignoreIllegals: true }).value
                             }</code></pre>
                     `;
-                        } catch (__) {
+                            // eslint-disable-next-line no-unused-vars
+                        } catch (_) {
                             //
                         }
                     }
@@ -36,17 +38,12 @@ function MarkdownParser({ content, style, className }) {
         [],
     ).use(markdownItIns);
 
-    return (
-        <div className={'wrapper'} style={style}>
-            {parse(mdParser.render(content))}
-        </div>
-    );
+    return <Box sx={style}>{parse(mdParser.render(content))}</Box>;
 }
 
 MarkdownParser.propTypes = {
     content: PropTypes.string.isRequired,
     style: PropTypes.object,
-    className: PropTypes.string,
 };
 
 export default memo(MarkdownParser);

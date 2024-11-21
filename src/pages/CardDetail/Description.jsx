@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
-
-import MdEditor from '~/components/MdEditor';
-import MarkdownParser from '~/components/MarkdownParser';
 import { useDispatch } from 'react-redux';
+
+import MarkdownEditor from '~/components/MarkdownEditor';
+import MarkdownParser from '~/components/MarkdownParser';
 import { updateCard } from '~/store/actions/boardAction';
 
 function Description({ desc, isEditingDesc, setIsEditingDesc, card }) {
@@ -34,8 +34,8 @@ function Description({ desc, isEditingDesc, setIsEditingDesc, card }) {
                 </>
             ) : (
                 <>
-                    <MdEditor
-                        value={cardDescValue}
+                    <MarkdownEditor
+                        value={cardDescValue || ''}
                         style={{ minHeight: '275px' }}
                         onChange={({ text }) => setCardDescValue(text)}
                     />

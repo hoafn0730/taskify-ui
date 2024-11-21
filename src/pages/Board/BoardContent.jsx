@@ -18,6 +18,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 import { cloneDeep, isEmpty } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 import Column from './Column';
 import { mapOrder } from '~/utils/sort';
@@ -29,9 +31,7 @@ import {
     moveCardInSameColumn,
     moveColumns,
 } from '~/store/actions/boardAction';
-import { toast } from 'react-toastify';
 import { MouseSensor, TouchSensor } from '~/libs/dndKitSensors';
-import { useTranslation } from 'react-i18next';
 
 const ACTIVE_DRAG_ITEM_TYPE = {
     COLUMN: 'COLUMN',

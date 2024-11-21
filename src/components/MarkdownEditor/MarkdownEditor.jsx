@@ -1,14 +1,25 @@
+import { Box } from '@mui/material';
 import PropTypes from 'prop-types';
-import MarkdownEditor from 'react-markdown-editor-lite';
+import MdEditor from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
 
 import MarkdownParser from '~/components/MarkdownParser';
 
-function MdEditor({ value, onChange, style }) {
+function MarkdownEditor({ value, onChange, style }) {
     return (
-        <MarkdownEditor
+        <Box
+            component={MdEditor}
             value={value}
-            style={style}
+            sx={{
+                ...style,
+                borderRadius: 1,
+                '& .rc-md-navigation': {
+                    bgcolor: 'common.white',
+                },
+                '& .editor-container .sec-md': {
+                    borderWidth: 0,
+                },
+            }}
             view={{ menu: true, md: true, html: false }}
             canView={{
                 menu: true,
@@ -28,10 +39,10 @@ function MdEditor({ value, onChange, style }) {
     );
 }
 
-MdEditor.propTypes = {
+MarkdownEditor.propTypes = {
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     style: PropTypes.object,
 };
 
-export default MdEditor;
+export default MarkdownEditor;

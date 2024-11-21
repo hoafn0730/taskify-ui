@@ -4,6 +4,8 @@ import Tabs from '@mui/material/Tabs';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import DashboardCustomizeRoundedIcon from '@mui/icons-material/DashboardCustomizeRounded';
+import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
 import LinkTab from './LinkTab';
 
 function samePageLinkNavigation(event) {
@@ -31,7 +33,7 @@ function NavTabs() {
     };
 
     return (
-        <Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Tabs
                 value={value}
                 sx={{
@@ -61,6 +63,16 @@ function NavTabs() {
                     to="/templates"
                 />
             </Tabs>
+            <Divider />
+            <Button
+                size="small"
+                sx={{
+                    mt: 1,
+                    color: '#444',
+                }}
+            >
+                Create New Board
+            </Button>
         </Box>
     );
 }

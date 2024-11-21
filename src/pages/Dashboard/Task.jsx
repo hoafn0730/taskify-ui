@@ -11,11 +11,10 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import AttachmentIcon from '@mui/icons-material/Attachment';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
-import Link from '~/components/Link';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 
+import Link from '~/components/Link';
 import { cardService } from '~/services/cardService';
 
 function Task({ title, image, slug, attachments = [], card, setTasks }) {

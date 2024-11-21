@@ -13,9 +13,9 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import VpnLockIcon from '@mui/icons-material/VpnLock';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { useState } from 'react';
 
 import { capitalizeFirstLetter } from '~/utils/formatters';
-import { useState } from 'react';
 import Invite from './Invite/Invite';
 import BoardMenu from './BoardMenu';
 

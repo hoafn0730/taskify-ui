@@ -1,5 +1,5 @@
+import Box from '@mui/material/Box';
 import NavTabs from '../NavTabs/NavTabs';
-import { Box, Divider } from '@mui/material';
 
 function Sidebar() {
     return (
@@ -14,7 +14,6 @@ function Sidebar() {
             }}
         >
             <NavTabs />
-            <Divider />
         </Box>
     );
 }

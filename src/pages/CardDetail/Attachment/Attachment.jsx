@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
-import AttachmentItem from './AttachmentItem';
 import PropTypes from 'prop-types';
+import AttachmentItem from './AttachmentItem';
 
 function Attachment({ card, attachments = [] }) {
     return (

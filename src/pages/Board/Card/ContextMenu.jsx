@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
@@ -7,17 +7,36 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
-import { updateCard } from '~/store/actions/boardAction';
 import { useTranslation } from 'react-i18next';
+import { cardService } from '~/services/cardService';
+import { cloneDeep } from 'lodash';
+import { updateBoardData } from '~/store/slices/boardSlice';
+import dayjs from 'dayjs';
 
 function ContextMenu({ anchorEl, card, onClose }) {
     const { t } = useTranslation('board');
+    const board = useSelector((state) => state.board.activeBoard);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
 
     const handleArchive = () => {
-        dispatch(updateCard({ columnId: card.columnId, cardId: card.id, data: { archivedAt: new Date() } }));
+        const updateData = {
+            archivedAt: dayjs(new Date()).toISOString(),
+        };
+        const newBoard = cloneDeep(board);
+
+        const column = newBoard.columns.find((col) => col.id === card.columnId);
+        const activeCard = column.cards.find((c) => c.id === card.id);
+
+        Object.assign(activeCard, updateData);
+
+        column.cards = column.cards.filter((c) => c.id !== card.id);
+        column.cardOrderIds = column.cardOrderIds.filter((cardId) => cardId !== card.uuid);
+
+        dispatch(updateBoardData(newBoard));
+
+        cardService.updateCard(card?.id, updateData);
     };
 
     const handleOpen = () => {
@@ -63,7 +82,7 @@ function ContextMenu({ anchorEl, card, onClose }) {
 }
 
 ContextMenu.propTypes = {
-    anchorEl: PropTypes.node,
+    anchorEl: PropTypes.any,
     card: PropTypes.object,
     onClose: PropTypes.func,
 };

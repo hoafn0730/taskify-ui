@@ -4,18 +4,24 @@ import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-
 import { CSS } from '@dnd-kit/utilities';
 import { useState } from 'react';
 import { useConfirm } from 'material-ui-confirm';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { cloneDeep } from 'lodash';
+import { toast } from 'react-toastify';
 
 import Footer from './Footer';
 import Header from './Header';
 import Card from '../Card';
-import { deleteColumn } from '~/store/actions/boardAction';
+import { updateBoardData } from '~/store/slices/boardSlice';
+import { columnService } from '~/services/columnService';
+import { cardService } from '~/services/cardService';
 
-function Column({ title, cards, data }) {
+function Column({ column }) {
+    const board = useSelector((state) => state.board.activeBoard);
     const [openNewCardForm, setOpenNewCardForm] = useState(false);
+    const [newCardTitle, setNewCardTitle] = useState('');
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-        id: data?.uuid,
-        data: { ...data },
+        id: column?.uuid,
+        data: { ...column },
     });
     const confirm = useConfirm();
     const dispatch = useDispatch();
@@ -27,6 +33,38 @@ function Column({ title, cards, data }) {
         opacity: isDragging ? 0.5 : undefined,
     };
 
+    const handleAddNewCard = async () => {
+        if (newCardTitle.startsWith(' ')) return;
+        if (!newCardTitle) {
+            toast.error('Please enter card title!');
+            return;
+        }
+        const newCardData = {
+            title: newCardTitle,
+            columnId: column.id,
+        };
+
+        const createdCard = await cardService.createNewCard({ ...newCardData, boardId: board.id });
+
+        const newBoard = cloneDeep(board);
+        const columnToUpdate = newBoard.columns.find((col) => col.id === createdCard.columnId);
+
+        if (columnToUpdate) {
+            if (columnToUpdate.cards.some((c) => c.FE_PlaceholderCard)) {
+                columnToUpdate.cards = [createdCard];
+                columnToUpdate.cardOrderIds = [createdCard.uuid];
+            } else {
+                columnToUpdate.cards.push(createdCard);
+                columnToUpdate.cardOrderIds.push(createdCard.uuid);
+            }
+        }
+
+        dispatch(updateBoardData(newBoard));
+
+        setOpenNewCardForm((prev) => !prev);
+        setNewCardTitle('');
+    };
+
     const handleDeleteColumn = () => {
         confirm({
             title: 'Delete Column?',
@@ -36,10 +74,22 @@ function Column({ title, cards, data }) {
             },
         })
             .then(() => {
-                dispatch(deleteColumn({ columnId: data.id }));
+                const newBoard = { ...board };
+
+                newBoard.columns = newBoard.columns.filter((col) => col.id !== column.id);
+                newBoard.columnOrderIds = newBoard.columnOrderIds.filter((colId) => colId !== column.uuid);
+
+                dispatch(updateBoardData(newBoard));
+
+                columnService.deleteColumn(column.id);
             })
             .catch(() => {});
     };
+
+    // todo: Su kien menu
+    // const handleClickMenu = () => {
+    //     ///
+    // };
 
     return (
         <div ref={setNodeRef} style={style} {...attributes}>
@@ -56,16 +106,10 @@ function Column({ title, cards, data }) {
                 }}
                 {...listeners}
             >
-                <Header
-                    title={title}
-                    openNewCardForm={openNewCardForm}
-                    data={data}
-                    setOpenNewCardForm={setOpenNewCardForm}
-                    onDeleteColumn={handleDeleteColumn}
-                />
+                <Header column={column} setOpenNewCardForm={setOpenNewCardForm} onDeleteColumn={handleDeleteColumn} />
 
                 {/* Box List Card */}
-                <SortableContext items={cards.map((c) => c.uuid)} strategy={verticalListSortingStrategy}>
+                <SortableContext items={column?.cards?.map((c) => c.uuid) || []} strategy={verticalListSortingStrategy}>
                     <Box
                         sx={{
                             p: 0.5,
@@ -89,23 +133,28 @@ function Column({ title, cards, data }) {
                         }}
                     >
                         {/* List cards */}
-                        {cards.map((card) => (
-                            <Card key={card.id} title={card.title} card={card} />
-                        ))}
+                        {column?.cards?.length > 0 && column?.cards?.map((card) => <Card key={card.id} card={card} />)}
                     </Box>
                 </SortableContext>
 
                 {/* Box Column Footer */}
-                <Footer columnId={data?.id} openNewCardForm={openNewCardForm} setOpenNewCardForm={setOpenNewCardForm} />
+                <Footer
+                    newCardTitle={newCardTitle}
+                    openNewCardForm={openNewCardForm}
+                    onChangeCardTitle={(e) => setNewCardTitle(e.target.value)}
+                    onAddNewCard={handleAddNewCard}
+                    onCloseCardForm={() => {
+                        setOpenNewCardForm((prev) => !prev);
+                        setNewCardTitle('');
+                    }}
+                />
             </Box>
         </div>
     );
 }
 
 Column.propTypes = {
-    title: PropTypes.string,
-    cards: PropTypes.array,
-    data: PropTypes.object,
+    column: PropTypes.object,
 };
 
 export default Column;

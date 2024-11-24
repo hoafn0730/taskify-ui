@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
@@ -29,10 +28,9 @@ const MENUS_STYLES = {
     },
 };
 
-function BoardBar() {
+function BoardBar({ board }) {
     const { t } = useTranslation('board');
     const [isOpen, setIsOpen] = useState(false);
-    const board = useSelector((state) => state.board.boardData);
     const [open, setOpen] = useState(false);
 
     return (
@@ -126,7 +124,7 @@ function BoardBar() {
 }
 
 BoardBar.propTypes = {
-    boardData: PropTypes.object,
+    board: PropTypes.object,
 };
 
 export default BoardBar;

@@ -4,7 +4,7 @@ const createNewColumn = async (data) => {
     const res = await httpRequest.post('/columns', {
         ...data,
     });
-    return res.data;
+    return res.data.data;
 };
 
 const updateColumn = async (columnId, data) => {

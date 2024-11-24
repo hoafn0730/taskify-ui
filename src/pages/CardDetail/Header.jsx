@@ -5,10 +5,13 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
-import { useDispatch } from 'react-redux';
-import { updateCard } from '~/store/actions/boardAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { cardService } from '~/services/cardService';
+import { updateBoardData } from '~/store/slices/boardSlice';
+import { cloneDeep } from 'lodash';
 
 function Header({ title = '', image, columnTitle, card }) {
+    const board = useSelector((state) => state.board.activeBoard);
     const [cardTitleValue, setCardTitleValue] = useState(title);
     const debouncedSearchTerm = useDebounce(cardTitleValue, 800);
     const dispatch = useDispatch();
@@ -24,9 +27,21 @@ function Header({ title = '', image, columnTitle, card }) {
         const updateData = { title: debouncedSearchTerm?.trim() };
 
         if (updateData.title !== title) {
-            dispatch(updateCard({ columnId: card.columnId, cardId: card.id, data: updateData }));
+            const newBoard = cloneDeep(board);
+
+            const column = newBoard.columns.find((col) => col.id === card.columnId);
+            const activeCard = column.cards.find((c) => c.id === card.id);
+
+            Object.assign(activeCard, updateData);
+
+            column.cards = column.cards.filter((c) => c.id !== card.id);
+            column.cardOrderIds = column.cardOrderIds.filter((cardId) => cardId !== card.uuid);
+
+            dispatch(updateBoardData(newBoard));
+            cardService.updateCard(card?.id, updateData);
         }
-    }, [debouncedSearchTerm]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [debouncedSearchTerm, dispatch]);
 
     const handleUpdateTitle = (e) => {
         setCardTitleValue(e.target.value);

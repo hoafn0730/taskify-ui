@@ -1,12 +1,12 @@
 import config from '~/config';
-import HomeDashboardLayout from '~/layouts/HomeDashboardLayout';
-import HomeLayout from '~/layouts/HomeLayout';
 import Blog from '~/pages/Blog';
+import HomeLayout from '~/layouts/HomeLayout';
+import HomeDashboardLayout from '~/layouts/HomeDashboardLayout';
 
+import Home from '~/pages/Home';
 import Board from '~/pages/Board';
 import Boards from '~/pages/Boards';
 import Dashboard from '~/pages/Dashboard';
-import Home from '~/pages/Home';
 import Invite from '~/pages/Invite/Invite';
 import Templates from '~/pages/Templates/Templates';
 

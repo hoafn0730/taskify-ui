@@ -3,12 +3,12 @@ import Box from '@mui/material/Box';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 
 import Section from '~/components/Section';
 import BoardItem from './BoardItem';
 import { boardService } from '~/services/boardService';
-import { Typography } from '@mui/material';
 
 function Boards() {
     // const { t, i18n } = useTranslation('boards');

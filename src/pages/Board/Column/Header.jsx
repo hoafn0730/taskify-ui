@@ -18,15 +18,20 @@ import ContentPaste from '@mui/icons-material/ContentPaste';
 import AddCard from '@mui/icons-material/AddCard';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import { useDebounce } from '@uidotdev/usehooks';
-import { useDispatch } from 'react-redux';
-import { updateColumn } from '~/store/actions/boardAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { cloneDeep } from 'lodash';
+
+import { updateBoardData } from '~/store/slices/boardSlice';
+import { columnService } from '~/services/columnService';
+
 // import { useTranslation } from 'react-i18next';
 
-function Header({ title, data, setOpenNewCardForm, onDeleteColumn }) {
+function Header({ column, setOpenNewCardForm, onDeleteColumn }) {
     // const { t } = useTranslation('board');
+    const board = useSelector((state) => state.board.activeBoard);
     const [anchorEl, setAnchorEl] = useState(null);
     const [isRename, setIsRename] = useState(false);
-    const [columnTitleValue, setColumnTitleValue] = useState(title);
+    const [columnTitleValue, setColumnTitleValue] = useState(column?.title);
     const debouncedColumnTitleValue = useDebounce(columnTitleValue, 800);
     const dispatch = useDispatch();
 
@@ -39,10 +44,18 @@ function Header({ title, data, setOpenNewCardForm, onDeleteColumn }) {
 
         const updateData = { title: debouncedColumnTitleValue?.trim() };
 
-        if (updateData.title !== title) {
-            dispatch(updateColumn({ columnId: data.id, data: updateData }));
+        if (updateData.title !== column?.title) {
+            const newBoard = cloneDeep(board);
+
+            const activeColumn = newBoard.columns.find((col) => col.id === column.id);
+            Object.assign(activeColumn, updateData);
+
+            dispatch(updateBoardData(newBoard));
+
+            columnService.updateColumn(column.id, updateData);
         }
-    }, [data.id, debouncedColumnTitleValue, dispatch, title]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [debouncedColumnTitleValue, dispatch]);
 
     const handleClick = (event) => setAnchorEl(event.currentTarget);
     const handleClose = () => setAnchorEl(null);
@@ -66,7 +79,7 @@ function Header({ title, data, setOpenNewCardForm, onDeleteColumn }) {
                         cursor: 'pointer',
                     }}
                 >
-                    {title}
+                    {column?.title}
                 </Typography>
             ) : (
                 <TextField
@@ -211,9 +224,7 @@ function Header({ title, data, setOpenNewCardForm, onDeleteColumn }) {
 }
 
 Header.propTypes = {
-    title: PropTypes.string,
-    data: PropTypes.object,
-    openNewCardForm: PropTypes.bool,
+    column: PropTypes.object,
     setOpenNewCardForm: PropTypes.func,
     onDeleteColumn: PropTypes.func,
 };

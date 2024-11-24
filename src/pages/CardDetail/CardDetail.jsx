@@ -10,7 +10,7 @@ import AttachmentOutlinedIcon from '@mui/icons-material/AttachmentOutlined';
 // import ListItemIcon from '@mui/material/ListItemIcon';
 // import ListItemText from '@mui/material/ListItemText';
 import { cloneDeep } from 'lodash';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Activity from './Activity';
 import Attachment from './Attachment';
@@ -20,28 +20,26 @@ import Header from './Header';
 import Section from './Section';
 import TaskDetailHeader from './TaskDetailHeader';
 import Modal from '~/components/Modal';
-import { cardService } from '~/services/cardService';
 import { checklistService } from '~/services/checklistService';
 import AttachmentAction from './Actions/AttachmentAction';
 import { updateCardData } from '~/store/slices/boardSlice';
+import { fetchCardDetail } from '~/store/actions/cardAction';
 
 function CardDetail() {
     const { state } = useLocation();
     const navigate = useNavigate();
     const { slug } = useParams();
     const dispatch = useDispatch();
-    const [card, setCard] = useState();
-    const [checklists, setChecklists] = useState([]);
+    const card = useSelector((state) => state.card.activeCard);
+
     const [isEditingDesc, setIsEditingDesc] = useState(false);
     const [url, setUrl] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
 
     useEffect(() => {
         // Tim board.id === card.boardId
-        cardService.getCardDetailBySlug(slug).then((res) => {
-            setCard(res.data);
-            setChecklists(res.data?.checklists);
-        });
+        dispatch(fetchCardDetail(slug));
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -56,7 +54,7 @@ function CardDetail() {
             }
 
             newCard.attachments = [...newCard.attachments, url];
-            setCard(newCard);
+            // setCard(newCard);
             setUrl(null);
             setAnchorEl(null);
         }
@@ -64,7 +62,7 @@ function CardDetail() {
 
     const handleDeleteChecklist = (checklistId) => {
         checklistService.deleteChecklist(checklistId);
-        setChecklists((prev) => prev.filter((item) => item.id !== checklistId));
+        // setChecklists((prev) => prev.filter((item) => item.id !== checklistId));
     };
 
     function handleDismiss() {
@@ -85,7 +83,7 @@ function CardDetail() {
 
                     {/* Content */}
                     <Box>
-                        <TaskDetailHeader card={card} setUrl={setUrl} setCard={setCard} />
+                        <TaskDetailHeader card={card} setUrl={setUrl} />
 
                         <Section
                             title={'Description'}
@@ -112,8 +110,8 @@ function CardDetail() {
                         )}
 
                         {/* Checklist */}
-                        {checklists?.length > 0 &&
-                            checklists.map((checklist) => (
+                        {card?.checklists?.length > 0 &&
+                            card?.checklists?.map((checklist) => (
                                 <Section
                                     key={checklist.id}
                                     title={checklist.title}

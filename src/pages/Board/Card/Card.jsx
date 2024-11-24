@@ -1,26 +1,26 @@
+import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import { CSS } from '@dnd-kit/utilities';
+import MuiCard from '@mui/material/Card';
+import { useMemo, useState } from 'react';
 import Button from '@mui/material/Button';
+import { useSortable } from '@dnd-kit/sortable';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+// import GroupIcon from '@mui/icons-material/Group';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import MuiCard from '@mui/material/Card';
-import Typography from '@mui/material/Typography';
+// import CommentIcon from '@mui/icons-material/Comment';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AttachmentIcon from '@mui/icons-material/Attachment';
-import CommentIcon from '@mui/icons-material/Comment';
-import GroupIcon from '@mui/icons-material/Group';
-import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
+import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 
 import Link from '~/components/Link';
 import ContextMenu from './ContextMenu';
-import dayjs from 'dayjs';
 
-function Card({ title, card }) {
+function Card({ card }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
         id: card?.uuid,
@@ -60,8 +60,6 @@ function Card({ title, card }) {
         setAnchorEl(e.currentTarget);
     };
 
-    const handleCloseContextMenu = () => setAnchorEl(null);
-
     return (
         <>
             <Box>
@@ -89,7 +87,7 @@ function Card({ title, card }) {
                                 backgroundSize: 'cover',
                             }}
                             image={card?.cover?.fileUrl}
-                            title={title}
+                            title={card?.title}
                             onClick={() => navigate(`/card/${card?.slug}`, { state: { backgroundLocation: location } })}
                         />
                     )}
@@ -100,7 +98,7 @@ function Card({ title, card }) {
                             to={`/card/${card?.slug}`}
                             state={{ backgroundLocation: location }}
                         >
-                            <Typography>{title}</Typography>
+                            <Typography>{card?.title}</Typography>
                         </Link>
                     </CardContent>
 
@@ -142,14 +140,13 @@ function Card({ title, card }) {
                         </CardActions>
                     )}
                 </MuiCard>
-                <ContextMenu anchorEl={anchorEl} onClose={handleCloseContextMenu} card={card} />
+                <ContextMenu anchorEl={anchorEl} card={card} onClose={() => setAnchorEl(null)} />
             </Box>
         </>
     );
 }
 
 Card.propTypes = {
-    title: PropTypes.string,
     card: PropTypes.object,
 };
 

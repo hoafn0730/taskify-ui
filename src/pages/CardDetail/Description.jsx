@@ -2,24 +2,40 @@ import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import MarkdownEditor from '~/components/MarkdownEditor';
 import MarkdownParser from '~/components/MarkdownParser';
-import { updateCard } from '~/store/actions/boardAction';
+import { cloneDeep } from 'lodash';
+import { cardService } from '~/services/cardService';
+import { updateBoardData } from '~/store/slices/boardSlice';
 
-function Description({ desc, isEditingDesc, setIsEditingDesc, card }) {
-    const [cardDescValue, setCardDescValue] = useState(desc);
+function Description({ card, isEditingDesc, setIsEditingDesc }) {
+    const board = useSelector((state) => state.board.activeBoard);
+    const [cardDescValue, setCardDescValue] = useState(card?.desc);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        setCardDescValue(desc);
-    }, [desc]);
+        setCardDescValue(card?.desc);
+    }, [card?.desc]);
 
     const handleSubmit = () => {
         const updateData = { title: card.title, description: cardDescValue?.trim() };
-        dispatch(updateCard({ columnId: card.columnId, cardId: card.id, data: updateData }));
+
+        const newBoard = cloneDeep(board);
+
+        const column = newBoard.columns.find((col) => col.id === card.columnId);
+        const activeCard = column.cards.find((c) => c.id === card.id);
+
+        Object.assign(activeCard, updateData);
+
+        column.cards = column.cards.filter((c) => c.id !== card.id);
+        column.cardOrderIds = column.cardOrderIds.filter((cardId) => cardId !== card.uuid);
+
+        dispatch(updateBoardData(newBoard));
         setIsEditingDesc(false);
+
+        cardService.updateCard(card?.id, updateData);
     };
 
     return (
@@ -52,10 +68,9 @@ function Description({ desc, isEditingDesc, setIsEditingDesc, card }) {
 }
 
 Description.propTypes = {
-    desc: PropTypes.string,
+    card: PropTypes.object,
     isEditingDesc: PropTypes.bool,
     setIsEditingDesc: PropTypes.func,
-    card: PropTypes.object,
 };
 
 export default Description;

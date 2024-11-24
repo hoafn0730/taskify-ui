@@ -33,6 +33,7 @@ function Modal({ size = 'normal', children, open, onClose }) {
                 sx={{
                     position: 'relative',
                     width: width,
+                    minHeight: '100px',
                     bgcolor: 'background.paper',
                     boxShadow: 24,
                     borderRadius: 4,

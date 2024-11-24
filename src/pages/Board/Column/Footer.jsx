@@ -5,36 +5,11 @@ import Button from '@mui/material/Button';
 import AddCard from '@mui/icons-material/AddCard';
 import CloseIcon from '@mui/icons-material/Close';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { createNewCard } from '~/store/actions/boardAction';
 import { useTranslation } from 'react-i18next';
 
-function Footer({ columnId, openNewCardForm, setOpenNewCardForm }) {
+function Footer({ openNewCardForm, newCardTitle, onChangeCardTitle, onAddNewCard, onCloseCardForm }) {
     const { t } = useTranslation('board');
-    const [newCardTitle, setNewCardTitle] = useState('');
-    const dispatch = useDispatch();
-
-    const toggleNewCardForm = () => setOpenNewCardForm((prev) => !prev);
-
-    const handleAddNewCard = () => {
-        if (newCardTitle.startsWith(' ')) return;
-        if (!newCardTitle) {
-            toast.error('Please enter card title!');
-            return;
-        }
-        const newCardData = {
-            title: newCardTitle,
-            columnId: columnId,
-        };
-
-        dispatch(createNewCard(newCardData));
-
-        toggleNewCardForm();
-        setNewCardTitle('');
-    };
 
     return (
         <Box
@@ -45,7 +20,7 @@ function Footer({ columnId, openNewCardForm, setOpenNewCardForm }) {
         >
             {!openNewCardForm ? (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Button startIcon={<AddCard />} onClick={toggleNewCardForm}>
+                    <Button startIcon={<AddCard />} onClick={onCloseCardForm}>
                         {t('addNewCard')}
                     </Button>
                     <Tooltip title={t('dragToMove')}>
@@ -96,7 +71,7 @@ function Footer({ columnId, openNewCardForm, setOpenNewCardForm }) {
                                 },
                             },
                         }}
-                        onChange={(e) => setNewCardTitle(e.target.value)}
+                        onChange={onChangeCardTitle}
                     />
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <Button
@@ -111,7 +86,7 @@ function Footer({ columnId, openNewCardForm, setOpenNewCardForm }) {
                                 borderColor: (theme) => theme.palette.success.main,
                                 '&:hover': { bgcolor: (theme) => theme.palette.success.main },
                             }}
-                            onClick={handleAddNewCard}
+                            onClick={onAddNewCard}
                         >
                             {t('addCard')}
                         </Button>
@@ -124,10 +99,7 @@ function Footer({ columnId, openNewCardForm, setOpenNewCardForm }) {
                                 cursor: 'pointer',
                                 '&:hover': { color: (theme) => theme.palette.warning.light },
                             }}
-                            onClick={() => {
-                                toggleNewCardForm();
-                                setNewCardTitle('');
-                            }}
+                            onClick={onCloseCardForm}
                         />
                     </Box>
                 </Box>
@@ -137,9 +109,11 @@ function Footer({ columnId, openNewCardForm, setOpenNewCardForm }) {
 }
 
 Footer.propTypes = {
-    columnId: PropTypes.number,
     openNewCardForm: PropTypes.bool,
-    setOpenNewCardForm: PropTypes.func,
+    newCardTitle: PropTypes.string,
+    onChangeCardTitle: PropTypes.func,
+    onAddNewCard: PropTypes.func,
+    onCloseCardForm: PropTypes.func,
 };
 
 export default Footer;

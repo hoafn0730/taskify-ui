@@ -12,68 +12,78 @@ import {
     Select,
     Typography,
 } from '@mui/material';
+//
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import DateCalendar from '~/components/DateCalendar';
 import { DateField, LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { cloneDeep } from 'lodash';
-import { updateCard } from '~/store/actions/boardAction';
 import { updateCardData } from '~/store/slices/boardSlice';
+import { cardService } from '~/services/cardService';
 
-function Dates({ title, anchorEl, card, setCard, onClose }) {
+function Dates({ title, anchorEl, onClose }) {
+    const board = useSelector((state) => state.board.activeBoard);
+    const card = useSelector((state) => state.card.activeCard);
     const dueDate = card?.dueDate && dayjs(card?.dueDate);
     const [dateCalendarValue, setDateCalendarValue] = useState(dueDate ?? dayjs());
     const dispatch = useDispatch();
 
     const handleSave = () => {
+        const updateData = {
+            title: card?.title,
+            dueDate: dateCalendarValue,
+            dueComplete: false,
+            dueReminder: -1,
+        };
+
         const newCard = cloneDeep(card);
 
         newCard.dueDate = dayjs(dateCalendarValue).toISOString();
         newCard.dueComplete = false;
         newCard.dueReminder = -1;
-        dispatch(updateCardData({ newCard }));
-        setCard(newCard);
-        onClose();
 
-        dispatch(
-            updateCard({
-                columnId: card?.columnId,
-                cardId: card?.id,
-                data: {
-                    title: card?.title,
-                    dueDate: dateCalendarValue,
-                    dueComplete: false,
-                    dueReminder: -1,
-                },
-            }),
-        );
+        onClose();
+        dispatch(updateCardData(newCard));
+
+        cardService.updateCard(card.id, updateData);
     };
 
     const handleRemove = () => {
+        const updateData = {
+            title: card?.title,
+            dueDate: null,
+            dueComplete: false,
+            dueReminder: -1,
+        };
         const newCard = cloneDeep(card);
 
         newCard.dueDate = null;
         newCard.dueComplete = false;
         newCard.dueReminder = -1;
-        dispatch(updateCardData({ newCard }));
-        setCard(newCard);
-        onClose();
 
-        dispatch(
-            updateCard({
-                columnId: card?.columnId,
-                cardId: card?.id,
-                data: {
-                    title: card?.title,
-                    dueDate: null,
-                    dueComplete: false,
-                    dueReminder: -1,
-                },
-            }),
-        );
+        onClose();
+        dispatch(updateCardData(newCard));
+
+        cardService.updateCard(card.id, updateData);
+
+        // Bi lap lai nhieu
+        //         const updateData = { title: card?.title, dueDate: null, dueComplete: false, dueReminder: -1 };
+        //
+        //         const newBoard = cloneDeep(board);
+        //
+        //         const column = newBoard.columns.find((col) => col.id === card.columnId);
+        //         const activeCard = column.cards.find((c) => c.id === card.id);
+        //
+        //         Object.assign(activeCard, updateData);
+        //
+        //         column.cards = column.cards.filter((c) => c.id !== card.id);
+        //         column.cardOrderIds = column.cardOrderIds.filter((cardId) => cardId !== card.uuid);
+        //
+        //         dispatch(updateBoardData(newBoard));
+        //         cardService.updateCard(card?.id, updateData);
     };
 
     return (

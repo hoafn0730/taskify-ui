@@ -1,8 +1,4 @@
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
 import {
     closestCorners,
@@ -17,30 +13,23 @@ import {
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 import { cloneDeep, isEmpty } from 'lodash';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { useTranslation } from 'react-i18next';
 
 import Column from './Column';
-import { mapOrder } from '~/utils/sort';
 import Card from './Card';
 import { generatePlaceholderCard } from '~/utils/formatters';
-import {
-    createNewColumn,
-    moveCardDifferentColumn,
-    moveCardInSameColumn,
-    moveColumns,
-} from '~/store/actions/boardAction';
 import { MouseSensor, TouchSensor } from '~/libs/dndKitSensors';
+import { columnService } from '~/services/columnService';
+import { updateBoardData } from '~/store/slices/boardSlice';
+import NewColumnForm from './NewColumnForm';
 
 const ACTIVE_DRAG_ITEM_TYPE = {
     COLUMN: 'COLUMN',
     CARD: 'CARD',
 };
 
-function BoardContent() {
-    const { t } = useTranslation('board');
-    const board = useSelector((state) => state.board.boardData);
+function BoardContent({ board, moveColumns, moveCardInSameColumn, moveCardDifferentColumn }) {
     const [orderedColumns, setOrderedColumns] = useState([]);
     const [activeDragItemId, setActiveDragItemId] = useState(null);
     const [activeDragItemType, setActiveDragItemType] = useState(null);
@@ -70,7 +59,7 @@ function BoardContent() {
     };
 
     useEffect(() => {
-        setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, 'uuid') || []);
+        setOrderedColumns(board?.columns || []);
     }, [board]);
 
     const findColumnByCardId = (cardId) => {
@@ -127,15 +116,11 @@ function BoardContent() {
             }
 
             if (triggerFrom === 'handleDragEnd') {
-                dispatch(
-                    moveCardDifferentColumn({
-                        currentCardId: oldColumnWhenDraggingCard.cards.find(
-                            (card) => card.uuid === activeDraggingCardId,
-                        ).id,
-                        prevColumnId: oldColumnWhenDraggingCard.id,
-                        nextColumnId: nextOverColumn.id,
-                        orderedColumns: nextColumns,
-                    }),
+                moveCardDifferentColumn(
+                    oldColumnWhenDraggingCard.cards.find((card) => card.uuid === activeDraggingCardId).id,
+                    oldColumnWhenDraggingCard.id,
+                    nextOverColumn.id,
+                    nextColumns,
                 );
             }
 
@@ -234,11 +219,7 @@ function BoardContent() {
                 setOrderedColumns(newOrderedColumns);
 
                 // Update to database
-                dispatch(
-                    moveColumns({
-                        columnOrderIds: newOrderedColumns.map((c) => c.uuid),
-                    }),
-                );
+                moveColumns(newOrderedColumns);
             }
         }
 
@@ -291,13 +272,7 @@ function BoardContent() {
                 });
 
                 // Update to database
-                dispatch(
-                    moveCardInSameColumn({
-                        columnId: oldColumnWhenDraggingCard.id,
-                        orderedCards: orderedCards,
-                        orderedCardIds: orderedCardIds,
-                    }),
-                );
+                moveCardInSameColumn(orderedCards, orderedCardIds, oldColumnWhenDraggingCard.id);
             }
         }
 
@@ -307,7 +282,7 @@ function BoardContent() {
         setOldColumnWhenDraggingCard(null);
     };
 
-    const handleAddNewColumn = () => {
+    const handleAddNewColumn = async () => {
         if (newColumnTitle.startsWith(' ')) return;
         if (!newColumnTitle) {
             toast.error('Please enter column title!');
@@ -318,7 +293,17 @@ function BoardContent() {
             boardId: board.id,
         };
 
-        dispatch(createNewColumn(newColumnData));
+        const createdColumn = await columnService.createNewColumn(newColumnData);
+
+        createdColumn.cards = [generatePlaceholderCard(createdColumn)];
+        createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn).uuid];
+
+        const newBoard = cloneDeep(board);
+        // find column update
+        newBoard.columns.push(createdColumn);
+        newBoard.columnOrderIds.push(createdColumn.uuid);
+
+        dispatch(updateBoardData(newBoard));
 
         toggleNewColumnForm();
         setNewColumnTitle('');
@@ -354,144 +339,25 @@ function BoardContent() {
                     <SortableContext items={orderedColumns.map((c) => c.uuid)} strategy={horizontalListSortingStrategy}>
                         {/* List Column */}
                         {orderedColumns.map((col) => (
-                            <Column
-                                key={col.id}
-                                title={col.title}
-                                cards={mapOrder(col.cards, col.cardOrderIds, 'uuid')}
-                                data={col}
-                            />
+                            <Column key={col.id} column={col} />
                         ))}
                     </SortableContext>
 
-                    {!openNewColumnForm ? (
-                        <Box
-                            sx={{
-                                minWidth: '250px',
-                                maxWidth: '250px',
-                                mx: 2,
-                                borderRadius: '6px',
-                                height: 'fit-content',
-                                bgcolor: '#ffffffed',
-                            }}
-                        >
-                            <Button
-                                sx={{
-                                    width: '100%',
-                                    justifyContent: 'flex-start',
-                                    pl: 2.5,
-                                    py: 1,
-                                    // bgcolor: 'rgba(255, 255, 255, 0.16)',
-                                    // color: (theme) =>
-                                    //     theme.palette.mode === 'dark' ? theme.palette.common.white : 'primary.main',
-                                    '&:hover': {
-                                        color: (theme) => theme.palette.mode === 'dark' && theme.palette.primary.main,
-                                        bgcolor: (theme) =>
-                                            theme.palette.mode === 'dark' && theme.palette.primary['50'],
-                                    },
-                                }}
-                                startIcon={<NoteAddIcon />}
-                                onClick={toggleNewColumnForm}
-                            >
-                                {t('addNewColumn')}
-                            </Button>
-                        </Box>
-                    ) : (
-                        <Box
-                            sx={{
-                                minWidth: '250px',
-                                maxWidth: '250px',
-                                mx: 2,
-                                p: 1,
-                                borderRadius: '6px',
-                                height: 'fit-content',
-                                bgcolor: '#ffffffed',
-                            }}
-                        >
-                            <TextField
-                                value={newColumnTitle}
-                                label={t('enterColumnTitle')}
-                                type="text"
-                                variant="outlined"
-                                size="small"
-                                autoFocus
-                                sx={{
-                                    width: '100%',
-                                    '& .MuiOutlinedInput-root': {
-                                        '& fieldset': {
-                                            borderColor: (theme) =>
-                                                theme.palette.mode === 'dark'
-                                                    ? theme.palette.common.white
-                                                    : theme.palette.primary.main,
-                                        },
-                                        '&:hover fieldset': {
-                                            borderColor: (theme) =>
-                                                theme.palette.mode === 'dark'
-                                                    ? theme.palette.common.white
-                                                    : theme.palette.primary.main,
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                            borderColor: (theme) =>
-                                                theme.palette.mode === 'dark'
-                                                    ? theme.palette.common.white
-                                                    : theme.palette.primary.main,
-                                        },
-                                    },
-                                }}
-                                onChange={(e) => setNewColumnTitle(e.target.value)}
-                            />
-                            <Box sx={{ display: 'flex', marginTop: 1, alignItems: 'center', gap: 1 }}>
-                                <Button
-                                    variant="contained"
-                                    color="success"
-                                    size="small"
-                                    sx={{
-                                        color: 'white',
-                                        boxShadow: 'none',
-                                        border: '0.5px solid',
-                                        borderColor: (theme) => theme.palette.success.main,
-                                        '&:hover': { bgcolor: (theme) => theme.palette.success.main },
-                                    }}
-                                    onClick={handleAddNewColumn}
-                                >
-                                    {t('addColumn')}
-                                </Button>
-                                <CloseIcon
-                                    sx={{
-                                        color: (theme) =>
-                                            theme.palette.mode === 'dark'
-                                                ? theme.palette.common.white
-                                                : theme.palette.primary.main,
-                                        cursor: 'pointer',
-                                        '&:hover': { color: (theme) => theme.palette.warning.light },
-                                    }}
-                                    onClick={() => {
-                                        toggleNewColumnForm();
-                                        setNewColumnTitle('');
-                                    }}
-                                />
-                            </Box>
-                        </Box>
-                    )}
+                    <NewColumnForm
+                        openNewColumnForm={openNewColumnForm}
+                        newColumnTitle={newColumnTitle}
+                        setNewColumnTitle={setNewColumnTitle}
+                        toggleNewColumnForm={toggleNewColumnForm}
+                        onAddNewColumn={handleAddNewColumn}
+                    />
                 </Box>
 
                 <DragOverlay dropAnimation={dropAnimation}>
                     {activeDragItemId && activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (
-                        <Column
-                            title={activeDragItemData.title}
-                            cards={mapOrder(activeDragItemData.cards, activeDragItemData.cardOrderIds, 'id')}
-                            data={activeDragItemData}
-                        />
+                        <Column column={activeDragItemData} />
                     )}
                     {activeDragItemId && activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && (
-                        <Card
-                            title={activeDragItemData.title}
-                            desc={activeDragItemData.description}
-                            image={activeDragItemData.image}
-                            memberIds={activeDragItemData.memberIds}
-                            comments={activeDragItemData.comments}
-                            attachments={activeDragItemData.attachments}
-                            data={activeDragItemData}
-                        />
+                        <Card card={activeDragItemData} />
                     )}
                 </DragOverlay>
             </Box>
@@ -500,6 +366,10 @@ function BoardContent() {
 }
 
 BoardContent.propTypes = {
-    data: PropTypes.object,
+    board: PropTypes.object,
+    moveColumns: PropTypes.func,
+    moveCardInSameColumn: PropTypes.func,
+    moveCardDifferentColumn: PropTypes.func,
 };
+
 export default BoardContent;

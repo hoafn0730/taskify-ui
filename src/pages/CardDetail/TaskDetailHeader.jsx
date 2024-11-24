@@ -23,12 +23,13 @@ import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { useDispatch } from 'react-redux';
 
-import { updateCard } from '~/store/actions/boardAction';
 import Dates from './Actions/Dates';
 import ChecklistAction from './Actions/ChecklistAction';
 import AttachmentAction from './Actions/AttachmentAction';
+import { updateCardData } from '~/store/slices/boardSlice';
+import { cardService } from '~/services/cardService';
 
-function TaskDetailHeader({ card, setUrl, setCard }) {
+function TaskDetailHeader({ card, setUrl }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchorButtonActions, setAnchorButtonActions] = useState(null);
     const [actionButton, setActionButton] = useState(null);
@@ -44,21 +45,18 @@ function TaskDetailHeader({ card, setUrl, setCard }) {
     };
 
     const handleCheckDueComplete = (e) => {
+        const updateData = {
+            title: card?.title,
+            dueComplete: e.target.checked,
+        };
+
         const newCard = cloneDeep(card);
 
         newCard.dueComplete = e.target.checked;
-        setCard(newCard);
 
-        dispatch(
-            updateCard({
-                columnId: card?.columnId,
-                cardId: card?.id,
-                data: {
-                    title: card?.title,
-                    dueComplete: e.target.checked,
-                },
-            }),
-        );
+        dispatch(updateCardData(newCard));
+
+        cardService.updateCard(card.id, updateData);
     };
 
     return (
@@ -257,7 +255,6 @@ function TaskDetailHeader({ card, setUrl, setCard }) {
                 title={actionButton}
                 anchorEl={anchorButtonActions}
                 card={card}
-                setCard={setCard}
                 onClose={() => setAnchorButtonActions(null)}
             />
 
@@ -273,7 +270,6 @@ function TaskDetailHeader({ card, setUrl, setCard }) {
                 title={actionButton}
                 anchorEl={anchorButtonActions}
                 card={card}
-                setCard={setCard}
                 onClose={() => setAnchorButtonActions(null)}
             />
         </>
@@ -283,7 +279,6 @@ function TaskDetailHeader({ card, setUrl, setCard }) {
 TaskDetailHeader.propTypes = {
     card: PropTypes.object,
     setUrl: PropTypes.func,
-    setCard: PropTypes.func,
 };
 
 export default TaskDetailHeader;

@@ -6,7 +6,9 @@ import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import DashboardCustomizeRoundedIcon from '@mui/icons-material/DashboardCustomizeRounded';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
+import Fade from '@mui/material/Fade';
 import LinkTab from './LinkTab';
+import Modal from '../Modal';
 
 function samePageLinkNavigation(event) {
     if (
@@ -24,7 +26,10 @@ function samePageLinkNavigation(event) {
 
 function NavTabs() {
     const [value, setValue] = useState(0);
+    const [open, setOpen] = useState(false);
 
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     const handleChange = (event, newValue) => {
         // event.type can be equal to focus with selectionFollowsFocus.
         if (event.type !== 'click' || (event.type === 'click' && samePageLinkNavigation(event))) {
@@ -64,15 +69,24 @@ function NavTabs() {
                 />
             </Tabs>
             <Divider />
-            <Button
-                size="small"
-                sx={{
-                    mt: 1,
-                    color: '#444',
-                }}
-            >
-                Create New Board
-            </Button>
+
+            <Box>
+                <Button
+                    size="small"
+                    sx={{
+                        mt: 1,
+                        color: '#444',
+                    }}
+                    onClick={handleOpen}
+                >
+                    Create New Board
+                </Button>
+                <Modal open={open} onClose={handleClose}>
+                    <Fade in={open}>
+                        <Box>Text in a modal</Box>
+                    </Fade>
+                </Modal>
+            </Box>
         </Box>
     );
 }

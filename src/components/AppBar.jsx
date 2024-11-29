@@ -94,7 +94,9 @@ function AppBar() {
                                     color="primary"
                                     variant="contained"
                                     size="small"
-                                    href={`http://localhost:3000/register?continue=${encodeURIComponent(currentURL)}`}
+                                    href={`${
+                                        import.meta.env.VITE_APP_ACCOUNTS_URL
+                                    }/register?continue=${encodeURIComponent(currentURL)}`}
                                 >
                                     Sign up
                                 </Button>
@@ -144,9 +146,9 @@ function AppBar() {
                                                 color="primary"
                                                 variant="contained"
                                                 fullWidth
-                                                href={`http://localhost:3000/register?continue=${encodeURIComponent(
-                                                    currentURL,
-                                                )}`}
+                                                href={`${
+                                                    import.meta.env.VITE_APP_ACCOUNTS_URL
+                                                }/register?continue=${encodeURIComponent(currentURL)}`}
                                             >
                                                 Sign up
                                             </Button>
@@ -156,9 +158,9 @@ function AppBar() {
                                                 color="primary"
                                                 variant="outlined"
                                                 fullWidth
-                                                href={`http://localhost:3000/login?continue=${encodeURIComponent(
-                                                    currentURL,
-                                                )}`}
+                                                href={`${
+                                                    import.meta.env.VITE_APP_ACCOUNTS_URL
+                                                }/login?continue=${encodeURIComponent(currentURL)}`}
                                             >
                                                 Sign in
                                             </Button>

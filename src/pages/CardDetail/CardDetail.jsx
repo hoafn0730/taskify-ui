@@ -24,6 +24,7 @@ import { checklistService } from '~/services/checklistService';
 import AttachmentAction from './Actions/AttachmentAction';
 import { updateCardData } from '~/store/slices/boardSlice';
 import { fetchCardDetail } from '~/store/actions/cardAction';
+import socket from '~/utils/socket';
 
 function CardDetail() {
     const { state } = useLocation();
@@ -59,6 +60,17 @@ function CardDetail() {
             setAnchorEl(null);
         }
     }, [card, dispatch, url]);
+
+    useEffect(() => {
+        socket.on('receiveComment', (data) => {
+            console.log(data);
+        });
+
+        return () =>
+            socket.off('receiveComment', (arg) => {
+                console.log(arg);
+            });
+    }, []);
 
     const handleDeleteChecklist = (checklistId) => {
         checklistService.deleteChecklist(checklistId);

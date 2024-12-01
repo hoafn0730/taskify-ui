@@ -28,20 +28,18 @@ function Invite() {
                         .then((res) => {
                             if (res?.message) {
                                 toast.info('You are allowed to join the board.');
-                                return navigate('/board/' + slug);
+                                return navigate('/board/' + slug, { replace: true });
                             } else {
                                 toast.success('You have submitted a request to join! Please wait to join.');
                             }
                         });
-
-                    navigate('/');
                 } else {
                     toast('You need to sign in! Please log in to access.');
-                    navigate('/home');
+                    navigate('/home', { replace: true });
                 }
             })
             .catch(() => {
-                navigate('/home');
+                navigate('/home', { replace: true });
             });
     }, [confirm, navigate, slug, user]);
 

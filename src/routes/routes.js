@@ -7,8 +7,9 @@ import Home from '~/pages/Home';
 import Board from '~/pages/Board';
 import Boards from '~/pages/Boards';
 import Dashboard from '~/pages/Dashboard';
-import Invite from '~/pages/Invite/Invite';
-import Templates from '~/pages/Templates/Templates';
+import Invite from '~/pages/Invite';
+import Templates from '~/pages/Templates';
+import NotFound from '~/pages/NotFound';
 
 export const publicRoutes = [
     {
@@ -20,6 +21,11 @@ export const publicRoutes = [
         path: config.paths.blog,
         component: Blog,
         layout: HomeLayout,
+    },
+    {
+        path: config.paths.notFound,
+        component: NotFound,
+        layout: null,
     },
 ];
 

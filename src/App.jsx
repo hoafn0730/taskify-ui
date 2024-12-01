@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box';
-import { io } from 'socket.io-client';
 import { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes, useLocation } from 'react-router-dom';
@@ -10,13 +9,7 @@ import DefaultLayout from '~/layouts/DefaultLayout';
 import PrivateRoute from '~/components/PrivateRoute';
 import { privateRoutes, publicRoutes } from '~/routes';
 import { getCurrentUser } from '~/store/actions/userAction';
-
-const socket = io('http://localhost:5000', {
-    withCredentials: true,
-    extraHeaders: {
-        // 'my-custom-header': 'abcd',
-    },
-});
+import socket from './utils/socket';
 
 function App() {
     const location = useLocation();

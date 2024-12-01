@@ -1,38 +1,38 @@
 import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
-import { Typography } from '@mui/material';
+
+import ActivityBox from './ActivityBox';
+import ActivityItem from './ActivityItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { commentService } from '~/services/commentService';
+import { updateCardData } from '~/store/slices/cardSlice';
 
 function Activity() {
+    const card = useSelector((state) => state.card.activeCard);
+    const dispatch = useDispatch();
+
+    const handleDeleteItem = (commentId) => {
+        commentService.deleteComment(commentId).then(() => {
+            const newCard = { ...card };
+
+            newCard.comments = newCard.comments.filter((c) => c.id !== commentId);
+
+            dispatch(updateCardData(newCard));
+        });
+    };
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Avatar alt="Remy Sharp" src="https://mui.com/static/images/avatar/1.jpg" />
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Box>
-                        <Typography variant="span" sx={{ fontWeight: 'bold', fontSize: '14px' }}>
-                            Hoan Tran
-                        </Typography>{' '}
-                        joined this card
-                    </Box>
-                    <Typography variant="span" sx={{ fontSize: '12px' }}>
-                        6 hours ago
-                    </Typography>
-                </Box>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Avatar alt="Remy Sharp" src="https://mui.com/static/images/avatar/1.jpg" />
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Box>
-                        <Typography variant="span" sx={{ fontWeight: 'bold', fontSize: '14px' }}>
-                            Hoan Tran
-                        </Typography>{' '}
-                        joined this card
-                    </Box>
-                    <Typography variant="span" sx={{ fontSize: '12px' }}>
-                        6 hours ago
-                    </Typography>
-                </Box>
-            </Box>
+            <ActivityBox />
+            {card?.comments.map((comment) => (
+                <ActivityItem
+                    key={comment.id}
+                    comment={comment}
+                    title={comment.comment}
+                    user={comment.user}
+                    createdAt={comment.createdAt}
+                    onDelete={handleDeleteItem}
+                />
+            ))}
         </Box>
     );
 }

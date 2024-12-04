@@ -6,19 +6,19 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
 import { useDispatch, useSelector } from 'react-redux';
+import { cloneDeep } from 'lodash';
 import { cardService } from '~/services/cardService';
 import { updateBoardData } from '~/store/slices/boardSlice';
-import { cloneDeep } from 'lodash';
 
-function Header({ title = '', image, columnTitle, card }) {
+function Header({ card }) {
     const board = useSelector((state) => state.board.activeBoard);
-    const [cardTitleValue, setCardTitleValue] = useState(title);
+    const [cardTitleValue, setCardTitleValue] = useState(card?.title);
     const debouncedSearchTerm = useDebounce(cardTitleValue, 800);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        setCardTitleValue(title);
-    }, [title]);
+        setCardTitleValue(card?.title);
+    }, [card?.title]);
 
     useEffect(() => {
         if (!debouncedSearchTerm?.trim()) {
@@ -26,7 +26,7 @@ function Header({ title = '', image, columnTitle, card }) {
         }
         const updateData = { title: debouncedSearchTerm?.trim() };
 
-        if (updateData.title !== title) {
+        if (updateData.title !== card?.title) {
             const newBoard = cloneDeep(board);
 
             const column = newBoard.columns.find((col) => col.id === card.columnId);
@@ -50,7 +50,7 @@ function Header({ title = '', image, columnTitle, card }) {
     return (
         <Box sx={{ mb: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                {image && (
+                {card?.cover && (
                     <Box
                         component="img"
                         sx={{
@@ -60,8 +60,8 @@ function Header({ title = '', image, columnTitle, card }) {
                             maxWidth: { xs: 350, md: 250 },
                             objectFit: 'contain',
                         }}
-                        alt={title}
-                        src={image.fileUrl}
+                        alt={card?.title}
+                        src={card?.cover.fileUrl}
                     />
                 )}
             </Box>
@@ -116,7 +116,7 @@ function Header({ title = '', image, columnTitle, card }) {
                     />
                 </Box>
                 <Typography variant="span" sx={{ fontSize: '14px', ml: '44px' }}>
-                    in list {columnTitle}
+                    in list {card?.column?.title}
                 </Typography>
             </Box>
         </Box>
@@ -124,9 +124,6 @@ function Header({ title = '', image, columnTitle, card }) {
 }
 
 Header.propTypes = {
-    title: PropTypes.string,
-    image: PropTypes.object,
-    columnTitle: PropTypes.string,
     card: PropTypes.object,
 };
 

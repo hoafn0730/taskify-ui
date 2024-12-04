@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import CircularProgress from '@mui/material/CircularProgress';
 
 import BoardBar from './BoardBar';
 import BoardContent from './BoardContent';
@@ -11,6 +10,7 @@ import { updateBoardData } from '~/store/slices/boardSlice';
 import { boardService } from '~/services/boardService';
 import { cloneDeep } from 'lodash';
 import { columnService } from '~/services/columnService';
+import LoadingSpinner from '~/components/LoadingSpinner';
 
 function Board() {
     const { slug } = useParams();
@@ -70,21 +70,7 @@ function Board() {
     };
 
     if (isLoading) {
-        return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 1,
-                    height: '100vh',
-                    width: '100vw',
-                }}
-            >
-                <CircularProgress />
-                Board Loading...
-            </Box>
-        );
+        return <LoadingSpinner caption="Board Loading..." />;
     }
 
     return (

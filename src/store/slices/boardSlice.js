@@ -53,6 +53,6 @@ export const boardSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { updateBoardData, updateCardData } = boardSlice.actions;
+export const { updateBoardData } = boardSlice.actions;
 
 export default boardSlice.reducer;

@@ -12,26 +12,30 @@ import AttachmentOutlinedIcon from '@mui/icons-material/AttachmentOutlined';
 import { cloneDeep } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Activity from './Activity';
-import Attachment from './Attachment';
-import Checklist from './Checklist';
-import Description from './Description';
 import Header from './Header';
 import Section from './Section';
 import TaskDetailHeader from './TaskDetailHeader';
+import Activity from './Section/Activity';
+import Attachment from './Section/Attachment';
+import Checklist from './Section/Checklist';
+import Description from './Section/Description';
 import Modal from '~/components/Modal';
 import { checklistService } from '~/services/checklistService';
 import AttachmentAction from './Actions/AttachmentAction';
-import { updateCardData } from '~/store/slices/boardSlice';
 import { fetchCardDetail } from '~/store/actions/cardAction';
 import socket from '~/utils/socket';
+import LoadingSpinner from '~/components/LoadingSpinner';
+import { updateCardData } from '~/store/slices/cardSlice';
+import findCard from '~/utils/findCard';
+import { updateBoardData } from '~/store/slices/boardSlice';
 
-function CardDetail() {
+function Card() {
     const { state } = useLocation();
     const navigate = useNavigate();
     const { slug } = useParams();
     const dispatch = useDispatch();
     const card = useSelector((state) => state.card.activeCard);
+    const board = useSelector((state) => state.board.activeBoard);
 
     const [isEditingDesc, setIsEditingDesc] = useState(false);
     const [url, setUrl] = useState(null);
@@ -49,17 +53,25 @@ function CardDetail() {
             const newCard = cloneDeep(card);
 
             if (url.cover) {
-                newCard.cover = url;
-                newCard.image = url.id + '';
-                dispatch(updateCardData({ newCard }));
+                const newBoard = cloneDeep(board);
+                newCard.cover = url.data;
+                newCard.image = url.data.id + '';
+
+                const card = findCard(newCard, newBoard);
+                card.cover = url.data;
+                card.image = url.data.id + '';
+
+                dispatch(updateBoardData(newBoard));
             }
 
-            newCard.attachments = [...newCard.attachments, url];
-            // setCard(newCard);
+            newCard.attachments = [...newCard.attachments, url.data];
+
+            dispatch(updateCardData(newCard));
             setUrl(null);
             setAnchorEl(null);
         }
-    }, [card, dispatch, url]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, url]);
 
     useEffect(() => {
         socket.on('receiveComment', (data) => {
@@ -83,15 +95,11 @@ function CardDetail() {
 
     return (
         <Modal open={!!state} onClose={handleDismiss}>
-            {!card && (
-                <Box sx={{ display: 'flex', position: 'relative', height: '90vh' }}>
-                    <CircularProgress sx={{ position: 'absolute', top: '50%', left: '50%' }} />
-                </Box>
-            )}
+            {!card && <LoadingSpinner caption="Card Loading..." />}
             {card && (
                 <>
                     {/* Header card */}
-                    <Header title={card?.title} image={card?.cover} columnTitle={card?.column?.title} card={card} />
+                    <Header card={card} />
 
                     {/* Content */}
                     <Box>
@@ -103,7 +111,6 @@ function CardDetail() {
                             button={<Button onClick={() => setIsEditingDesc(true)}>Edit</Button>}
                         >
                             <Description
-                                desc={card?.description}
                                 isEditingDesc={isEditingDesc}
                                 setIsEditingDesc={setIsEditingDesc}
                                 card={card}
@@ -117,7 +124,7 @@ function CardDetail() {
                                 icon={<AttachmentOutlinedIcon />}
                                 button={<Button onClick={(e) => setAnchorEl(e.currentTarget)}>Add</Button>}
                             >
-                                <Attachment card={card} attachments={card.attachments} />
+                                <Attachment card={card} />
                             </Section>
                         )}
 
@@ -156,4 +163,4 @@ function CardDetail() {
     );
 }
 
-export default CardDetail;
+export default Card;

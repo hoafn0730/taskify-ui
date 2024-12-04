@@ -83,15 +83,8 @@ function Invite({ members = [], open, onClose }) {
     };
 
     return (
-        <Modal size="small" open={open} onClose={onClose}>
-            <Box
-                sx={{
-                    pt: 2,
-                }}
-            >
-                <Typography variant="h3" sx={{ fontSize: '20px', mb: 2 }}>
-                    {t('boardBar.share')}
-                </Typography>
+        <Modal size="small" title={t('boardBar.share')} open={open} onClose={onClose}>
+            <Box>
                 <Box sx={{ display: 'flex', gap: 1, pr: 4, mb: 2 }}>
                     <TextField
                         data-no-dnd={true}

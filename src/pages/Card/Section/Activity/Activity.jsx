@@ -23,7 +23,7 @@ function Activity() {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <ActivityBox />
-            {card?.comments.map((comment) => (
+            {card?.comments?.map((comment) => (
                 <ActivityItem
                     key={comment.id}
                     comment={comment}

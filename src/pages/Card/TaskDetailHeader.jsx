@@ -26,7 +26,6 @@ import { useDispatch } from 'react-redux';
 import Dates from './Actions/Dates';
 import ChecklistAction from './Actions/ChecklistAction';
 import AttachmentAction from './Actions/AttachmentAction';
-import { updateCardData } from '~/store/slices/boardSlice';
 import { cardService } from '~/services/cardService';
 
 function TaskDetailHeader({ card, setUrl }) {
@@ -46,23 +45,35 @@ function TaskDetailHeader({ card, setUrl }) {
 
     const handleCheckDueComplete = (e) => {
         const updateData = {
-            title: card?.title,
             dueComplete: e.target.checked,
         };
 
         const newCard = cloneDeep(card);
-
         newCard.dueComplete = e.target.checked;
 
-        dispatch(updateCardData(newCard));
-
+        // dispatch(updateCardData(newCard));
         cardService.updateCard(card.id, updateData);
     };
 
     return (
         <>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', pl: '40px' }}>
-                <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', columnGap: 1, rowGap: 1 }}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    pl: '40px',
+                }}
+            >
+                <Box
+                    sx={{
+                        mb: 2,
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        columnGap: 1,
+                        rowGap: 1,
+                    }}
+                >
                     {/* Members, Labels, Notifications, Due date */}
 
                     {/* Notifications */}
@@ -78,7 +89,11 @@ function TaskDetailHeader({ card, setUrl }) {
                     <Box component={'section'}>
                         <Typography
                             variant="span"
-                            sx={{ fontSize: '12px', fontWeight: '600', alignItems: 'flex-start' }}
+                            sx={{
+                                fontSize: '12px',
+                                fontWeight: '600',
+                                alignItems: 'flex-start',
+                            }}
                         >
                             Members
                         </Typography>
@@ -89,7 +104,15 @@ function TaskDetailHeader({ card, setUrl }) {
                                     alt="Remy Sharp"
                                     src="https://mui.com/static/images/avatar/1.jpg"
                                 />
-                                <Button sx={{ p: 0.5, width: 38, height: 38, minWidth: 'auto', borderRadius: '50%' }}>
+                                <Button
+                                    sx={{
+                                        p: 0.5,
+                                        width: 38,
+                                        height: 38,
+                                        minWidth: 'auto',
+                                        borderRadius: '50%',
+                                    }}
+                                >
                                     <AddIcon />
                                 </Button>
                             </Box>
@@ -101,7 +124,15 @@ function TaskDetailHeader({ card, setUrl }) {
                             <Typography variant="span" sx={{ fontSize: '12px', fontWeight: '600' }}>
                                 Due date
                             </Typography>
-                            <Box sx={{ mt: 1.5, display: 'flex', alignItems: 'center', gap: 1, height: '36px' }}>
+                            <Box
+                                sx={{
+                                    mt: 1.5,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 1,
+                                    height: '36px',
+                                }}
+                            >
                                 <Checkbox sx={{ p: 0 }} checked={card?.dueComplete} onChange={handleCheckDueComplete} />
                                 <Typography variant="span">{dayjs(card?.dueDate).format('MMM D, h:mm A')}</Typography>
 

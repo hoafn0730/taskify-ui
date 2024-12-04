@@ -21,7 +21,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { cloneDeep } from 'lodash';
-import { updateCardData } from '~/store/slices/boardSlice';
 import { cardService } from '~/services/cardService';
 
 function Dates({ title, anchorEl, onClose }) {
@@ -33,7 +32,6 @@ function Dates({ title, anchorEl, onClose }) {
 
     const handleSave = () => {
         const updateData = {
-            title: card?.title,
             dueDate: dateCalendarValue,
             dueComplete: false,
             dueReminder: -1,
@@ -46,14 +44,13 @@ function Dates({ title, anchorEl, onClose }) {
         newCard.dueReminder = -1;
 
         onClose();
-        dispatch(updateCardData(newCard));
+        // dispatch(updateCardData(newCard));
 
         cardService.updateCard(card.id, updateData);
     };
 
     const handleRemove = () => {
         const updateData = {
-            title: card?.title,
             dueDate: null,
             dueComplete: false,
             dueReminder: -1,
@@ -65,7 +62,7 @@ function Dates({ title, anchorEl, onClose }) {
         newCard.dueReminder = -1;
 
         onClose();
-        dispatch(updateCardData(newCard));
+        // dispatch(updateCardData(newCard));
 
         cardService.updateCard(card.id, updateData);
 

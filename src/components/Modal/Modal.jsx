@@ -1,10 +1,11 @@
 import MuiModal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
 
-function Modal({ size = 'normal', children, open, onClose }) {
+function Modal({ size = 'normal', children, title, open, onClose }) {
     let width;
     if (size === 'normal') {
         width = 750;
@@ -43,7 +44,16 @@ function Modal({ size = 'normal', children, open, onClose }) {
                     my: '48px',
                 }}
             >
-                {children}
+                <Box
+                    sx={{
+                        pt: 2,
+                    }}
+                >
+                    <Typography variant="h3" sx={{ fontSize: '20px', mb: 2 }}>
+                        {title}
+                    </Typography>
+                    {children}
+                </Box>
                 <Button
                     sx={{
                         p: 0.8,
@@ -64,6 +74,7 @@ function Modal({ size = 'normal', children, open, onClose }) {
 
 Modal.propTypes = {
     children: PropTypes.node.isRequired,
+    title: PropTypes.string,
     size: PropTypes.string,
     open: PropTypes.bool,
     onClose: PropTypes.func,

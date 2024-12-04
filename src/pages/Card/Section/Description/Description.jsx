@@ -3,24 +3,24 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import { cloneDeep } from 'lodash';
 
 import MarkdownEditor from '~/components/MarkdownEditor';
 import MarkdownParser from '~/components/MarkdownParser';
-import { cloneDeep } from 'lodash';
 import { cardService } from '~/services/cardService';
 import { updateBoardData } from '~/store/slices/boardSlice';
 
 function Description({ card, isEditingDesc, setIsEditingDesc }) {
     const board = useSelector((state) => state.board.activeBoard);
-    const [cardDescValue, setCardDescValue] = useState(card?.desc);
+    const [cardDescValue, setCardDescValue] = useState(card?.description);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        setCardDescValue(card?.desc);
-    }, [card?.desc]);
+        setCardDescValue(card?.description);
+    }, [card?.description]);
 
     const handleSubmit = () => {
-        const updateData = { title: card.title, description: cardDescValue?.trim() };
+        const updateData = { description: cardDescValue?.trim() };
 
         const newBoard = cloneDeep(board);
 

@@ -33,23 +33,24 @@ function Checklist({ checklist, checkItems = [] }) {
     const inputRef = useRef(null);
 
     useEffect(() => {
+        setListCheckItems(checkItems);
         setValue(percent);
-    }, [percent]);
+    }, [checkItems, percent]);
 
     const handleCheck = (e, item) => {
+        // Loi check
         checklistService.updateCheckItem(checklist.id, item.id, {
             status: e.target.checked ? 'complete' : 'incomplete',
         });
 
         item.status = item.status === 'complete' ? 'incomplete' : 'complete';
 
+        // e.target.checked = item.status === 'complete';
         setValue((prev) => (e.target.checked ? prev + onePercent : prev - onePercent));
     };
 
     const handleAddNewItem = () => {
         if (!itemValue.trim()) return;
-
-        console.log(itemValue);
 
         const itemClone = {
             title: itemValue,
@@ -59,7 +60,7 @@ function Checklist({ checklist, checkItems = [] }) {
         checklistService
             .createNewCheckItem(checklist.id, itemClone)
             .then((res) => {
-                setListCheckItems((prev) => [...prev, res]);
+                setListCheckItems((prev) => [...prev, res.data]);
                 inputRef.current.focus();
                 setItemValue('');
             })

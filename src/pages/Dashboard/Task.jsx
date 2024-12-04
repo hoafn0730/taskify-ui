@@ -24,7 +24,6 @@ function Task({ title, image, slug, attachments = [], card, setTasks }) {
         const newCard = cloneDeep(card);
 
         cardService.updateCard(card?.id, {
-            title: card?.title,
             dueComplete: true,
         });
 
@@ -35,7 +34,6 @@ function Task({ title, image, slug, attachments = [], card, setTasks }) {
         const newCard = cloneDeep(card);
 
         cardService.updateCard(card?.id, {
-            title: card?.title,
             dueDate: null,
             dueComplete: false,
             dueReminder: -1,

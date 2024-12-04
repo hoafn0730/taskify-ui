@@ -5,7 +5,6 @@ import { Button, Popover, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { cloneDeep } from 'lodash';
 import { useDispatch } from 'react-redux';
-import { updateCardData } from '~/store/slices/boardSlice';
 import { checklistService } from '~/services/checklistService';
 
 function ChecklistAction({ title, anchorEl, card, setCard, onClose }) {
@@ -23,7 +22,7 @@ function ChecklistAction({ title, anchorEl, card, setCard, onClose }) {
 
         newCard.checklists = [{ ...checklist, checkItems: [] }, ...newCard.checklists];
 
-        dispatch(updateCardData({ newCard }));
+        // dispatch(updateCardData({ newCard }));
         setCard(newCard);
         onClose();
     };

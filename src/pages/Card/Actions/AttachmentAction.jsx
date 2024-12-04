@@ -1,9 +1,9 @@
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import { Divider, Popover, TextField, Typography } from '@mui/material';
-import UploadFile from '../Attachment/UploadFile';
+import UploadFile from '../Section/Attachment/UploadFile';
 
-function AttachmentAction({ title, isCover, anchorEl, card, setUrl, onClose }) {
+function AttachmentAction({ title, anchorEl, card, setUrl, onClose }) {
     return (
         <Popover
             open={Boolean(anchorEl) && (title === 'Attachment' || title === 'Cover')}
@@ -41,7 +41,7 @@ function AttachmentAction({ title, isCover, anchorEl, card, setUrl, onClose }) {
                 <Typography sx={{ fontSize: '12px', mb: 3 }}>
                     You can also drag and drop files to upload them.
                 </Typography>
-                <UploadFile cardId={card.id} isUploadCover={isCover} setUrl={setUrl} />
+                <UploadFile cardId={card.id} isUploadCover={title === 'Cover'} setUrl={setUrl} />
             </Box>
             <Divider />
             <Box
@@ -85,7 +85,7 @@ AttachmentAction.propTypes = {
     title: PropTypes.string,
     isCover: PropTypes.bool,
     card: PropTypes.object,
-    anchorEl: PropTypes.node,
+    anchorEl: PropTypes.any,
     setUrl: PropTypes.func,
     onClose: PropTypes.func,
 };

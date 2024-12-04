@@ -2,11 +2,11 @@ import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import AttachmentItem from './AttachmentItem';
 
-function Attachment({ card, attachments = [] }) {
+function Attachment({ card }) {
     return (
         <Box sx={{ ml: '32px', display: 'flex', flexDirection: 'column', gap: 1 }}>
-            {attachments.length > 0 &&
-                attachments.map((attachment, index) => (
+            {card?.attachments.length > 0 &&
+                card?.attachments.map((attachment, index) => (
                     <AttachmentItem
                         key={index}
                         id={attachment.id}
@@ -21,7 +21,6 @@ function Attachment({ card, attachments = [] }) {
 
 Attachment.propTypes = {
     card: PropTypes.object,
-    attachments: PropTypes.array,
 };
 
 export default Attachment;

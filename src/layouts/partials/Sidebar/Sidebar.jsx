@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import NavTabs from '../NavTabs/NavTabs';
+import NavTabs from '~/components/NavTabs/NavTabs';
 
 function Sidebar() {
     return (

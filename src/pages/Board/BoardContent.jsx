@@ -1,4 +1,7 @@
-import Box from '@mui/material/Box';
+import { cloneDeep, isEmpty } from 'lodash';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
     closestCorners,
@@ -10,19 +13,16 @@ import {
     useSensor,
     useSensors,
 } from '@dnd-kit/core';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
-import { cloneDeep, isEmpty } from 'lodash';
-import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
+import Box from '@mui/material/Box';
 
-import Column from './Column';
 import Card from './Card';
-import { generatePlaceholderCard } from '~/utils/formatters';
+import Column from './Column';
+import NewColumnForm from './Column/NewColumnForm';
 import { MouseSensor, TouchSensor } from '~/libs/dndKitSensors';
+import { generatePlaceholderCard } from '~/utils/formatters';
 import { columnService } from '~/services/columnService';
 import { updateBoardData } from '~/store/slices/boardSlice';
-import NewColumnForm from './NewColumnForm';
 
 const ACTIVE_DRAG_ITEM_TYPE = {
     COLUMN: 'COLUMN',

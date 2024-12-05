@@ -1,7 +1,7 @@
 import config from '~/config';
 import Blog from '~/pages/Blog';
 import HomeLayout from '~/layouts/HomeLayout';
-import HomeDashboardLayout from '~/layouts/HomeDashboardLayout';
+import DashboardLayout from '~/layouts/DashboardLayout';
 
 import Home from '~/pages/Home';
 import Board from '~/pages/Board';
@@ -33,17 +33,17 @@ export const privateRoutes = [
     {
         path: config.paths.dashboard,
         component: Dashboard,
-        layout: HomeDashboardLayout,
+        layout: DashboardLayout,
     },
     {
         path: config.paths.boards,
         component: Boards,
-        layout: HomeDashboardLayout,
+        layout: DashboardLayout,
     },
     {
         path: config.paths.templates,
         component: Templates,
-        layout: HomeDashboardLayout,
+        layout: DashboardLayout,
     },
     {
         path: config.paths.board,

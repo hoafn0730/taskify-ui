@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchBoardDetail } from '../actions/boardAction';
 import { mapOrder } from '~/utils/sort';
@@ -16,6 +16,17 @@ export const boardSlice = createSlice({
     reducers: {
         updateBoardData: (state, action) => {
             state.activeBoard = action.payload;
+        },
+        updateCardOnBoard: (state, action) => {
+            const newBoard = cloneDeep(state.activeBoard);
+            const card = action.payload;
+
+            const column = newBoard.columns.find((col) => col.id === card.columnId);
+            const cardToUpdate = column.cards.find((c) => c.id === card.id);
+
+            Object.assign(cardToUpdate, card);
+
+            state.activeBoard = newBoard;
         },
     },
     extraReducers: (builder) => {
@@ -53,6 +64,6 @@ export const boardSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { updateBoardData } = boardSlice.actions;
+export const { updateBoardData, updateCardOnBoard } = boardSlice.actions;
 
 export default boardSlice.reducer;

@@ -2,8 +2,8 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import PropTypes from 'prop-types';
 
-import AppBar from '~/components/AppBar';
-import Footer from '~/components/Footer';
+import AppBar from '~/layouts/partials/AppBar';
+import Footer from '~/layouts/partials/Footer';
 
 function HomeLayout({ children }) {
     return (

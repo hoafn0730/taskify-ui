@@ -1,11 +1,10 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import PropTypes from 'prop-types';
+import Header from './partials/Header';
+import Sidebar from './partials/Sidebar';
 
-import Header from '~/components/Header/Header';
-import Sidebar from '~/components/Sidebar/Sidebar';
-
-function HomeDashboardLayout({ children }) {
+function DashboardLayout({ children }) {
     return (
         <Box>
             <Header />
@@ -19,8 +18,8 @@ function HomeDashboardLayout({ children }) {
     );
 }
 
-HomeDashboardLayout.propTypes = {
+DashboardLayout.propTypes = {
     children: PropTypes.node.isRequired,
 };
 
-export default HomeDashboardLayout;
+export default DashboardLayout;

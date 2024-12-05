@@ -1,39 +1,40 @@
 import { useState } from 'react';
-import Box from '@mui/material/Box';
+import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import { cloneDeep } from 'lodash';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
-import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import AddIcon from '@mui/icons-material/Add';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
-import AttachmentIcon from '@mui/icons-material/Attachment';
-import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
-// import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
+import AddIcon from '@mui/icons-material/Add';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
-import { Checkbox } from '@mui/material';
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { useDispatch } from 'react-redux';
+import AttachmentIcon from '@mui/icons-material/Attachment';
+import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
+import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
+import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 
 import Dates from './Actions/Dates';
 import ChecklistAction from './Actions/ChecklistAction';
 import AttachmentAction from './Actions/AttachmentAction';
 import { cardService } from '~/services/cardService';
+import { useDispatch } from 'react-redux';
+import { updateCardData } from '~/store/slices/cardSlice';
+import { updateCardOnBoard } from '~/store/slices/boardSlice';
 
-function TaskDetailHeader({ card, setUrl }) {
+function TaskDetailHeader({ card }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchorButtonActions, setAnchorButtonActions] = useState(null);
     const [actionButton, setActionButton] = useState(null);
     const timeDifference = dayjs(card?.dueDate).valueOf() - dayjs().valueOf();
-
     const dispatch = useDispatch();
 
     const handleClick = (event) => {
@@ -51,7 +52,9 @@ function TaskDetailHeader({ card, setUrl }) {
         const newCard = cloneDeep(card);
         newCard.dueComplete = e.target.checked;
 
-        // dispatch(updateCardData(newCard));
+        dispatch(updateCardOnBoard(newCard));
+        dispatch(updateCardData(newCard));
+
         cardService.updateCard(card.id, updateData);
     };
 
@@ -294,7 +297,6 @@ function TaskDetailHeader({ card, setUrl }) {
                 title={actionButton}
                 anchorEl={anchorButtonActions}
                 card={card}
-                setUrl={setUrl}
                 onClose={() => setAnchorButtonActions(null)}
             />
             <ChecklistAction

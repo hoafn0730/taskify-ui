@@ -1,19 +1,18 @@
+import { styled } from '@mui/material/styles';
+import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import { styled } from '@mui/material/styles';
-import { Divider, List, Typography } from '@mui/material';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 const drawerWidth = 320;
-
 const DrawerHeader = styled('div')(({ theme }) => ({
     position: 'relative',
     display: 'flex',

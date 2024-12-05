@@ -22,9 +22,10 @@ import Starred from './Starred';
 import Template from './Template';
 import Workspaces from './Workspaces';
 import { locales } from '~/utils/i18n';
-import Logo from '../Logo';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '~/store/actions/userAction';
+import Logo from '~/components/Logo';
 
 const MENU_ITEMS = [
     {

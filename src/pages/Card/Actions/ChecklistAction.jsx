@@ -4,26 +4,28 @@ import PropTypes from 'prop-types';
 import { Button, Popover, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { cloneDeep } from 'lodash';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { checklistService } from '~/services/checklistService';
+import { updateCardOnBoard } from '~/store/slices/boardSlice';
+import { updateCardData } from '~/store/slices/cardSlice';
 
-function ChecklistAction({ title, anchorEl, card, setCard, onClose }) {
-    const [checklistTitle, setChecklistTitle] = useState('');
+function ChecklistAction({ title, anchorEl, onClose }) {
     const dispatch = useDispatch();
+    const [checklistTitle, setChecklistTitle] = useState('');
+    const card = useSelector((state) => state.card.activeCard);
 
     const handleSave = async () => {
-        const newCard = cloneDeep(card);
-
         const checklist = await checklistService.createNewChecklist({
             boardId: card.boardId,
             cardId: card.id,
             title: checklistTitle,
         });
 
-        newCard.checklists = [{ ...checklist, checkItems: [] }, ...newCard.checklists];
+        const newCard = cloneDeep(card);
+        newCard.checklists = [...newCard.checklists, { ...checklist, checkItems: [] }];
 
-        // dispatch(updateCardData({ newCard }));
-        setCard(newCard);
+        dispatch(updateCardOnBoard(newCard));
+        dispatch(updateCardData(newCard));
         onClose();
     };
 

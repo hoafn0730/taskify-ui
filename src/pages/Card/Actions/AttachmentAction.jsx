@@ -1,9 +1,56 @@
-import Box from '@mui/material/Box';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { cloneDeep } from 'lodash';
 import PropTypes from 'prop-types';
-import { Divider, Popover, TextField, Typography } from '@mui/material';
-import UploadFile from '../Section/Attachment/UploadFile';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import Popover from '@mui/material/Popover';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
-function AttachmentAction({ title, anchorEl, card, setUrl, onClose }) {
+import UploadFile from '../Section/Attachment/UploadFile';
+import LoadingSpinner from '~/components/LoadingSpinner';
+import { attachmentService } from '~/services/attachmentService';
+import { convertBase64 } from '~/utils/convertBase64';
+import { updateCardData } from '~/store/slices/cardSlice';
+import { updateCardOnBoard } from '~/store/slices/boardSlice';
+
+function AttachmentAction({ title, anchorEl, card, onClose }) {
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
+
+    const handleUploadFile = async (e) => {
+        const files = e.target.files;
+
+        if (files.length === 1) {
+            const base64 = await convertBase64(files[0]);
+            setLoading(true);
+
+            attachmentService
+                .createNewAttachment({
+                    cardId: card.id,
+                    cover: title === 'Cover',
+                    fileName: files[0].name,
+                    file: base64,
+                })
+                .then((res) => {
+                    const newCard = cloneDeep(card);
+                    newCard.attachments = [...newCard.attachments, res];
+
+                    if (title === 'Cover') {
+                        newCard.cover = res;
+                        newCard.image = res.id + '';
+
+                        dispatch(updateCardOnBoard(newCard));
+                    }
+
+                    dispatch(updateCardData(newCard));
+                    onClose();
+                    setLoading(false);
+                });
+        }
+    };
+
     return (
         <Popover
             open={Boolean(anchorEl) && (title === 'Attachment' || title === 'Cover')}
@@ -41,7 +88,7 @@ function AttachmentAction({ title, anchorEl, card, setUrl, onClose }) {
                 <Typography sx={{ fontSize: '12px', mb: 3 }}>
                     You can also drag and drop files to upload them.
                 </Typography>
-                <UploadFile cardId={card.id} isUploadCover={title === 'Cover'} setUrl={setUrl} />
+                {loading ? <LoadingSpinner caption="Loading..." /> : <UploadFile onUploadFile={handleUploadFile} />}
             </Box>
             <Divider />
             <Box

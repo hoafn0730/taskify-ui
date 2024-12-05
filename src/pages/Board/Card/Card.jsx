@@ -128,9 +128,11 @@ function Card({ card }) {
                                 {2}
                             </Button>*/}
 
-                            <Button size="small" startIcon={<CheckBoxOutlinedIcon />}>
-                                {completeItemCounts}/{totalItem}
-                            </Button>
+                            {card?.checklists?.length > 0 && (
+                                <Button size="small" startIcon={<CheckBoxOutlinedIcon />}>
+                                    {completeItemCounts}/{totalItem}
+                                </Button>
+                            )}
 
                             {!!card?.attachments?.length && (
                                 <Button size="small" startIcon={<AttachmentIcon />}>

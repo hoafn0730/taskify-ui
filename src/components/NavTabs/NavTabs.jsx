@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Fade from '@mui/material/Fade';
 import { useForm } from 'react-hook-form';
+import AddBoxRoundedIcon from '@mui/icons-material/AddBoxRounded';
 
 import LinkTab from './LinkTab';
 import Modal from '../Modal';
@@ -113,10 +114,14 @@ function NavTabs() {
                     size="small"
                     sx={{
                         mt: 1,
+                        px: 2,
+                        py: 1,
                         color: '#444',
+                        justifyContent: 'flex-start',
                     }}
                     fullWidth
                     onClick={handleOpen}
+                    startIcon={<AddBoxRoundedIcon />}
                 >
                     Create New Board
                 </Button>

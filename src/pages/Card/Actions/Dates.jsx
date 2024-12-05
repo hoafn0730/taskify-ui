@@ -1,34 +1,32 @@
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-//
-import {
-    Button,
-    Checkbox,
-    FormControl,
-    FormHelperText,
-    InputLabel,
-    MenuItem,
-    Popover,
-    Select,
-    Typography,
-} from '@mui/material';
-//
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
-import DateCalendar from '~/components/DateCalendar';
-import { DateField, LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { DateField, LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { cloneDeep } from 'lodash';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Popover from '@mui/material/Popover';
+import Select from '@mui/material/Select';
+import Typography from '@mui/material/Typography';
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+
+import DateCalendar from '~/components/DateCalendar';
 import { cardService } from '~/services/cardService';
+import { updateCardData } from '~/store/slices/cardSlice';
+import { updateCardOnBoard } from '~/store/slices/boardSlice';
 
 function Dates({ title, anchorEl, onClose }) {
-    const board = useSelector((state) => state.board.activeBoard);
+    const dispatch = useDispatch();
     const card = useSelector((state) => state.card.activeCard);
     const dueDate = card?.dueDate && dayjs(card?.dueDate);
     const [dateCalendarValue, setDateCalendarValue] = useState(dueDate ?? dayjs());
-    const dispatch = useDispatch();
 
     const handleSave = () => {
         const updateData = {
@@ -44,7 +42,8 @@ function Dates({ title, anchorEl, onClose }) {
         newCard.dueReminder = -1;
 
         onClose();
-        // dispatch(updateCardData(newCard));
+        dispatch(updateCardOnBoard(newCard));
+        dispatch(updateCardData(newCard));
 
         cardService.updateCard(card.id, updateData);
     };
@@ -62,25 +61,10 @@ function Dates({ title, anchorEl, onClose }) {
         newCard.dueReminder = -1;
 
         onClose();
-        // dispatch(updateCardData(newCard));
+        dispatch(updateCardOnBoard(newCard));
+        dispatch(updateCardData(newCard));
 
         cardService.updateCard(card.id, updateData);
-
-        // Bi lap lai nhieu
-        //         const updateData = { title: card?.title, dueDate: null, dueComplete: false, dueReminder: -1 };
-        //
-        //         const newBoard = cloneDeep(board);
-        //
-        //         const column = newBoard.columns.find((col) => col.id === card.columnId);
-        //         const activeCard = column.cards.find((c) => c.id === card.id);
-        //
-        //         Object.assign(activeCard, updateData);
-        //
-        //         column.cards = column.cards.filter((c) => c.id !== card.id);
-        //         column.cardOrderIds = column.cardOrderIds.filter((cardId) => cardId !== card.uuid);
-        //
-        //         dispatch(updateBoardData(newBoard));
-        //         cardService.updateCard(card?.id, updateData);
     };
 
     return (

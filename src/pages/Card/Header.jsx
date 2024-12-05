@@ -5,16 +5,20 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { cloneDeep } from 'lodash';
 import { cardService } from '~/services/cardService';
-import { updateBoardData } from '~/store/slices/boardSlice';
+import { updateCardOnBoard } from '~/store/slices/boardSlice';
+import { updateCardData } from '~/store/slices/cardSlice';
+import slugify from 'slugify';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function Header({ card }) {
-    const board = useSelector((state) => state.board.activeBoard);
+    const location = useLocation();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [cardTitleValue, setCardTitleValue] = useState(card?.title);
     const debouncedSearchTerm = useDebounce(cardTitleValue, 800);
-    const dispatch = useDispatch();
 
     useEffect(() => {
         setCardTitleValue(card?.title);
@@ -27,17 +31,17 @@ function Header({ card }) {
         const updateData = { title: debouncedSearchTerm?.trim() };
 
         if (updateData.title !== card?.title) {
-            const newBoard = cloneDeep(board);
+            const newCard = cloneDeep(card);
+            newCard.title = updateData.title;
+            newCard.slug = slugify(updateData.title, { lower: true });
+            navigate('/card/' + slugify(updateData.title, { lower: true }), {
+                state: { backgroundLocation: location.state.backgroundLocation },
+                replace: true,
+            });
 
-            const column = newBoard.columns.find((col) => col.id === card.columnId);
-            const activeCard = column.cards.find((c) => c.id === card.id);
+            dispatch(updateCardOnBoard(newCard));
+            dispatch(updateCardData(newCard));
 
-            Object.assign(activeCard, updateData);
-
-            column.cards = column.cards.filter((c) => c.id !== card.id);
-            column.cardOrderIds = column.cardOrderIds.filter((cardId) => cardId !== card.uuid);
-
-            dispatch(updateBoardData(newBoard));
             cardService.updateCard(card?.id, updateData);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

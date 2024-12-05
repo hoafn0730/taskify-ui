@@ -13,8 +13,7 @@ import ContentCopy from '@mui/icons-material/ContentCopy';
 import ContentCut from '@mui/icons-material/ContentCut';
 import ContentPaste from '@mui/icons-material/ContentPaste';
 import InboxIcon from '@mui/icons-material/Inbox';
-
-import Popover from '../Popover';
+import Popover from '~/components/Popover';
 
 function Inbox() {
     const { t } = useTranslation('header');

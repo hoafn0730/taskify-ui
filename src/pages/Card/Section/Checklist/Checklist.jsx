@@ -1,27 +1,33 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { cloneDeep } from 'lodash';
+import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Checkbox from '@mui/material/Checkbox';
-import TextField from '@mui/material/TextField';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import Slider from '@mui/material/Slider';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import PropTypes from 'prop-types';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import { checklistService } from '~/services/checklistService';
+import { updateCardOnBoard } from '~/store/slices/boardSlice';
+import { updateCardData } from '~/store/slices/cardSlice';
 
-function Checklist({ checklist, checkItems = [] }) {
+function Checklist({ checklistId, checkItems = [] }) {
+    const dispatch = useDispatch();
     const [listCheckItems, setListCheckItems] = useState(checkItems);
     const [itemValue, setItemValue] = useState('');
     const [addAnItem, setAddAnItem] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const card = useSelector((state) => state.card.activeCard);
 
     const onePercent = useMemo(() => (1 / listCheckItems?.length) * 100, [listCheckItems]);
     const percent = useMemo(
@@ -33,34 +39,42 @@ function Checklist({ checklist, checkItems = [] }) {
     const inputRef = useRef(null);
 
     useEffect(() => {
-        setListCheckItems(checkItems);
         setValue(percent);
-    }, [checkItems, percent]);
+    }, [percent]);
 
     const handleCheck = (e, item) => {
-        // Loi check
-        checklistService.updateCheckItem(checklist.id, item.id, {
+        checklistService.updateCheckItem(checklistId, item.id, {
             status: e.target.checked ? 'complete' : 'incomplete',
         });
 
-        item.status = item.status === 'complete' ? 'incomplete' : 'complete';
+        const newCard = cloneDeep(card);
+        const currentChecklist = newCard.checklists.find((checklist) => checklist.id === checklistId);
+        const checkItem = currentChecklist.checkItems.find((checkItem) => checkItem.id === item.id);
 
-        // e.target.checked = item.status === 'complete';
+        checkItem.status = e.target.checked ? 'complete' : 'incomplete';
+
+        dispatch(updateCardOnBoard(newCard));
+        dispatch(updateCardData(newCard));
+
         setValue((prev) => (e.target.checked ? prev + onePercent : prev - onePercent));
     };
 
     const handleAddNewItem = () => {
         if (!itemValue.trim()) return;
 
-        const itemClone = {
-            title: itemValue,
-            status: 'incomplete',
-        };
-
         checklistService
-            .createNewCheckItem(checklist.id, itemClone)
+            .createNewCheckItem(checklistId, {
+                title: itemValue,
+            })
             .then((res) => {
-                setListCheckItems((prev) => [...prev, res.data]);
+                setListCheckItems((prev) => [...prev, res]);
+
+                const newCard = cloneDeep(card);
+                const currentChecklist = newCard.checklists.find((checklist) => checklist.id === checklistId);
+                currentChecklist.checkItems.push(res);
+
+                dispatch(updateCardOnBoard(newCard));
+                dispatch(updateCardData(newCard));
                 inputRef.current.focus();
                 setItemValue('');
             })
@@ -70,9 +84,16 @@ function Checklist({ checklist, checkItems = [] }) {
     };
 
     const handleDeleteItem = () => {
-        checklistService.deleteCheckItem(checklist.id, itemId);
-
+        checklistService.deleteCheckItem(checklistId, itemId);
         const newListCheckItems = listCheckItems.filter((item) => item.id !== itemId);
+
+        const newCard = cloneDeep(card);
+        const currentChecklist = newCard.checklists.find((checklist) => checklist.id === checklistId);
+        currentChecklist.checkItems = newListCheckItems;
+
+        dispatch(updateCardOnBoard(newCard));
+        dispatch(updateCardData(newCard));
+
         setListCheckItems(newListCheckItems);
         setItemId(null);
         setAnchorEl(null);
@@ -117,11 +138,14 @@ function Checklist({ checklist, checkItems = [] }) {
                             }}
                         >
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Checkbox checked={item.status === 'complete'} onChange={(e) => handleCheck(e, item)} />
+                                <Checkbox
+                                    defaultChecked={item.status === 'complete'}
+                                    onChange={(e) => handleCheck(e, item)}
+                                />
                                 <ListItemText
-                                    sx={{
-                                        textDecoration: item.status === 'complete' ? 'line-through' : 'none',
-                                    }}
+                                // sx={{
+                                //     textDecoration: item.status === 'complete' ? 'line-through' : 'none',
+                                // }}
                                 >
                                     {item.title}
                                 </ListItemText>
@@ -215,7 +239,7 @@ function Checklist({ checklist, checkItems = [] }) {
 }
 
 Checklist.propTypes = {
-    checklist: PropTypes.object,
+    checklistId: PropTypes.number,
     checkItems: PropTypes.array,
 };
 export default Checklist;

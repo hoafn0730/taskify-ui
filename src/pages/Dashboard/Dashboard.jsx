@@ -47,6 +47,34 @@ function Dashboard() {
                     });
                 });
             }
+            //             const notification = new Notification(`Card "${title}" is due now!`, {
+            //                 body: 'Hãy kiểm tra và xử lý ngay!',
+            //                 icon: 'https://via.placeholder.com/100', // URL icon tùy chỉnh
+            //                 vibrate: [200, 100, 200], // Rung (chỉ hoạt động trên thiết bị hỗ trợ)
+            //                 badge: 'https://via.placeholder.com/50', // Icon nhỏ hiển thị trên màn hình
+            //                 actions: [
+            //                     { action: 'view', title: 'Xem chi tiết', icon: 'https://via.placeholder.com/50' },
+            //                     { action: 'dismiss', title: 'Bỏ qua', icon: 'https://via.placeholder.com/50' },
+            //                 ],
+            //                 requireInteraction: true, // Thông báo sẽ không tự động biến mất
+            //                 tag: 'card-due', // Gắn tag để tránh tạo trùng lặp thông báo
+            //             });
+            //
+            //             // Xử lý khi người dùng nhấp vào thông báo
+            //             notification.onclick = () => {
+            //                 window.open('http://localhost:5173', '_blank');
+            //                 notification.close(); // Đóng thông báo sau khi nhấp
+            //             };
+            //
+            //             // Xử lý khi thông báo bị đóng
+            //             notification.onclose = () => {
+            //                 console.log('Thông báo đã bị đóng.');
+            //             };
+            //
+            //             // Xử lý lỗi (nếu có)
+            //             notification.onerror = (err) => {
+            //                 console.error('Lỗi thông báo:', err);
+            //             };
         }
     };
 

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
@@ -12,10 +13,9 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import VpnLockIcon from '@mui/icons-material/VpnLock';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { useState } from 'react';
 
 import { capitalizeFirstLetter } from '~/utils/formatters';
-import Invite from './Invite/Invite';
+import Invite from './Invite';
 import BoardMenu from './BoardMenu';
 
 const MENUS_STYLES = {
@@ -96,13 +96,9 @@ function BoardBar({ board }) {
                         },
                     }}
                 >
-                    {/* <Tooltip title={'Hoafn0730'}>
-                        <Avatar alt={'hoafn'} src={''} />
-                    </Tooltip> */}
-
-                    {board?.members?.filter((member) => member.role).length > 0 &&
+                    {board?.members?.filter((member) => member.active).length > 0 &&
                         board?.members
-                            ?.filter((member) => member.role)
+                            ?.filter((member) => member.active)
                             .map((member) => (
                                 <Tooltip key={member.id} title={member.user.fullName}>
                                     <Avatar alt={member.user.fullName} src={member.user.avatar} />

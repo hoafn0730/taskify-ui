@@ -1,34 +1,35 @@
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
+import { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
+import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Tab from '@mui/material/Tab';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
-import { useEffect, useMemo, useState } from 'react';
-import CopyToClipboard from 'react-copy-to-clipboard';
-import { Select } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-import PropTypes from 'prop-types';
 
-import { memberService } from '~/services/memberService';
-import Modal from '~/components/Modal';
 import Member from './Member';
+import Modal from '~/components/Modal';
+import { memberService } from '~/services/memberService';
 
 function Invite({ members = [], open, onClose }) {
     const { t } = useTranslation('board');
+    const user = useSelector((state) => state.user.userInfo);
+    const board = useSelector((state) => state.board.activeBoard);
     const [tab, setTab] = useState('1');
-    const [value] = useState(window.location.origin + '/invite/b/board-1');
+    const [value] = useState(window.location.origin + '/invite/b/' + board?.slug);
     const [copied, setCopied] = useState(false);
     const [memberList, setMemberList] = useState(members);
     const [currentMember, setCurrentMember] = useState(null);
-    const user = useSelector((state) => state.user.userInfo);
 
     const ownerCount = useMemo(() => memberList.filter((member) => member.role === 'owner').length, [memberList]);
 
@@ -63,10 +64,10 @@ function Invite({ members = [], open, onClose }) {
     };
 
     const handleAccept = async (memberId) => {
-        memberService.updateMember(memberId, { role: 'user' });
+        memberService.updateMember(memberId, { active: true });
 
         setMemberList((prevMembers) =>
-            prevMembers.map((member) => (member.id === memberId ? { ...member, role: 'user' } : member)),
+            prevMembers.map((member) => (member.id === memberId ? { ...member, active: true } : member)),
         );
     };
 
@@ -138,9 +139,9 @@ function Invite({ members = [], open, onClose }) {
 
                     <TabPanel value="1" sx={{ p: 0 }}>
                         <List>
-                            {memberList?.filter((member) => member.role)?.length > 0 &&
+                            {memberList?.filter((member) => member.active)?.length > 0 &&
                                 memberList
-                                    .filter((member) => member.role)
+                                    .filter((member) => member.active)
                                     .map((member) => (
                                         <Member
                                             member={member}
@@ -182,9 +183,9 @@ function Invite({ members = [], open, onClose }) {
 
                     <TabPanel value="2" sx={{ p: 0 }}>
                         <List>
-                            {memberList?.filter((member) => !member.role)?.length > 0 &&
+                            {memberList?.filter((member) => !member.active)?.length > 0 &&
                                 memberList
-                                    .filter((member) => !member.role)
+                                    .filter((member) => !member.active)
                                     ?.map((member) => (
                                         <Member
                                             member={member}
@@ -200,7 +201,7 @@ function Invite({ members = [], open, onClose }) {
                                             }
                                         />
                                     ))}
-                            {!memberList?.filter((member) => !member.role)?.length > 0 && (
+                            {!memberList?.filter((member) => !member.active)?.length > 0 && (
                                 <Typography variant="span" sx={{ p: 2, fontSize: '14px' }}>
                                     {t('boardBar.noJoinRequests')}
                                 </Typography>

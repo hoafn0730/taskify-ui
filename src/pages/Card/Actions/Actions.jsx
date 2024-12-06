@@ -1,7 +1,8 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -19,18 +20,17 @@ import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+// import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
 
-import Dates from './Actions/Dates';
-import ChecklistAction from './Actions/ChecklistAction';
-import AttachmentAction from './Actions/AttachmentAction';
+import Dates from './Dates';
+import ChecklistAction from './ChecklistAction';
+import AttachmentAction from './AttachmentAction';
 import { cardService } from '~/services/cardService';
-import { useDispatch } from 'react-redux';
 import { updateCardData } from '~/store/slices/cardSlice';
 import { updateCardOnBoard } from '~/store/slices/boardSlice';
 
-function TaskDetailHeader({ card }) {
+function Actions({ card }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchorButtonActions, setAnchorButtonActions] = useState(null);
     const [actionButton, setActionButton] = useState(null);
@@ -309,9 +309,9 @@ function TaskDetailHeader({ card }) {
     );
 }
 
-TaskDetailHeader.propTypes = {
+Actions.propTypes = {
     card: PropTypes.object,
     setUrl: PropTypes.func,
 };
 
-export default TaskDetailHeader;
+export default Actions;

@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import Cloud from '@mui/icons-material/Cloud';
-import ContentCopy from '@mui/icons-material/ContentCopy';
-import ContentCut from '@mui/icons-material/ContentCut';
-import ContentPaste from '@mui/icons-material/ContentPaste';
 import InboxIcon from '@mui/icons-material/Inbox';
 import Popover from '~/components/Popover';
 
@@ -37,7 +35,7 @@ function Inbox() {
                     <Popover.Header title={t('inbox.title')} buttonTitle={t('inbox.buttonTitle')} />
                     <MenuList>
                         {/* Empty notifications */}
-                        <Box
+                        {/* <Box
                             sx={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -51,46 +49,46 @@ function Inbox() {
                             <Typography variant="h3" sx={{ fontSize: '1.2rem' }}>
                                 No notifications
                             </Typography>
-                        </Box>
-                        {/* {Array(1)
+                        </Box> */}
+                        {Array(2)
                             .fill(0)
                             .map((item) => (
-                                <Box key={item}>
-                                    <MenuItem>
+                                <MenuItem
+                                    key={item}
+                                    sx={{
+                                        gap: 1,
+                                        flexDirection: 'column',
+                                        alignItems: 'flex-start',
+                                        '&:hover': {
+                                            textDecoration: 'none',
+                                            bgcolor: 'none',
+                                        },
+                                    }}
+                                >
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <ListItemIcon>
-                                            <ContentCut fontSize="small" />
+                                            <Avatar src={''} />
                                         </ListItemIcon>
-                                        <ListItemText>Cut</ListItemText>
-                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            ⌘X {item}
-                                        </Typography>
-                                    </MenuItem>
-                                    <MenuItem>
-                                        <ListItemIcon>
-                                            <ContentCopy fontSize="small" />
-                                        </ListItemIcon>
-                                        <ListItemText>Copy</ListItemText>
-                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            ⌘C
-                                        </Typography>
-                                    </MenuItem>
-                                    <MenuItem>
-                                        <ListItemIcon>
-                                            <ContentPaste fontSize="small" />
-                                        </ListItemIcon>
-                                        <ListItemText>Paste</ListItemText>
-                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                            ⌘V
-                                        </Typography>
-                                    </MenuItem>
-                                    <MenuItem>
-                                        <ListItemIcon>
-                                            <Cloud fontSize="small" />
-                                        </ListItemIcon>
-                                        <ListItemText>Web Clipboard</ListItemText>
-                                    </MenuItem>
-                                </Box>
-                            ))} */}
+                                        <ListItemText>
+                                            <Typography variant="span">{'Bạn có chấp nhận tham gia?'}</Typography>
+                                        </ListItemText>
+                                    </Box>
+
+                                    {/*  Action of invite notification */}
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'flex-end',
+                                            gap: 1,
+                                            width: '100%',
+                                        }}
+                                    >
+                                        <Button variant="contained">Accept</Button>
+                                        <Button variant="contained">Reject</Button>
+                                    </Box>
+                                </MenuItem>
+                            ))}
                     </MenuList>
                 </>
             }

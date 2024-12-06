@@ -1,10 +1,11 @@
+import { toast } from 'react-toastify';
 import { useConfirm } from 'material-ui-confirm';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 import { boardService } from '~/services/boardService';
 import { memberService } from '~/services/memberService';
+import { delay } from 'lodash';
 
 function Invite() {
     const { slug } = useParams();
@@ -21,25 +22,31 @@ function Invite() {
                 if (user) {
                     const board = await boardService
                         .getBoards()
-                        .then((res) => res.data.data.find((board) => board.slug === slug));
+                        .then((res) => res.data.find((board) => board.slug === slug));
 
                     memberService
-                        .createNewMember({ userId: user?.id, objectId: board.id, objectType: 'board' })
+                        .createNewMember({
+                            userId: user?.id,
+                            objectId: board.id,
+                            objectType: 'board',
+                            ...(board.type === 'public' ? { active: true } : {}),
+                        })
                         .then((res) => {
-                            if (res?.message) {
+                            if (board.type === 'public') {
                                 toast.info('You are allowed to join the board.');
-                                return navigate('/board/' + slug, { replace: true });
+                                delay(() => navigate('/board/' + slug, { replace: true }), 2000);
                             } else {
                                 toast.success('You have submitted a request to join! Please wait to join.');
+                                delay(() => navigate('/', { replace: true }), 2000);
                             }
                         });
                 } else {
                     toast('You need to sign in! Please log in to access.');
-                    navigate('/home', { replace: true });
+                    delay(() => navigate('/home', { replace: true }), 2000);
                 }
             })
             .catch(() => {
-                navigate('/home', { replace: true });
+                navigate('/', { replace: true });
             });
     }, [confirm, navigate, slug, user]);
 

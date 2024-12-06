@@ -4,7 +4,7 @@ const createNewComment = async (data) => {
     const res = await httpRequest.post('/comments', {
         ...data,
     });
-    return res.data.data;
+    return res.data;
 };
 
 const updateComment = async (commentId, data) => {

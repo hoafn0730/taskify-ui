@@ -18,7 +18,7 @@ import Activity from './Section/Activity';
 import Attachment from './Section/Attachment';
 import Checklist from './Section/Checklist';
 import Description from './Section/Description';
-import TaskDetailHeader from './TaskDetailHeader';
+import Actions from './Actions';
 import LoadingSpinner from '~/components/LoadingSpinner';
 import Modal from '~/components/Modal';
 import socket from '~/utils/socket';
@@ -43,15 +43,18 @@ function Card() {
     }, []);
 
     useEffect(() => {
+        const newCard = cloneDeep(card);
+        if (!newCard) return;
+
         socket.on('receiveComment', (data) => {
-            console.log(data);
+            newCard.comments = [data.comment, ...newCard.comments];
+            dispatch(updateCardData(newCard));
         });
 
-        return () =>
-            socket.off('receiveComment', (arg) => {
-                console.log(arg);
-            });
-    }, []);
+        return () => {
+            socket.off('receiveComment');
+        };
+    }, [card, dispatch]);
 
     const handleDeleteChecklist = (checklistId) => {
         checklistService.deleteChecklist(checklistId);
@@ -77,7 +80,7 @@ function Card() {
 
                     {/* Content */}
                     <Box>
-                        <TaskDetailHeader card={card} />
+                        <Actions card={card} />
 
                         <Section
                             title={'Description'}

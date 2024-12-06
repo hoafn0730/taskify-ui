@@ -69,7 +69,7 @@ function Header({ card }) {
                     />
                 )}
             </Box>
-            <Box sx={{ mt: 2 }}>
+            <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <CreditCardIcon />
 

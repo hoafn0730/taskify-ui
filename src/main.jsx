@@ -13,6 +13,17 @@ import theme from '~/theme';
 import { store } from '~/store';
 import i18n from '~/utils/i18n';
 
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js').then(
+        (registration) => {
+            console.log('Service Worker registered:', registration);
+        },
+        (err) => {
+            console.error('Service Worker registration failed:', err);
+        },
+    );
+}
+
 createRoot(document.getElementById('root')).render(
     // <StrictMode>
     <Provider store={store}>

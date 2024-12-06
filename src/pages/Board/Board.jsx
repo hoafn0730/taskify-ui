@@ -2,15 +2,15 @@ import { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { cloneDeep } from 'lodash';
 
 import BoardBar from './BoardBar';
 import BoardContent from './BoardContent';
+import LoadingSpinner from '~/components/LoadingSpinner';
+import { boardService } from '~/services/boardService';
+import { columnService } from '~/services/columnService';
 import { fetchBoardDetail } from '~/store/actions/boardAction';
 import { updateBoardData } from '~/store/slices/boardSlice';
-import { boardService } from '~/services/boardService';
-import { cloneDeep } from 'lodash';
-import { columnService } from '~/services/columnService';
-import LoadingSpinner from '~/components/LoadingSpinner';
 
 function Board() {
     const { slug } = useParams();
@@ -21,6 +21,10 @@ function Board() {
     useEffect(() => {
         dispatch(fetchBoardDetail(slug));
     }, [dispatch, slug]);
+
+    useEffect(() => {
+        // Todo: Check is member in board
+    }, []);
 
     const moveColumns = (orderedColumns) => {
         const dndOrderedColumnsIds = orderedColumns.map((c) => c.uuid);

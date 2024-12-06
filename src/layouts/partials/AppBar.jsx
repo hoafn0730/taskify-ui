@@ -33,7 +33,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 function AppBar() {
     const [open, setOpen] = useState(false);
-    const currentURL = window.location.href;
+    const currentURL = window.location.origin;
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
     const toggleDrawer = (newOpen) => () => {

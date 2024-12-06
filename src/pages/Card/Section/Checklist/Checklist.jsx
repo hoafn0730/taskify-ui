@@ -64,7 +64,7 @@ function Checklist({ checklistId, checkItems = [] }) {
 
         checklistService
             .createNewCheckItem(checklistId, {
-                title: itemValue,
+                title: itemValue.trim(),
             })
             .then((res) => {
                 setListCheckItems((prev) => [...prev, res]);

@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import StarOutlineRoundedIcon from '@mui/icons-material/StarOutlineRounded';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -15,15 +15,45 @@ function Dashboard() {
     const [boards, setBoards] = useState([]);
 
     useEffect(() => {
-        cardService.getCards().then((res) => setTasks(res.data.filter((card) => card.dueDate && !card.dueComplete)));
+        cardService.getCards().then((res) => {
+            const tasklist = res.data.filter((card) => card.dueDate && !card.dueComplete);
+            setTasks(tasklist);
+        });
         boardService.getBoards().then((res) => {
             return setBoards(res.data);
         });
     }, []);
 
+    const sendNotification = (title) => {
+        if (Notification.permission === 'granted') {
+            // new Notification('Card is due now!', {
+            //     body: 'Hãy kiểm tra và xử lý ngay!',
+            //     icon: 'https://via.placeholder.com/100',
+            // });
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.ready.then((registration) => {
+                    registration.showNotification('Card is due now!', {
+                        body: 'Hãy kiểm tra và xử lý ngay!',
+                        icon: 'https://via.placeholder.com/100',
+                        actions: [
+                            { action: 'view', title: 'Xem chi tiết', icon: 'https://via.placeholder.com/50' },
+                            { action: 'dismiss', title: 'Bỏ qua', icon: 'https://via.placeholder.com/50' },
+                        ],
+                        tag: 'card-due',
+                        requireInteraction: true,
+                        data: {
+                            slug: 'notification',
+                        },
+                    });
+                });
+            }
+        }
+    };
+
     return (
         <Box sx={{ display: 'flex' }}>
             <Box sx={{ width: '420px' }}>
+                <Button onClick={() => sendNotification('card.title')}>Click me!</Button>
                 <Section title="Up next" icon={<AccessTimeRoundedIcon fontSize="small" />}>
                     {tasks.length > 0 &&
                         tasks.map((task) => (

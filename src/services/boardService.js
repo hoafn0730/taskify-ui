@@ -12,7 +12,7 @@ const createNewBoard = async (data) => {
     const res = await httpRequest.post('/boards', {
         ...data,
     });
-    return res.data.data;
+    return res.data;
 };
 
 const updateBoard = async (boardId, data) => {

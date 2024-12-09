@@ -28,7 +28,7 @@ import { updateCardOnBoard } from '~/store/slices/boardSlice';
 import { updateCardData } from '~/store/slices/cardSlice';
 
 function Card() {
-    const { state } = useLocation();
+    const location = useLocation();
     const navigate = useNavigate();
     const { slug } = useParams();
     const dispatch = useDispatch();
@@ -37,6 +37,21 @@ function Card() {
     const [anchorEl, setAnchorEl] = useState(null);
 
     useEffect(() => {
+        if (!location?.state?.backgroundLocation) {
+            return navigate(location?.pathname, {
+                state: {
+                    backgroundLocation: {
+                        pathname: '/',
+                        search: '',
+                        hash: '',
+                        state: null,
+                        key: 'dkl4r4gx',
+                    },
+                },
+                replace: true,
+            });
+        }
+
         dispatch(fetchCardDetail(slug));
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,11 +82,15 @@ function Card() {
     };
 
     function handleDismiss() {
-        navigate(-1);
+        if (window.history.state && window.history.state.idx > 0) {
+            navigate(-1);
+        } else {
+            navigate('/');
+        }
     }
 
     return (
-        <Modal open={!!state} onClose={handleDismiss}>
+        <Modal open={!!location?.state} onClose={handleDismiss}>
             {!card && <LoadingSpinner caption="Card Loading..." />}
             {card && (
                 <>

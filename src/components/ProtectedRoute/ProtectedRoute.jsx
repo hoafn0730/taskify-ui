@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Navigate } from 'react-router-dom';
 import LoadingSpinner from '../LoadingSpinner';
 
 function ProtectedRoute({ children }) {
     const userInfo = useSelector((state) => state.user.userInfo);
     const isLoading = useSelector((state) => state.user.isLoading);
-    const navigate = useNavigate();
     const [initialized, setInitialized] = useState(false);
 
     useEffect(() => {
@@ -16,15 +15,11 @@ function ProtectedRoute({ children }) {
         }
     }, [isLoading]);
 
-    useEffect(() => {
-        if (initialized && !isLoading && userInfo === null) {
-            navigate('/home');
-        }
-    }, [navigate, userInfo, isLoading, initialized]);
-
-    if (!initialized || isLoading) {
+    if (isLoading) {
         return <LoadingSpinner caption="Loading..." />;
     }
+
+    if (initialized && !userInfo && !isLoading) return <Navigate to={'/home'} replace />;
 
     return children;
 }

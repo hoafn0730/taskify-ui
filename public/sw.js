@@ -13,10 +13,9 @@ self.addEventListener('push', (event) => {
 
 self.addEventListener('notificationclick', (event) => {
     const data = event.notification.data;
-    console.log('🚀 ~ self.addEventListener ~ data:', data);
 
-    if (event.action === 'view' && data?.slug) {
-        event.waitUntil(clients.openWindow(`http://localhost:5173/card/${data.slug}`));
+    if (event.action === 'view') {
+        event.waitUntil(self.clients.openWindow(`${self.location.origin}/card/${data.slug}`));
     } else if (event.action === 'dismiss') {
         event.notification.close();
     }

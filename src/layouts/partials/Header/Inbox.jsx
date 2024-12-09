@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
@@ -12,6 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import InboxIcon from '@mui/icons-material/Inbox';
 import Popover from '~/components/Popover';
+import socket from '~/utils/socket';
 
 function Inbox() {
     const { t } = useTranslation('header');
@@ -20,6 +21,17 @@ function Inbox() {
 
     const handleClick = (event) => setAnchorEl(event.currentTarget);
     const handleClose = () => setAnchorEl(null);
+
+    useEffect(() => {
+        socket.on('notification', (data) => {
+            console.log('🚀 ~ socket.on ~ data:', data);
+        });
+        return () => {
+            socket.off('notification', (data) => {
+                console.log('🚀 ~ socket.on ~ data:', data);
+            });
+        };
+    }, []);
 
     return (
         <Popover

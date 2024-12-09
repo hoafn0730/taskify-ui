@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import { Fragment, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Route, Routes, useLocation } from 'react-router-dom';
 
 import config from '~/config';
@@ -14,14 +14,11 @@ function App() {
     const location = useLocation();
     const dispatch = useDispatch();
     const state = location.state;
-    const userInfo = useSelector((state) => state.user.userInfo);
 
     useEffect(() => {
         // 🐳
-        if (!userInfo) {
-            dispatch(getCurrentUser());
-        }
-    }, [userInfo, dispatch]);
+        dispatch(getCurrentUser());
+    }, [dispatch]);
 
     useEffect(() => {
         if (Notification.permission === 'default') {
@@ -56,6 +53,7 @@ function App() {
                         />
                     );
                 })}
+                <Route path="/card/:slug" element={<Card />} />
 
                 {privateRoutes.map((route, index) => {
                     let Layout = DefaultLayout;

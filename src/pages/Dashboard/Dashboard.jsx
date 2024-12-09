@@ -1,14 +1,15 @@
-import Box from '@mui/material/Box';
-import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
-import StarOutlineRoundedIcon from '@mui/icons-material/StarOutlineRounded';
-import { Button, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
+import StarOutlineRoundedIcon from '@mui/icons-material/StarOutlineRounded';
 
 import Section from '~/components/Section';
 import Task from './Task';
 import { cardService } from '~/services/cardService';
 import { boardService } from '~/services/boardService';
+import dayjs from 'dayjs';
 
 function Dashboard() {
     const [tasks, setTasks] = useState([]);
@@ -16,72 +17,17 @@ function Dashboard() {
 
     useEffect(() => {
         cardService.getCards().then((res) => {
-            const tasklist = res.data.filter((card) => card.dueDate && !card.dueComplete);
-            setTasks(tasklist);
+            const tasklist = res.data.filter((card) => card.dueDate && !card.dueComplete && !card.archivedAt);
+            setTasks(tasklist.sort((a, b) => dayjs(a.dueDate) - dayjs(b.dueDate)));
         });
         boardService.getBoards().then((res) => {
             return setBoards(res.data);
         });
     }, []);
 
-    const sendNotification = (title) => {
-        if (Notification.permission === 'granted') {
-            // new Notification('Card is due now!', {
-            //     body: 'Hãy kiểm tra và xử lý ngay!',
-            //     icon: 'https://via.placeholder.com/100',
-            // });
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.ready.then((registration) => {
-                    registration.showNotification('Card is due now!', {
-                        body: 'Hãy kiểm tra và xử lý ngay!',
-                        icon: 'https://via.placeholder.com/100',
-                        actions: [
-                            { action: 'view', title: 'Xem chi tiết', icon: 'https://via.placeholder.com/50' },
-                            { action: 'dismiss', title: 'Bỏ qua', icon: 'https://via.placeholder.com/50' },
-                        ],
-                        tag: 'card-due',
-                        requireInteraction: true,
-                        data: {
-                            slug: 'notification',
-                        },
-                    });
-                });
-            }
-            //             const notification = new Notification(`Card "${title}" is due now!`, {
-            //                 body: 'Hãy kiểm tra và xử lý ngay!',
-            //                 icon: 'https://via.placeholder.com/100', // URL icon tùy chỉnh
-            //                 vibrate: [200, 100, 200], // Rung (chỉ hoạt động trên thiết bị hỗ trợ)
-            //                 badge: 'https://via.placeholder.com/50', // Icon nhỏ hiển thị trên màn hình
-            //                 actions: [
-            //                     { action: 'view', title: 'Xem chi tiết', icon: 'https://via.placeholder.com/50' },
-            //                     { action: 'dismiss', title: 'Bỏ qua', icon: 'https://via.placeholder.com/50' },
-            //                 ],
-            //                 requireInteraction: true, // Thông báo sẽ không tự động biến mất
-            //                 tag: 'card-due', // Gắn tag để tránh tạo trùng lặp thông báo
-            //             });
-            //
-            //             // Xử lý khi người dùng nhấp vào thông báo
-            //             notification.onclick = () => {
-            //                 window.open('http://localhost:5173', '_blank');
-            //                 notification.close(); // Đóng thông báo sau khi nhấp
-            //             };
-            //
-            //             // Xử lý khi thông báo bị đóng
-            //             notification.onclose = () => {
-            //                 console.log('Thông báo đã bị đóng.');
-            //             };
-            //
-            //             // Xử lý lỗi (nếu có)
-            //             notification.onerror = (err) => {
-            //                 console.error('Lỗi thông báo:', err);
-            //             };
-        }
-    };
-
     return (
         <Box sx={{ display: 'flex' }}>
             <Box sx={{ width: '420px' }}>
-                <Button onClick={() => sendNotification('card.title')}>Click me!</Button>
                 <Section title="Up next" icon={<AccessTimeRoundedIcon fontSize="small" />}>
                     {tasks.length > 0 &&
                         tasks.map((task) => (

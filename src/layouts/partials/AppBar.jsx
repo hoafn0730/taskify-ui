@@ -1,21 +1,20 @@
 import { styled, alpha } from '@mui/material/styles';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
-
-import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
-import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import MuiAppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import Logo from '~/components/Logo';
 import config from '~/config';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     display: 'flex',
@@ -33,8 +32,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 function AppBar() {
     const [open, setOpen] = useState(false);
-    const currentURL = window.location.origin;
-    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+    const userInfo = useSelector((state) => state.user.userInfo);
 
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
@@ -74,7 +72,7 @@ function AppBar() {
                             alignItems: 'center',
                         }}
                     >
-                        {isLoggedIn ? (
+                        {userInfo ? (
                             <Button LinkComponent={Link} color="primary" variant="contained" size="small" to={'/'}>
                                 Go to my boards
                             </Button>
@@ -96,7 +94,7 @@ function AppBar() {
                                     size="small"
                                     href={`${
                                         import.meta.env.VITE_APP_ACCOUNTS_URL
-                                    }/register?continue=${encodeURIComponent(currentURL)}`}
+                                    }/register?continue=${encodeURIComponent(window.location.origin)}`}
                                 >
                                     Sign up
                                 </Button>
@@ -127,7 +125,7 @@ function AppBar() {
                                 <MenuItem>Pricing</MenuItem>
                                 <MenuItem>FAQ</MenuItem>
                                 <MenuItem>Blog</MenuItem>
-                                {isLoggedIn ? (
+                                {userInfo ? (
                                     <MenuItem>
                                         <Button
                                             LinkComponent={Link}
@@ -148,7 +146,7 @@ function AppBar() {
                                                 fullWidth
                                                 href={`${
                                                     import.meta.env.VITE_APP_ACCOUNTS_URL
-                                                }/register?continue=${encodeURIComponent(currentURL)}`}
+                                                }/register?continue=${encodeURIComponent(window.location.origin)}`}
                                             >
                                                 Sign up
                                             </Button>
@@ -159,8 +157,8 @@ function AppBar() {
                                                 variant="outlined"
                                                 fullWidth
                                                 href={`${
-                                                    import.meta.env.VITE_APP_ACCOUNTS_URL
-                                                }/login?continue=${encodeURIComponent(currentURL)}`}
+                                                    import.meta.env.VITE_APP_SSO_LOGIN
+                                                }?serviceURL=${encodeURIComponent(window.location.origin)}`}
                                             >
                                                 Sign in
                                             </Button>

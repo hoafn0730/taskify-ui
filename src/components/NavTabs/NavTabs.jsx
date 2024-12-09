@@ -1,22 +1,25 @@
 import { useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
-import Tabs from '@mui/material/Tabs';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
-import DashboardCustomizeRoundedIcon from '@mui/icons-material/DashboardCustomizeRounded';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Fade from '@mui/material/Fade';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Fade from '@mui/material/Fade';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Tabs from '@mui/material/Tabs';
+import TextField from '@mui/material/TextField';
+import DashboardCustomizeRoundedIcon from '@mui/icons-material/DashboardCustomizeRounded';
+import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import AddBoxRoundedIcon from '@mui/icons-material/AddBoxRounded';
 
 import LinkTab from './LinkTab';
 import Modal from '../Modal';
 import { FIELD_REQUIRED_MESSAGE } from '~/utils/validators';
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { boardService } from '~/services/boardService';
 
 function samePageLinkNavigation(event) {
@@ -70,9 +73,17 @@ function NavTabs() {
         const { title, description, type } = data;
 
         toast
-            .promise(boardService.createNewBoard({ title, description, type }), {
-                pending: 'Create new board is in progress...',
-            })
+            .promise(
+                boardService.createNewBoard({
+                    title: title.trim(),
+                    description: description.trim(),
+                    type,
+                    image: 'https://trello-backgrounds.s3.amazonaws.com/SharedBackground/480x480/1849a4a0cc47bd7f5c6e08a06cf3affa/photo-1516553174826-d05833723cd4.jpg',
+                }),
+                {
+                    pending: 'Create new board is in progress...',
+                },
+            )
             .then((board) => navigate(`/board/${board.slug}`));
     };
 
@@ -162,12 +173,13 @@ function NavTabs() {
                                 <Select
                                     labelId="select-label"
                                     label="Visibility"
+                                    defaultValue={'public'}
                                     {...register('type', {
                                         required: FIELD_REQUIRED_MESSAGE,
                                     })}
                                 >
-                                    <MenuItem value={'private'}>Private</MenuItem>
                                     <MenuItem value={'public'}>Public</MenuItem>
+                                    <MenuItem value={'private'}>Private</MenuItem>
                                 </Select>
                             </FormControl>
                             <Button

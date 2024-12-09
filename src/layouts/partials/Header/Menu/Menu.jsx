@@ -14,12 +14,12 @@ import { useSelector } from 'react-redux';
 import Header from './Header';
 
 function Menu({ items, onChange }) {
+    const { t } = useTranslation('header');
+    const userInfo = useSelector((state) => state.user.userInfo);
     const [anchorEl, setAnchorEl] = useState(null);
     const [history, setHistory] = useState([{ data: items }]);
-    const { t } = useTranslation('header');
     const current = history[history.length - 1];
     const open = Boolean(anchorEl);
-    const userInfo = useSelector((state) => state.user.userInfo);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);

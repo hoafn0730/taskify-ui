@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import Box from '@mui/material/Box';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { cloneDeep } from 'lodash';
 
@@ -17,14 +17,15 @@ function Board() {
     const board = useSelector((state) => state.board.activeBoard);
     const isLoading = useSelector((state) => state.board.isLoading);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(fetchBoardDetail(slug));
-    }, [dispatch, slug]);
-
-    useEffect(() => {
-        // Todo: Check is member in board
-    }, []);
+        dispatch(fetchBoardDetail(slug)).then((res) => {
+            if (res?.error) {
+                navigate('/');
+            }
+        });
+    }, [dispatch, navigate, slug]);
 
     const moveColumns = (orderedColumns) => {
         const dndOrderedColumnsIds = orderedColumns.map((c) => c.uuid);

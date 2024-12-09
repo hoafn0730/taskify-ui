@@ -16,7 +16,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 import { capitalizeFirstLetter } from '~/utils/formatters';
 import Invite from './Invite';
-import BoardMenu from './BoardMenu';
+import BoardMenu from './BoardMenu/BoardMenu';
 
 const MENUS_STYLES = {
     color: (theme) => (theme.palette.mode === 'dark' ? theme.palette.common.white : 'primary.main'),

@@ -40,7 +40,7 @@ function Column({ column }) {
             return;
         }
         const newCardData = {
-            title: newCardTitle,
+            title: newCardTitle.trim(),
             columnId: column.id,
         };
 
@@ -92,7 +92,7 @@ function Column({ column }) {
     // };
 
     return (
-        <div ref={setNodeRef} style={style} {...attributes}>
+        <div ref={setNodeRef} style={{ ...style, outline: 'none' }} {...attributes}>
             <Box
                 sx={{
                     bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#333643' : theme.palette.common.white),

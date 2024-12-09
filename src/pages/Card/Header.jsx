@@ -39,6 +39,11 @@ function Header({ card }) {
                 replace: true,
             });
 
+            // set pathname
+            // const urlObject = new URL(window.location.href);
+            // urlObject.pathname = '/card/' + slugify(updateData.title, { lower: true });
+            // window.history.replaceState(null, null, urlObject.toString());
+
             dispatch(updateCardOnBoard(newCard));
             dispatch(updateCardData(newCard));
 

@@ -8,7 +8,7 @@ import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import UploadFile from '../Section/Attachment/UploadFile';
+import UploadFile from '../../../components/UploadFile';
 import LoadingSpinner from '~/components/LoadingSpinner';
 import { attachmentService } from '~/services/attachmentService';
 import { convertBase64 } from '~/utils/convertBase64';
@@ -88,7 +88,7 @@ function AttachmentAction({ title, anchorEl, card, onClose }) {
                 <Typography sx={{ fontSize: '12px', mb: 3 }}>
                     You can also drag and drop files to upload them.
                 </Typography>
-                {loading ? <LoadingSpinner caption="Loading..." /> : <UploadFile onUploadFile={handleUploadFile} />}
+                {loading ? <LoadingSpinner caption="Loading..." /> : <UploadFile onChange={handleUploadFile} />}
             </Box>
             <Divider />
             <Box

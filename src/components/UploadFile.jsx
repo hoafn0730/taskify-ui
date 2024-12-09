@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -14,14 +15,26 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-// eslint-disable-next-line react/prop-types
-function InputFileUpload({ onChange }) {
+function UploadFile({ fullWidth, onChange }) {
     return (
-        <Button component="label" role={undefined} variant="contained" tabIndex={-1} startIcon={<CloudUploadIcon />}>
+        <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+            fullWidth={fullWidth}
+            sx={{ my: 1 }}
+        >
             Choose a file
             <VisuallyHiddenInput type="file" onChange={onChange} multiple />
         </Button>
     );
 }
 
-export default InputFileUpload;
+UploadFile.propTypes = {
+    fullWidth: PropTypes.bool,
+    onChange: PropTypes.func,
+};
+
+export default UploadFile;

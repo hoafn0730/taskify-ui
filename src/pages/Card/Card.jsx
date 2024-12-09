@@ -12,7 +12,6 @@ import NotesIcon from '@mui/icons-material/Notes';
 // import ListItemText from '@mui/material/ListItemText';
 
 import Header from './Header';
-import Section from './Section';
 import AttachmentAction from './Actions/AttachmentAction';
 import Activity from './Section/Activity';
 import Attachment from './Section/Attachment';
@@ -26,6 +25,7 @@ import { checklistService } from '~/services/checklistService';
 import { fetchCardDetail } from '~/store/actions/cardAction';
 import { updateCardOnBoard } from '~/store/slices/boardSlice';
 import { updateCardData } from '~/store/slices/cardSlice';
+import Section from '~/components/Section';
 
 function Card() {
     const location = useLocation();
@@ -104,7 +104,7 @@ function Card() {
                         <Section
                             title={'Description'}
                             icon={<NotesIcon />}
-                            button={<Button onClick={() => setIsEditingDesc(true)}>Edit</Button>}
+                            action={<Button onClick={() => setIsEditingDesc(true)}>Edit</Button>}
                         >
                             <Description
                                 isEditingDesc={isEditingDesc}
@@ -118,7 +118,7 @@ function Card() {
                             <Section
                                 title={'Attachments'}
                                 icon={<AttachmentOutlinedIcon />}
-                                button={<Button onClick={(e) => setAnchorEl(e.currentTarget)}>Add</Button>}
+                                action={<Button onClick={(e) => setAnchorEl(e.currentTarget)}>Add</Button>}
                             >
                                 <Attachment card={card} />
                             </Section>
@@ -131,7 +131,7 @@ function Card() {
                                     key={checklist.id}
                                     title={checklist.title}
                                     icon={<ChecklistIcon />}
-                                    button={<Button onClick={() => handleDeleteChecklist(checklist.id)}>Delete</Button>}
+                                    action={<Button onClick={() => handleDeleteChecklist(checklist.id)}>Delete</Button>}
                                 >
                                     <Checklist checklistId={checklist.id} checkItems={checklist.checkItems} />
                                 </Section>
@@ -141,7 +141,7 @@ function Card() {
                         <Section
                             title={'Activity'}
                             icon={<FormatListBulletedIcon />}
-                            button={<Button>Show Details</Button>}
+                            action={<Button>Show Details</Button>}
                         >
                             <Activity />
                         </Section>

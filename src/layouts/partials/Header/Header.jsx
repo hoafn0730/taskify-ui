@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { useColorScheme, useMediaQuery, useTheme } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import Avatar from '@mui/material/Avatar';
@@ -21,11 +22,9 @@ import Search from './Search';
 import Starred from './Starred';
 import Template from './Template';
 import Workspaces from './Workspaces';
-import { locales } from '~/utils/i18n';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '~/store/actions/userAction';
 import Logo from '~/components/Logo';
+import { locales } from '~/utils/i18n';
+import { logout } from '~/store/actions/userAction';
 
 const MENU_ITEMS = [
     {

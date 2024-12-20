@@ -24,6 +24,7 @@ import { updateCardOnBoard } from '~/store/slices/boardSlice';
 
 function Dates({ title, anchorEl, onClose }) {
     const dispatch = useDispatch();
+    const board = useSelector((state) => state.board.activeBoard);
     const card = useSelector((state) => state.card.activeCard);
     const dueDate = card?.dueDate && dayjs(card?.dueDate);
     const [dateCalendarValue, setDateCalendarValue] = useState(dueDate ?? dayjs());
@@ -42,8 +43,8 @@ function Dates({ title, anchorEl, onClose }) {
         newCard.dueReminder = -1;
 
         onClose();
-        dispatch(updateCardOnBoard(newCard));
         dispatch(updateCardData(newCard));
+        board && dispatch(updateCardOnBoard(newCard));
 
         cardService.updateCard(card.id, updateData);
     };

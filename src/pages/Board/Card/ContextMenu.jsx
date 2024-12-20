@@ -1,17 +1,15 @@
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import { cloneDeep } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemText from '@mui/material/ListItemText';
+import { useTranslation } from 'react-i18next';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
-import { useTranslation } from 'react-i18next';
+
+import Menu from '~/components/Menu';
 import { cardService } from '~/services/cardService';
-import { cloneDeep } from 'lodash';
 import { updateBoardData } from '~/store/slices/boardSlice';
-import dayjs from 'dayjs';
 
 function ContextMenu({ anchorEl, card, onClose }) {
     const { t } = useTranslation('board');
@@ -19,6 +17,19 @@ function ContextMenu({ anchorEl, card, onClose }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
+
+    const contextMenu = [
+        {
+            title: t('openCard'),
+            icon: <CreditCardIcon fontSize="small" />,
+            type: 'openCard',
+        },
+        {
+            title: t('archive'),
+            icon: <Inventory2OutlinedIcon fontSize="small" />,
+            type: 'archive',
+        },
+    ];
 
     const handleArchive = () => {
         const updateData = {
@@ -43,12 +54,23 @@ function ContextMenu({ anchorEl, card, onClose }) {
         navigate(`/card/${card.slug}`, { state: { backgroundLocation: location } });
     };
 
+    const handleMenuChange = (menuItem, e) => {
+        switch (menuItem.type) {
+            case 'openCard':
+                handleOpen();
+                onClose();
+                break;
+            case 'archive':
+                handleArchive();
+                break;
+
+            default:
+        }
+    };
+
     return (
         <Menu
-            id="positioned-menu"
-            aria-labelledby="positioned-button"
             anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
             onClose={onClose}
             anchorOrigin={{
                 vertical: 'top',
@@ -59,25 +81,9 @@ function ContextMenu({ anchorEl, card, onClose }) {
                 horizontal: 'left',
             }}
             sx={{ ml: 1 }}
-        >
-            <MenuItem
-                onClick={() => {
-                    handleOpen();
-                    onClose();
-                }}
-            >
-                <ListItemIcon>
-                    <CreditCardIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>{t('openCard')}</ListItemText>
-            </MenuItem>
-            <MenuItem onClick={handleArchive}>
-                <ListItemIcon>
-                    <Inventory2OutlinedIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>{t('archive')}</ListItemText>
-            </MenuItem>
-        </Menu>
+            items={contextMenu}
+            onChange={handleMenuChange}
+        />
     );
 }
 

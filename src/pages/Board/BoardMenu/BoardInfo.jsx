@@ -12,8 +12,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 
-import LoadingSpinner from '~/components/LoadingSpinner';
-import UploadFile from '~/components/UploadFile';
+import LoadingSpinner from '~/components/LoadingSpinner/LoadingSpinner';
+import UploadFile from '~/components/UploadFile/UploadFile';
 import { FIELD_REQUIRED_MESSAGE } from '~/utils/validators';
 import { boardService } from '~/services/boardService';
 import { convertBase64 } from '~/utils/convertBase64';

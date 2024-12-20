@@ -1,11 +1,11 @@
 import httpRequest from '~/utils/httpRequest';
 
-const getChecklistDetail = async (checklistId) => {
-    return await httpRequest.get('/checklists/' + checklistId);
+const getChecklistDetail = (checklistId) => {
+    return httpRequest.get('/checklists/' + checklistId);
 };
 
-const getChecklistDetailBySlug = async (slug) => {
-    return await httpRequest.get('/checklists/' + slug);
+const getChecklistDetailBySlug = (slug) => {
+    return httpRequest.get('/checklists/' + slug);
 };
 
 const createNewChecklist = async (data) => {
@@ -15,14 +15,14 @@ const createNewChecklist = async (data) => {
     return res.data;
 };
 
-const updateChecklist = async (checklistId, data) => {
-    return await httpRequest.put('/checklists/' + checklistId, {
+const updateChecklist = (checklistId, data) => {
+    return httpRequest.put('/checklists/' + checklistId, {
         ...data,
     });
 };
 
-const deleteChecklist = async (checklistId) => {
-    return await httpRequest.delete('/checklists/' + checklistId);
+const deleteChecklist = (checklistId) => {
+    return httpRequest.delete('/checklists/' + checklistId);
 };
 
 const createNewCheckItem = async (checklistId, data) => {
@@ -32,14 +32,14 @@ const createNewCheckItem = async (checklistId, data) => {
     return res.data;
 };
 
-const updateCheckItem = async (checklistId, checkItemId, data) => {
-    return await httpRequest.put('/checklists/' + checklistId + '/check-items/' + checkItemId, {
+const updateCheckItem = (checklistId, checkItemId, data) => {
+    return httpRequest.put('/checklists/' + checklistId + '/check-items/' + checkItemId, {
         ...data,
     });
 };
 
-const deleteCheckItem = async (checklistId, checkItemId) => {
-    return await httpRequest.delete('/checklists/' + checklistId + '/check-items/' + checkItemId);
+const deleteCheckItem = (checklistId, checkItemId) => {
+    return httpRequest.delete('/checklists/' + checklistId + '/check-items/' + checkItemId);
 };
 
 export const checklistService = {

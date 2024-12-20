@@ -17,8 +17,8 @@ const items = [
         title: 'Boards',
         description:
             'TaskFlow boards keep tasks organized and work moving forward. In a glance, see everything from “things to do” to “aww yeah, we did it!”',
-        imageLight: 'url("https://mui.com/static/images/templates/templates-images/dash-light.png")',
-        imageDark: 'url("https://mui.com/static/images/templates/templates-images/dash-dark.png")',
+        imageLight: 'url("https://res.cloudinary.com/djcqm9suu/image/upload/v1734017447/ugmcfuwmbcim66tyxjgz.jpg")',
+        imageDark: 'url("https://res.cloudinary.com/djcqm9suu/image/upload/v1734017447/ugmcfuwmbcim66tyxjgz.jpg")',
     },
     {
         icon: <EdgesensorHighRoundedIcon />,
@@ -237,6 +237,8 @@ function Features() {
                                 width: 420,
                                 height: 500,
                                 backgroundSize: 'contain',
+                                backgroundPosition: 'center',
+                                backgroundRepeat: 'no-repeat',
                                 backgroundImage: 'var(--items-imageLight)',
                                 ...theme.applyStyles('dark', {
                                     backgroundImage: 'var(--items-imageDark)',

@@ -1,27 +1,24 @@
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import StarOutlineRoundedIcon from '@mui/icons-material/StarOutlineRounded';
 
-import Section from '~/components/Section';
 import Task from './Task';
+import Section from '~/components/Section/Section';
 import { cardService } from '~/services/cardService';
-import { boardService } from '~/services/boardService';
 
 function Dashboard() {
+    const workspace = useSelector((state) => state.workspace.activeWorkspace);
     const [tasks, setTasks] = useState([]);
-    const [boards, setBoards] = useState([]);
 
     useEffect(() => {
         cardService.getCards().then((res) => {
             const tasklist = res.data.filter((card) => card.dueDate && !card.dueComplete && !card.archivedAt);
             setTasks(tasklist.sort((a, b) => dayjs(a.dueDate) - dayjs(b.dueDate)));
-        });
-        boardService.getBoards().then((res) => {
-            return setBoards(res.data);
         });
     }, []);
 
@@ -61,8 +58,8 @@ function Dashboard() {
                 }}
             >
                 <Section title="Starred" icon={<StarOutlineRoundedIcon fontSize="small" />}>
-                    {boards.length > 0 &&
-                        boards.map((board) => (
+                    {workspace?.boardStars?.length > 0 &&
+                        workspace.boardStars.map((board) => (
                             <Box key={board.id} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, p: 0.5 }}>
                                 <Box
                                     sx={{ height: '30px', borderRadius: 1 }}
@@ -80,15 +77,15 @@ function Dashboard() {
                                         </Typography>
                                     </Box>
                                     <Typography variant="span" sx={{ fontSize: '12px', lineHeight: '16px' }}>
-                                        Hoafn Workspace
+                                        {workspace.title} Workspace
                                     </Typography>
                                 </Box>
                             </Box>
                         ))}
                 </Section>
                 <Section title="Recently viewed" icon={<AccessTimeRoundedIcon fontSize="small" />}>
-                    {boards.length > 0 &&
-                        boards.map((board) => (
+                    {workspace?.boards?.length > 0 &&
+                        workspace.boards.map((board) => (
                             <Box key={board.id} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, p: 0.5 }}>
                                 <Box
                                     sx={{ height: '30px', borderRadius: 1 }}
@@ -106,12 +103,13 @@ function Dashboard() {
                                         </Typography>
                                     </Box>
                                     <Typography variant="span" sx={{ fontSize: '12px', lineHeight: '16px' }}>
-                                        Hoafn Workspace
+                                        {workspace.title} Workspace
                                     </Typography>
                                 </Box>
                             </Box>
                         ))}
                 </Section>
+                <img src="https://qr.sepay.vn/img?acc=0975882405&bank=MBBank&amount=20000&des=hello" />
             </Box>
         </Box>
     );

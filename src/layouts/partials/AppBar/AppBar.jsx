@@ -13,7 +13,7 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import Logo from '~/components/Logo';
+import Logo from '~/components/Logo/Logo';
 import config from '~/config';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({

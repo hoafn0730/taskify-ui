@@ -11,6 +11,7 @@ import { updateCardData } from '~/store/slices/cardSlice';
 
 function ChecklistAction({ title, anchorEl, onClose }) {
     const dispatch = useDispatch();
+    const board = useSelector((state) => state.board.activeBoard);
     const [checklistTitle, setChecklistTitle] = useState('');
     const card = useSelector((state) => state.card.activeCard);
 
@@ -24,7 +25,7 @@ function ChecklistAction({ title, anchorEl, onClose }) {
         const newCard = cloneDeep(card);
         newCard.checklists = [...newCard.checklists, { ...checklist, checkItems: [] }];
 
-        dispatch(updateCardOnBoard(newCard));
+        board && dispatch(updateCardOnBoard(newCard));
         dispatch(updateCardData(newCard));
         onClose();
     };

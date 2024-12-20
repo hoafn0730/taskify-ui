@@ -21,8 +21,7 @@ import Recent from './Recent';
 import Search from './Search';
 import Starred from './Starred';
 import Template from './Template';
-import Workspaces from './Workspaces';
-import Logo from '~/components/Logo';
+import Logo from '~/components/Logo/Logo';
 import { locales } from '~/utils/i18n';
 import { logout } from '~/store/actions/userAction';
 
@@ -168,7 +167,6 @@ function Header() {
                     </>
                 ) : (
                     <>
-                        <Workspaces />
                         <Recent />
                         <Starred />
                         <Template />

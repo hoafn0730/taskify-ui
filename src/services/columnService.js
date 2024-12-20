@@ -4,17 +4,17 @@ const createNewColumn = async (data) => {
     const res = await httpRequest.post('/columns', {
         ...data,
     });
-    return res.data.data;
+    return res.data;
 };
 
-const updateColumn = async (columnId, data) => {
-    return await httpRequest.put('/columns/' + columnId, {
+const updateColumn = (columnId, data) => {
+    return httpRequest.put('/columns/' + columnId, {
         ...data,
     });
 };
 
-const deleteColumn = async (columnId) => {
-    return await httpRequest.delete('/columns/' + columnId);
+const deleteColumn = (columnId) => {
+    return httpRequest.delete('/columns/' + columnId);
 };
 
 export const columnService = { createNewColumn, updateColumn, deleteColumn };

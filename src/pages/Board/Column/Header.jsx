@@ -1,28 +1,23 @@
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import CloudOutlinedIcon from '@mui/icons-material/CloudOutlined';
-import Tooltip from '@mui/material/Tooltip';
-import TextField from '@mui/material/TextField';
-import ContentCut from '@mui/icons-material/ContentCut';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import ContentCopy from '@mui/icons-material/ContentCopy';
-import ContentPaste from '@mui/icons-material/ContentPaste';
-import AddCard from '@mui/icons-material/AddCard';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import { cloneDeep } from 'lodash';
 import { useDebounce } from '@uidotdev/usehooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { cloneDeep } from 'lodash';
+import { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import AddCard from '@mui/icons-material/AddCard';
+import ContentCopy from '@mui/icons-material/ContentCopy';
+import ContentCut from '@mui/icons-material/ContentCut';
+import ContentPaste from '@mui/icons-material/ContentPaste';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import { updateBoardData } from '~/store/slices/boardSlice';
 import { columnService } from '~/services/columnService';
+import Menu from '~/components/Menu';
 
 // import { useTranslation } from 'react-i18next';
 
@@ -35,7 +30,38 @@ function Header({ column, setOpenNewCardForm, onDeleteColumn }) {
     const debouncedColumnTitleValue = useDebounce(columnTitleValue, 800);
     const dispatch = useDispatch();
 
-    const open = Boolean(anchorEl);
+    const columnMenu = [
+        {
+            title: 'Add new card',
+            icon: <AddCard fontSize="small" />,
+            type: 'addNewCard',
+        },
+        {
+            title: 'Cut',
+            icon: <ContentCut fontSize="small" />,
+            type: 'cut',
+        },
+        {
+            title: 'Copy',
+            icon: <ContentCopy fontSize="small" />,
+            type: 'copy',
+        },
+        {
+            title: 'Paste',
+            icon: <ContentPaste fontSize="small" />,
+            type: 'paste',
+        },
+        {
+            title: 'Rename',
+            icon: <DriveFileRenameOutlineIcon fontSize="small" />,
+            type: 'rename',
+        },
+        {
+            title: 'Remove this column',
+            icon: <DeleteForeverIcon fontSize="small" />,
+            type: 'removeColumn',
+        },
+    ];
 
     useEffect(() => {
         if (!debouncedColumnTitleValue?.trim()) {
@@ -59,6 +85,23 @@ function Header({ column, setOpenNewCardForm, onDeleteColumn }) {
 
     const handleClick = (event) => setAnchorEl(event.currentTarget);
     const handleClose = () => setAnchorEl(null);
+
+    const handleMenuChange = (menuItem, e) => {
+        switch (menuItem.type) {
+            case 'addNewCard':
+                setAnchorEl(null);
+                setOpenNewCardForm(true);
+                break;
+            case 'rename':
+                setIsRename(true);
+                break;
+            case 'removeColumn':
+                onDeleteColumn();
+                break;
+
+            default:
+        }
+    };
 
     return (
         <Box
@@ -132,92 +175,7 @@ function Header({ column, setOpenNewCardForm, onDeleteColumn }) {
                         onClick={handleClick}
                     />
                 </Tooltip>
-                <Menu
-                    id="basic-menu-column-dropdown"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    onClick={handleClose}
-                    disableEnforceFocus
-                    disableRestoreFocus
-                    MenuListProps={{
-                        'aria-labelledby': 'basic-column-dropdown',
-                    }}
-                >
-                    <MenuItem onClick={() => setOpenNewCardForm(true)}>
-                        <ListItemIcon>
-                            <AddCard fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText>Add new card</ListItemText>
-                        <Typography variant="body2" color="text.secondary">
-                            ⌘N
-                        </Typography>
-                    </MenuItem>
-                    <MenuItem>
-                        <ListItemIcon>
-                            <ContentCut fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText>Cut</ListItemText>
-                        <Typography variant="body2" color="text.secondary">
-                            ⌘X
-                        </Typography>
-                    </MenuItem>
-                    <MenuItem>
-                        <ListItemIcon>
-                            <ContentCopy fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText>Copy</ListItemText>
-                        <Typography variant="body2" color="text.secondary">
-                            ⌘C
-                        </Typography>
-                    </MenuItem>
-                    <MenuItem>
-                        <ListItemIcon>
-                            <ContentPaste fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText>Paste</ListItemText>
-                        <Typography variant="body2" color="text.secondary">
-                            ⌘V
-                        </Typography>
-                    </MenuItem>
-                    <MenuItem
-                        onClick={() => {
-                            setIsRename(true);
-                        }}
-                    >
-                        <ListItemIcon>
-                            <DriveFileRenameOutlineIcon fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText>Rename</ListItemText>
-                        <Typography variant="body2" color="text.secondary">
-                            ⌘V
-                        </Typography>
-                    </MenuItem>
-
-                    <Divider />
-                    <MenuItem
-                        sx={{
-                            '&:hover': {
-                                color: 'warning.dark',
-                                '& .delete-icon': {
-                                    color: 'warning.dark',
-                                },
-                            },
-                        }}
-                        onClick={onDeleteColumn}
-                    >
-                        <ListItemIcon>
-                            <DeleteForeverIcon className="delete-icon" fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText>Remove this column</ListItemText>
-                    </MenuItem>
-                    <MenuItem>
-                        <ListItemIcon>
-                            <CloudOutlinedIcon fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText>Archive this column</ListItemText>
-                    </MenuItem>
-                </Menu>
+                <Menu anchorEl={anchorEl} items={columnMenu} onChange={handleMenuChange} onClose={handleClose} />
             </Box>
         </Box>
     );

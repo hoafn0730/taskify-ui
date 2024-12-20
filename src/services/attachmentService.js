@@ -7,14 +7,14 @@ const createNewAttachment = async (data) => {
     return res.data;
 };
 
-const updateAttachment = async (attachmentId, data) => {
-    return await httpRequest.put('/attachments/' + attachmentId, {
+const updateAttachment = (attachmentId, data) => {
+    return httpRequest.put('/attachments/' + attachmentId, {
         ...data,
     });
 };
 
-const deleteAttachment = async (attachmentId) => {
-    return await httpRequest.delete('/attachments/' + attachmentId);
+const deleteAttachment = (attachmentId) => {
+    return httpRequest.delete('/attachments/' + attachmentId);
 };
 
 export const attachmentService = { createNewAttachment, updateAttachment, deleteAttachment };

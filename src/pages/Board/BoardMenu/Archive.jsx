@@ -1,11 +1,14 @@
-import ListItemText from '@mui/material/ListItemText';
 import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import { formatDistanceToNow } from 'date-fns';
+import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import { cardService } from '~/services/cardService';
-import dayjs from 'dayjs';
+import { Typography } from '@mui/material';
 
 function Archive() {
     const [cards, setCards] = useState([]);
@@ -16,6 +19,24 @@ function Archive() {
             setCards(tasklist);
         });
     }, []);
+
+    const handleRestore = (cardId) => {
+        // call api
+        cardService.updateCard(cardId, {
+            archivedAt: null,
+        });
+
+        //* update lai board
+
+        setCards((prev) => prev.filter((item) => item.id !== cardId));
+    };
+
+    const handleDelete = (cardId) => {
+        // call api
+        cardService.deleteCard(cardId);
+
+        setCards((prev) => prev.filter((item) => item.id !== cardId));
+    };
 
     return (
         <Box sx={{ p: 1, width: '100%' }}>
@@ -29,7 +50,12 @@ function Archive() {
                         >
                             <ListItemText
                                 primary={item.title}
-                                secondary={dayjs(item.archivedAt).format('MMM D, h:mm A')}
+                                secondary={
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                                        <Inventory2OutlinedIcon fontSize="small" />
+                                        {formatDistanceToNow(dayjs(item.archivedAt), { addSuffix: true })}
+                                    </Box>
+                                }
                                 sx={{
                                     p: 1,
                                     borderRadius: 1,
@@ -39,11 +65,23 @@ function Archive() {
                                 }}
                             />
                             <Box sx={{ display: 'flex' }}>
-                                <ListItemButton>Restore</ListItemButton>
-                                <ListItemButton>Delete</ListItemButton>
+                                <ListItemButton
+                                    sx={{ '&:hover': { textDecoration: 'underline' }, borderRadius: 1 }}
+                                    onClick={() => handleRestore(item.id)}
+                                >
+                                    Restore
+                                </ListItemButton>
+                                <ListItemButton
+                                    sx={{ '&:hover': { textDecoration: 'underline' }, borderRadius: 1 }}
+                                    onClick={() => handleDelete(item.id)}
+                                >
+                                    Delete
+                                </ListItemButton>
                             </Box>
                         </ListItem>
                     ))}
+
+                {!cards.length && <Typography variant="span">No archived items</Typography>}
             </List>
         </Box>
     );

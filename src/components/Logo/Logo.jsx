@@ -2,7 +2,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg';
-import Link from '~/components/Link';
+import Link from '~/components/Link/Link';
 import config from '~/config';
 
 function Logo({ to }) {

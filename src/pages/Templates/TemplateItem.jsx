@@ -1,5 +1,5 @@
 import { Card, CardContent, CardMedia, Typography } from '@mui/material';
-import Link from '~/components/Link';
+import Link from '~/components/Link/Link';
 
 function TemplateItem() {
     return (

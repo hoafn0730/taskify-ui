@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { cloneDeep } from 'lodash';
 import PropTypes from 'prop-types';
@@ -8,14 +8,16 @@ import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import UploadFile from '../../../components/UploadFile';
-import LoadingSpinner from '~/components/LoadingSpinner';
+import UploadFile from '../../../components/UploadFile/UploadFile';
+import LoadingSpinner from '~/components/LoadingSpinner/LoadingSpinner';
 import { attachmentService } from '~/services/attachmentService';
 import { convertBase64 } from '~/utils/convertBase64';
 import { updateCardData } from '~/store/slices/cardSlice';
 import { updateCardOnBoard } from '~/store/slices/boardSlice';
 
 function AttachmentAction({ title, anchorEl, card, onClose }) {
+    const board = useSelector((state) => state.board.activeBoard);
+
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
 
@@ -41,7 +43,7 @@ function AttachmentAction({ title, anchorEl, card, onClose }) {
                         newCard.cover = res;
                         newCard.image = res.id + '';
 
-                        dispatch(updateCardOnBoard(newCard));
+                        board && dispatch(updateCardOnBoard(newCard));
                     }
 
                     dispatch(updateCardData(newCard));

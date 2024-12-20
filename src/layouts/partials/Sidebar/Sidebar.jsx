@@ -1,9 +1,21 @@
-import { Button } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { List, ListItem, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 import NavTabs from '~/components/NavTabs/NavTabs';
 import { sendNotification } from '~/utils/notification';
+import { useEffect } from 'react';
+import { fetchWorkspace } from '~/store/actions/workspaceAction';
 
 function Sidebar() {
+    const dispatch = useDispatch();
+    const workspace = useSelector((state) => state.workspace.activeWorkspace);
+
+    useEffect(() => {
+        dispatch(fetchWorkspace());
+    }, [dispatch]);
+
     return (
         <Box
             sx={{
@@ -16,6 +28,20 @@ function Sidebar() {
             }}
         >
             <NavTabs />
+            <Divider />
+            <Typography variant="h3" sx={{ fontSize: '16px', mx: 2, mt: 1 }}>
+                {workspace?.title}
+            </Typography>
+            <List>
+                {workspace?.boards.length > 0 &&
+                    workspace.boards.map((board) => (
+                        <ListItem key={board.id}>
+                            <Typography variant="span" sx={{ fontSize: '14px' }}>
+                                {workspace.title}
+                            </Typography>
+                        </ListItem>
+                    ))}
+            </List>
             <Button
                 size="small"
                 sx={{

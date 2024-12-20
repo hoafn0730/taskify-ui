@@ -1,8 +1,8 @@
 import config from '~/config';
-import Blog from '~/pages/Blog';
 import HomeLayout from '~/layouts/HomeLayout';
 import DashboardLayout from '~/layouts/DashboardLayout';
 
+import Blog from '~/pages/Blog';
 import Home from '~/pages/Home';
 import Board from '~/pages/Board';
 import Boards from '~/pages/Boards';
@@ -11,7 +11,7 @@ import Invite from '~/pages/Invite';
 import Templates from '~/pages/Templates';
 import NotFound from '~/pages/NotFound';
 
-export const publicRoutes = [
+const publicRoutes = [
     {
         path: config.paths.home,
         component: Home,
@@ -29,7 +29,7 @@ export const publicRoutes = [
     },
 ];
 
-export const privateRoutes = [
+const privateRoutes = [
     {
         path: config.paths.dashboard,
         component: Dashboard,
@@ -54,3 +54,5 @@ export const privateRoutes = [
         component: Invite,
     },
 ];
+
+export { publicRoutes, privateRoutes };

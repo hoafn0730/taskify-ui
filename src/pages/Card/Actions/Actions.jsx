@@ -1,16 +1,13 @@
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
@@ -21,7 +18,6 @@ import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-// import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
 
 import Dates from './Dates';
 import ChecklistAction from './ChecklistAction';
@@ -29,19 +25,57 @@ import AttachmentAction from './AttachmentAction';
 import { cardService } from '~/services/cardService';
 import { updateCardData } from '~/store/slices/cardSlice';
 import { updateCardOnBoard } from '~/store/slices/boardSlice';
+import Menu from '~/components/Menu';
 
 function Actions({ card }) {
+    const { t } = useTranslation('card');
+    const dispatch = useDispatch();
+    const board = useSelector((state) => state.board.activeBoard);
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchorButtonActions, setAnchorButtonActions] = useState(null);
     const [actionButton, setActionButton] = useState(null);
     const timeDifference = dayjs(card?.dueDate).valueOf() - dayjs().valueOf();
-    const dispatch = useDispatch();
+
+    const actionsMenu = [
+        {
+            title: 'Join',
+            icon: <PersonAddAltOutlinedIcon fontSize="small" />,
+            type: 'join',
+        },
+        {
+            title: t('actions.menu.members'),
+            icon: <PersonOutlineIcon fontSize="small" />,
+            type: 'members',
+        },
+        {
+            title: t('actions.menu.dates'),
+            icon: <AccessTimeIcon fontSize="small" />,
+            type: 'dates',
+        },
+        {
+            title: t('actions.menu.labels'),
+            icon: <LocalOfferOutlinedIcon fontSize="small" />,
+            type: 'labels',
+        },
+        {
+            title: t('actions.menu.checklist'),
+            icon: <CheckBoxOutlinedIcon fontSize="small" />,
+            type: 'checklist',
+        },
+        {
+            title: t('actions.menu.attachments'),
+            icon: <AttachmentIcon fontSize="small" />,
+            type: 'attachments',
+        },
+        {
+            title: t('actions.menu.cover'),
+            icon: <AddPhotoAlternateOutlinedIcon fontSize="small" />,
+            type: 'cover',
+        },
+    ];
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
     };
 
     const handleCheckDueComplete = (e) => {
@@ -52,10 +86,29 @@ function Actions({ card }) {
         const newCard = cloneDeep(card);
         newCard.dueComplete = e.target.checked;
 
-        dispatch(updateCardOnBoard(newCard));
         dispatch(updateCardData(newCard));
+        board && dispatch(updateCardOnBoard(newCard));
 
         cardService.updateCard(card.id, updateData);
+    };
+
+    const handleMenuChange = (menuItem, e) => {
+        setAnchorButtonActions(e.currentTarget);
+        switch (menuItem.type) {
+            case 'dates':
+                setActionButton('Dates');
+                break;
+            case 'checklist':
+                setActionButton('Checklist');
+                break;
+            case 'attachment':
+                setActionButton('Attachment');
+                break;
+            case 'cover':
+                setActionButton('Cover');
+                break;
+            default:
+        }
     };
 
     return (
@@ -82,10 +135,12 @@ function Actions({ card }) {
                     {/* Notifications */}
                     <Box component={'section'}>
                         <Typography variant="span" sx={{ fontSize: '12px', fontWeight: '600' }}>
-                            Notifications
+                            {t('actions.notifications')}
                         </Typography>
                         <Box sx={{ mt: 1.5 }}>
-                            <Button startIcon={<RemoveRedEyeOutlinedIcon fontSize="small" />}>Watch</Button>
+                            <Button startIcon={<RemoveRedEyeOutlinedIcon fontSize="small" />}>
+                                {t('actions.watch')}
+                            </Button>
                         </Box>
                     </Box>
                     {/* Members */}
@@ -98,7 +153,7 @@ function Actions({ card }) {
                                 alignItems: 'flex-start',
                             }}
                         >
-                            Members
+                            {t('actions.members')}
                         </Typography>
                         <Box sx={{ mt: 1.5 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -125,7 +180,7 @@ function Actions({ card }) {
                     {card?.dueDate && (
                         <Box component={'section'}>
                             <Typography variant="span" sx={{ fontSize: '12px', fontWeight: '600' }}>
-                                Due date
+                                {t('actions.dueDate')}
                             </Typography>
                             <Box
                                 sx={{
@@ -150,7 +205,7 @@ function Actions({ card }) {
                                             borderRadius: 1,
                                         }}
                                     >
-                                        Complete
+                                        {t('actions.complete')}
                                     </Typography>
                                 )}
 
@@ -165,7 +220,7 @@ function Actions({ card }) {
                                             borderRadius: 1,
                                         }}
                                     >
-                                        Due soon
+                                        {t('actions.dueSoon')}
                                     </Typography>
                                 )}
 
@@ -180,7 +235,7 @@ function Actions({ card }) {
                                             borderRadius: 1,
                                         }}
                                     >
-                                        Overdue
+                                        {t('actions.overdue')}
                                     </Typography>
                                 )}
                             </Box>
@@ -200,91 +255,11 @@ function Actions({ card }) {
 
             <Menu
                 anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                sx={{ ml: 1 }}
-            >
-                <MenuItem
-                    sx={{
-                        '&:hover': {
-                            '& .delete-icon': {
-                                color: 'warning.dark',
-                            },
-                        },
-                    }}
-                >
-                    <ListItemIcon>
-                        <PersonAddAltOutlinedIcon fontSize="small" />
-                        {/* <PersonRemoveOutlinedIcon fontSize="small" className="delete-icon" /> */}
-                    </ListItemIcon>
-                    <ListItemText>Join</ListItemText>
-                    {/* <ListItemText>Leave</ListItemText> */}
-                </MenuItem>
-                <MenuItem>
-                    <ListItemIcon>
-                        <PersonOutlineIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Members</ListItemText>
-                </MenuItem>
-                <MenuItem
-                    onClick={(event) => {
-                        setActionButton('Dates');
-                        setAnchorButtonActions(event.currentTarget);
-                    }}
-                >
-                    <ListItemIcon>
-                        <AccessTimeIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Dates</ListItemText>
-                </MenuItem>
-                <MenuItem>
-                    <ListItemIcon>
-                        <LocalOfferOutlinedIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Labels</ListItemText>
-                </MenuItem>
-                <MenuItem
-                    onClick={(event) => {
-                        setActionButton('Checklist');
-                        setAnchorButtonActions(event.currentTarget);
-                    }}
-                >
-                    <ListItemIcon>
-                        <CheckBoxOutlinedIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Checklist</ListItemText>
-                </MenuItem>
-                <MenuItem
-                    onClick={(event) => {
-                        setActionButton('Attachment');
-                        setAnchorButtonActions(event.currentTarget);
-                    }}
-                >
-                    <ListItemIcon>
-                        <AttachmentIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Attachment</ListItemText>
-                </MenuItem>
-                <MenuItem
-                    onClick={(event) => {
-                        setActionButton('Cover');
-                        setAnchorButtonActions(event.currentTarget);
-                    }}
-                >
-                    <ListItemIcon>
-                        <AddPhotoAlternateOutlinedIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Cover</ListItemText>
-                </MenuItem>
-            </Menu>
+                items={actionsMenu}
+                onClose={() => setAnchorEl(null)}
+                onChange={handleMenuChange}
+            />
+
             <Dates
                 title={actionButton}
                 anchorEl={anchorButtonActions}

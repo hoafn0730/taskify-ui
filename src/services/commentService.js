@@ -7,14 +7,14 @@ const createNewComment = async (data) => {
     return res.data;
 };
 
-const updateComment = async (commentId, data) => {
-    return await httpRequest.put('/comments/' + commentId, {
+const updateComment = (commentId, data) => {
+    return httpRequest.put('/comments/' + commentId, {
         ...data,
     });
 };
 
-const deleteComment = async (commentId) => {
-    return await httpRequest.delete('/comments/' + commentId);
+const deleteComment = (commentId) => {
+    return httpRequest.delete('/comments/' + commentId);
 };
 
 export const commentService = { createNewComment, updateComment, deleteComment };

@@ -17,7 +17,7 @@ import AttachmentIcon from '@mui/icons-material/Attachment';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 
-import Link from '~/components/Link';
+import Link from '~/components/Link/Link';
 import ContextMenu from './ContextMenu';
 
 function Card({ card }) {

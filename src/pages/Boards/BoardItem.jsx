@@ -3,7 +3,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
-import Link from '~/components/Link';
+import Link from '~/components/Link/Link';
 
 function BoardItem({ title, slug, image }) {
     return (

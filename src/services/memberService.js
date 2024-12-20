@@ -1,21 +1,19 @@
 import httpRequest from '~/utils/httpRequest';
 
-const createNewMember = async (data) => {
-    const res = await httpRequest.post('/members', {
-        ...data,
-    });
-
-    return res;
-};
-
-const updateMember = async (memberId, data) => {
-    return await httpRequest.put('/members/' + memberId, {
+const createNewMember = (data) => {
+    return httpRequest.post('/members', {
         ...data,
     });
 };
 
-const deleteMember = async (memberId) => {
-    return await httpRequest.delete('/members/' + memberId);
+const updateMember = (memberId, data) => {
+    return httpRequest.put('/members/' + memberId, {
+        ...data,
+    });
+};
+
+const deleteMember = (memberId) => {
+    return httpRequest.delete('/members/' + memberId);
 };
 
 export const memberService = { createNewMember, updateMember, deleteMember };

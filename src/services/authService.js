@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const logout = async () => {
+const logout = () => {
     return axios.get(import.meta.env.VITE_APP_SSO_BACKEND_URL + '/auth/logout', { withCredentials: true });
 };
 

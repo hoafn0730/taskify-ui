@@ -14,11 +14,10 @@ import App from '~/App';
 import theme from '~/theme';
 import { store } from '~/store';
 import i18n from '~/utils/i18n';
-import { cancelNotification, registerNotification } from '~/utils/notification';
+import { registerNotification } from '~/utils/notification';
 
 registerNotification();
-// cancelNotification();
-let persistor = persistStore(store);
+const persistor = persistStore(store);
 
 createRoot(document.getElementById('root')).render(
     // <StrictMode>

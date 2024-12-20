@@ -1,17 +1,19 @@
 // import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
-import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
-import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
-import { useEffect, useState } from 'react';
+import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
+import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 
-import Section from '~/components/Section';
 import BoardItem from './BoardItem';
+import Section from '~/components/Section';
 import { boardService } from '~/services/boardService';
 
 function Boards() {
     // const { t, i18n } = useTranslation('boards');
+    const workspace = useSelector((state) => state.workspace.activeWorkspace);
     const [boards, setBoards] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -31,11 +33,11 @@ function Boards() {
                 </Box>
             )}
 
-            {boards?.length > 0 && (
+            {workspace?.boards?.length > 0 && (
                 <>
                     <Section title="Starred boards" icon={<StarBorderRoundedIcon />}>
                         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                            {boards.length > 0 &&
+                            {workspace?.boards.length > 0 &&
                                 boards.map((board) => (
                                     <BoardItem
                                         key={board.id}
@@ -44,47 +46,43 @@ function Boards() {
                                         image={board.image}
                                     />
                                 ))}
-                        </Box>
-                    </Section>
-                    <Section title="Recently viewed" icon={<AccessTimeRoundedIcon />}>
-                        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                            {boards.length > 0 &&
-                                boards.map((board) => (
-                                    <BoardItem
-                                        key={board.id}
-                                        title={board.title}
-                                        slug={board.slug}
-                                        image={board.image}
-                                    />
-                                ))}
-                        </Box>
-                    </Section>
-                    <Section title="Starred boards" icon={<StarBorderRoundedIcon />}>
-                        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                            <BoardItem
-                                title={'Web development'}
-                                image="https://trello-backgrounds.s3.amazonaws.com/SharedBackground/640x960/a30c5051a16b148e7ece9df168a0d821/photo-1727224750231-00b06a08e070.webp"
-                            />
-                            <BoardItem
-                                title={'Web development'}
-                                image="https://trello-backgrounds.s3.amazonaws.com/SharedBackground/640x960/a30c5051a16b148e7ece9df168a0d821/photo-1727224750231-00b06a08e070.webp"
-                            />
-                            <BoardItem
-                                title={'Web development'}
-                                image="https://trello-backgrounds.s3.amazonaws.com/SharedBackground/640x960/a30c5051a16b148e7ece9df168a0d821/photo-1727224750231-00b06a08e070.webp"
-                            />
-                            <BoardItem
-                                title={'Web development'}
-                                image="https://trello-backgrounds.s3.amazonaws.com/SharedBackground/640x960/a30c5051a16b148e7ece9df168a0d821/photo-1727224750231-00b06a08e070.webp"
-                            />
-                            <BoardItem
-                                title={'Web development'}
-                                image="https://trello-backgrounds.s3.amazonaws.com/SharedBackground/640x960/a30c5051a16b148e7ece9df168a0d821/photo-1727224750231-00b06a08e070.webp"
-                            />
                         </Box>
                     </Section>
                 </>
             )}
+
+            <Section title="Recently viewed" icon={<AccessTimeRoundedIcon />}>
+                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                    {boards.length > 0 &&
+                        boards.map((board) => (
+                            <BoardItem key={board.id} title={board.title} slug={board.slug} image={board.image} />
+                        ))}
+                </Box>
+            </Section>
+            <Section title="Starred boards" icon={<StarBorderRoundedIcon />}>
+                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                    <BoardItem
+                        title={'Web development'}
+                        image="https://trello-backgrounds.s3.amazonaws.com/SharedBackground/640x960/a30c5051a16b148e7ece9df168a0d821/photo-1727224750231-00b06a08e070.webp"
+                    />
+                    <BoardItem
+                        title={'Web development'}
+                        image="https://trello-backgrounds.s3.amazonaws.com/SharedBackground/640x960/a30c5051a16b148e7ece9df168a0d821/photo-1727224750231-00b06a08e070.webp"
+                    />
+                    <BoardItem
+                        title={'Web development'}
+                        image="https://trello-backgrounds.s3.amazonaws.com/SharedBackground/640x960/a30c5051a16b148e7ece9df168a0d821/photo-1727224750231-00b06a08e070.webp"
+                    />
+                    <BoardItem
+                        title={'Web development'}
+                        image="https://trello-backgrounds.s3.amazonaws.com/SharedBackground/640x960/a30c5051a16b148e7ece9df168a0d821/photo-1727224750231-00b06a08e070.webp"
+                    />
+                    <BoardItem
+                        title={'Web development'}
+                        image="https://trello-backgrounds.s3.amazonaws.com/SharedBackground/640x960/a30c5051a16b148e7ece9df168a0d821/photo-1727224750231-00b06a08e070.webp"
+                    />
+                </Box>
+            </Section>
 
             {!boards?.length && <Typography variant="span">Stay on track and up to date</Typography>}
         </Box>

@@ -6,7 +6,7 @@ import { cloneDeep } from 'lodash';
 
 import BoardBar from './BoardBar';
 import BoardContent from './BoardContent';
-import LoadingSpinner from '~/components/LoadingSpinner';
+import LoadingSpinner from '~/components/LoadingSpinner/LoadingSpinner';
 import { boardService } from '~/services/boardService';
 import { columnService } from '~/services/columnService';
 import { fetchBoardDetail } from '~/store/actions/boardAction';

@@ -1,11 +1,19 @@
 import httpRequest from '~/utils/httpRequest';
 
-const getBoards = async () => {
-    return await httpRequest.get('/boards');
+const getBoards = () => {
+    return httpRequest.get('/boards');
 };
 
-const getBoardBySlug = async (slug) => {
-    return await httpRequest.get('/boards/' + slug);
+const searchBoards = (query) => {
+    return httpRequest.get('/boards/search', {
+        params: {
+            q: query,
+        },
+    });
+};
+
+const getBoardBySlug = (slug) => {
+    return httpRequest.get('/boards/' + slug);
 };
 
 const createNewBoard = async (data) => {
@@ -15,17 +23,23 @@ const createNewBoard = async (data) => {
     return res.data;
 };
 
-const updateBoard = async (boardId, data) => {
-    return await httpRequest.put('/boards/' + boardId, {
+const updateBoard = (boardId, data) => {
+    return httpRequest.put('/boards/' + boardId, {
         ...data,
     });
 };
 
-const moveCardToDifferentColumn = async (data) => {
-    const response = await httpRequest.put('/boards/supports/moving_card', {
+const moveCardToDifferentColumn = (data) => {
+    return httpRequest.put('/boards/supports/moving_card', {
         ...data,
     });
-    return response;
 };
 
-export const boardService = { getBoards, getBoardBySlug, createNewBoard, updateBoard, moveCardToDifferentColumn };
+export const boardService = {
+    searchBoards,
+    getBoards,
+    getBoardBySlug,
+    createNewBoard,
+    updateBoard,
+    moveCardToDifferentColumn,
+};

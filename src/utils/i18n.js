@@ -8,6 +8,8 @@ import BOARD_EN from '~/locales/en/board.json';
 import BOARD_VI from '~/locales/vi/board.json';
 import HEADER_EN from '~/locales/en/header.json';
 import HEADER_VI from '~/locales/vi/header.json';
+import CARD_EN from '~/locales/en/card.json';
+import CARD_VI from '~/locales/vi/card.json';
 
 export const locales = { en: 'English', vi: 'Tiếng Việt' };
 
@@ -16,11 +18,13 @@ const resources = {
         header: HEADER_EN,
         home: HOME_EN,
         board: BOARD_EN,
+        card: CARD_EN,
     },
     vi: {
         header: HEADER_VI,
         home: HOME_VI,
         board: BOARD_VI,
+        card: CARD_VI,
     },
 };
 

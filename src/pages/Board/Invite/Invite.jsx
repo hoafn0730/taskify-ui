@@ -166,7 +166,7 @@ function Invite({ members = [], open, onClose }) {
                                                         handleUpdateRole(member.id, member?.role, e.target.value)
                                                     }
                                                 >
-                                                    <MenuItem value={'user'}>{t('boardBar.member')}</MenuItem>
+                                                    <MenuItem value={'member'}>{t('boardBar.member')}</MenuItem>
                                                     <MenuItem value={'admin'}>{t('boardBar.admin')}</MenuItem>
                                                     <MenuItem
                                                         value={'owner'}

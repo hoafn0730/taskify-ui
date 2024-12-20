@@ -18,18 +18,9 @@ axiosRetry(httpRequest, {
     },
 });
 
-let store;
-export const injectStore = (_store) => {
-    store = _store;
-};
-
 httpRequest.interceptors.request.use(
     function (config) {
         // Do something before request is sent
-        const headerToken = store?.userInfo?.accessToken ?? '';
-        if (headerToken) {
-            config.headers.Authorization = `Bearer ${headerToken}`;
-        }
 
         return config;
     },
@@ -47,11 +38,11 @@ httpRequest.interceptors.response.use(
         return response?.data;
     },
     function (error) {
-        if (error?.response?.status !== 405) {
+        if (error?.response?.status !== 410) {
             toast.error(error?.response?.data?.message);
         }
 
-        if (error?.response?.status === 405) {
+        if (error?.response?.status === 410) {
             authService.refreshToken().catch((err) => {
                 return Promise.reject(err);
             });

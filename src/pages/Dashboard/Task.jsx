@@ -14,7 +14,7 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 
-import Link from '~/components/Link';
+import Link from '~/components/Link/Link';
 import { cardService } from '~/services/cardService';
 
 function Task({ title, image, slug, attachments = [], card, setTasks }) {

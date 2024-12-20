@@ -1,8 +1,9 @@
 export const registerNotification = () => {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js').then(
+            // eslint-disable-next-line no-unused-vars
             (registration) => {
-                console.log('Service Worker registered:', registration);
+                // console.log('Service Worker registered:', registration);
             },
             (err) => {
                 console.error('Service Worker registration failed:', err);
@@ -50,18 +51,18 @@ export const sendNotification = (data, type) => {
             return;
         }
 
-        const notification = new Notification(`Card  is due now!`, {
+        const notification = new Notification(`Card is due now!`, {
             body: 'Hãy kiểm tra và xử lý ngay!',
             icon: 'https://via.placeholder.com/100', // URL icon tùy chỉnh
             vibrate: [200, 100, 200], // Rung (chỉ hoạt động trên thiết bị hỗ trợ)
             badge: 'https://via.placeholder.com/50', // Icon nhỏ hiển thị trên màn hình
-            // requireInteraction: true, // Thông báo sẽ không tự động biến mất
-            // tag: 'card-due' + count, // Gắn tag để tránh tạo trùng lặp thông báo
+            requireInteraction: true, // Thông báo sẽ không tự động biến mất
+            tag: 'card-due' + data.slug, // Gắn tag để tránh tạo trùng lặp thông báo
         });
 
         // Xử lý khi người dùng nhấp vào thông báo
         notification.onclick = () => {
-            window.open('http://localhost:5173/ádfs');
+            window.open('http://localhost:5173/card/' + data.slug);
             notification.close(); // Đóng thông báo sau khi nhấp
         };
 

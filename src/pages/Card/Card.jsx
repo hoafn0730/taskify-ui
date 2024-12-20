@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { cloneDeep } from 'lodash';
@@ -18,16 +19,17 @@ import Attachment from './Section/Attachment';
 import Checklist from './Section/Checklist';
 import Description from './Section/Description';
 import Actions from './Actions';
-import LoadingSpinner from '~/components/LoadingSpinner';
+import LoadingSpinner from '~/components/LoadingSpinner/LoadingSpinner';
 import Modal from '~/components/Modal';
 import socket from '~/utils/socket';
 import { checklistService } from '~/services/checklistService';
 import { fetchCardDetail } from '~/store/actions/cardAction';
 import { updateCardOnBoard } from '~/store/slices/boardSlice';
 import { updateCardData } from '~/store/slices/cardSlice';
-import Section from '~/components/Section';
+import Section from '~/components/Section/Section';
 
 function Card() {
+    const { t } = useTranslation('card');
     const location = useLocation();
     const navigate = useNavigate();
     const { slug } = useParams();
@@ -91,7 +93,7 @@ function Card() {
 
     return (
         <Modal open={!!location?.state} onClose={handleDismiss}>
-            {!card && <LoadingSpinner caption="Card Loading..." />}
+            {!card && <LoadingSpinner caption={t('cardLoading')} />}
             {card && (
                 <>
                     {/* Header card */}
@@ -102,7 +104,7 @@ function Card() {
                         <Actions card={card} />
 
                         <Section
-                            title={'Description'}
+                            title={t('description')}
                             icon={<NotesIcon />}
                             action={<Button onClick={() => setIsEditingDesc(true)}>Edit</Button>}
                         >
@@ -116,7 +118,7 @@ function Card() {
                         {/* Attachment */}
                         {card?.attachments.length > 0 && (
                             <Section
-                                title={'Attachments'}
+                                title={t('attachments')}
                                 icon={<AttachmentOutlinedIcon />}
                                 action={<Button onClick={(e) => setAnchorEl(e.currentTarget)}>Add</Button>}
                             >
@@ -139,7 +141,7 @@ function Card() {
 
                         {/* Activity */}
                         <Section
-                            title={'Activity'}
+                            title={t('activity')}
                             icon={<FormatListBulletedIcon />}
                             action={<Button>Show Details</Button>}
                         >

@@ -1,19 +1,19 @@
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useColorScheme, useMediaQuery, useTheme } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
+import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import SettingsIcon from '@mui/icons-material/Settings';
-import LogoutIcon from '@mui/icons-material/Logout';
-import TranslateIcon from '@mui/icons-material/Translate';
-import LanguageIcon from '@mui/icons-material/Language';
+import AddIcon from '@mui/icons-material/Add';
 import SyncIcon from '@mui/icons-material/Sync';
+import LogoutIcon from '@mui/icons-material/Logout';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LanguageIcon from '@mui/icons-material/Language';
+import TranslateIcon from '@mui/icons-material/Translate';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
-import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
 
 import Inbox from './Inbox';
 import Menu from './Menu';
@@ -28,7 +28,7 @@ import { logout } from '~/store/actions/userAction';
 const MENU_ITEMS = [
     {
         title: 'menu.login',
-        href: `${import.meta.env.VITE_APP_SSO_LOGIN}?serviceURL=${encodeURIComponent(window.location.origin)}`,
+        href: `${import.meta.env.VITE_APP_SSO_LOGIN}?continue=${encodeURIComponent(window.location.origin)}`,
         icon: <Avatar />,
         type: 'login',
     },

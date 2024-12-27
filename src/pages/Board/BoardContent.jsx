@@ -1,8 +1,9 @@
-import { cloneDeep, isEmpty } from 'lodash';
-import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { cloneDeep, isEmpty } from 'lodash';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 import {
     closestCorners,
     defaultDropAnimationSideEffects,
@@ -13,7 +14,6 @@ import {
     useSensor,
     useSensors,
 } from '@dnd-kit/core';
-import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 import Box from '@mui/material/Box';
 
 import Card from './Card';
@@ -30,6 +30,8 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 };
 
 function BoardContent({ board, moveColumns, moveCardInSameColumn, moveCardDifferentColumn }) {
+    const dispatch = useDispatch();
+    const lastOverId = useRef(null);
     const [orderedColumns, setOrderedColumns] = useState([]);
     const [activeDragItemId, setActiveDragItemId] = useState(null);
     const [activeDragItemType, setActiveDragItemType] = useState(null);
@@ -37,8 +39,6 @@ function BoardContent({ board, moveColumns, moveCardInSameColumn, moveCardDiffer
     const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] = useState(null);
     const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
     const [newColumnTitle, setNewColumnTitle] = useState('');
-    const lastOverId = useRef(null);
-    const dispatch = useDispatch();
 
     const mouseSensor = useSensor(MouseSensor, {
         activationConstraint: { distance: 10 },
@@ -76,18 +76,18 @@ function BoardContent({ board, moveColumns, moveCardInSameColumn, moveCardDiffer
         activeDraggingCardData,
         triggerFrom,
     ) => {
+        const overCardIndex = overColumn?.cards.findIndex((card) => card.uuid === overCardId);
+
+        let newCardIndex;
+
+        const isBelowOverItem =
+            active.rect.current.translated && active.rect.current.translated.top > over.rect.top + over.rect.height;
+
+        const modifier = isBelowOverItem ? 1 : 0;
+
+        newCardIndex = overCardIndex >= 0 ? overCardIndex + modifier : overColumn?.cards?.length + 1;
+
         setOrderedColumns((prev) => {
-            const overCardIndex = overColumn?.cards.findIndex((card) => card.uuid === overCardId);
-
-            let newCardIndex;
-
-            const isBelowOverItem =
-                active.rect.current.translated && active.rect.current.translated.top > over.rect.top + over.rect.height;
-
-            const modifier = isBelowOverItem ? 1 : 0;
-
-            newCardIndex = overCardIndex >= 0 ? overCardIndex + modifier : overColumn?.cards?.length + 1;
-
             const nextColumns = cloneDeep(prev);
             const nextActiveColumn = nextColumns.find((col) => col.uuid === activeColumn.uuid);
             const nextOverColumn = nextColumns.find((col) => col.uuid === overColumn.uuid);
@@ -216,10 +216,8 @@ function BoardContent({ board, moveColumns, moveCardInSameColumn, moveCardDiffer
 
                 const newOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex);
 
-                setOrderedColumns(newOrderedColumns);
-
                 // Update to database
-                moveColumns(newOrderedColumns);
+                moveColumns(newOrderedColumns).then(() => setOrderedColumns(newOrderedColumns));
             }
         }
 
@@ -261,18 +259,18 @@ function BoardContent({ board, moveColumns, moveCardInSameColumn, moveCardDiffer
                 const orderedCards = arrayMove(oldColumnWhenDraggingCard.cards, oldCardIndex, newCardIndex);
                 const orderedCardIds = orderedCards.map((card) => card.uuid);
 
-                setOrderedColumns((prev) => {
-                    const nextColumns = cloneDeep(prev);
-                    const targetColumn = nextColumns.find((col) => col.uuid === overColumn.uuid);
-
-                    targetColumn.cards = orderedCards;
-                    targetColumn.cardOrderIds = orderedCardIds;
-
-                    return nextColumns;
-                });
-
                 // Update to database
-                moveCardInSameColumn(orderedCards, orderedCardIds, oldColumnWhenDraggingCard.id);
+                moveCardInSameColumn(orderedCards, orderedCardIds, oldColumnWhenDraggingCard.id).then(() => {
+                    setOrderedColumns((prev) => {
+                        const nextColumns = cloneDeep(prev);
+                        const targetColumn = nextColumns.find((col) => col.uuid === overColumn.uuid);
+
+                        targetColumn.cards = orderedCards;
+                        targetColumn.cardOrderIds = orderedCardIds;
+
+                        return nextColumns;
+                    });
+                });
             }
         }
 

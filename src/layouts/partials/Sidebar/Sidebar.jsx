@@ -1,12 +1,14 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { List, ListItem, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
+
 import NavTabs from '~/components/NavTabs/NavTabs';
 import { sendNotification } from '~/utils/notification';
-import { useEffect } from 'react';
 import { fetchWorkspace } from '~/store/actions/workspaceAction';
+import Pricing from './Pricing';
 
 function Sidebar() {
     const dispatch = useDispatch();
@@ -25,14 +27,17 @@ function Sidebar() {
                 position: 'sticky',
                 top: '40px',
                 width: '256px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 1,
             }}
         >
             <NavTabs />
             <Divider />
             <Typography variant="h3" sx={{ fontSize: '16px', mx: 2, mt: 1 }}>
-                {workspace?.title}
+                {workspace?.title.toUpperCase()}
             </Typography>
-            <List>
+            {/* <List>
                 {workspace?.boards.length > 0 &&
                     workspace.boards.map((board) => (
                         <ListItem key={board.id}>
@@ -41,7 +46,8 @@ function Sidebar() {
                             </Typography>
                         </ListItem>
                     ))}
-            </List>
+            </List> */}
+            <Pricing />
             <Button
                 size="small"
                 sx={{

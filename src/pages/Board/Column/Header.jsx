@@ -1,23 +1,23 @@
 import PropTypes from 'prop-types';
 import { cloneDeep } from 'lodash';
+import { useEffect, useState } from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import AddCard from '@mui/icons-material/AddCard';
-import ContentCopy from '@mui/icons-material/ContentCopy';
 import ContentCut from '@mui/icons-material/ContentCut';
+import ContentCopy from '@mui/icons-material/ContentCopy';
 import ContentPaste from '@mui/icons-material/ContentPaste';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import { updateBoardData } from '~/store/slices/boardSlice';
-import { columnService } from '~/services/columnService';
 import Menu from '~/components/Menu';
+import { columnService } from '~/services/columnService';
+import { updateBoardData } from '~/store/slices/boardSlice';
 
 // import { useTranslation } from 'react-i18next';
 

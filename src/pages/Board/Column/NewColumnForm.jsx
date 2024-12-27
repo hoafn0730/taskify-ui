@@ -1,10 +1,10 @@
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import CloseIcon from '@mui/icons-material/Close';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 
 function NewColumnForm({ openNewColumnForm, newColumnTitle, setNewColumnTitle, toggleNewColumnForm, onAddNewColumn }) {
     const { t } = useTranslation('board');

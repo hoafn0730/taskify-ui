@@ -16,7 +16,7 @@ const createNewCard = async (data) => {
     const res = await httpRequest.post('/cards', {
         ...data,
     });
-    return res.data.data;
+    return res.data;
 };
 
 const updateCard = (cardId, data) => {

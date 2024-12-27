@@ -82,7 +82,7 @@ function AppBar() {
                                     color="primary"
                                     variant="text"
                                     size="small"
-                                    href={`${import.meta.env.VITE_APP_SSO_LOGIN}?serviceURL=${encodeURIComponent(
+                                    href={`${import.meta.env.VITE_APP_SSO_LOGIN}?continue=${encodeURIComponent(
                                         window.location.origin,
                                     )}`}
                                 >
@@ -158,7 +158,7 @@ function AppBar() {
                                                 fullWidth
                                                 href={`${
                                                     import.meta.env.VITE_APP_SSO_LOGIN
-                                                }?serviceURL=${encodeURIComponent(window.location.origin)}`}
+                                                }?continue=${encodeURIComponent(window.location.origin)}`}
                                             >
                                                 Sign in
                                             </Button>

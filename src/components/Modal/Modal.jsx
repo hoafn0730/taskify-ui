@@ -49,9 +49,11 @@ function Modal({ size = 'normal', children, title, open, onClose }) {
                         pt: 2,
                     }}
                 >
-                    <Typography variant="h3" sx={{ fontSize: '20px', mb: 2 }}>
-                        {title}
-                    </Typography>
+                    {title && (
+                        <Typography variant="h3" sx={{ fontSize: '20px', mb: 2 }}>
+                            {title}
+                        </Typography>
+                    )}
                     {children}
                 </Box>
                 <Button

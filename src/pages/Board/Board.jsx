@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
-import Box from '@mui/material/Box';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { cloneDeep } from 'lodash';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import Box from '@mui/material/Box';
 
 import BoardBar from './BoardBar';
 import BoardContent from './BoardContent';
-import LoadingSpinner from '~/components/LoadingSpinner/LoadingSpinner';
+import LoadingSpinner from '~/components/LoadingSpinner';
 import { boardService } from '~/services/boardService';
 import { columnService } from '~/services/columnService';
 import { fetchBoardDetail } from '~/store/actions/boardAction';
@@ -14,10 +14,10 @@ import { updateBoardData } from '~/store/slices/boardSlice';
 
 function Board() {
     const { slug } = useParams();
-    const board = useSelector((state) => state.board.activeBoard);
-    const isLoading = useSelector((state) => state.board.isLoading);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const board = useSelector((state) => state.board.activeBoard);
+    const isLoading = useSelector((state) => state.board.isLoading);
 
     useEffect(() => {
         dispatch(fetchBoardDetail(slug)).then((res) => {
@@ -28,28 +28,36 @@ function Board() {
     }, [dispatch, navigate, slug]);
 
     const moveColumns = (orderedColumns) => {
-        const dndOrderedColumnsIds = orderedColumns.map((c) => c.uuid);
+        return new Promise((resolve) => {
+            const dndOrderedColumnsIds = orderedColumns.map((c) => c.uuid);
 
-        const newBoard = { ...board };
-        newBoard.columns = orderedColumns;
-        newBoard.columnOrderIds = dndOrderedColumnsIds;
-        dispatch(updateBoardData(newBoard));
+            const newBoard = { ...board };
+            newBoard.columns = orderedColumns;
+            newBoard.columnOrderIds = dndOrderedColumnsIds;
 
-        // fetch API update board
-        boardService.updateBoard(newBoard.id, { columnOrderIds: dndOrderedColumnsIds });
+            // fetch API update board
+            boardService.updateBoard(newBoard.id, { columnOrderIds: dndOrderedColumnsIds }).then(() => {
+                dispatch(updateBoardData(newBoard));
+                resolve();
+            });
+        });
     };
 
     const moveCardInSameColumn = (dndOrderedCards, dndOrderedCardIds, columnId) => {
-        const newBoard = cloneDeep(board);
-        const columnToUpdate = newBoard.columns.find((col) => col.id === columnId);
+        return new Promise((resolve) => {
+            const newBoard = cloneDeep(board);
+            const columnToUpdate = newBoard.columns.find((col) => col.id === columnId);
 
-        if (columnToUpdate) {
-            columnToUpdate.cards = dndOrderedCards;
-            columnToUpdate.cardOrderIds = dndOrderedCardIds;
-        }
-        dispatch(updateBoardData(newBoard));
+            if (columnToUpdate) {
+                columnToUpdate.cards = dndOrderedCards;
+                columnToUpdate.cardOrderIds = dndOrderedCardIds;
+            }
 
-        columnService.updateColumn(columnId, { cardOrderIds: dndOrderedCardIds });
+            columnService.updateColumn(columnId, { cardOrderIds: dndOrderedCardIds }).then(() => {
+                dispatch(updateBoardData(newBoard));
+                resolve();
+            });
+        });
     };
 
     const moveCardDifferentColumn = (currentCardId, prevColumnId, nextColumnId, orderedColumns) => {

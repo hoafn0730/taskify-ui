@@ -1,3 +1,6 @@
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+import styled from '@emotion/styled';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
@@ -5,8 +8,23 @@ import Button from '@mui/material/Button';
 import AddCard from '@mui/icons-material/AddCard';
 import CloseIcon from '@mui/icons-material/Close';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
-import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
+
+const TextFieldComp = styled(TextField)({
+    '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+            borderColor: (theme) =>
+                theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.primary.main,
+        },
+        '&:hover fieldset': {
+            borderColor: (theme) =>
+                theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.primary.main,
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: (theme) =>
+                theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.primary.main,
+        },
+    },
+});
 
 function Footer({ openNewCardForm, newCardTitle, onChangeCardTitle, onAddNewCard, onCloseCardForm }) {
     const { t } = useTranslation('board');
@@ -41,7 +59,7 @@ function Footer({ openNewCardForm, newCardTitle, onChangeCardTitle, onAddNewCard
                         gap: 1,
                     }}
                 >
-                    <TextField
+                    <TextFieldComp
                         value={newCardTitle}
                         data-no-dnd={true}
                         label={t('enterCardTitle')}
@@ -49,28 +67,6 @@ function Footer({ openNewCardForm, newCardTitle, onChangeCardTitle, onAddNewCard
                         variant="outlined"
                         size="small"
                         autoFocus
-                        sx={{
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: (theme) =>
-                                        theme.palette.mode === 'dark'
-                                            ? theme.palette.common.white
-                                            : theme.palette.primary.main,
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: (theme) =>
-                                        theme.palette.mode === 'dark'
-                                            ? theme.palette.common.white
-                                            : theme.palette.primary.main,
-                                },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: (theme) =>
-                                        theme.palette.mode === 'dark'
-                                            ? theme.palette.common.white
-                                            : theme.palette.primary.main,
-                                },
-                            },
-                        }}
                         onChange={onChangeCardTitle}
                     />
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

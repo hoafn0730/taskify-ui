@@ -16,6 +16,8 @@ import { columnService } from '~/services/columnService';
 import { cardService } from '~/services/cardService';
 
 function Column({ column }) {
+    const confirm = useConfirm();
+    const dispatch = useDispatch();
     const board = useSelector((state) => state.board.activeBoard);
     const [openNewCardForm, setOpenNewCardForm] = useState(false);
     const [newCardTitle, setNewCardTitle] = useState('');
@@ -23,8 +25,6 @@ function Column({ column }) {
         id: column?.uuid,
         data: { ...column },
     });
-    const confirm = useConfirm();
-    const dispatch = useDispatch();
 
     const style = {
         transform: CSS.Translate.toString(transform),

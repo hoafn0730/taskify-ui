@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import PropTypes from 'prop-types';
 import Header from './partials/Header';
 
 function DefaultLayout({ children }) {

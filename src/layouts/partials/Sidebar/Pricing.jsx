@@ -83,7 +83,7 @@ function Pricing() {
             <Card>
                 <CardContent>
                     <Typography variant="h5" gutterBottom sx={{ fontSize: 16 }}>
-                        Try TaskFlow Premium
+                        Upgrade TaskFlow Premium
                     </Typography>
                     <Typography sx={{ color: 'text.secondary', mb: 1 }}>
                         Get unlimited boards, all the views, unlimited automation, and more
@@ -91,7 +91,7 @@ function Pricing() {
                 </CardContent>
                 <CardActions>
                     <Button size="small" onClick={handleOpen}>
-                        Buy now
+                        Upgrade
                     </Button>
                 </CardActions>
             </Card>

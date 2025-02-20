@@ -17,15 +17,8 @@ const updateNotification = (notificationId, data) => {
     });
 };
 
-const moveCardToDifferentColumn = (data) => {
-    return httpRequest.put('/workspaces/supports/moving_card', {
-        ...data,
-    });
-};
-
 export const workspaceService = {
     getWorkspace,
     createNewNotification,
     updateNotification,
-    moveCardToDifferentColumn,
 };

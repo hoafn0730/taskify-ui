@@ -1,7 +1,7 @@
+import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
-import PropTypes from 'prop-types';
 
 function LoadingSpinner({ caption }) {
     return (
@@ -12,7 +12,8 @@ function LoadingSpinner({ caption }) {
                 justifyContent: 'center',
                 gap: 2,
                 width: '100%',
-                height: '100vh',
+                // height: '100vh',
+                mx: 'auto',
             }}
         >
             <CircularProgress />

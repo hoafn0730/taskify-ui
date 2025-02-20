@@ -12,14 +12,13 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 
-import LoadingSpinner from '~/components/LoadingSpinner/LoadingSpinner';
-import UploadFile from '~/components/UploadFile/UploadFile';
 import { FIELD_REQUIRED_MESSAGE } from '~/utils/validators';
 import { boardService } from '~/services/boardService';
-import { convertBase64 } from '~/utils/convertBase64';
 import { updateBoardData } from '~/store/slices/boardSlice';
+import changePathnameURL from '~/utils/changeURL';
 
 function BoardInfo() {
+    const dispatch = useDispatch();
     const board = useSelector((state) => state.board.activeBoard);
     const {
         register,
@@ -32,8 +31,6 @@ function BoardInfo() {
             type: board.type,
         },
     });
-    const dispatch = useDispatch();
-    const [loading, setLoading] = useState(false);
 
     const submitUpdateBoard = (data) => {
         const { title, description, type } = data;
@@ -58,31 +55,11 @@ function BoardInfo() {
                 newBoard.description = description.trim();
                 newBoard.type = type;
 
-                dispatch(updateBoardData(newBoard));
-
                 // set pathname
-                const urlObject = new URL(window.location.href);
-                urlObject.pathname = '/board/' + newBoard.slug;
-                window.history.replaceState(null, null, urlObject.toString());
+                changePathnameURL('/board/' + newBoard.slug);
+
+                dispatch(updateBoardData(newBoard));
             });
-    };
-
-    // * lam sau
-    const handleUploadFile = async (e) => {
-        const files = e.target.files;
-
-        if (files.length === 1) {
-            const base64 = await convertBase64(files[0]);
-            setLoading(true);
-
-            // call api update image board
-
-            const newBoard = cloneDeep(board);
-
-            newBoard.image = '';
-
-            dispatch(updateBoardData(newBoard));
-        }
     };
 
     return (
@@ -129,12 +106,6 @@ function BoardInfo() {
                         <MenuItem value={'private'}>Private</MenuItem>
                     </Select>
                 </FormControl>
-
-                {loading ? (
-                    <LoadingSpinner caption="Upload..." />
-                ) : (
-                    <UploadFile onChange={handleUploadFile} fullWidth />
-                )}
 
                 <Button
                     type="submit"

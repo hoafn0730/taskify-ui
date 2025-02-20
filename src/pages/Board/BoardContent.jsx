@@ -176,6 +176,9 @@ function BoardContent({ board, moveColumns, moveCardInSameColumn, moveCardDiffer
     };
 
     const handleDragOver = ({ active, over }) => {
+        // check quyen cua member
+        return;
+        // eslint-disable-next-line no-unreachable
         if (!active || !over) return;
 
         if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) return;
@@ -206,6 +209,7 @@ function BoardContent({ board, moveColumns, moveCardInSameColumn, moveCardDiffer
     };
 
     const handleDragEnd = ({ active, over }) => {
+        // check quyen cua member
         if (!active || !over) return;
 
         // Handle drag columns
@@ -216,8 +220,10 @@ function BoardContent({ board, moveColumns, moveCardInSameColumn, moveCardDiffer
 
                 const newOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex);
 
+                setOrderedColumns(newOrderedColumns);
+
                 // Update to database
-                moveColumns(newOrderedColumns).then(() => setOrderedColumns(newOrderedColumns));
+                moveColumns(newOrderedColumns);
             }
         }
 
@@ -259,18 +265,18 @@ function BoardContent({ board, moveColumns, moveCardInSameColumn, moveCardDiffer
                 const orderedCards = arrayMove(oldColumnWhenDraggingCard.cards, oldCardIndex, newCardIndex);
                 const orderedCardIds = orderedCards.map((card) => card.uuid);
 
-                // Update to database
-                moveCardInSameColumn(orderedCards, orderedCardIds, oldColumnWhenDraggingCard.id).then(() => {
-                    setOrderedColumns((prev) => {
-                        const nextColumns = cloneDeep(prev);
-                        const targetColumn = nextColumns.find((col) => col.uuid === overColumn.uuid);
+                setOrderedColumns((prev) => {
+                    const nextColumns = cloneDeep(prev);
+                    const targetColumn = nextColumns.find((col) => col.uuid === overColumn.uuid);
 
-                        targetColumn.cards = orderedCards;
-                        targetColumn.cardOrderIds = orderedCardIds;
+                    targetColumn.cards = orderedCards;
+                    targetColumn.cardOrderIds = orderedCardIds;
 
-                        return nextColumns;
-                    });
+                    return nextColumns;
                 });
+
+                // Update to database
+                moveCardInSameColumn(orderedCards, orderedCardIds, oldColumnWhenDraggingCard.id);
             }
         }
 
@@ -319,10 +325,9 @@ function BoardContent({ board, moveColumns, moveCardInSameColumn, moveCardDiffer
         >
             <Box
                 sx={{
-                    bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#ebecf0'),
                     width: '100%',
                     height: (theme) => theme.app.boardContentHeight,
-                    p: '10px 0',
+                    pb: 1,
                 }}
             >
                 <Box
@@ -342,11 +347,13 @@ function BoardContent({ board, moveColumns, moveCardInSameColumn, moveCardDiffer
                     </SortableContext>
 
                     <NewColumnForm
-                        openNewColumnForm={openNewColumnForm}
-                        newColumnTitle={newColumnTitle}
-                        setNewColumnTitle={setNewColumnTitle}
-                        toggleNewColumnForm={toggleNewColumnForm}
-                        onAddNewColumn={handleAddNewColumn}
+                        {...{
+                            openNewColumnForm,
+                            newColumnTitle,
+                            setNewColumnTitle,
+                            toggleNewColumnForm,
+                            onAddNewColumn: handleAddNewColumn,
+                        }}
                     />
                 </Box>
 

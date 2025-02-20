@@ -5,12 +5,31 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import styled from '@emotion/styled';
+
+const TextFieldComp = styled(TextField)({
+    width: '100%',
+    '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+            borderColor: (theme) =>
+                theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.primary.main,
+        },
+        '&:hover fieldset': {
+            borderColor: (theme) =>
+                theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.primary.main,
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: (theme) =>
+                theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.primary.main,
+        },
+    },
+});
 
 function NewColumnForm({ openNewColumnForm, newColumnTitle, setNewColumnTitle, toggleNewColumnForm, onAddNewColumn }) {
     const { t } = useTranslation('board');
 
     return (
-        <div>
+        <Box sx={{ mt: 1 }}>
             <>
                 {!openNewColumnForm ? (
                     <Box
@@ -18,6 +37,7 @@ function NewColumnForm({ openNewColumnForm, newColumnTitle, setNewColumnTitle, t
                             minWidth: '250px',
                             maxWidth: '250px',
                             mx: 2,
+
                             borderRadius: '6px',
                             height: 'fit-content',
                             bgcolor: '#ffffffed',
@@ -55,36 +75,13 @@ function NewColumnForm({ openNewColumnForm, newColumnTitle, setNewColumnTitle, t
                             bgcolor: '#ffffffed',
                         }}
                     >
-                        <TextField
+                        <TextFieldComp
                             value={newColumnTitle}
                             label={t('enterColumnTitle')}
                             type="text"
                             variant="outlined"
                             size="small"
                             autoFocus
-                            sx={{
-                                width: '100%',
-                                '& .MuiOutlinedInput-root': {
-                                    '& fieldset': {
-                                        borderColor: (theme) =>
-                                            theme.palette.mode === 'dark'
-                                                ? theme.palette.common.white
-                                                : theme.palette.primary.main,
-                                    },
-                                    '&:hover fieldset': {
-                                        borderColor: (theme) =>
-                                            theme.palette.mode === 'dark'
-                                                ? theme.palette.common.white
-                                                : theme.palette.primary.main,
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: (theme) =>
-                                            theme.palette.mode === 'dark'
-                                                ? theme.palette.common.white
-                                                : theme.palette.primary.main,
-                                    },
-                                },
-                            }}
                             onChange={(e) => setNewColumnTitle(e.target.value)}
                         />
                         <Box sx={{ display: 'flex', marginTop: 1, alignItems: 'center', gap: 1 }}>
@@ -121,7 +118,7 @@ function NewColumnForm({ openNewColumnForm, newColumnTitle, setNewColumnTitle, t
                     </Box>
                 )}
             </>
-        </div>
+        </Box>
     );
 }
 

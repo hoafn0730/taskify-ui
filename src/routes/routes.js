@@ -10,6 +10,7 @@ import Dashboard from '~/pages/Dashboard';
 import Invite from '~/pages/Invite';
 import Templates from '~/pages/Templates';
 import NotFound from '~/pages/NotFound';
+import Profile from '~/pages/Profile';
 
 const publicRoutes = [
     {
@@ -52,6 +53,10 @@ const privateRoutes = [
     {
         path: config.paths.invite,
         component: Invite,
+    },
+    {
+        path: config.paths.profile,
+        component: Profile,
     },
 ];
 

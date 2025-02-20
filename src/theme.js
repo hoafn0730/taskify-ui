@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material';
 
 const HEADER_HEIGHT = '58px';
-const BOARD_BAR_HEIGHT = '48px';
+const BOARD_BAR_HEIGHT = '64px';
 const BOARD_CONTENT_HEIGHT = `calc(100vh - ${HEADER_HEIGHT} - ${BOARD_BAR_HEIGHT})`;
 const COLUMN_HEADER_HEIGHT = '50px';
 const COLUMN_FOOTER_HEIGHT = '56px';
@@ -47,6 +47,9 @@ const theme = createTheme({
                             backgroundColor: '#bfc2cf',
                         },
                     },
+
+                    touchAction: 'manipulation',
+                    overscrollBehavior: 'none',
                 },
                 a: {
                     textDecoration: 'none',
@@ -63,7 +66,7 @@ const theme = createTheme({
         },
         MuiOutlinedInput: {
             styleOverrides: {
-                root: ({ theme }) => ({
+                root: () => ({
                     // color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.primary.main,
                     fontSize: '0.875rem',
 

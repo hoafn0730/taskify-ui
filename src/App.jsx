@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import { Fragment, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes, useLocation } from 'react-router-dom';
 
 import config from '~/config';
@@ -9,16 +9,23 @@ import Card from '~/pages/Card';
 import DefaultLayout from '~/layouts/DefaultLayout';
 import ProtectedRoute from '~/components/ProtectedRoute';
 import { getCurrentUser } from '~/store/actions/userAction';
+import { fetchWorkspace } from '~/store/actions/workspaceAction';
 
 function App() {
     const location = useLocation();
     const dispatch = useDispatch();
+    const { userInfo } = useSelector((state) => state.user);
     const state = location.state;
 
     useEffect(() => {
         // 🐳
-        dispatch(getCurrentUser());
-    }, [dispatch]);
+        if (!userInfo) {
+            dispatch(getCurrentUser());
+        }
+
+        dispatch(fetchWorkspace());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         if (Notification.permission === 'default') {
@@ -26,6 +33,14 @@ function App() {
                 console.log(`Notification permission: ${permission}`);
             });
         }
+
+        // document.addEventListener(
+        //     'wheel',
+        //     (e) => {
+        //         e.preventDefault();
+        //     },
+        //     { passive: false },
+        // );
     }, []);
 
     return (

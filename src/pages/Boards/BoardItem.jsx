@@ -1,9 +1,9 @@
+import PropTypes from 'prop-types';
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import PropTypes from 'prop-types';
-import Link from '~/components/Link/Link';
+import CardContent from '@mui/material/CardContent';
+import Link from '~/components/Link';
 
 function BoardItem({ title, slug, image }) {
     return (

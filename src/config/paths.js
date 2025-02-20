@@ -7,6 +7,7 @@ const paths = {
     board: '/board/:slug',
     card: '/card/:slug',
     invite: '/invite/b/:slug',
+    profile: '/:username',
     notFound: '*',
 };
 

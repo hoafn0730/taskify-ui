@@ -54,7 +54,7 @@ function ContextMenu({ anchorEl, card, onClose }) {
         navigate(`/card/${card.slug}`, { state: { backgroundLocation: location } });
     };
 
-    const handleMenuChange = (menuItem, e) => {
+    const handleMenuChange = (menuItem) => {
         switch (menuItem.type) {
             case 'openCard':
                 handleOpen();

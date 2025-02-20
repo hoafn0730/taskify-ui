@@ -1,10 +1,13 @@
-import Box from '@mui/material/Box';
-import PropTypes from 'prop-types';
-//
-import { Button, Popover, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { cloneDeep } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
+import Box from '@mui/material/Box';
+import PropTypes from 'prop-types';
+import Button from '@mui/material/Button';
+import Popover from '@mui/material/Popover';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+
 import { checklistService } from '~/services/checklistService';
 import { updateCardOnBoard } from '~/store/slices/boardSlice';
 import { updateCardData } from '~/store/slices/cardSlice';

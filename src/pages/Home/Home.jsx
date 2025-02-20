@@ -1,13 +1,13 @@
-import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 
+import FAQ from './FAQ';
 import Hero from './Hero';
-import LogoCollection from './LogoCollection';
-import Highlights from './Highlights';
 import Pricing from './Pricing';
 import Features from './Features';
+import Highlights from './Highlights';
 import Testimonials from './Testimonials';
-import FAQ from './FAQ';
+import LogoCollection from './LogoCollection';
 
 export default function Home() {
     return (

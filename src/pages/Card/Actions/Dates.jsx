@@ -65,6 +65,7 @@ function Dates({ title, anchorEl, onClose }) {
         dispatch(updateCardOnBoard(newCard));
         dispatch(updateCardData(newCard));
 
+        // Call API to update card
         cardService.updateCard(card.id, updateData);
     };
 

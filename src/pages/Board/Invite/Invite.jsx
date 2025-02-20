@@ -1,9 +1,10 @@
-import CopyToClipboard from 'react-copy-to-clipboard';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import styled from '@emotion/styled';
+import { useCopyToClipboard } from '@uidotdev/usehooks';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
@@ -21,6 +22,23 @@ import Member from './Member';
 import Modal from '~/components/Modal';
 import { memberService } from '~/services/memberService';
 
+const TextFieldComp = styled(TextField)({
+    '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+            borderColor: (theme) =>
+                theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.primary.main,
+        },
+        '&:hover fieldset': {
+            borderColor: (theme) =>
+                theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.primary.main,
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: (theme) =>
+                theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.primary.main,
+        },
+    },
+});
+
 function Invite({ members = [], open, onClose }) {
     const { t } = useTranslation('board');
     const user = useSelector((state) => state.user.userInfo);
@@ -30,6 +48,7 @@ function Invite({ members = [], open, onClose }) {
     const [copied, setCopied] = useState(false);
     const [memberList, setMemberList] = useState(members);
     const [currentMember, setCurrentMember] = useState(null);
+    const [, copyToClipboard] = useCopyToClipboard(value);
 
     const ownerCount = useMemo(() => memberList.filter((member) => member.role === 'owner').length, [memberList]);
 
@@ -87,7 +106,7 @@ function Invite({ members = [], open, onClose }) {
         <Modal size="small" title={t('boardBar.share')} open={open} onClose={onClose}>
             <Box>
                 <Box sx={{ display: 'flex', gap: 1, pr: 4, mb: 2 }}>
-                    <TextField
+                    <TextFieldComp
                         data-no-dnd={true}
                         type="text"
                         variant="outlined"
@@ -99,35 +118,18 @@ function Invite({ members = [], open, onClose }) {
                                 readOnly: true,
                             },
                         }}
-                        sx={{
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: (theme) =>
-                                        theme.palette.mode === 'dark'
-                                            ? theme.palette.common.white
-                                            : theme.palette.primary.main,
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: (theme) =>
-                                        theme.palette.mode === 'dark'
-                                            ? theme.palette.common.white
-                                            : theme.palette.primary.main,
-                                },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: (theme) =>
-                                        theme.palette.mode === 'dark'
-                                            ? theme.palette.common.white
-                                            : theme.palette.primary.main,
-                                },
-                            },
-                        }}
                         aria-readonly
                     />
-                    <CopyToClipboard onCopy={() => setCopied(true)} text={value}>
-                        <Button variant="contained" sx={{ whiteSpace: 'nowrap' }}>
-                            {copied ? t('boardBar.copied') : t('boardBar.copy')}
-                        </Button>
-                    </CopyToClipboard>
+                    <Button
+                        variant="contained"
+                        sx={{ whiteSpace: 'nowrap' }}
+                        onClick={() => {
+                            setCopied(true);
+                            copyToClipboard(value);
+                        }}
+                    >
+                        {copied ? t('boardBar.copied') : t('boardBar.copy')}
+                    </Button>
                 </Box>
                 <TabContext value={tab}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

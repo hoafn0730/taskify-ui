@@ -86,7 +86,7 @@ function Header({ column, setOpenNewCardForm, onDeleteColumn }) {
     const handleClick = (event) => setAnchorEl(event.currentTarget);
     const handleClose = () => setAnchorEl(null);
 
-    const handleMenuChange = (menuItem, e) => {
+    const handleMenuChange = (menuItem) => {
         switch (menuItem.type) {
             case 'addNewCard':
                 setAnchorEl(null);

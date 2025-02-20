@@ -30,6 +30,7 @@ function Column({ column }) {
         transform: CSS.Translate.toString(transform),
         transition,
         height: '100%',
+        margin: '8px',
         opacity: isDragging ? 0.5 : undefined,
     };
 
@@ -37,6 +38,7 @@ function Column({ column }) {
         if (newCardTitle.startsWith(' ')) return;
         if (!newCardTitle) {
             toast.error('Please enter card title!');
+
             return;
         }
         const newCardData = {
@@ -88,7 +90,7 @@ function Column({ column }) {
 
     // todo: Su kien menu
     // const handleClickMenu = () => {
-    //     ///
+    //
     // };
 
     return (
@@ -101,7 +103,6 @@ function Column({ column }) {
                     minWidth: '300px',
                     height: 'fit-content',
                     maxHeight: (theme) => `calc(${theme.app.boardContentHeight} - ${theme.spacing(5)})`,
-                    ml: 2,
                     boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px',
                 }}
                 {...listeners}

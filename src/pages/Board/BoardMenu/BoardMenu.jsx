@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
+import Button from '@mui/material/Button';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -15,12 +16,14 @@ import CancelPresentationOutlinedIcon from '@mui/icons-material/CancelPresentati
 import MenuHeader from './MenuHeader';
 import BoardInfo from './BoardInfo';
 import Archive from './Archive';
+import ChangeBackground from './ChangeBackground';
 
 const drawerWidth = 320;
 
 const BOARD_MENU = [
     {
         title: 'About this board',
+        subTitle: 'Add a description to your board',
         icon: <InfoOutlinedIcon />,
         type: 'info',
         children: {
@@ -49,6 +52,46 @@ const BOARD_MENU = [
         title: 'Change background',
         icon: <PhotoSizeSelectActualOutlinedIcon />,
         type: 'background',
+        children: {
+            title: 'Change background',
+            style: { display: 'flex' },
+            data: [
+                {
+                    title: 'Image',
+                    button: (data, onClick) => {
+                        return <Button onClick={onClick}>{data.title}</Button>;
+                    },
+                    children: {
+                        title: 'Color',
+                        data: [
+                            {
+                                title: 'Change background',
+                                component: ChangeBackground,
+                                type: 'close',
+                            },
+                        ],
+                    },
+                },
+                {
+                    title: 'Color',
+                    button: (data, onClick) => {
+                        return <Button onClick={onClick}>{data.title}</Button>;
+                    },
+                    children: {
+                        title: 'Color',
+                        data: [
+                            {
+                                title: 'Change background',
+                                button: (data, onClick) => {
+                                    return <button onClick={onClick}>{data.title}</button>;
+                                },
+                                type: 'close',
+                            },
+                        ],
+                    },
+                },
+            ],
+        },
     },
     {
         title: 'Close board',
@@ -65,12 +108,19 @@ function BoardMenu({ open, onClose }) {
 
     const handleMenuChange = (menuItem) => {
         switch (menuItem.type) {
-            case 'background':
+            case 'close':
+                // call api delete board
+                // update state board
                 console.log('🚀 ~ handleMenuChange ~ menuItem:', menuItem);
                 break;
 
             default:
         }
+    };
+
+    const handleClose = () => {
+        onClose();
+        setHistory([{ data: BOARD_MENU }]);
     };
 
     return (
@@ -89,17 +139,18 @@ function BoardMenu({ open, onClose }) {
         >
             <MenuHeader
                 title={current.title || 'Menu'}
+                onClose={handleClose}
                 {...(history.length > 1 && { onBack: handleBack })}
-                onClose={onClose}
             />
 
             <Divider />
             <List>
                 {current.data.map((item, index) => {
                     const isParent = !!item.children;
+
                     return (
                         <ListItem key={index} disablePadding>
-                            {!item.component && (
+                            {!item.component && !item.button && (
                                 <ListItemButton
                                     onClick={() => {
                                         if (isParent) {
@@ -108,10 +159,17 @@ function BoardMenu({ open, onClose }) {
                                     }}
                                 >
                                     <ListItemIcon>{item.icon}</ListItemIcon>
-                                    <ListItemText>{item.title}</ListItemText>
+                                    <ListItemText primary={item.title} secondary={item.subTitle} />
                                 </ListItemButton>
                             )}
-                            {item.component && <item.component />}
+
+                            {item.button &&
+                                item.button(item, () => {
+                                    if (isParent) {
+                                        setHistory((prev) => [...prev, item.children]);
+                                    } else handleMenuChange(item);
+                                })}
+                            {item.component && <item.component onClose={handleClose} />}
                         </ListItem>
                     );
                 })}

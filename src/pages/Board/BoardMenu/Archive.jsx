@@ -2,15 +2,19 @@ import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { formatDistanceToNow } from 'date-fns';
 import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import { cardService } from '~/services/cardService';
-import { Typography } from '@mui/material';
+
+// import { useDispatch } from 'react-redux';
+// import { updateCardOnBoard } from '~/store/slices/boardSlice';
 
 function Archive() {
+    // const dispatch = useDispatch();
     const [cards, setCards] = useState([]);
 
     useEffect(() => {
@@ -26,7 +30,11 @@ function Archive() {
             archivedAt: null,
         });
 
-        //* update lai board
+        //  const card = cards.find((c) => c.id === cardId);
+        //  card.archivedAt = null;
+        //
+        // //* update lai board
+        // dispatch(updateCardOnBoard(card));
 
         setCards((prev) => prev.filter((item) => item.id !== cardId));
     };

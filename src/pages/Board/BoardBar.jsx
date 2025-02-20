@@ -28,9 +28,9 @@ const MENUS_STYLES = {
     },
 };
 
-function BoardBar({ board }) {
+// eslint-disable-next-line react/prop-types
+function BoardBar({ board, setOpen }) {
     const { t } = useTranslation('board');
-    const [open, setOpen] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -39,11 +39,15 @@ function BoardBar({ board }) {
             sx={{
                 width: '100%',
                 height: (theme) => theme.app.boardBarHeight,
+                background: '#0000003d',
+                // bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#ebecf0'),
+
+                backdropFilter: 'blur(4px)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                gap: 2,
                 overflowX: 'auto',
+                gap: 2,
                 '&::-webkit-scrollbar-track': { m: 2 },
             }}
         >
@@ -64,6 +68,7 @@ function BoardBar({ board }) {
                 <Button
                     variant="outlined"
                     sx={{
+                        bgcolor: 'white',
                         color: (theme) => (theme.palette.mode === 'dark' ? theme.palette.common.white : 'primary.main'),
                         borderColor: (theme) =>
                             theme.palette.mode === 'dark' ? theme.palette.common.white : 'primary.main',
@@ -106,12 +111,9 @@ function BoardBar({ board }) {
                             ))}
                 </AvatarGroup>
 
-                {!open && (
-                    <Button sx={{ p: '6px', minWidth: 'auto' }} onClick={() => setOpen(true)}>
-                        <MoreHorizIcon />
-                    </Button>
-                )}
-                <BoardMenu open={open} onClose={() => setOpen(false)} />
+                <Button sx={{ p: '6px', minWidth: 'auto' }} onClick={() => setOpen(true)}>
+                    <MoreHorizIcon />
+                </Button>
             </Box>
 
             <Invite members={board?.members} open={isOpen} onClose={() => setIsOpen(false)} />

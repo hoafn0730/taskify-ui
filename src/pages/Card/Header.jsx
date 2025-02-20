@@ -1,22 +1,21 @@
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
+import slugify from 'slugify';
 import PropTypes from 'prop-types';
+import { cloneDeep } from 'lodash';
+import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
-import { useDispatch } from 'react-redux';
-import { cloneDeep } from 'lodash';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+
 import { cardService } from '~/services/cardService';
 import { updateCardOnBoard } from '~/store/slices/boardSlice';
 import { updateCardData } from '~/store/slices/cardSlice';
-import slugify from 'slugify';
-import { useLocation, useNavigate } from 'react-router-dom';
+import changePathnameURL from '~/utils/changeURL';
 
 function Header({ card }) {
-    const location = useLocation();
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [cardTitleValue, setCardTitleValue] = useState(card?.title);
     const debouncedSearchTerm = useDebounce(cardTitleValue, 800);
 
@@ -34,19 +33,11 @@ function Header({ card }) {
             const newCard = cloneDeep(card);
             newCard.title = updateData.title;
             newCard.slug = slugify(updateData.title, { lower: true });
-            navigate('/card/' + slugify(updateData.title, { lower: true }), {
-                state: { backgroundLocation: location.state.backgroundLocation },
-                replace: true,
-            });
 
-            // set pathname
-            // const urlObject = new URL(window.location.href);
-            // urlObject.pathname = '/card/' + slugify(updateData.title, { lower: true });
-            // window.history.replaceState(null, null, urlObject.toString());
+            changePathnameURL('/card/' + slugify(updateData.title, { lower: true }));
 
             dispatch(updateCardOnBoard(newCard));
             dispatch(updateCardData(newCard));
-
             cardService.updateCard(card?.id, updateData);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

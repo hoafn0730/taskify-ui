@@ -31,7 +31,7 @@ function Invite() {
                             objectType: 'board',
                             ...(board.type === 'public' ? { active: true } : {}),
                         })
-                        .then((res) => {
+                        .then(() => {
                             if (board.type === 'public') {
                                 toast.info('You are allowed to join the board.');
                                 delay(() => navigate('/board/' + slug, { replace: true }), 2000);

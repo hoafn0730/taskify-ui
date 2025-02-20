@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useColorScheme, useMediaQuery, useTheme } from '@mui/material';
+import { Vibrant } from 'node-vibrant/browser';
+import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -93,7 +95,9 @@ function Header() {
     const dispatch = useDispatch();
     const isMatch = useMediaQuery(theme.breakpoints.down('md'));
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+    const board = useSelector((state) => state.board.activeBoard);
     const userInfo = useSelector((state) => state.user.userInfo);
+    const [bgColor, setBgColor] = useState('#ffffff');
 
     const userMenu = [
         {
@@ -114,6 +118,33 @@ function Header() {
             separate: true,
         },
     ];
+
+    useEffect(() => {
+        if (board) {
+            const img = new Image();
+            img.crossOrigin = 'Anonymous'; // Bật CORS
+            img.src = board?.image;
+
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                const width = img.width;
+                const height = img.height; // Chỉ lấy phần trên của ảnh
+
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height, 0, 0, width, height);
+                const dataUrl = canvas.toDataURL('image/png');
+
+                Vibrant.from(dataUrl)
+                    .getPalette()
+                    .then((palette) => {
+                        setBgColor(`rgb(${palette.LightMuted.r}, ${palette.LightMuted.g}, ${palette.LightMuted.b})`);
+                    });
+            };
+        }
+    }, [board]);
 
     const handleMenuChange = (menuItem) => {
         switch (menuItem.type) {
@@ -145,6 +176,7 @@ function Header() {
                 borderBottom: '1px solid',
                 borderColor: 'primary.main',
                 overflowX: 'auto',
+                bgcolor: bgColor,
                 '&::-webkit-scrollbar-track': { m: 2 },
             }}
         >
@@ -153,7 +185,6 @@ function Header() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: 2,
-                    color: 'primary.main',
                     mr: 2,
                 }}
             >

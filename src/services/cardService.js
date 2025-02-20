@@ -29,4 +29,18 @@ const deleteCard = async (cardId) => {
     return httpRequest.delete('/cards/' + cardId);
 };
 
-export const cardService = { getCards, getCardDetail, getCardDetailBySlug, createNewCard, updateCard, deleteCard };
+const updateCardCover = (cardId, data) => {
+    return httpRequest.put(`/cards/${cardId}/update-cover`, {
+        ...data,
+    });
+};
+
+export const cardService = {
+    getCards,
+    getCardDetail,
+    getCardDetailBySlug,
+    createNewCard,
+    updateCard,
+    deleteCard,
+    updateCardCover,
+};

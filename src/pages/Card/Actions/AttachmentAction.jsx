@@ -8,7 +8,7 @@ import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import UploadFile from '../../../components/UploadFile/UploadFile';
+import UploadFile from '~/components/UploadFile';
 import LoadingSpinner from '~/components/LoadingSpinner/LoadingSpinner';
 import { attachmentService } from '~/services/attachmentService';
 import { convertBase64 } from '~/utils/convertBase64';
@@ -16,9 +16,8 @@ import { updateCardData } from '~/store/slices/cardSlice';
 import { updateCardOnBoard } from '~/store/slices/boardSlice';
 
 function AttachmentAction({ title, anchorEl, card, onClose }) {
-    const board = useSelector((state) => state.board.activeBoard);
-
     const dispatch = useDispatch();
+    const board = useSelector((state) => state.board.activeBoard);
     const [loading, setLoading] = useState(false);
 
     const handleUploadFile = async (e) => {
@@ -87,9 +86,11 @@ function AttachmentAction({ title, anchorEl, card, onClose }) {
                 <Typography variant="h3" sx={{ fontSize: '14px', mb: 1 }}>
                     Attach a file from your computer
                 </Typography>
+
                 <Typography sx={{ fontSize: '12px', mb: 3 }}>
                     You can also drag and drop files to upload them.
                 </Typography>
+
                 {loading ? <LoadingSpinner caption="Loading..." /> : <UploadFile onChange={handleUploadFile} />}
             </Box>
             <Divider />

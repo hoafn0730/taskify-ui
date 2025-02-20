@@ -23,16 +23,31 @@ const createNewBoard = async (data) => {
     return res.data;
 };
 
+const generateBoard = async (data) => {
+    const res = await httpRequest.post('/boards/generate', {
+        ...data,
+    });
+    return res.data;
+};
+
 const updateBoard = (boardId, data) => {
     return httpRequest.put('/boards/' + boardId, {
         ...data,
     });
 };
 
-const moveCardToDifferentColumn = (data) => {
-    return httpRequest.put('/boards/supports/moving_card', {
+const moveCardToDifferentColumn = (boardId, data) => {
+    return httpRequest.put(`/boards/${boardId}/moving-card`, {
         ...data,
     });
+};
+
+const updateBoardBackground = (boardId, data) => {
+    return httpRequest
+        .put(`/boards/${boardId}/update-background`, {
+            ...data,
+        })
+        .then((res) => res.data);
 };
 
 export const boardService = {
@@ -42,4 +57,6 @@ export const boardService = {
     createNewBoard,
     updateBoard,
     moveCardToDifferentColumn,
+    generateBoard,
+    updateBoardBackground,
 };

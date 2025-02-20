@@ -13,7 +13,7 @@ axiosRetry(httpRequest, {
     retryCondition: (error) => {
         return error?.response?.status === 400 || error?.response?.status === 405;
     },
-    retryDelay: (retryCount, error) => {
+    retryDelay: (retryCount) => {
         return retryCount * 100;
     },
 });
@@ -30,6 +30,7 @@ httpRequest.interceptors.request.use(
     },
 );
 
+let refreshTokenPromise = null;
 // Add a response interceptor
 httpRequest.interceptors.response.use(
     function (response) {
@@ -38,16 +39,40 @@ httpRequest.interceptors.response.use(
         return response?.data;
     },
     function (error) {
+        const originalRequest = error.config;
+
+        if (error?.response?.status === 410 && originalRequest) {
+            if (!refreshTokenPromise) {
+                refreshTokenPromise = authService
+                    .refreshToken()
+                    .then(() => {})
+                    .catch((error) => {
+                        authService.logout().then(() => {
+                            location.href = '/home';
+                        });
+
+                        return Promise.reject(error);
+                    })
+                    .finally(() => {
+                        refreshTokenPromise = null;
+                    });
+            }
+
+            return refreshTokenPromise.then(() => {
+                return httpRequest(originalRequest);
+            });
+        }
+
         if (error?.response?.status !== 410) {
             toast.error(error?.response?.data?.message);
         }
 
-        if (error?.response?.status === 410) {
-            authService.refreshToken().catch((err) => {
-                return Promise.reject(err);
-            });
-            // return error.
-        }
+        // if (error?.response?.status === 401) {
+        //     authService.logout().then(() => {
+        //         store.dispatch(logout());
+        //         location.href = '/login';
+        //     });
+        // }
 
         // Any status codes that falls outside the range of 2xx cause this function to trigger
         // Do something with response error

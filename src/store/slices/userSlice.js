@@ -18,7 +18,7 @@ export const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getCurrentUser.pending, (state, action) => {
+            .addCase(getCurrentUser.pending, (state) => {
                 state.userInfo = null;
                 state.isLoading = true;
             })
@@ -28,11 +28,11 @@ export const userSlice = createSlice({
                 state.isLoggedIn = true;
                 state.isError = false;
             })
-            .addCase(getCurrentUser.rejected, (state, action) => {
+            .addCase(getCurrentUser.rejected, (state) => {
                 state.userInfo = null;
                 state.isLoading = false;
             })
-            .addCase(logout.fulfilled, (state, action) => {
+            .addCase(logout.fulfilled, (state) => {
                 state.userInfo = null;
                 state.isLoading = false;
                 state.isLoggedIn = false;

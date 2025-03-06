@@ -11,6 +11,7 @@ import Invite from '~/pages/Invite';
 import Templates from '~/pages/Templates';
 import NotFound from '~/pages/NotFound';
 import Profile from '~/pages/Profile';
+import ShortLink from '~/pages/ShortLink';
 
 const publicRoutes = [
     {
@@ -49,6 +50,14 @@ const privateRoutes = [
     {
         path: config.paths.board,
         component: Board,
+    },
+    {
+        path: config.paths.boardShortLink,
+        component: ShortLink,
+    },
+    {
+        path: config.paths.cardShortLink,
+        component: ShortLink,
     },
     {
         path: config.paths.invite,

@@ -12,7 +12,7 @@ function LoadingSpinner({ caption }) {
                 justifyContent: 'center',
                 gap: 2,
                 width: '100%',
-                // height: '100vh',
+                height: '100vh',
                 mx: 'auto',
             }}
         >
@@ -23,7 +23,7 @@ function LoadingSpinner({ caption }) {
 }
 
 LoadingSpinner.propTypes = {
-    caption: PropTypes.string.isRequired,
+    caption: PropTypes.string,
 };
 
 export default LoadingSpinner;

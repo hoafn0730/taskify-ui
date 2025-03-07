@@ -16,6 +16,12 @@ const getBoardBySlug = (slug) => {
     return httpRequest.get('/boards/' + slug);
 };
 
+const getCombinedBoards = () => {
+    return httpRequest.get('/boards/combined', {
+        params: { boardStars: true },
+    });
+};
+
 const createNewBoard = async (data) => {
     const res = await httpRequest.post('/boards', {
         ...data,
@@ -54,6 +60,7 @@ export const boardService = {
     searchBoards,
     getBoards,
     getBoardBySlug,
+    getCombinedBoards,
     createNewBoard,
     updateBoard,
     moveCardToDifferentColumn,

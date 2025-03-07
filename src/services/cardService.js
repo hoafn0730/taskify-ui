@@ -12,6 +12,10 @@ const getCardDetailBySlug = (slug) => {
     return httpRequest.get('/cards/' + slug);
 };
 
+const getUpNext = () => {
+    return httpRequest.get('/cards/up-next');
+};
+
 const createNewCard = async (data) => {
     const res = await httpRequest.post('/cards', {
         ...data,
@@ -39,6 +43,7 @@ export const cardService = {
     getCards,
     getCardDetail,
     getCardDetailBySlug,
+    getUpNext,
     createNewCard,
     updateCard,
     deleteCard,

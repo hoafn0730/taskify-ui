@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
@@ -13,17 +12,19 @@ import { boardService } from '~/services/boardService';
 import LoadingSpinner from '~/components/LoadingSpinner';
 
 function Dashboard() {
-    // const workspace = useSelector((state) => state.workspace.activeWorkspace);
     const [tasks, setTasks] = useState([]);
     const [boards, setBoards] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         setIsLoading(true);
-        Promise.all([cardService.getCards(), boardService.getBoards()])
+        Promise.all([cardService.getUpNext(), boardService.getCombinedBoards()])
             .then(([resCard, resBoard]) => {
-                const tasklist = resCard.data.filter((card) => card.dueDate && !card.dueComplete && !card.archivedAt);
-                setTasks(tasklist.sort((a, b) => dayjs(a.dueDate) - dayjs(b.dueDate)));
+                resBoard.data?.boards.sort(
+                    (a, b) => new Date(b.workspaceBoard.lastView) - new Date(a.workspaceBoard.lastView),
+                );
+
+                setTasks(resCard.data.data);
                 setBoards(resBoard.data);
             })
             .then(() => setIsLoading(false));
@@ -68,8 +69,8 @@ function Dashboard() {
                         }}
                     >
                         <Section title="Starred" icon={<StarOutlineRoundedIcon fontSize="small" />}>
-                            {boards?.length > 0 &&
-                                boards.map((board) => (
+                            {boards.boardStars?.length > 0 &&
+                                boards.boardStars.map((board) => (
                                     <Box
                                         key={board.id}
                                         sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, p: 0.5 }}
@@ -98,8 +99,8 @@ function Dashboard() {
                                 ))}
                         </Section>
                         <Section title="Recently viewed" icon={<AccessTimeRoundedIcon fontSize="small" />}>
-                            {boards?.length > 0 &&
-                                boards.map((board) => (
+                            {boards.boards?.length > 0 &&
+                                boards.boards.map((board) => (
                                     <Box
                                         key={board.id}
                                         sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, p: 0.5 }}

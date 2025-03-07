@@ -1,6 +1,5 @@
 // import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
@@ -13,7 +12,6 @@ import { boardService } from '~/services/boardService';
 
 function Boards() {
     // const { t, i18n } = useTranslation('boards');
-    const workspace = useSelector((state) => state.workspace.activeWorkspace);
     const [boards, setBoards] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -32,7 +30,7 @@ function Boards() {
                     <CircularProgress sx={{ position: 'absolute', top: '50%', left: '50%' }} />
                 </Box>
             )}
-
+            {/* 
             {workspace?.boards?.length > 0 && (
                 <>
                     <Section title="Starred boards" icon={<StarBorderRoundedIcon />}>
@@ -49,7 +47,7 @@ function Boards() {
                         </Box>
                     </Section>
                 </>
-            )}
+            )} */}
 
             <Section title="Recently viewed" icon={<AccessTimeRoundedIcon />}>
                 <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>

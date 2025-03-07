@@ -1,15 +1,11 @@
-import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
 
 import CreateBoard from './CreateBoard';
 import Pricing from './Pricing';
 import NavTabs from '~/components/NavTabs/NavTabs';
 
 function Sidebar() {
-    const workspace = useSelector((state) => state.workspace.activeWorkspace);
-
     return (
         <Box
             sx={{
@@ -28,9 +24,6 @@ function Sidebar() {
             <Divider />
             <CreateBoard />
             <Divider />
-            <Typography variant="h3" sx={{ fontSize: '16px', mx: 2, mt: 1 }}>
-                {workspace?.title.toUpperCase()}
-            </Typography>
             <Pricing />
         </Box>
     );

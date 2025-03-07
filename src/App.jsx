@@ -9,7 +9,6 @@ import Card from '~/pages/Card';
 import DefaultLayout from '~/layouts/DefaultLayout';
 import ProtectedRoute from '~/components/ProtectedRoute';
 import { getCurrentUser } from '~/store/actions/userAction';
-import { fetchWorkspace } from '~/store/actions/workspaceAction';
 
 function App() {
     const location = useLocation();
@@ -23,7 +22,6 @@ function App() {
             dispatch(getCurrentUser());
         }
 
-        dispatch(fetchWorkspace());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
+import Button from '@mui/material/Button';
 import DashboardCustomizeRoundedIcon from '@mui/icons-material/DashboardCustomizeRounded';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 
 import LinkTab from './LinkTab';
+import { getCategories } from '~/services';
 
 function samePageLinkNavigation(event) {
     if (
@@ -25,6 +27,14 @@ function samePageLinkNavigation(event) {
 function NavTabs() {
     const location = useLocation();
     const [value, setValue] = useState(0);
+    const [categories, setCategories] = useState([]);
+    console.log('🚀 ~ NavTabs ~ categories:', categories);
+
+    useEffect(() => {
+        getCategories().then((res) => {
+            setCategories(res.data);
+        });
+    }, []);
 
     useEffect(() => {
         let page;
@@ -49,6 +59,7 @@ function NavTabs() {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Tabs
+                variant="scrollable"
                 value={value}
                 sx={{
                     '& .MuiTab-root': {
@@ -70,12 +81,27 @@ function NavTabs() {
                     label="Boards"
                     to="/boards"
                 />
+
                 <LinkTab
                     icon={<DashboardCustomizeRoundedIcon fontSize="small" />}
                     label="Templates"
                     iconPosition="start"
                     to="/templates"
                 />
+
+                {location.pathname === '/templates' &&
+                    categories.length &&
+                    categories.map((item) => (
+                        <Button
+                            component={Link}
+                            to={item.slug}
+                            key={item.id}
+                            fullWidth
+                            sx={{ color: 'rgba(0, 0, 0, 0.6)', justifyContent: 'flex-start', pl: 6 }}
+                        >
+                            {item.title}
+                        </Button>
+                    ))}
             </Tabs>
         </Box>
     );

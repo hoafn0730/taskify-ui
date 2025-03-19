@@ -30,24 +30,6 @@ function Boards() {
                     <CircularProgress sx={{ position: 'absolute', top: '50%', left: '50%' }} />
                 </Box>
             )}
-            {/* 
-            {workspace?.boards?.length > 0 && (
-                <>
-                    <Section title="Starred boards" icon={<StarBorderRoundedIcon />}>
-                        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                            {workspace?.boards.length > 0 &&
-                                boards.map((board) => (
-                                    <BoardItem
-                                        key={board.id}
-                                        title={board.title}
-                                        slug={board.slug}
-                                        image={board.image}
-                                    />
-                                ))}
-                        </Box>
-                    </Section>
-                </>
-            )} */}
 
             <Section title="Recently viewed" icon={<AccessTimeRoundedIcon />}>
                 <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>

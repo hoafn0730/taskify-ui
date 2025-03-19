@@ -7,9 +7,9 @@ import StarOutlineRoundedIcon from '@mui/icons-material/StarOutlineRounded';
 
 import Task from './Task';
 import Section from '~/components/Section';
+import LoadingSpinner from '~/components/LoadingSpinner';
 import { cardService } from '~/services/cardService';
 import { boardService } from '~/services/boardService';
-import LoadingSpinner from '~/components/LoadingSpinner';
 
 function Dashboard() {
     const [tasks, setTasks] = useState([]);

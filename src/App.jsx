@@ -31,14 +31,6 @@ function App() {
                 console.log(`Notification permission: ${permission}`);
             });
         }
-
-        // document.addEventListener(
-        //     'wheel',
-        //     (e) => {
-        //         e.preventDefault();
-        //     },
-        //     { passive: false },
-        // );
     }, []);
 
     return (

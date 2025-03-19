@@ -9,4 +9,8 @@ const getByShortLink = (shortLink, type) => {
     });
 };
 
-export { getByShortLink };
+const getCategories = () => {
+    return httpRequest.get('/categories');
+};
+
+export { getByShortLink, getCategories };

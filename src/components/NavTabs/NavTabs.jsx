@@ -28,7 +28,6 @@ function NavTabs() {
     const location = useLocation();
     const [value, setValue] = useState(0);
     const [categories, setCategories] = useState([]);
-    console.log('🚀 ~ NavTabs ~ categories:', categories);
 
     useEffect(() => {
         getCategories().then((res) => {

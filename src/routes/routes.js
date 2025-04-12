@@ -18,6 +18,7 @@ const publicRoutes = [
         path: config.paths.home,
         component: Home,
         layout: HomeLayout,
+        
     },
     {
         path: config.paths.blog,

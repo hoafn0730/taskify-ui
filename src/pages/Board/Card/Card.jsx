@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import { CSS } from '@dnd-kit/utilities';
 import MuiCard from '@mui/material/Card';
-import { useMemo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import Button from '@mui/material/Button';
 import { useSortable } from '@dnd-kit/sortable';
 import CardMedia from '@mui/material/CardMedia';
@@ -152,4 +152,4 @@ Card.propTypes = {
     card: PropTypes.object,
 };
 
-export default Card;
+export default memo(Card);

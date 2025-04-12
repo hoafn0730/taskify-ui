@@ -6,7 +6,7 @@ import { ReactComponent as TrelloIcon } from '~/assets/trello.svg';
 import Link from '~/components/Link/Link';
 import config from '~/config';
 
-function Logo({ to }) {
+function Logo({ to, sx }) {
     return (
         <Link
             to={to || config.paths.dashboard}
@@ -16,6 +16,7 @@ function Logo({ to }) {
                 gap: 1,
                 cursor: 'pointer',
                 textDecoration: 'none',
+                ...sx,
             }}
         >
             <SvgIcon component={TrelloIcon} inheritViewBox />
@@ -34,6 +35,7 @@ function Logo({ to }) {
 
 Logo.propTypes = {
     to: PropTypes.string,
+    sx: PropTypes.object,
 };
 
 export default Logo;

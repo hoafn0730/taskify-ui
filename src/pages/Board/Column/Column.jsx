@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { useConfirm } from 'material-ui-confirm';
 import { useDispatch, useSelector } from 'react-redux';
 import { cloneDeep } from 'lodash';
@@ -158,4 +158,4 @@ Column.propTypes = {
     column: PropTypes.object,
 };
 
-export default Column;
+export default memo(Column);

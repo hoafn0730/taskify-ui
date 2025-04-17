@@ -1,98 +1,55 @@
-import Box from '@mui/material/Box';
-import { Fragment, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Provider } from 'react-redux';
 
-import config from '~/config';
-import { privateRoutes, publicRoutes } from '~/routes';
-import Card from '~/pages/Card';
-import DefaultLayout from '~/layouts/DefaultLayout';
-import ProtectedRoute from '~/components/ProtectedRoute';
-import { getCurrentUser } from '~/store/actions/userAction';
+import '~/global.css';
 
-function App() {
-    const location = useLocation();
-    const dispatch = useDispatch();
-    const { userInfo } = useSelector((state) => state.user);
-    const state = location.state;
+// ----------------------------------------------------------------------
 
-    useEffect(() => {
-        // 🐳
-        if (!userInfo) {
-            dispatch(getCurrentUser());
-        }
+import { Router } from '~/routes/sections';
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+import { useScrollToTop } from '~/hooks/use-scroll-to-top';
 
-    useEffect(() => {
-        if (Notification.permission === 'default') {
-            Notification.requestPermission().then((permission) => {
-                console.log(`Notification permission: ${permission}`);
-            });
-        }
-    }, []);
+import { CONFIG } from '~/config-global';
+import { LocalizationProvider } from '~/locales';
+import { I18nProvider } from '~/locales/i18n-provider';
+import { ThemeProvider } from '~/theme/theme-provider';
+
+import { Snackbar } from '~/components/snackbar';
+import { ProgressBar } from '~/components/progress-bar';
+import { MotionLazy } from '~/components/animate/motion-lazy';
+import { SettingsDrawer, defaultSettings, SettingsProvider } from '~/components/settings';
+
+import { CheckoutProvider } from '~/sections/checkout/context';
+
+import { AuthProvider as JwtAuthProvider } from '~/auth/context/auth';
+import { store } from './store';
+
+// ----------------------------------------------------------------------
+
+const AuthProvider = JwtAuthProvider;
+
+export default function App() {
+    useScrollToTop();
 
     return (
-        <Box>
-            <Routes location={state?.backgroundLocation || location}>
-                {publicRoutes.map((route, index) => {
-                    let Layout = DefaultLayout;
-                    const Page = route.component;
-
-                    if (route.layout) {
-                        Layout = route.layout;
-                    } else if (route.layout === null) {
-                        Layout = Fragment;
-                    }
-
-                    return (
-                        <Route
-                            key={index}
-                            path={route.path}
-                            element={
-                                <Layout>
-                                    <Page />
-                                </Layout>
-                            }
-                        />
-                    );
-                })}
-                <Route path="/card/:slug" element={<Card />} />
-
-                {privateRoutes.map((route, index) => {
-                    let Layout = DefaultLayout;
-                    const Page = route.component;
-
-                    if (route.layout) {
-                        Layout = route.layout;
-                    } else if (route.layout === null) {
-                        Layout = Fragment;
-                    }
-
-                    return (
-                        <Route
-                            key={index}
-                            path={route.path}
-                            element={
-                                <ProtectedRoute>
-                                    <Layout>
-                                        <Page />
-                                    </Layout>
-                                </ProtectedRoute>
-                            }
-                        />
-                    );
-                })}
-            </Routes>
-
-            {state?.backgroundLocation && (
-                <Routes>
-                    <Route path={config.paths.card} element={<Card />} />
-                </Routes>
-            )}
-        </Box>
+        <Provider store={store}>
+            <I18nProvider>
+                <LocalizationProvider>
+                    <AuthProvider>
+                        <SettingsProvider settings={defaultSettings}>
+                            <ThemeProvider>
+                                <MotionLazy>
+                                    <CheckoutProvider>
+                                        <Snackbar />
+                                        <ProgressBar />
+                                        <SettingsDrawer />
+                                        <Router />
+                                    </CheckoutProvider>
+                                </MotionLazy>
+                            </ThemeProvider>
+                        </SettingsProvider>
+                    </AuthProvider>
+                </LocalizationProvider>
+            </I18nProvider>
+        </Provider>
     );
 }
-
-export default App;

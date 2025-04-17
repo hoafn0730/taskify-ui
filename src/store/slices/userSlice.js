@@ -1,47 +1,31 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { getCurrentUser, logout } from '../actions/userAction';
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    userInfo: null,
+    user: null,
     isLoading: false,
-    isError: false,
-    isLoggedIn: false,
-};
+}
 
 export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        addUserData: (state, action) => {
-            state.userData = { ...action.payload };
+        increment: (state) => {
+            // Redux Toolkit allows us to write "mutating" logic in reducers. It
+            // doesn't actually mutate the state because it uses the Immer library,
+            // which detects changes to a "draft state" and produces a brand new
+            // immutable state based off those changes
+            state.value += 1
+        },
+        decrement: (state) => {
+            state.value -= 1
+        },
+        incrementByAmount: (state, action) => {
+            state.value += action.payload
         },
     },
-    extraReducers: (builder) => {
-        builder
-            .addCase(getCurrentUser.pending, (state) => {
-                state.userInfo = null;
-                state.isLoading = true;
-            })
-            .addCase(getCurrentUser.fulfilled, (state, action) => {
-                state.userInfo = action.payload;
-                state.isLoading = false;
-                state.isLoggedIn = true;
-                state.isError = false;
-            })
-            .addCase(getCurrentUser.rejected, (state) => {
-                state.userInfo = null;
-                state.isLoading = false;
-            })
-            .addCase(logout.fulfilled, (state) => {
-                state.userInfo = null;
-                state.isLoading = false;
-                state.isLoggedIn = false;
-                state.isError = false;
-            });
-    },
-});
+})
 
 // Action creators are generated for each case reducer function
-export const { addUserData } = userSlice.actions;
+export const { increment, decrement, incrementByAmount } = userSlice.actions
 
-export default userSlice.reducer;
+export default userSlice.reducer

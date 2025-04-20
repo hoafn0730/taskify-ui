@@ -1,29 +1,27 @@
-import { z as zod } from 'zod'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { z as zod } from 'zod';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import Link from '@mui/material/Link'
-import Alert from '@mui/material/Alert'
-import Stack from '@mui/material/Stack'
-import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
-import LoadingButton from '@mui/lab/LoadingButton'
-import InputAdornment from '@mui/material/InputAdornment'
-import Divider from '@mui/material/Divider'
+import Link from '@mui/material/Link';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Divider from '@mui/material/Divider';
 
-import { paths } from '~/routes/paths'
-import { useRouter } from '~/routes/hooks'
-import { RouterLink } from '~/routes/components'
+import { paths } from '~/routes/paths';
+import { useRouter } from '~/routes/hooks';
+import { RouterLink } from '~/routes/components';
 
-import { useBoolean } from '~/hooks/use-boolean'
+import { useBoolean } from '~/hooks/use-boolean';
 
-import { Iconify, SocialIcon } from '~/components/iconify'
-import { Form, Field } from '~/components/hook-form'
+import { Iconify, SocialIcon } from '~/components/iconify';
+import { Form, Field } from '~/components/hook-form';
 
-// import { signUp } from '~/auth/context/auth'
-// import { useAuthContext } from '~/auth/hooks'
-import { authService } from '~/services/authService'
+import { authService } from '~/services/authService';
 
 // ----------------------------------------------------------------------
 
@@ -39,18 +37,16 @@ export const SignUpSchema = zod.object({
         .string()
         .min(1, { message: 'Password is required!' })
         .min(6, { message: 'Password must be at least 6 characters!' }),
-})
+});
 
 // ----------------------------------------------------------------------
 
 export function SignUpView() {
-    // const { checkUserSession } = useAuthContext()
+    const router = useRouter();
 
-    const router = useRouter()
+    const password = useBoolean();
 
-    const password = useBoolean()
-
-    const [errorMsg, setErrorMsg] = useState('')
+    const [errorMsg, setErrorMsg] = useState('');
 
     const defaultValues = {
         firstName: 'Hello',
@@ -58,17 +54,17 @@ export function SignUpView() {
         username: 'hello',
         email: 'hello@gmail.com',
         password: '123456',
-    }
+    };
 
     const methods = useForm({
         resolver: zodResolver(SignUpSchema),
         defaultValues,
-    })
+    });
 
     const {
         handleSubmit,
         formState: { isSubmitting },
-    } = methods
+    } = methods;
 
     const onSubmit = handleSubmit(async (data) => {
         try {
@@ -78,15 +74,15 @@ export function SignUpView() {
                 password: data.password,
                 firstName: data.firstName,
                 lastName: data.lastName,
-            })
+            });
 
-            router.push('/auth/sign-in')
+            router.push('/auth/sign-in');
         } catch (error) {
-            console.error(error)
+            console.error(error);
 
-            setErrorMsg(error instanceof Error ? error.response.data.message : error)
+            setErrorMsg(error instanceof Error ? error.response.data.message : error);
         }
-    })
+    });
 
     const renderHead = (
         <Stack spacing={1.5} sx={{ mb: 5 }}>
@@ -102,16 +98,12 @@ export function SignUpView() {
                 </Link>
             </Stack>
         </Stack>
-    )
+    );
 
     const renderForm = (
         <Stack spacing={3}>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                <Field.Text
-                    name="firstName"
-                    label="First name"
-                    InputLabelProps={{ shrink: true }}
-                />
+                <Field.Text name="firstName" label="First name" InputLabelProps={{ shrink: true }} />
                 <Field.Text name="lastName" label="Last name" InputLabelProps={{ shrink: true }} />
             </Stack>
 
@@ -129,11 +121,7 @@ export function SignUpView() {
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton onClick={password.onToggle} edge="end">
-                                <Iconify
-                                    icon={
-                                        password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'
-                                    }
-                                />
+                                <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
                             </IconButton>
                         </InputAdornment>
                     ),
@@ -152,7 +140,7 @@ export function SignUpView() {
                 Create account
             </LoadingButton>
         </Stack>
-    )
+    );
 
     const renderTerms = (
         <Typography
@@ -174,7 +162,7 @@ export function SignUpView() {
             </Link>
             .
         </Typography>
-    )
+    );
 
     const renderSignInWithSocials = (
         <>
@@ -203,7 +191,7 @@ export function SignUpView() {
                 </IconButton>
             </Stack>
         </>
-    )
+    );
 
     return (
         <>
@@ -223,5 +211,5 @@ export function SignUpView() {
 
             {renderSignInWithSocials}
         </>
-    )
+    );
 }

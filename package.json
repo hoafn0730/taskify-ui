@@ -18,8 +18,6 @@
         "dev:host": "vite --host"
     },
     "dependencies": {
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0",
         "@auth0/auth0-react": "^2.2.4",
         "@dnd-kit/core": "^6.1.0",
         "@dnd-kit/sortable": "^8.0.0",
@@ -79,7 +77,9 @@
         "mapbox-gl": "^3.4.0",
         "mui-one-time-password-input": "^2.0.2",
         "nprogress": "^0.2.0",
+        "react": "^19.0.0",
         "react-apexcharts": "^1.4.1",
+        "react-dom": "^19.0.0",
         "react-dropzone": "^14.2.3",
         "react-helmet-async": "^2.0.5",
         "react-hook-form": "^7.51.5",
@@ -103,7 +103,6 @@
         "stylis-plugin-rtl": "^2.1.1",
         "swr": "^2.2.5",
         "turndown": "^7.2.0",
-        "vite-plugin-eslint": "^1.8.1",
         "yet-another-react-lightbox": "^3.20.0",
         "zod": "^3.23.8"
     },

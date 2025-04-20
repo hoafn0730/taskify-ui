@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
 import { paths } from '~/routes/paths';
 import { useRouter, usePathname, useSearchParams } from '~/routes/hooks';
@@ -7,20 +8,12 @@ import { CONFIG } from '~/config-global';
 
 import { SplashScreen } from '~/components/loading-screen';
 
-import { useAuthContext } from '../hooks';
-
-// ----------------------------------------------------------------------
-
-// eslint-disable-next-line react/prop-types
 export function AuthGuard({ children }) {
     const router = useRouter();
-
     const pathname = usePathname();
-
     const searchParams = useSearchParams();
 
-    const { authenticated, loading } = useAuthContext();
-
+    const { status, isLoading } = useSelector((state) => state.user);
     const [isChecking, setIsChecking] = useState(true);
 
     const createQueryString = useCallback(
@@ -34,11 +27,11 @@ export function AuthGuard({ children }) {
     );
 
     const checkPermissions = async () => {
-        if (loading) {
+        if (isLoading) {
             return;
         }
 
-        if (!authenticated) {
+        if (status !== 'authenticated') {
             const { method } = CONFIG.auth;
 
             const signInPath = {
@@ -57,7 +50,7 @@ export function AuthGuard({ children }) {
     useEffect(() => {
         checkPermissions();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [authenticated, loading]);
+    }, [status, isLoading]);
 
     if (isChecking) {
         return <SplashScreen />;

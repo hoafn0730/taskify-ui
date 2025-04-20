@@ -1,13 +1,13 @@
-import axios from 'axios'
+import axios from 'axios';
 
-import { CONFIG } from '~/config-global'
+import { CONFIG } from '~/config-global';
 
 // ----------------------------------------------------------------------
 
 const axiosInstance = axios.create({
     baseURL: CONFIG.site.serverUrl,
     withCredentials: true,
-})
+});
 
 axiosInstance.interceptors.response.use(
     (response) => response?.data,
@@ -16,32 +16,32 @@ axiosInstance.interceptors.response.use(
         //     toast.error(error.response.data.message)
         // }
 
-        return Promise.reject(error || 'Something went wrong!')
-    }
-)
+        return Promise.reject(error || 'Something went wrong!');
+    },
+);
 
-export default axiosInstance
+export default axiosInstance;
 
 // ----------------------------------------------------------------------
 
 export const fetcher = async (args) => {
     try {
-        const [url, config] = Array.isArray(args) ? args : [args]
+        const [url, config] = Array.isArray(args) ? args : [args];
 
-        const res = await axiosInstance.get(url, { ...config })
+        const res = await axiosInstance.get(url, { ...config });
 
-        return res.data
+        return res.data;
     } catch (error) {
-        console.error('Failed to fetch:', error)
-        throw error
+        console.error('Failed to fetch:', error);
+        throw error;
     }
-}
+};
 
 // ----------------------------------------------------------------------
 
 export const endpoints = {
     chat: '/api/chat',
-    kanban: '/api/kanban',
+    board: '/api/v1/boards',
     calendar: '/api/calendar',
     auth: {
         me: '/api/auth/me',
@@ -64,4 +64,4 @@ export const endpoints = {
         details: '/api/product/details',
         search: '/api/product/search',
     },
-}
+};

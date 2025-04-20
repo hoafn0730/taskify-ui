@@ -2,6 +2,7 @@ import { z as zod } from 'zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useDispatch } from 'react-redux';
 
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
@@ -21,8 +22,8 @@ import { useBoolean } from '~/hooks/use-boolean';
 import { Iconify, SocialIcon } from '~/components/iconify';
 import { Form, Field } from '~/components/hook-form';
 
-import { useAuthContext } from '~/auth/hooks';
-import { signInWithPassword } from '~/auth/context/auth';
+import { signIn } from '~/store/actions/userAction';
+// import { checkUserSession } from '~/store/slices/userSlice';
 
 // ----------------------------------------------------------------------
 
@@ -37,17 +38,15 @@ export const SignInSchema = zod.object({
         .min(6, { message: 'Password must be at least 6 characters!' }),
 });
 
-// ----------------------------------------------------------------------
-
 export function SignInView() {
     const router = useRouter();
-    const { checkUserSession } = useAuthContext();
     const [errorMsg, setErrorMsg] = useState('');
     const password = useBoolean();
+    const dispatch = useDispatch();
 
     const defaultValues = {
-        email: 'demo@minimals.cc',
-        password: '@demo1',
+        email: 'hello@gmail.com',
+        password: '123456',
     };
 
     const methods = useForm({
@@ -62,10 +61,9 @@ export function SignInView() {
 
     const onSubmit = handleSubmit(async (data) => {
         try {
-            await signInWithPassword({ email: data.email, password: data.password });
-            await checkUserSession?.();
-
-            router.refresh();
+            dispatch(signIn({ email: data.email, password: data.password }));
+            router.push('/dashboard');
+            // dispatch(checkUserSession());
         } catch (error) {
             console.error(error);
             setErrorMsg(error instanceof Error ? error.message : error);

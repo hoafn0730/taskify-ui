@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import { useRouter, useSearchParams } from '~/routes/hooks';
 
@@ -6,28 +7,25 @@ import { CONFIG } from '~/config-global';
 
 import { SplashScreen } from '~/components/loading-screen';
 
-import { useAuthContext } from '../hooks';
-
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function GuestGuard({ children }) {
     const router = useRouter();
 
     const searchParams = useSearchParams();
 
-    const { loading, authenticated } = useAuthContext();
+    const { status, isLoading } = useSelector((state) => state.user);
 
     const [isChecking, setIsChecking] = useState(true);
 
     const returnTo = searchParams.get('returnTo') || CONFIG.auth.redirectPath;
 
     const checkPermissions = async () => {
-        if (loading) {
+        if (isLoading) {
             return;
         }
 
-        if (authenticated) {
+        if (status === 'authenticated') {
             router.replace(returnTo);
             return;
         }
@@ -38,7 +36,7 @@ export function GuestGuard({ children }) {
     useEffect(() => {
         checkPermissions();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [authenticated, loading]);
+    }, [status, isLoading]);
 
     if (isChecking) {
         return <SplashScreen />;

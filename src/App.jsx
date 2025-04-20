@@ -1,8 +1,7 @@
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import '~/global.css';
-
-// ----------------------------------------------------------------------
 
 import { Router } from '~/routes/sections';
 
@@ -20,21 +19,18 @@ import { SettingsDrawer, defaultSettings, SettingsProvider } from '~/components/
 
 import { CheckoutProvider } from '~/sections/checkout/context';
 
-import { AuthProvider as JwtAuthProvider } from '~/auth/context/auth';
-import { store } from './store';
+import { persistor, store } from './store';
 
 // ----------------------------------------------------------------------
-
-const AuthProvider = JwtAuthProvider;
 
 export default function App() {
     useScrollToTop();
 
     return (
         <Provider store={store}>
-            <I18nProvider>
-                <LocalizationProvider>
-                    <AuthProvider>
+            <PersistGate loading={null} persistor={persistor}>
+                <I18nProvider>
+                    <LocalizationProvider>
                         <SettingsProvider settings={defaultSettings}>
                             <ThemeProvider>
                                 <MotionLazy>
@@ -47,9 +43,9 @@ export default function App() {
                                 </MotionLazy>
                             </ThemeProvider>
                         </SettingsProvider>
-                    </AuthProvider>
-                </LocalizationProvider>
-            </I18nProvider>
+                    </LocalizationProvider>
+                </I18nProvider>
+            </PersistGate>
         </Provider>
     );
 }

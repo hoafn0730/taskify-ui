@@ -2,8 +2,6 @@ import { paths } from '~/routes/paths';
 
 import axios from '~/utils/axios';
 
-import { STORAGE_KEY } from './constant';
-
 // ----------------------------------------------------------------------
 
 export function jwtDecode(token) {
@@ -58,7 +56,7 @@ export function tokenExpired(exp) {
     setTimeout(() => {
         try {
             alert('Token expired!');
-            sessionStorage.removeItem(STORAGE_KEY);
+            // sessionStorage.removeItem(STORAGE_KEY);
             window.location.href = paths.auth.signIn;
         } catch (error) {
             console.error('Error during token expiration:', error);
@@ -72,7 +70,7 @@ export function tokenExpired(exp) {
 export async function setSession(accessToken) {
     try {
         if (accessToken) {
-            sessionStorage.setItem(STORAGE_KEY, accessToken);
+            // sessionStorage.setItem(STORAGE_KEY, accessToken);
 
             axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
@@ -84,7 +82,7 @@ export async function setSession(accessToken) {
                 throw new Error('Invalid access token!');
             }
         } else {
-            sessionStorage.removeItem(STORAGE_KEY);
+            // sessionStorage.removeItem(STORAGE_KEY);
             delete axios.defaults.headers.common.Authorization;
         }
     } catch (error) {

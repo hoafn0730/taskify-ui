@@ -10,7 +10,7 @@ import { mainRoutes } from './main';
 import { authDemoRoutes } from './auth-demo';
 import { dashboardRoutes } from './dashboard';
 import { componentsRoutes } from './components';
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 
 // ----------------------------------------------------------------------
 

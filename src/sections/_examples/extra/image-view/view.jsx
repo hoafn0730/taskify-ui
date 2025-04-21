@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { _mock } from '~/_mock';
 
@@ -21,59 +21,53 @@ const IMAGES = RATIO.map((ratio, index) => ({ ratio, url: _mock.image.cover(inde
 // ----------------------------------------------------------------------
 
 export function ImageView() {
-  const DEMO = [
-    {
-      name: 'List',
-      component: (
-        <Box
-          gap={2}
-          display="grid"
-          gridTemplateColumns={{ xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(4, 1fr)' }}
-        >
-          {IMAGES.map((img) => (
-            <Image
-              key={img.ratio}
-              alt={img.ratio}
-              src={img.url}
-              ratio="3/2"
-              sx={{ borderRadius: 2 }}
-            />
-          ))}
-        </Box>
-      ),
-    },
-    {
-      name: 'Aspect ratio',
-      component: (
-        <Box
-          gap={2}
-          display="grid"
-          gridTemplateColumns={{ xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(4, 1fr)' }}
-        >
-          {IMAGES.map((img) => (
-            <Stack key={img.ratio} spacing={1}>
-              <Typography variant="overline" sx={{ color: 'text.secondary' }}>
-                {img.ratio}
-              </Typography>
+    const DEMO = [
+        {
+            name: 'List',
+            component: (
+                <Box
+                    gap={2}
+                    display="grid"
+                    gridTemplateColumns={{ xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(4, 1fr)' }}
+                >
+                    {IMAGES.map((img) => (
+                        <Image key={img.ratio} alt={img.ratio} src={img.url} ratio="3/2" sx={{ borderRadius: 2 }} />
+                    ))}
+                </Box>
+            ),
+        },
+        {
+            name: 'Aspect ratio',
+            component: (
+                <Box
+                    gap={2}
+                    display="grid"
+                    gridTemplateColumns={{ xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(4, 1fr)' }}
+                >
+                    {IMAGES.map((img) => (
+                        <Stack key={img.ratio} spacing={1}>
+                            <Typography variant="overline" sx={{ color: 'text.secondary' }}>
+                                {img.ratio}
+                            </Typography>
 
-              <Image alt={img.ratio} src={img.url} ratio={img.ratio} sx={{ borderRadius: 2 }} />
-            </Stack>
-          ))}
-        </Box>
-      ),
-    },
-  ];
+                            <Image alt={img.ratio} src={img.url} ratio={img.ratio} sx={{ borderRadius: 2 }} />
+                        </Stack>
+                    ))}
+                </Box>
+            ),
+        },
+    ];
 
-  return (
-    <>
-      <ComponentHero>
-        <CustomBreadcrumbs
-          heading="Image"
-          links={[{ name: 'Components', href: paths.components }, { name: 'Image' }]}
-        />
-      </ComponentHero>
+    return (
+        <>
+            <ComponentHero>
+                <CustomBreadcrumbs
+                    heading="Image"
+                    links={[{ name: 'Components', href: paths.components }, { name: 'Image' }]}
+                />
+            </ComponentHero>
 
-      <ScrollToViewTemplate data={DEMO} />
-    </>
-  );
+            <ScrollToViewTemplate data={DEMO} />
+        </>
+    );
 }

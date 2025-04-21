@@ -2,7 +2,7 @@
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 import { setFont, varAlpha, stylesMode } from '~/theme/styles';
 
 import { Block } from './styles';
@@ -40,10 +40,16 @@ export function FontOptions({ value, options, onClickOption }) {
                                         color: (theme) => theme.vars.palette.text.primary,
                                         borderColor: (theme) => varAlpha(theme.vars.palette.grey['500Channel'], 0.08),
                                         boxShadow: (theme) =>
-                                            `-8px 8px 20px -4px ${varAlpha(theme.vars.palette.grey['500Channel'], 0.12)}`,
+                                            `-8px 8px 20px -4px ${varAlpha(
+                                                theme.vars.palette.grey['500Channel'],
+                                                0.12,
+                                            )}`,
                                         [stylesMode.dark]: {
                                             boxShadow: (theme) =>
-                                                `-8px 8px 20px -4px ${varAlpha(theme.vars.palette.common.blackChannel, 0.12)}`,
+                                                `-8px 8px 20px -4px ${varAlpha(
+                                                    theme.vars.palette.common.blackChannel,
+                                                    0.12,
+                                                )}`,
                                         },
                                     }),
                                 }}

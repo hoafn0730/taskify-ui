@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 
 import { useRouter } from '~/routes/hooks';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 
 import { toast } from '~/components/snackbar';
 

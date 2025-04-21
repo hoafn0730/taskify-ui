@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { ORDER_STATUS_OPTIONS } from '~/_mock';
 import { DashboardContent } from '~/layouts/dashboard';
@@ -16,48 +16,48 @@ import { OrderDetailsHistory } from '../order-details-history';
 // ----------------------------------------------------------------------
 
 export function OrderDetailsView({ order }) {
-  const [status, setStatus] = useState(order?.status);
+    const [status, setStatus] = useState(order?.status);
 
-  const handleChangeStatus = useCallback((newValue) => {
-    setStatus(newValue);
-  }, []);
+    const handleChangeStatus = useCallback((newValue) => {
+        setStatus(newValue);
+    }, []);
 
-  return (
-    <DashboardContent>
-      <OrderDetailsToolbar
-        backLink={paths.dashboard.order.root}
-        orderNumber={order?.orderNumber}
-        createdAt={order?.createdAt}
-        status={status}
-        onChangeStatus={handleChangeStatus}
-        statusOptions={ORDER_STATUS_OPTIONS}
-      />
-
-      <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
-          <Stack spacing={3} direction={{ xs: 'column-reverse', md: 'column' }}>
-            <OrderDetailsItems
-              items={order?.items}
-              taxes={order?.taxes}
-              shipping={order?.shipping}
-              discount={order?.discount}
-              subtotal={order?.subtotal}
-              totalAmount={order?.totalAmount}
+    return (
+        <DashboardContent>
+            <OrderDetailsToolbar
+                backLink={paths.dashboard.order.root}
+                orderNumber={order?.orderNumber}
+                createdAt={order?.createdAt}
+                status={status}
+                onChangeStatus={handleChangeStatus}
+                statusOptions={ORDER_STATUS_OPTIONS}
             />
 
-            <OrderDetailsHistory history={order?.history} />
-          </Stack>
-        </Grid>
+            <Grid container spacing={3}>
+                <Grid xs={12} md={8}>
+                    <Stack spacing={3} direction={{ xs: 'column-reverse', md: 'column' }}>
+                        <OrderDetailsItems
+                            items={order?.items}
+                            taxes={order?.taxes}
+                            shipping={order?.shipping}
+                            discount={order?.discount}
+                            subtotal={order?.subtotal}
+                            totalAmount={order?.totalAmount}
+                        />
 
-        <Grid xs={12} md={4}>
-          <OrderDetailsInfo
-            customer={order?.customer}
-            delivery={order?.delivery}
-            payment={order?.payment}
-            shippingAddress={order?.shippingAddress}
-          />
-        </Grid>
-      </Grid>
-    </DashboardContent>
-  );
+                        <OrderDetailsHistory history={order?.history} />
+                    </Stack>
+                </Grid>
+
+                <Grid xs={12} md={4}>
+                    <OrderDetailsInfo
+                        customer={order?.customer}
+                        delivery={order?.delivery}
+                        payment={order?.payment}
+                        shippingAddress={order?.shippingAddress}
+                    />
+                </Grid>
+            </Grid>
+        </DashboardContent>
+    );
 }

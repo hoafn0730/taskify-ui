@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { useTabs } from '~/hooks/use-tabs';
 
@@ -19,45 +19,43 @@ import { TourDetailsToolbar } from '../tour-details-toolbar';
 // ----------------------------------------------------------------------
 
 export function TourDetailsView({ tour }) {
-  const [publish, setPublish] = useState(tour?.publish);
+    const [publish, setPublish] = useState(tour?.publish);
 
-  const tabs = useTabs('content');
+    const tabs = useTabs('content');
 
-  const handleChangePublish = useCallback((newValue) => {
-    setPublish(newValue);
-  }, []);
+    const handleChangePublish = useCallback((newValue) => {
+        setPublish(newValue);
+    }, []);
 
-  const renderTabs = (
-    <Tabs value={tabs.value} onChange={tabs.onChange} sx={{ mb: { xs: 3, md: 5 } }}>
-      {TOUR_DETAILS_TABS.map((tab) => (
-        <Tab
-          key={tab.value}
-          iconPosition="end"
-          value={tab.value}
-          label={tab.label}
-          icon={
-            tab.value === 'bookers' ? <Label variant="filled">{tour?.bookers.length}</Label> : ''
-          }
-        />
-      ))}
-    </Tabs>
-  );
+    const renderTabs = (
+        <Tabs value={tabs.value} onChange={tabs.onChange} sx={{ mb: { xs: 3, md: 5 } }}>
+            {TOUR_DETAILS_TABS.map((tab) => (
+                <Tab
+                    key={tab.value}
+                    iconPosition="end"
+                    value={tab.value}
+                    label={tab.label}
+                    icon={tab.value === 'bookers' ? <Label variant="filled">{tour?.bookers.length}</Label> : ''}
+                />
+            ))}
+        </Tabs>
+    );
 
-  return (
-    <DashboardContent>
-      <TourDetailsToolbar
-        backLink={paths.dashboard.tour.root}
-        editLink={paths.dashboard.tour.edit(`${tour?.id}`)}
-        liveLink="#"
-        publish={publish || ''}
-        onChangePublish={handleChangePublish}
-        publishOptions={TOUR_PUBLISH_OPTIONS}
-      />
-      {renderTabs}
+    return (
+        <DashboardContent>
+            <TourDetailsToolbar
+                backLink={paths.dashboard.kanban.root}
+                editLink={paths.dashboard.kanban.edit(`${tour?.id}`)}
+                liveLink="#"
+                publish={publish || ''}
+                onChangePublish={handleChangePublish}
+                publishOptions={TOUR_PUBLISH_OPTIONS}
+            />
+            {renderTabs}
 
-      {tabs.value === 'content' && <TourDetailsContent tour={tour} />}
+            {tabs.value === 'content' && <TourDetailsContent tour={tour} />}
 
-      {tabs.value === 'bookers' && <TourDetailsBookers bookers={tour?.bookers} />}
-    </DashboardContent>
-  );
+            {tabs.value === 'bookers' && <TourDetailsBookers bookers={tour?.bookers} />}
+        </DashboardContent>
+    );
 }

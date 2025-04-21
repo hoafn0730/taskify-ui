@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 import { varAlpha, bgGradient } from '~/theme/styles';
 
 // ----------------------------------------------------------------------
@@ -22,10 +22,10 @@ export function Section({
         <Box
             sx={{
                 ...bgGradient({
-                    color: `0deg, ${varAlpha(
+                    color: `0deg, ${varAlpha(theme.vars.palette.background.defaultChannel, 0.92)}, ${varAlpha(
                         theme.vars.palette.background.defaultChannel,
                         0.92,
-                    )}, ${varAlpha(theme.vars.palette.background.defaultChannel, 0.92)}`,
+                    )}`,
                     imgUrl: `${CONFIG.site.basePath}/assets/background/background-3-blur.webp`,
                 }),
                 px: 3,

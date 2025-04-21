@@ -1,4 +1,4 @@
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { CustomBreadcrumbs } from '~/components/custom-breadcrumbs';
 
@@ -12,23 +12,23 @@ import { ScrollToViewTemplate } from '../../component-template';
 // ----------------------------------------------------------------------
 
 export function UtilitiesView() {
-  const DEMO = [
-    { name: 'Text max line', component: <TextMaxLine /> },
-    { name: 'Copy to clipboard', component: <CopyToClipboard /> },
-    { name: 'Gradient', component: <Gradient /> },
-    { name: 'Countdown', component: <Countdown /> },
-  ];
+    const DEMO = [
+        { name: 'Text max line', component: <TextMaxLine /> },
+        { name: 'Copy to clipboard', component: <CopyToClipboard /> },
+        { name: 'Gradient', component: <Gradient /> },
+        { name: 'Countdown', component: <Countdown /> },
+    ];
 
-  return (
-    <>
-      <ComponentHero>
-        <CustomBreadcrumbs
-          heading="Utilities"
-          links={[{ name: 'Components', href: paths.components }, { name: 'Utilities' }]}
-        />
-      </ComponentHero>
+    return (
+        <>
+            <ComponentHero>
+                <CustomBreadcrumbs
+                    heading="Utilities"
+                    links={[{ name: 'Components', href: paths.components }, { name: 'Utilities' }]}
+                />
+            </ComponentHero>
 
-      <ScrollToViewTemplate data={DEMO} />
-    </>
-  );
+            <ScrollToViewTemplate data={DEMO} />
+        </>
+    );
 }

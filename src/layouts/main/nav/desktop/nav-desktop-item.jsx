@@ -7,9 +7,9 @@ import { styled } from '@mui/material/styles';
 import ButtonBase from '@mui/material/ButtonBase';
 import CardActionArea from '@mui/material/CardActionArea';
 
-import { RouterLink } from '~/routes/components';
+import { RouterLink } from '~/components/router-link';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 
 import { Iconify } from '~/components/iconify';
 import { useNavItem } from '~/components/nav-section/hooks';

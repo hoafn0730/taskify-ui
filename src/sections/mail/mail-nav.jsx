@@ -4,7 +4,7 @@ import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 
 import { Iconify } from '~/components/iconify';
 import { Scrollbar } from '~/components/scrollbar';
@@ -16,87 +16,84 @@ import { MailNavItemSkeleton } from './mail-skeleton';
 // ----------------------------------------------------------------------
 
 export function MailNav({
-  empty,
-  labels,
-  loading,
-  openNav,
-  onCloseNav,
-  selectedLabelId,
-  onToggleCompose,
-  handleClickLabel,
+    empty,
+    labels,
+    loading,
+    openNav,
+    onCloseNav,
+    selectedLabelId,
+    onToggleCompose,
+    handleClickLabel,
 }) {
-  const theme = useTheme();
+    const theme = useTheme();
 
-  const renderLoading = (
-    <Stack sx={{ flex: '1 1 auto', px: { xs: 2.5, md: 1.5 } }}>
-      <MailNavItemSkeleton />
-    </Stack>
-  );
+    const renderLoading = (
+        <Stack sx={{ flex: '1 1 auto', px: { xs: 2.5, md: 1.5 } }}>
+            <MailNavItemSkeleton />
+        </Stack>
+    );
 
-  const renderEmpty = (
-    <Stack sx={{ flex: '1 1 auto', px: { xs: 2.5, md: 1.5 } }}>
-      <EmptyContent
-        title="No labels"
-        imgUrl={`${CONFIG.site.basePath}/assets/icons/empty/ic-folder-empty.svg`}
-      />
-    </Stack>
-  );
+    const renderEmpty = (
+        <Stack sx={{ flex: '1 1 auto', px: { xs: 2.5, md: 1.5 } }}>
+            <EmptyContent title="No labels" imgUrl={`${CONFIG.site.basePath}/assets/icons/empty/ic-folder-empty.svg`} />
+        </Stack>
+    );
 
-  const renderList = (
-    <Scrollbar sx={{ flex: '1 1 0' }}>
-      <nav>
-        <Box
-          component="ul"
-          sx={{
-            pb: 1.5,
-            px: { xs: 1.5, md: 0.5 },
-          }}
-        >
-          {labels.map((label) => (
-            <MailNavItem
-              key={label.id}
-              label={label}
-              selected={selectedLabelId === label.id}
-              onClickNavItem={() => {
-                handleClickLabel(label.id);
-              }}
-            />
-          ))}
-        </Box>
-      </nav>
-    </Scrollbar>
-  );
+    const renderList = (
+        <Scrollbar sx={{ flex: '1 1 0' }}>
+            <nav>
+                <Box
+                    component="ul"
+                    sx={{
+                        pb: 1.5,
+                        px: { xs: 1.5, md: 0.5 },
+                    }}
+                >
+                    {labels.map((label) => (
+                        <MailNavItem
+                            key={label.id}
+                            label={label}
+                            selected={selectedLabelId === label.id}
+                            onClickNavItem={() => {
+                                handleClickLabel(label.id);
+                            }}
+                        />
+                    ))}
+                </Box>
+            </nav>
+        </Scrollbar>
+    );
 
-  const renderContent = (
-    <>
-      <Stack sx={{ p: { xs: 2.5, md: theme.spacing(2, 1.5) } }}>
-        <Button
-          fullWidth
-          color="inherit"
-          variant="contained"
-          startIcon={<Iconify icon="solar:pen-bold" />}
-          onClick={onToggleCompose}
-        >
-          Compose
-        </Button>
-      </Stack>
+    const renderContent = (
+        <>
+            <Stack sx={{ p: { xs: 2.5, md: theme.spacing(2, 1.5) } }}>
+                <Button
+                    fullWidth
+                    color="inherit"
+                    variant="contained"
+                    startIcon={<Iconify icon="solar:pen-bold" />}
+                    onClick={onToggleCompose}
+                >
+                    Compose
+                </Button>
+            </Stack>
 
-      {loading ? renderLoading : <>{empty ? renderEmpty : renderList}</>}
-    </>
-  );
+            {loading ? renderLoading : <>{empty ? renderEmpty : renderList}</>}
+        </>
+    );
 
-  return (
-    <>
-      {renderContent}
+    return (
+        <>
+            {renderContent}
 
-      <Drawer
-        open={openNav}
-        onClose={onCloseNav}
-        slotProps={{ backdrop: { invisible: true } }}
-        PaperProps={{ sx: { width: 280 } }}
-      >
-        {renderContent}
-      </Drawer>
-    </>
-  );
+            <Drawer
+                open={openNav}
+                onClose={onCloseNav}
+                slotProps={{ backdrop: { invisible: true } }}
+                PaperProps={{ sx: { width: 280 } }}
+            >
+                {renderContent}
+            </Drawer>
+        </>
+    );
 }

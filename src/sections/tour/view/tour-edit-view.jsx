@@ -1,4 +1,4 @@
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { DashboardContent } from '~/layouts/dashboard';
 
@@ -9,19 +9,19 @@ import { TourNewEditForm } from '../tour-new-edit-form';
 // ----------------------------------------------------------------------
 
 export function TourEditView({ tour }) {
-  return (
-    <DashboardContent>
-      <CustomBreadcrumbs
-        heading="Edit"
-        links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'Tour', href: paths.dashboard.tour.root },
-          { name: tour?.name },
-        ]}
-        sx={{ mb: { xs: 3, md: 5 } }}
-      />
+    return (
+        <DashboardContent>
+            <CustomBreadcrumbs
+                heading="Edit"
+                links={[
+                    { name: 'Dashboard', href: paths.dashboard.root },
+                    { name: 'Tour', href: paths.dashboard.kanban.root },
+                    { name: tour?.name },
+                ]}
+                sx={{ mb: { xs: 3, md: 5 } }}
+            />
 
-      <TourNewEditForm currentTour={tour} />
-    </DashboardContent>
-  );
+            <TourNewEditForm currentTour={tour} />
+        </DashboardContent>
+    );
 }

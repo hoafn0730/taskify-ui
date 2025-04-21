@@ -10,7 +10,7 @@ import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 import { useRouter, usePathname } from '~/routes/hooks';
 
 import { _mock } from '~/_mock';
@@ -65,7 +65,9 @@ export function AccountDrawer({ data = [], sx, ...other }) {
                 overlay: {
                     border: 2,
                     spacing: 3,
-                    color: `linear-gradient(135deg, ${varAlpha(theme.vars.palette.primary.mainChannel, 0)} 25%, ${theme.vars.palette.primary.main} 100%)`,
+                    color: `linear-gradient(135deg, ${varAlpha(theme.vars.palette.primary.mainChannel, 0)} 25%, ${
+                        theme.vars.palette.primary.main
+                    } 100%)`,
                 },
             }}
         >

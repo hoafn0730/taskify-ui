@@ -13,9 +13,9 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Divider from '@mui/material/Divider';
 
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 import { useRouter } from '~/routes/hooks';
-import { RouterLink } from '~/routes/components';
+import { RouterLink } from '~/components/router-link';
 
 import { useBoolean } from '~/hooks/use-boolean';
 

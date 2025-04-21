@@ -1,4 +1,4 @@
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { _mock } from '~/_mock';
 
@@ -26,51 +26,51 @@ import { CarouselVariableWidths } from './carousel-variable-widths';
 // ----------------------------------------------------------------------
 
 const SLIDES = [...Array(20)].map((_, index) => ({
-  id: _mock.id(index),
-  title: _mock.postTitle(index),
-  coverUrl: _mock.image.cover(index),
-  description: _mock.description(index),
+    id: _mock.id(index),
+    title: _mock.postTitle(index),
+    coverUrl: _mock.image.cover(index),
+    description: _mock.description(index),
 }));
 
 const DEMO = [
-  { name: 'Align', component: <CarouselAlign data={SLIDES.slice(11, 15)} /> },
-  { name: 'Progress', component: <CarouselProgress data={SLIDES.slice(3, 7)} /> },
-  { name: 'Opacity', component: <CarouselOpacity data={SLIDES.slice(8, 12)} /> },
-  { name: 'Scale', component: <CarouselScale data={SLIDES.slice(10, 14)} /> },
-  { name: 'Parallax', component: <CarouselParallax data={SLIDES.slice(11, 15)} /> },
-  {
-    name: 'Right-to-left',
-    component: <CarouselRightToLeft data={SLIDES.slice(15, 19)} />,
-  },
-  { name: 'Autoplay', component: <CarouselAutoplay data={SLIDES.slice(2, 6)} /> },
-  { name: 'Auto Scroll', component: <CarouselAutoScroll data={SLIDES.slice(3, 7)} /> },
-  { name: 'Thumbs-x', component: <CarouselThumbsX data={SLIDES.slice(3, 11)} /> },
-  { name: 'Thumbs-y', component: <CarouselThumbsY data={SLIDES.slice(2, 10)} /> },
-  {
-    name: 'Variable widths',
-    component: <CarouselVariableWidths data={SLIDES.slice(8, 12)} />,
-  },
-  { name: 'Auto height', component: <CarouselAutoHeight data={SLIDES.slice(14, 18)} /> },
-  { name: 'Y-axis', component: <CarouselYaxis data={SLIDES.slice(4, 8)} /> },
-  { name: 'Dots number', component: <CarouselDotsNumber data={SLIDES.slice(8, 16)} /> },
-  { name: 'Animation', component: <CarouselAnimation data={SLIDES.slice(16, 20)} /> },
-  { name: 'Customs', component: <CarouselCustoms data={SLIDES.slice(8, 14)} /> },
+    { name: 'Align', component: <CarouselAlign data={SLIDES.slice(11, 15)} /> },
+    { name: 'Progress', component: <CarouselProgress data={SLIDES.slice(3, 7)} /> },
+    { name: 'Opacity', component: <CarouselOpacity data={SLIDES.slice(8, 12)} /> },
+    { name: 'Scale', component: <CarouselScale data={SLIDES.slice(10, 14)} /> },
+    { name: 'Parallax', component: <CarouselParallax data={SLIDES.slice(11, 15)} /> },
+    {
+        name: 'Right-to-left',
+        component: <CarouselRightToLeft data={SLIDES.slice(15, 19)} />,
+    },
+    { name: 'Autoplay', component: <CarouselAutoplay data={SLIDES.slice(2, 6)} /> },
+    { name: 'Auto Scroll', component: <CarouselAutoScroll data={SLIDES.slice(3, 7)} /> },
+    { name: 'Thumbs-x', component: <CarouselThumbsX data={SLIDES.slice(3, 11)} /> },
+    { name: 'Thumbs-y', component: <CarouselThumbsY data={SLIDES.slice(2, 10)} /> },
+    {
+        name: 'Variable widths',
+        component: <CarouselVariableWidths data={SLIDES.slice(8, 12)} />,
+    },
+    { name: 'Auto height', component: <CarouselAutoHeight data={SLIDES.slice(14, 18)} /> },
+    { name: 'Y-axis', component: <CarouselYaxis data={SLIDES.slice(4, 8)} /> },
+    { name: 'Dots number', component: <CarouselDotsNumber data={SLIDES.slice(8, 16)} /> },
+    { name: 'Animation', component: <CarouselAnimation data={SLIDES.slice(16, 20)} /> },
+    { name: 'Customs', component: <CarouselCustoms data={SLIDES.slice(8, 14)} /> },
 ];
 
 // ----------------------------------------------------------------------
 
 export function CarouselView() {
-  return (
-    <>
-      <ComponentHero>
-        <CustomBreadcrumbs
-          heading="Carousel"
-          links={[{ name: 'Components', href: paths.components }, { name: 'Carousel' }]}
-          moreLink={['https://www.embla-carousel.com/']}
-        />
-      </ComponentHero>
+    return (
+        <>
+            <ComponentHero>
+                <CustomBreadcrumbs
+                    heading="Carousel"
+                    links={[{ name: 'Components', href: paths.components }, { name: 'Carousel' }]}
+                    moreLink={['https://www.embla-carousel.com/']}
+                />
+            </ComponentHero>
 
-      <ScrollToViewTemplate data={DEMO} />
-    </>
-  );
+            <ScrollToViewTemplate data={DEMO} />
+        </>
+    );
 }

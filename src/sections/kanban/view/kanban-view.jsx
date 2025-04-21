@@ -238,6 +238,7 @@ export function KanbanView() {
 
     /**
      * onDragEnd
+     * TODO: Handle api move col card
      */
     const onDragEnd = ({ active, over }) => {
         // Nếu phần tử đang kéo (active) là một column và có phần tử đang hover lên (over)

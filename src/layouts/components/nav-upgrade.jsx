@@ -9,9 +9,9 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { alpha as hexAlpha } from '@mui/material/styles';
 
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 import { varAlpha, bgGradient } from '~/theme/styles';
 
 import { Label } from '~/components/label';

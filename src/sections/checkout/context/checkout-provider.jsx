@@ -1,6 +1,6 @@
 import { useMemo, Suspense, useEffect, useCallback, createContext } from 'react';
 
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 import { useRouter, useSearchParams } from '~/routes/hooks';
 
 import { getStorage, useLocalStorage } from '~/hooks/use-local-storage';

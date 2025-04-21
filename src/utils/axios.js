@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 
 // ----------------------------------------------------------------------
 

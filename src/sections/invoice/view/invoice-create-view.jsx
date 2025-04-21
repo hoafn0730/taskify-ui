@@ -1,4 +1,4 @@
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { DashboardContent } from '~/layouts/dashboard';
 
@@ -9,19 +9,19 @@ import { InvoiceNewEditForm } from '../invoice-new-edit-form';
 // ----------------------------------------------------------------------
 
 export function InvoiceCreateView() {
-  return (
-    <DashboardContent>
-      <CustomBreadcrumbs
-        heading="Create a new invoice"
-        links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'Invoice', href: paths.dashboard.invoice.root },
-          { name: 'New invoice' },
-        ]}
-        sx={{ mb: { xs: 3, md: 5 } }}
-      />
+    return (
+        <DashboardContent>
+            <CustomBreadcrumbs
+                heading="Create a new invoice"
+                links={[
+                    { name: 'Dashboard', href: paths.dashboard.root },
+                    { name: 'Invoice', href: paths.dashboard.invoice.root },
+                    { name: 'New invoice' },
+                ]}
+                sx={{ mb: { xs: 3, md: 5 } }}
+            />
 
-      <InvoiceNewEditForm />
-    </DashboardContent>
-  );
+            <InvoiceNewEditForm />
+        </DashboardContent>
+    );
 }

@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
 import App from './app';
-import { CONFIG } from './config-global';
+import { CONFIG } from './configs/config-global';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

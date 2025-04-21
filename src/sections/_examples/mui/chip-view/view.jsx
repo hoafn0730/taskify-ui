@@ -1,4 +1,4 @@
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { CustomBreadcrumbs } from '~/components/custom-breadcrumbs';
 
@@ -9,23 +9,23 @@ import { ScrollToViewTemplate } from '../../component-template';
 // ----------------------------------------------------------------------
 
 export function ChipView() {
-  const DEMO = [
-    { name: 'Filled', component: <Chips /> },
-    { name: 'Outlined', component: <Chips variant="outlined" /> },
-    { name: 'Soft', component: <Chips variant="soft" /> },
-  ];
+    const DEMO = [
+        { name: 'Filled', component: <Chips /> },
+        { name: 'Outlined', component: <Chips variant="outlined" /> },
+        { name: 'Soft', component: <Chips variant="soft" /> },
+    ];
 
-  return (
-    <>
-      <ComponentHero>
-        <CustomBreadcrumbs
-          heading="Chip"
-          links={[{ name: 'Components', href: paths.components }, { name: 'Chip' }]}
-          moreLink={['https://mui.com/components/chips']}
-        />
-      </ComponentHero>
+    return (
+        <>
+            <ComponentHero>
+                <CustomBreadcrumbs
+                    heading="Chip"
+                    links={[{ name: 'Components', href: paths.components }, { name: 'Chip' }]}
+                    moreLink={['https://mui.com/components/chips']}
+                />
+            </ComponentHero>
 
-      <ScrollToViewTemplate data={DEMO} />
-    </>
-  );
+            <ScrollToViewTemplate data={DEMO} />
+        </>
+    );
 }

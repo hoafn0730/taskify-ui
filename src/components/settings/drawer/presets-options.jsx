@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import { alpha as hexAlpha } from '@mui/material/styles';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 
 import { Block } from './styles';
 import { SvgColor } from '../../svg-color';

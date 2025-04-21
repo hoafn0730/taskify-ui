@@ -11,7 +11,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 
 import { fToNow } from '~/utils/format-time';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 
 import { Label } from '~/components/label';
 import { FileThumbnail } from '~/components/file-thumbnail';
@@ -31,7 +31,12 @@ export function NotificationItem({ notification }) {
                 >
                     <Box
                         component="img"
-                        src={`${CONFIG.site.basePath}/assets/icons/notification/${(notification.type === 'order' && 'ic-order') || (notification.type === 'chat' && 'ic-chat') || (notification.type === 'mail' && 'ic-mail') || (notification.type === 'delivery' && 'ic-delivery')}.svg`}
+                        src={`${CONFIG.site.basePath}/assets/icons/notification/${
+                            (notification.type === 'order' && 'ic-order') ||
+                            (notification.type === 'chat' && 'ic-chat') ||
+                            (notification.type === 'mail' && 'ic-mail') ||
+                            (notification.type === 'delivery' && 'ic-delivery')
+                        }.svg`}
                         sx={{ width: 24, height: 24 }}
                     />
                 </Stack>

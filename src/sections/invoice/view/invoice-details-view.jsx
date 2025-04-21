@@ -1,4 +1,4 @@
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { DashboardContent } from '~/layouts/dashboard';
 
@@ -9,19 +9,19 @@ import { InvoiceDetails } from '../invoice-details';
 // ----------------------------------------------------------------------
 
 export function InvoiceDetailsView({ invoice }) {
-  return (
-    <DashboardContent>
-      <CustomBreadcrumbs
-        heading={invoice?.invoiceNumber}
-        links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'Invoice', href: paths.dashboard.invoice.root },
-          { name: invoice?.invoiceNumber },
-        ]}
-        sx={{ mb: { xs: 3, md: 5 } }}
-      />
+    return (
+        <DashboardContent>
+            <CustomBreadcrumbs
+                heading={invoice?.invoiceNumber}
+                links={[
+                    { name: 'Dashboard', href: paths.dashboard.root },
+                    { name: 'Invoice', href: paths.dashboard.invoice.root },
+                    { name: invoice?.invoiceNumber },
+                ]}
+                sx={{ mb: { xs: 3, md: 5 } }}
+            />
 
-      <InvoiceDetails invoice={invoice} />
-    </DashboardContent>
-  );
+            <InvoiceDetails invoice={invoice} />
+        </DashboardContent>
+    );
 }

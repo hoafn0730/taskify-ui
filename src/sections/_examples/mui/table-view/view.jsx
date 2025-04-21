@@ -1,4 +1,4 @@
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { CustomBreadcrumbs } from '~/components/custom-breadcrumbs';
 
@@ -13,62 +13,62 @@ import { GroupingFixedHeaderTable } from './grouping-fixed-header';
 // ----------------------------------------------------------------------
 
 const blockProps = {
-  p: 0,
-  overflow: 'hidden',
-  alignItems: 'unset',
-  flexDirection: 'column',
-  bgcolor: 'background.paper',
+    p: 0,
+    overflow: 'hidden',
+    alignItems: 'unset',
+    flexDirection: 'column',
+    bgcolor: 'background.paper',
 };
 
 const DEMO = [
-  {
-    name: 'Basic Table',
-    component: (
-      <ComponentBlock sx={blockProps}>
-        <BasicTable />
-      </ComponentBlock>
-    ),
-  },
-  {
-    name: 'Sorting & selecting',
-    component: (
-      <ComponentBlock sx={blockProps}>
-        <SortingSelectingTable />
-      </ComponentBlock>
-    ),
-  },
-  {
-    name: 'Grouping & fixed header',
-    component: (
-      <ComponentBlock sx={blockProps}>
-        <GroupingFixedHeaderTable />
-      </ComponentBlock>
-    ),
-  },
-  {
-    name: 'Collapsible table',
-    component: (
-      <ComponentBlock sx={blockProps}>
-        <CollapsibleTable />
-      </ComponentBlock>
-    ),
-  },
+    {
+        name: 'Basic Table',
+        component: (
+            <ComponentBlock sx={blockProps}>
+                <BasicTable />
+            </ComponentBlock>
+        ),
+    },
+    {
+        name: 'Sorting & selecting',
+        component: (
+            <ComponentBlock sx={blockProps}>
+                <SortingSelectingTable />
+            </ComponentBlock>
+        ),
+    },
+    {
+        name: 'Grouping & fixed header',
+        component: (
+            <ComponentBlock sx={blockProps}>
+                <GroupingFixedHeaderTable />
+            </ComponentBlock>
+        ),
+    },
+    {
+        name: 'Collapsible table',
+        component: (
+            <ComponentBlock sx={blockProps}>
+                <CollapsibleTable />
+            </ComponentBlock>
+        ),
+    },
 ];
 
 // ----------------------------------------------------------------------
 
 export function TableView() {
-  return (
-    <>
-      <ComponentHero>
-        <CustomBreadcrumbs
-          heading="Table"
-          links={[{ name: 'Components', href: paths.components }, { name: 'Table' }]}
-          moreLink={['https://mui.com/components/tables']}
-        />
-      </ComponentHero>
+    return (
+        <>
+            <ComponentHero>
+                <CustomBreadcrumbs
+                    heading="Table"
+                    links={[{ name: 'Components', href: paths.components }, { name: 'Table' }]}
+                    moreLink={['https://mui.com/components/tables']}
+                />
+            </ComponentHero>
 
-      <ScrollToViewTemplate data={DEMO} />
-    </>
-  );
+            <ScrollToViewTemplate data={DEMO} />
+        </>
+    );
 }

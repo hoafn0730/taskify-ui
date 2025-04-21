@@ -8,7 +8,7 @@ import rehypeHighlight from 'rehype-highlight';
 import Link from '@mui/material/Link';
 
 import { isExternalLink } from '~/routes/utils';
-import { RouterLink } from '~/routes/components';
+import { RouterLink } from '~/components/router-link';
 
 import { Image } from '../image';
 import { StyledRoot } from './styles';

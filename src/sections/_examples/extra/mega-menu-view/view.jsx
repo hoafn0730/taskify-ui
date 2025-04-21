@@ -1,4 +1,4 @@
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { CustomBreadcrumbs } from '~/components/custom-breadcrumbs';
 
@@ -11,21 +11,21 @@ import { ComponentContainer } from '../../component-block';
 // ----------------------------------------------------------------------
 
 export function MegaMenuView() {
-  return (
-    <>
-      <ComponentHero>
-        <CustomBreadcrumbs
-          heading="Mega Menu"
-          links={[{ name: 'Components', href: paths.components }, { name: 'Mega Menu' }]}
-        />
-      </ComponentHero>
+    return (
+        <>
+            <ComponentHero>
+                <CustomBreadcrumbs
+                    heading="Mega Menu"
+                    links={[{ name: 'Components', href: paths.components }, { name: 'Mega Menu' }]}
+                />
+            </ComponentHero>
 
-      <DemoMegaMenuHorizontal />
+            <DemoMegaMenuHorizontal />
 
-      <ComponentContainer sx={{ alignItems: 'flex-start' }}>
-        <DemoMegaMenuMobile />
-        <DemoMegaMenuVertical />
-      </ComponentContainer>
-    </>
-  );
+            <ComponentContainer sx={{ alignItems: 'flex-start' }}>
+                <DemoMegaMenuMobile />
+                <DemoMegaMenuVertical />
+            </ComponentContainer>
+        </>
+    );
 }

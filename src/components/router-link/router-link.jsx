@@ -1,6 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/display-name */
-
 import { forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 

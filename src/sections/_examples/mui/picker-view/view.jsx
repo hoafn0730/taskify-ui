@@ -1,4 +1,4 @@
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { CustomBreadcrumbs } from '~/components/custom-breadcrumbs';
 
@@ -12,27 +12,27 @@ import { ScrollToViewTemplate } from '../../component-template';
 // ----------------------------------------------------------------------
 
 export function PickerView() {
-  const DEMO = [
-    { name: 'Date', component: <PickerDate /> },
-    { name: 'DateTime', component: <PickerDateTime /> },
-    { name: 'Time', component: <PickerTime /> },
-    { name: 'Range', component: <PickerDateRange /> },
-  ];
+    const DEMO = [
+        { name: 'Date', component: <PickerDate /> },
+        { name: 'DateTime', component: <PickerDateTime /> },
+        { name: 'Time', component: <PickerTime /> },
+        { name: 'Range', component: <PickerDateRange /> },
+    ];
 
-  return (
-    <>
-      <ComponentHero>
-        <CustomBreadcrumbs
-          heading="Date Time Pickers"
-          links={[{ name: 'Components', href: paths.components }, { name: 'Date Time Pickers' }]}
-          moreLink={[
-            'https://mui.com/components/pickers',
-            'https://mui.com/x/react-date-pickers/getting-started/',
-          ]}
-        />
-      </ComponentHero>
+    return (
+        <>
+            <ComponentHero>
+                <CustomBreadcrumbs
+                    heading="Date Time Pickers"
+                    links={[{ name: 'Components', href: paths.components }, { name: 'Date Time Pickers' }]}
+                    moreLink={[
+                        'https://mui.com/components/pickers',
+                        'https://mui.com/x/react-date-pickers/getting-started/',
+                    ]}
+                />
+            </ComponentHero>
 
-      <ScrollToViewTemplate data={DEMO} />
-    </>
-  );
+            <ScrollToViewTemplate data={DEMO} />
+        </>
+    );
 }

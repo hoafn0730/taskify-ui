@@ -1,4 +1,4 @@
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { CustomBreadcrumbs } from '~/components/custom-breadcrumbs';
 
@@ -13,52 +13,52 @@ import { LinearAlternativeLabel } from './linear-alternative-label-stepper';
 // ----------------------------------------------------------------------
 
 export function StepperView() {
-  const DEMO = [
-    {
-      name: 'Horizontal linear stepper',
-      component: (
-        <ComponentBlock sx={{ flexDirection: 'column', alignItems: 'unset' }}>
-          <HorizontalLinearStepper />
-        </ComponentBlock>
-      ),
-    },
-    {
-      name: 'Linear alternative label',
-      component: (
-        <ComponentBlock sx={{ flexDirection: 'column', alignItems: 'unset' }}>
-          <LinearAlternativeLabel />
-        </ComponentBlock>
-      ),
-    },
-    {
-      name: 'Vertical linear stepper',
-      component: (
-        <ComponentBlock sx={{ flexDirection: 'column', alignItems: 'unset' }}>
-          <VerticalLinearStepper />
-        </ComponentBlock>
-      ),
-    },
-    {
-      name: 'Customized stepper',
-      component: (
-        <ComponentBlock sx={{ flexDirection: 'column', alignItems: 'unset' }}>
-          <CustomizedSteppers />
-        </ComponentBlock>
-      ),
-    },
-  ];
+    const DEMO = [
+        {
+            name: 'Horizontal linear stepper',
+            component: (
+                <ComponentBlock sx={{ flexDirection: 'column', alignItems: 'unset' }}>
+                    <HorizontalLinearStepper />
+                </ComponentBlock>
+            ),
+        },
+        {
+            name: 'Linear alternative label',
+            component: (
+                <ComponentBlock sx={{ flexDirection: 'column', alignItems: 'unset' }}>
+                    <LinearAlternativeLabel />
+                </ComponentBlock>
+            ),
+        },
+        {
+            name: 'Vertical linear stepper',
+            component: (
+                <ComponentBlock sx={{ flexDirection: 'column', alignItems: 'unset' }}>
+                    <VerticalLinearStepper />
+                </ComponentBlock>
+            ),
+        },
+        {
+            name: 'Customized stepper',
+            component: (
+                <ComponentBlock sx={{ flexDirection: 'column', alignItems: 'unset' }}>
+                    <CustomizedSteppers />
+                </ComponentBlock>
+            ),
+        },
+    ];
 
-  return (
-    <>
-      <ComponentHero>
-        <CustomBreadcrumbs
-          heading="Stepper"
-          links={[{ name: 'Components', href: paths.components }, { name: 'Stepper' }]}
-          moreLink={['https://mui.com/components/steppers']}
-        />
-      </ComponentHero>
+    return (
+        <>
+            <ComponentHero>
+                <CustomBreadcrumbs
+                    heading="Stepper"
+                    links={[{ name: 'Components', href: paths.components }, { name: 'Stepper' }]}
+                    moreLink={['https://mui.com/components/steppers']}
+                />
+            </ComponentHero>
 
-      <ScrollToViewTemplate data={DEMO} />
-    </>
-  );
+            <ScrollToViewTemplate data={DEMO} />
+        </>
+    );
 }

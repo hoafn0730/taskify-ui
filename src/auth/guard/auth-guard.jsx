@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 import { useRouter, usePathname, useSearchParams } from '~/routes/hooks';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 
 import { SplashScreen } from '~/components/loading-screen';
 

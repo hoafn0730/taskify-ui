@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { useRouter, useSearchParams } from '~/routes/hooks';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 
 import { SplashScreen } from '~/components/loading-screen';
 

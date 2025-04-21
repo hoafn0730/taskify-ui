@@ -5,7 +5,7 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { CustomBreadcrumbs } from '~/components/custom-breadcrumbs';
 
@@ -16,34 +16,34 @@ import { ComponentContainer } from '../../component-block';
 // ----------------------------------------------------------------------
 
 export function FormValidationView() {
-  const [debug, setDebug] = useState(true);
+    const [debug, setDebug] = useState(true);
 
-  const handleChangeDebug = (event) => {
-    setDebug(event.target.checked);
-  };
+    const handleChangeDebug = (event) => {
+        setDebug(event.target.checked);
+    };
 
-  return (
-    <>
-      <ComponentHero>
-        <CustomBreadcrumbs
-          heading="Form validation"
-          links={[{ name: 'Components', href: paths.components }, { name: 'Form validation' }]}
-          moreLink={['https://react-hook-form.com', 'https://zod.dev']}
-        />
-      </ComponentHero>
+    return (
+        <>
+            <ComponentHero>
+                <CustomBreadcrumbs
+                    heading="Form validation"
+                    links={[{ name: 'Components', href: paths.components }, { name: 'Form validation' }]}
+                    moreLink={['https://react-hook-form.com', 'https://zod.dev']}
+                />
+            </ComponentHero>
 
-      <ComponentContainer maxWidth="xl" sx={{ position: 'relative' }}>
-        <Typography variant="h4"> React hook form + Zod </Typography>
-        <FormControlLabel
-          control={<Switch name="switch-debug" checked={debug} onChange={handleChangeDebug} />}
-          label="Show Debug"
-          sx={{ alignSelf: 'flex-start' }}
-        />
+            <ComponentContainer maxWidth="xl" sx={{ position: 'relative' }}>
+                <Typography variant="h4"> React hook form + Zod </Typography>
+                <FormControlLabel
+                    control={<Switch name="switch-debug" checked={debug} onChange={handleChangeDebug} />}
+                    label="Show Debug"
+                    sx={{ alignSelf: 'flex-start' }}
+                />
 
-        <Divider sx={{ my: 5 }} />
+                <Divider sx={{ my: 5 }} />
 
-        <ReactHookForm debug={debug} />
-      </ComponentContainer>
-    </>
-  );
+                <ReactHookForm debug={debug} />
+            </ComponentContainer>
+        </>
+    );
 }

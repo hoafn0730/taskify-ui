@@ -4,8 +4,8 @@ import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import { styled, useTheme } from '@mui/material/styles';
 
-import { paths } from '~/routes/paths';
-import { RouterLink } from '~/routes/components';
+import { paths } from '~/configs/paths';
+import { RouterLink } from '~/components/router-link';
 
 import { Logo } from '~/components/logo';
 

@@ -1,4 +1,4 @@
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { CustomBreadcrumbs } from '~/components/custom-breadcrumbs';
 
@@ -9,23 +9,23 @@ import { ScrollToViewTemplate } from '../../component-template';
 // ----------------------------------------------------------------------
 
 export function TextfieldView() {
-  const DEMO = [
-    { name: 'Outlined', component: <Textfields variant="outlined" /> },
-    { name: 'Filled', component: <Textfields variant="filled" /> },
-    { name: 'Standard', component: <Textfields variant="standard" /> },
-  ];
+    const DEMO = [
+        { name: 'Outlined', component: <Textfields variant="outlined" /> },
+        { name: 'Filled', component: <Textfields variant="filled" /> },
+        { name: 'Standard', component: <Textfields variant="standard" /> },
+    ];
 
-  return (
-    <>
-      <ComponentHero>
-        <CustomBreadcrumbs
-          heading="Textfield"
-          links={[{ name: 'Components', href: paths.components }, { name: 'Textfield' }]}
-          moreLink={['https://mui.com/components/text-fields']}
-        />
-      </ComponentHero>
+    return (
+        <>
+            <ComponentHero>
+                <CustomBreadcrumbs
+                    heading="Textfield"
+                    links={[{ name: 'Components', href: paths.components }, { name: 'Textfield' }]}
+                    moreLink={['https://mui.com/components/text-fields']}
+                />
+            </ComponentHero>
 
-      <ScrollToViewTemplate data={DEMO} />
-    </>
-  );
+            <ScrollToViewTemplate data={DEMO} />
+        </>
+    );
 }

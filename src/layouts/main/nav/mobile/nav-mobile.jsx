@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 import { usePathname } from '~/routes/hooks';
 
 import { Logo } from '~/components/logo';

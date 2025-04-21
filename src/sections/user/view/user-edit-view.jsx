@@ -1,4 +1,4 @@
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { DashboardContent } from '~/layouts/dashboard';
 
@@ -9,19 +9,19 @@ import { UserNewEditForm } from '../user-new-edit-form';
 // ----------------------------------------------------------------------
 
 export function UserEditView({ user: currentUser }) {
-  return (
-    <DashboardContent>
-      <CustomBreadcrumbs
-        heading="Edit"
-        links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'User', href: paths.dashboard.user.root },
-          { name: currentUser?.name },
-        ]}
-        sx={{ mb: { xs: 3, md: 5 } }}
-      />
+    return (
+        <DashboardContent>
+            <CustomBreadcrumbs
+                heading="Edit"
+                links={[
+                    { name: 'Dashboard', href: paths.dashboard.root },
+                    { name: 'User', href: paths.dashboard.user.root },
+                    { name: currentUser?.name },
+                ]}
+                sx={{ mb: { xs: 3, md: 5 } }}
+            />
 
-      <UserNewEditForm currentUser={currentUser} />
-    </DashboardContent>
-  );
+            <UserNewEditForm currentUser={currentUser} />
+        </DashboardContent>
+    );
 }

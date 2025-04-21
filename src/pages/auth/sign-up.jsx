@@ -1,12 +1,12 @@
-import { Helmet } from 'react-helmet-async'
+import { Helmet } from 'react-helmet-async';
 
-import { CONFIG } from '~/config-global'
+import { CONFIG } from '~/configs/config-global';
 
-import { SignUpView } from '~/sections/auth'
+import { SignUpView } from '~/sections/auth';
 
 // ----------------------------------------------------------------------
 
-const metadata = { title: `Sign up | ${CONFIG.site.name}` }
+const metadata = { title: `Sign up | ${CONFIG.site.name}` };
 
 export default function Page() {
     return (
@@ -17,5 +17,5 @@ export default function Page() {
 
             <SignUpView />
         </>
-    )
+    );
 }

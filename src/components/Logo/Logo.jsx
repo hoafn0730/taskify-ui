@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import NoSsr from '@mui/material/NoSsr';
 import { useTheme } from '@mui/material/styles';
 
-import { RouterLink } from '~/routes/components';
+import { RouterLink } from '~/components/router-link';
 
 import { logoClasses } from './classes';
 

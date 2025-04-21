@@ -1,4 +1,4 @@
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { CustomBreadcrumbs } from '~/components/custom-breadcrumbs';
 
@@ -13,26 +13,26 @@ import { ScrollToViewTemplate } from '../../component-template';
 // ----------------------------------------------------------------------
 
 const DEMO = [
-  { name: 'Basic', component: <NavBasic /> },
-  { name: 'Vertical', component: <NavVertical /> },
-  { name: 'Mini', component: <NavMini /> },
-  { name: 'Horizontal', component: <NavHorizontal /> },
-  { name: 'Data from API', component: <NavAPI /> },
+    { name: 'Basic', component: <NavBasic /> },
+    { name: 'Vertical', component: <NavVertical /> },
+    { name: 'Mini', component: <NavMini /> },
+    { name: 'Horizontal', component: <NavHorizontal /> },
+    { name: 'Data from API', component: <NavAPI /> },
 ];
 
 // ----------------------------------------------------------------------
 
 export function NavigationBarView() {
-  return (
-    <>
-      <ComponentHero>
-        <CustomBreadcrumbs
-          heading="Navigation bar"
-          links={[{ name: 'Components', href: paths.components }, { name: 'Navigation bar' }]}
-        />
-      </ComponentHero>
+    return (
+        <>
+            <ComponentHero>
+                <CustomBreadcrumbs
+                    heading="Navigation bar"
+                    links={[{ name: 'Components', href: paths.components }, { name: 'Navigation bar' }]}
+                />
+            </ComponentHero>
 
-      <ScrollToViewTemplate data={DEMO} />
-    </>
-  );
+            <ScrollToViewTemplate data={DEMO} />
+        </>
+    );
 }

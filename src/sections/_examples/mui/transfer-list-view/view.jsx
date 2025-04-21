@@ -1,4 +1,4 @@
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { CustomBreadcrumbs } from '~/components/custom-breadcrumbs';
 
@@ -11,36 +11,36 @@ import { EnhancedTransferList } from './enhanced-transfer-list';
 // ----------------------------------------------------------------------
 
 export function TransferListView() {
-  const DEMO = [
-    {
-      name: 'Simple',
-      component: (
-        <ComponentBlock>
-          <SimpleTransferList />
-        </ComponentBlock>
-      ),
-    },
-    {
-      name: 'Enhanced',
-      component: (
-        <ComponentBlock>
-          <EnhancedTransferList />
-        </ComponentBlock>
-      ),
-    },
-  ];
+    const DEMO = [
+        {
+            name: 'Simple',
+            component: (
+                <ComponentBlock>
+                    <SimpleTransferList />
+                </ComponentBlock>
+            ),
+        },
+        {
+            name: 'Enhanced',
+            component: (
+                <ComponentBlock>
+                    <EnhancedTransferList />
+                </ComponentBlock>
+            ),
+        },
+    ];
 
-  return (
-    <>
-      <ComponentHero>
-        <CustomBreadcrumbs
-          heading="Transfer List"
-          links={[{ name: 'Components', href: paths.components }, { name: 'Transfer List' }]}
-          moreLink={['https://mui.com/components/transfer-list']}
-        />
-      </ComponentHero>
+    return (
+        <>
+            <ComponentHero>
+                <CustomBreadcrumbs
+                    heading="Transfer List"
+                    links={[{ name: 'Components', href: paths.components }, { name: 'Transfer List' }]}
+                    moreLink={['https://mui.com/components/transfer-list']}
+                />
+            </ComponentHero>
 
-      <ScrollToViewTemplate data={DEMO} />
-    </>
-  );
+            <ScrollToViewTemplate data={DEMO} />
+        </>
+    );
 }

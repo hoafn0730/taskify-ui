@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 import { DashboardLayout } from '~/layouts/dashboard';
 
 import { LoadingScreen } from '~/components/loading-screen';
@@ -48,7 +48,11 @@ const JobDetailsPage = lazy(() => import('~/pages/dashboard/job/details'));
 const JobListPage = lazy(() => import('~/pages/dashboard/job/list'));
 const JobCreatePage = lazy(() => import('~/pages/dashboard/job/new'));
 const JobEditPage = lazy(() => import('~/pages/dashboard/job/edit'));
-
+// Tour
+const TourDetailsPage = lazy(() => import('~/pages/dashboard/kanban/details'));
+const TourListPage = lazy(() => import('~/pages/dashboard/kanban/list'));
+const TourCreatePage = lazy(() => import('~/pages/dashboard/kanban/new'));
+const TourEditPage = lazy(() => import('~/pages/dashboard/kanban/edit'));
 // File manager
 const FileManagerPage = lazy(() => import('~/pages/dashboard/file-manager'));
 // App
@@ -133,12 +137,20 @@ export const dashboardRoutes = [
                     { path: ':id/edit', element: <JobEditPage /> },
                 ],
             },
+            {
+                path: 'kanban',
+                children: [
+                    { element: <TourListPage />, index: true },
+                    // { path: '::id', element: <TourDetailsPage /> },
+                    { path: ':slug', element: <KanbanPage /> },
+                    { path: 'new', element: <TourCreatePage /> },
+                    { path: ':id/edit', element: <TourEditPage /> },
+                ],
+            },
             { path: 'file-manager', element: <FileManagerPage /> },
             { path: 'mail', element: <MailPage /> },
             { path: 'chat', element: <ChatPage /> },
             { path: 'calendar', element: <CalendarPage /> },
-            { path: 'kanban', element: <KanbanPage /> },
-            { path: 'kanban/:slug', element: <KanbanPage /> },
             { path: 'permission', element: <PermissionDeniedPage /> },
             { path: 'blank', element: <BlankPage /> },
         ],

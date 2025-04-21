@@ -3,7 +3,7 @@ import Alert from '@mui/material/Alert';
 
 import { useBoolean } from '~/hooks/use-boolean';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 import { stylesMode } from '~/theme/styles';
 
 import { Main } from './main';

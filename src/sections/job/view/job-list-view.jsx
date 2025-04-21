@@ -3,8 +3,8 @@ import { useState, useCallback } from 'react';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
-import { paths } from '~/routes/paths';
-import { RouterLink } from '~/routes/components';
+import { paths } from '~/configs/paths';
+import { RouterLink } from '~/components/router-link';
 
 import { useBoolean } from '~/hooks/use-boolean';
 import { useSetState } from '~/hooks/use-set-state';
@@ -13,12 +13,12 @@ import { orderBy } from '~/utils/helper';
 
 import { DashboardContent } from '~/layouts/dashboard';
 import {
-  _jobs,
-  _roles,
-  JOB_SORT_OPTIONS,
-  JOB_BENEFIT_OPTIONS,
-  JOB_EXPERIENCE_OPTIONS,
-  JOB_EMPLOYMENT_TYPE_OPTIONS,
+    _jobs,
+    _roles,
+    JOB_SORT_OPTIONS,
+    JOB_BENEFIT_OPTIONS,
+    JOB_EXPERIENCE_OPTIONS,
+    JOB_EMPLOYMENT_TYPE_OPTIONS,
 } from '~/_mock';
 
 import { Iconify } from '~/components/iconify';
@@ -34,154 +34,152 @@ import { JobFiltersResult } from '../job-filters-result';
 // ----------------------------------------------------------------------
 
 export function JobListView() {
-  const openFilters = useBoolean();
+    const openFilters = useBoolean();
 
-  const [sortBy, setSortBy] = useState('latest');
+    const [sortBy, setSortBy] = useState('latest');
 
-  const search = useSetState({ query: '', results: [] });
+    const search = useSetState({ query: '', results: [] });
 
-  const filters = useSetState({
-    roles: [],
-    locations: [],
-    benefits: [],
-    experience: 'all',
-    employmentTypes: [],
-  });
+    const filters = useSetState({
+        roles: [],
+        locations: [],
+        benefits: [],
+        experience: 'all',
+        employmentTypes: [],
+    });
 
-  const dataFiltered = applyFilter({ inputData: _jobs, filters: filters.state, sortBy });
+    const dataFiltered = applyFilter({ inputData: _jobs, filters: filters.state, sortBy });
 
-  const canReset =
-    filters.state.roles.length > 0 ||
-    filters.state.locations.length > 0 ||
-    filters.state.benefits.length > 0 ||
-    filters.state.employmentTypes.length > 0 ||
-    filters.state.experience !== 'all';
+    const canReset =
+        filters.state.roles.length > 0 ||
+        filters.state.locations.length > 0 ||
+        filters.state.benefits.length > 0 ||
+        filters.state.employmentTypes.length > 0 ||
+        filters.state.experience !== 'all';
 
-  const notFound = !dataFiltered.length && canReset;
+    const notFound = !dataFiltered.length && canReset;
 
-  const handleSortBy = useCallback((newValue) => {
-    setSortBy(newValue);
-  }, []);
+    const handleSortBy = useCallback((newValue) => {
+        setSortBy(newValue);
+    }, []);
 
-  const handleSearch = useCallback(
-    (inputValue) => {
-      search.setState({ query: inputValue });
+    const handleSearch = useCallback(
+        (inputValue) => {
+            search.setState({ query: inputValue });
 
-      if (inputValue) {
-        const results = _jobs.filter(
-          (job) => job.title.toLowerCase().indexOf(search.state.query.toLowerCase()) !== -1
-        );
+            if (inputValue) {
+                const results = _jobs.filter(
+                    (job) => job.title.toLowerCase().indexOf(search.state.query.toLowerCase()) !== -1,
+                );
 
-        search.setState({ results });
-      }
-    },
-    [search]
-  );
+                search.setState({ results });
+            }
+        },
+        [search],
+    );
 
-  const renderFilters = (
-    <Stack
-      spacing={3}
-      justifyContent="space-between"
-      alignItems={{ xs: 'flex-end', sm: 'center' }}
-      direction={{ xs: 'column', sm: 'row' }}
-    >
-      <JobSearch search={search} onSearch={handleSearch} />
+    const renderFilters = (
+        <Stack
+            spacing={3}
+            justifyContent="space-between"
+            alignItems={{ xs: 'flex-end', sm: 'center' }}
+            direction={{ xs: 'column', sm: 'row' }}
+        >
+            <JobSearch search={search} onSearch={handleSearch} />
 
-      <Stack direction="row" spacing={1} flexShrink={0}>
-        <JobFilters
-          filters={filters}
-          canReset={canReset}
-          open={openFilters.value}
-          onOpen={openFilters.onTrue}
-          onClose={openFilters.onFalse}
-          options={{
-            roles: _roles,
-            benefits: JOB_BENEFIT_OPTIONS.map((option) => option.label),
-            employmentTypes: JOB_EMPLOYMENT_TYPE_OPTIONS.map((option) => option.label),
-            experiences: ['all', ...JOB_EXPERIENCE_OPTIONS.map((option) => option.label)],
-          }}
-        />
+            <Stack direction="row" spacing={1} flexShrink={0}>
+                <JobFilters
+                    filters={filters}
+                    canReset={canReset}
+                    open={openFilters.value}
+                    onOpen={openFilters.onTrue}
+                    onClose={openFilters.onFalse}
+                    options={{
+                        roles: _roles,
+                        benefits: JOB_BENEFIT_OPTIONS.map((option) => option.label),
+                        employmentTypes: JOB_EMPLOYMENT_TYPE_OPTIONS.map((option) => option.label),
+                        experiences: ['all', ...JOB_EXPERIENCE_OPTIONS.map((option) => option.label)],
+                    }}
+                />
 
-        <JobSort sort={sortBy} onSort={handleSortBy} sortOptions={JOB_SORT_OPTIONS} />
-      </Stack>
-    </Stack>
-  );
+                <JobSort sort={sortBy} onSort={handleSortBy} sortOptions={JOB_SORT_OPTIONS} />
+            </Stack>
+        </Stack>
+    );
 
-  const renderResults = <JobFiltersResult filters={filters} totalResults={dataFiltered.length} />;
+    const renderResults = <JobFiltersResult filters={filters} totalResults={dataFiltered.length} />;
 
-  return (
-    <DashboardContent>
-      <CustomBreadcrumbs
-        heading="List"
-        links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'Job', href: paths.dashboard.job.root },
-          { name: 'List' },
-        ]}
-        action={
-          <Button
-            component={RouterLink}
-            href={paths.dashboard.job.new}
-            variant="contained"
-            startIcon={<Iconify icon="mingcute:add-line" />}
-          >
-            New job
-          </Button>
-        }
-        sx={{ mb: { xs: 3, md: 5 } }}
-      />
+    return (
+        <DashboardContent>
+            <CustomBreadcrumbs
+                heading="List"
+                links={[
+                    { name: 'Dashboard', href: paths.dashboard.root },
+                    { name: 'Job', href: paths.dashboard.job.root },
+                    { name: 'List' },
+                ]}
+                action={
+                    <Button
+                        component={RouterLink}
+                        href={paths.dashboard.job.new}
+                        variant="contained"
+                        startIcon={<Iconify icon="mingcute:add-line" />}
+                    >
+                        New job
+                    </Button>
+                }
+                sx={{ mb: { xs: 3, md: 5 } }}
+            />
 
-      <Stack spacing={2.5} sx={{ mb: { xs: 3, md: 5 } }}>
-        {renderFilters}
+            <Stack spacing={2.5} sx={{ mb: { xs: 3, md: 5 } }}>
+                {renderFilters}
 
-        {canReset && renderResults}
-      </Stack>
+                {canReset && renderResults}
+            </Stack>
 
-      {notFound && <EmptyContent filled sx={{ py: 10 }} />}
+            {notFound && <EmptyContent filled sx={{ py: 10 }} />}
 
-      <JobList jobs={dataFiltered} />
-    </DashboardContent>
-  );
+            <JobList jobs={dataFiltered} />
+        </DashboardContent>
+    );
 }
 
 const applyFilter = ({ inputData, filters, sortBy }) => {
-  const { employmentTypes, experience, roles, locations, benefits } = filters;
+    const { employmentTypes, experience, roles, locations, benefits } = filters;
 
-  // Sort by
-  if (sortBy === 'latest') {
-    inputData = orderBy(inputData, ['createdAt'], ['desc']);
-  }
+    // Sort by
+    if (sortBy === 'latest') {
+        inputData = orderBy(inputData, ['createdAt'], ['desc']);
+    }
 
-  if (sortBy === 'oldest') {
-    inputData = orderBy(inputData, ['createdAt'], ['asc']);
-  }
+    if (sortBy === 'oldest') {
+        inputData = orderBy(inputData, ['createdAt'], ['asc']);
+    }
 
-  if (sortBy === 'popular') {
-    inputData = orderBy(inputData, ['totalViews'], ['desc']);
-  }
+    if (sortBy === 'popular') {
+        inputData = orderBy(inputData, ['totalViews'], ['desc']);
+    }
 
-  // Filters
-  if (employmentTypes.length) {
-    inputData = inputData.filter((job) =>
-      job.employmentTypes.some((item) => employmentTypes.includes(item))
-    );
-  }
+    // Filters
+    if (employmentTypes.length) {
+        inputData = inputData.filter((job) => job.employmentTypes.some((item) => employmentTypes.includes(item)));
+    }
 
-  if (experience !== 'all') {
-    inputData = inputData.filter((job) => job.experience === experience);
-  }
+    if (experience !== 'all') {
+        inputData = inputData.filter((job) => job.experience === experience);
+    }
 
-  if (roles.length) {
-    inputData = inputData.filter((job) => roles.includes(job.role));
-  }
+    if (roles.length) {
+        inputData = inputData.filter((job) => roles.includes(job.role));
+    }
 
-  if (locations.length) {
-    inputData = inputData.filter((job) => job.locations.some((item) => locations.includes(item)));
-  }
+    if (locations.length) {
+        inputData = inputData.filter((job) => job.locations.some((item) => locations.includes(item)));
+    }
 
-  if (benefits.length) {
-    inputData = inputData.filter((job) => job.benefits.some((item) => benefits.includes(item)));
-  }
+    if (benefits.length) {
+        inputData = inputData.filter((job) => job.benefits.some((item) => benefits.includes(item)));
+    }
 
-  return inputData;
+    return inputData;
 };

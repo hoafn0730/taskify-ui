@@ -1,4 +1,4 @@
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { _mock } from '~/_mock';
 
@@ -122,32 +122,32 @@ for (var i=1; i &#x3C;= 20; i++) {
 `;
 
 export function MarkdownView() {
-  return (
-    <>
-      <ComponentHero>
-        <CustomBreadcrumbs
-          heading="Markdown"
-          links={[{ name: 'Components', href: paths.components }, { name: 'Markdown' }]}
-          moreLink={['https://www.npmjs.com/package/react-markdown']}
-        />
-      </ComponentHero>
+    return (
+        <>
+            <ComponentHero>
+                <CustomBreadcrumbs
+                    heading="Markdown"
+                    links={[{ name: 'Components', href: paths.components }, { name: 'Markdown' }]}
+                    moreLink={['https://www.npmjs.com/package/react-markdown']}
+                />
+            </ComponentHero>
 
-      <ComponentContainer
-        sx={{
-          rowGap: 5,
-          columnGap: 3,
-          display: 'grid',
-          gridTemplateColumns: { xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' },
-        }}
-      >
-        <ComponentBlock title="Html content" sx={{ pt: 0 }}>
-          <Markdown children={htmlContent} />
-        </ComponentBlock>
+            <ComponentContainer
+                sx={{
+                    rowGap: 5,
+                    columnGap: 3,
+                    display: 'grid',
+                    gridTemplateColumns: { xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' },
+                }}
+            >
+                <ComponentBlock title="Html content" sx={{ pt: 0 }}>
+                    <Markdown children={htmlContent} />
+                </ComponentBlock>
 
-        <ComponentBlock title="Mardown content" sx={{ pt: 0 }}>
-          <Markdown children={mardownContent} />
-        </ComponentBlock>
-      </ComponentContainer>
-    </>
-  );
+                <ComponentBlock title="Mardown content" sx={{ pt: 0 }}>
+                    <Markdown children={mardownContent} />
+                </ComponentBlock>
+            </ComponentContainer>
+        </>
+    );
 }

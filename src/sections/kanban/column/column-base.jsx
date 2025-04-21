@@ -56,7 +56,12 @@ const ColumnBase = forwardRef(({ slots, stateProps, sx, ...other }, ref) => {
     );
 
     return (
-        <StyledRoot ref={ref} className={className} sx={{ gap: 2.5, width: 'var(--column-width)', ...sx }} {...other}>
+        <StyledRoot
+            ref={ref}
+            className={className}
+            sx={{ gap: 2.5, width: 'var(--column-width)', overflow: 'hidden', ...sx }}
+            {...other}
+        >
             {slots?.header && slots.header}
 
             {slots?.action && slots?.action}

@@ -10,8 +10,8 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { paths } from '~/routes/paths';
-import { RouterLink } from '~/routes/components';
+import { paths } from '~/configs/paths';
+import { RouterLink } from '~/components/router-link';
 
 import { useBoolean } from '~/hooks/use-boolean';
 
@@ -22,147 +22,147 @@ import { Iconify, SocialIcon } from '~/components/iconify';
 // ----------------------------------------------------------------------
 
 export const SignInSchema = zod.object({
-  email: zod
-    .string()
-    .min(1, { message: 'Email is required!' })
-    .email({ message: 'Email must be a valid email address!' }),
-  password: zod
-    .string()
-    .min(1, { message: 'Password is required!' })
-    .min(6, { message: 'Password must be at least 6 characters!' }),
+    email: zod
+        .string()
+        .min(1, { message: 'Email is required!' })
+        .email({ message: 'Email must be a valid email address!' }),
+    password: zod
+        .string()
+        .min(1, { message: 'Password is required!' })
+        .min(6, { message: 'Password must be at least 6 characters!' }),
 });
 
 // ----------------------------------------------------------------------
 
 export function CenteredSignInView() {
-  const password = useBoolean();
+    const password = useBoolean();
 
-  const defaultValues = { email: '', password: '' };
+    const defaultValues = { email: '', password: '' };
 
-  const methods = useForm({
-    resolver: zodResolver(SignInSchema),
-    defaultValues,
-  });
+    const methods = useForm({
+        resolver: zodResolver(SignInSchema),
+        defaultValues,
+    });
 
-  const {
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
+    const {
+        handleSubmit,
+        formState: { isSubmitting },
+    } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      console.info('DATA', data);
-    } catch (error) {
-      console.error(error);
-    }
-  });
+    const onSubmit = handleSubmit(async (data) => {
+        try {
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            console.info('DATA', data);
+        } catch (error) {
+            console.error(error);
+        }
+    });
 
-  const renderLogo = <AnimateLogo2 sx={{ mb: 3, mx: 'auto' }} />;
+    const renderLogo = <AnimateLogo2 sx={{ mb: 3, mx: 'auto' }} />;
 
-  const renderHead = (
-    <Stack alignItems="center" spacing={1.5} sx={{ mb: 5 }}>
-      <Typography variant="h5">Sign in to your account</Typography>
+    const renderHead = (
+        <Stack alignItems="center" spacing={1.5} sx={{ mb: 5 }}>
+            <Typography variant="h5">Sign in to your account</Typography>
 
-      <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {`Don't have an account?`}
-        </Typography>
+            <Stack direction="row" spacing={0.5}>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                    {`Don't have an account?`}
+                </Typography>
 
-        <Link component={RouterLink} href={paths.authDemo.centered.signUp} variant="subtitle2">
-          Get started
-        </Link>
-      </Stack>
-    </Stack>
-  );
+                <Link component={RouterLink} href={paths.authDemo.centered.signUp} variant="subtitle2">
+                    Get started
+                </Link>
+            </Stack>
+        </Stack>
+    );
 
-  const renderForm = (
-    <Stack spacing={3}>
-      <Field.Text name="email" label="Email address" InputLabelProps={{ shrink: true }} />
+    const renderForm = (
+        <Stack spacing={3}>
+            <Field.Text name="email" label="Email address" InputLabelProps={{ shrink: true }} />
 
-      <Stack spacing={1.5}>
-        <Link
-          component={RouterLink}
-          href={paths.authDemo.centered.resetPassword}
-          variant="body2"
-          color="inherit"
-          sx={{ alignSelf: 'flex-end' }}
-        >
-          Forgot password?
-        </Link>
+            <Stack spacing={1.5}>
+                <Link
+                    component={RouterLink}
+                    href={paths.authDemo.centered.resetPassword}
+                    variant="body2"
+                    color="inherit"
+                    sx={{ alignSelf: 'flex-end' }}
+                >
+                    Forgot password?
+                </Link>
 
-        <Field.Text
-          name="password"
-          label="Password"
-          placeholder="6+ characters"
-          type={password.value ? 'text' : 'password'}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={password.onToggle} edge="end">
-                  <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                <Field.Text
+                    name="password"
+                    label="Password"
+                    placeholder="6+ characters"
+                    type={password.value ? 'text' : 'password'}
+                    InputLabelProps={{ shrink: true }}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={password.onToggle} edge="end">
+                                    <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Stack>
+
+            <LoadingButton
+                fullWidth
+                color="inherit"
+                size="large"
+                type="submit"
+                variant="contained"
+                loading={isSubmitting}
+                loadingIndicator="Sign in..."
+            >
+                Sign in
+            </LoadingButton>
+        </Stack>
+    );
+
+    const renderSignInWithSocials = (
+        <>
+            <Divider
+                sx={{
+                    my: 3,
+                    typography: 'overline',
+                    color: 'text.disabled',
+                    '&::before, :after': { borderTopStyle: 'dashed' },
+                }}
+            >
+                OR
+            </Divider>
+
+            <Stack direction="row" justifyContent="center" spacing={1}>
+                <IconButton>
+                    <SocialIcon icon="google" width={22} />
                 </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Stack>
 
-      <LoadingButton
-        fullWidth
-        color="inherit"
-        size="large"
-        type="submit"
-        variant="contained"
-        loading={isSubmitting}
-        loadingIndicator="Sign in..."
-      >
-        Sign in
-      </LoadingButton>
-    </Stack>
-  );
+                <IconButton>
+                    <SocialIcon icon="github" width={22} />
+                </IconButton>
 
-  const renderSignInWithSocials = (
-    <>
-      <Divider
-        sx={{
-          my: 3,
-          typography: 'overline',
-          color: 'text.disabled',
-          '&::before, :after': { borderTopStyle: 'dashed' },
-        }}
-      >
-        OR
-      </Divider>
+                <IconButton>
+                    <SocialIcon icon="twitter" width={22} />
+                </IconButton>
+            </Stack>
+        </>
+    );
 
-      <Stack direction="row" justifyContent="center" spacing={1}>
-        <IconButton>
-          <SocialIcon icon="google" width={22} />
-        </IconButton>
+    return (
+        <>
+            {renderLogo}
 
-        <IconButton>
-          <SocialIcon icon="github" width={22} />
-        </IconButton>
+            {renderHead}
 
-        <IconButton>
-          <SocialIcon icon="twitter" width={22} />
-        </IconButton>
-      </Stack>
-    </>
-  );
+            <Form methods={methods} onSubmit={onSubmit}>
+                {renderForm}
+            </Form>
 
-  return (
-    <>
-      {renderLogo}
-
-      {renderHead}
-
-      <Form methods={methods} onSubmit={onSubmit}>
-        {renderForm}
-      </Form>
-
-      {renderSignInWithSocials}
-    </>
-  );
+            {renderSignInWithSocials}
+        </>
+    );
 }

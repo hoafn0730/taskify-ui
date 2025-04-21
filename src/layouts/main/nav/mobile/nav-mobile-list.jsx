@@ -6,7 +6,7 @@ import Collapse from '@mui/material/Collapse';
 import { isExternalLink } from '~/routes/utils';
 import { useActiveLink } from '~/routes/hooks/use-active-link';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 import { varAlpha } from '~/theme/styles';
 
 import { NavLi, navSectionClasses, NavSectionVertical } from '~/components/nav-section';

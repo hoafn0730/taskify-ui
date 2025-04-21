@@ -7,7 +7,7 @@ import { Router } from '~/routes/sections';
 
 import { useScrollToTop } from '~/hooks/use-scroll-to-top';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 import { LocalizationProvider } from '~/locales';
 import { I18nProvider } from '~/locales/i18n-provider';
 import { ThemeProvider } from '~/theme/theme-provider';

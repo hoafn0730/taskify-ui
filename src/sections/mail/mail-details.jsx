@@ -14,7 +14,7 @@ import { useBoolean } from '~/hooks/use-boolean';
 
 import { fDateTime } from '~/utils/format-time';
 
-import { CONFIG } from '~/config-global';
+import { CONFIG } from '~/configs/config-global';
 import { maxLine, stylesMode } from '~/theme/styles';
 
 import { Label } from '~/components/label';

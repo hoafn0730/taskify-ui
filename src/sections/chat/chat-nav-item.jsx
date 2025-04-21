@@ -9,7 +9,7 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
 
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 import { useRouter } from '~/routes/hooks';
 
 import { useResponsive } from '~/hooks/use-responsive';
@@ -25,109 +25,107 @@ import { useNavItem } from './hooks/use-nav-item';
 // ----------------------------------------------------------------------
 
 export function ChatNavItem({ selected, collapse, conversation, onCloseMobile }) {
-  const { user } = useMockedUser();
+    const { user } = useMockedUser();
 
-  const mdUp = useResponsive('up', 'md');
+    const mdUp = useResponsive('up', 'md');
 
-  const router = useRouter();
+    const router = useRouter();
 
-  const { group, displayName, displayText, participants, lastActivity, hasOnlineInGroup } =
-    useNavItem({ conversation, currentUserId: `${user?.id}` });
+    const { group, displayName, displayText, participants, lastActivity, hasOnlineInGroup } = useNavItem({
+        conversation,
+        currentUserId: `${user?.id}`,
+    });
 
-  const singleParticipant = participants[0];
+    const singleParticipant = participants[0];
 
-  const { name, avatarUrl, status } = singleParticipant;
+    const { name, avatarUrl, status } = singleParticipant;
 
-  const handleClickConversation = useCallback(async () => {
-    try {
-      if (!mdUp) {
-        onCloseMobile();
-      }
+    const handleClickConversation = useCallback(async () => {
+        try {
+            if (!mdUp) {
+                onCloseMobile();
+            }
 
-      await clickConversation(conversation.id);
+            await clickConversation(conversation.id);
 
-      router.push(`${paths.dashboard.chat}?id=${conversation.id}`);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [conversation.id, mdUp, onCloseMobile, router]);
+            router.push(`${paths.dashboard.chat}?id=${conversation.id}`);
+        } catch (error) {
+            console.error(error);
+        }
+    }, [conversation.id, mdUp, onCloseMobile, router]);
 
-  const renderGroup = (
-    <Badge
-      variant={hasOnlineInGroup ? 'online' : 'invisible'}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-    >
-      <AvatarGroup variant="compact" sx={{ width: 48, height: 48 }}>
-        {participants.slice(0, 2).map((participant) => (
-          <Avatar key={participant.id} alt={participant.name} src={participant.avatarUrl} />
-        ))}
-      </AvatarGroup>
-    </Badge>
-  );
-
-  const renderSingle = (
-    <Badge key={status} variant={status} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-      <Avatar alt={name} src={avatarUrl} sx={{ width: 48, height: 48 }} />
-    </Badge>
-  );
-
-  return (
-    <Box component="li" sx={{ display: 'flex' }}>
-      <ListItemButton
-        onClick={handleClickConversation}
-        sx={{
-          py: 1.5,
-          px: 2.5,
-          gap: 2,
-          ...(selected && { bgcolor: 'action.selected' }),
-        }}
-      >
+    const renderGroup = (
         <Badge
-          color="error"
-          overlap="circular"
-          badgeContent={collapse ? conversation.unreadCount : 0}
+            variant={hasOnlineInGroup ? 'online' : 'invisible'}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         >
-          {group ? renderGroup : renderSingle}
+            <AvatarGroup variant="compact" sx={{ width: 48, height: 48 }}>
+                {participants.slice(0, 2).map((participant) => (
+                    <Avatar key={participant.id} alt={participant.name} src={participant.avatarUrl} />
+                ))}
+            </AvatarGroup>
         </Badge>
+    );
 
-        {!collapse && (
-          <>
-            <ListItemText
-              primary={displayName}
-              primaryTypographyProps={{ noWrap: true, component: 'span', variant: 'subtitle2' }}
-              secondary={displayText}
-              secondaryTypographyProps={{
-                noWrap: true,
-                component: 'span',
-                variant: conversation.unreadCount ? 'subtitle2' : 'body2',
-                color: conversation.unreadCount ? 'text.primary' : 'text.secondary',
-              }}
-            />
+    const renderSingle = (
+        <Badge key={status} variant={status} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+            <Avatar alt={name} src={avatarUrl} sx={{ width: 48, height: 48 }} />
+        </Badge>
+    );
 
-            <Stack alignItems="flex-end" sx={{ alignSelf: 'stretch' }}>
-              <Typography
-                noWrap
-                variant="body2"
-                component="span"
-                sx={{ mb: 1.5, fontSize: 12, color: 'text.disabled' }}
-              >
-                {fToNow(lastActivity)}
-              </Typography>
+    return (
+        <Box component="li" sx={{ display: 'flex' }}>
+            <ListItemButton
+                onClick={handleClickConversation}
+                sx={{
+                    py: 1.5,
+                    px: 2.5,
+                    gap: 2,
+                    ...(selected && { bgcolor: 'action.selected' }),
+                }}
+            >
+                <Badge color="error" overlap="circular" badgeContent={collapse ? conversation.unreadCount : 0}>
+                    {group ? renderGroup : renderSingle}
+                </Badge>
 
-              {!!conversation.unreadCount && (
-                <Box
-                  sx={{
-                    width: 8,
-                    height: 8,
-                    bgcolor: 'info.main',
-                    borderRadius: '50%',
-                  }}
-                />
-              )}
-            </Stack>
-          </>
-        )}
-      </ListItemButton>
-    </Box>
-  );
+                {!collapse && (
+                    <>
+                        <ListItemText
+                            primary={displayName}
+                            primaryTypographyProps={{ noWrap: true, component: 'span', variant: 'subtitle2' }}
+                            secondary={displayText}
+                            secondaryTypographyProps={{
+                                noWrap: true,
+                                component: 'span',
+                                variant: conversation.unreadCount ? 'subtitle2' : 'body2',
+                                color: conversation.unreadCount ? 'text.primary' : 'text.secondary',
+                            }}
+                        />
+
+                        <Stack alignItems="flex-end" sx={{ alignSelf: 'stretch' }}>
+                            <Typography
+                                noWrap
+                                variant="body2"
+                                component="span"
+                                sx={{ mb: 1.5, fontSize: 12, color: 'text.disabled' }}
+                            >
+                                {fToNow(lastActivity)}
+                            </Typography>
+
+                            {!!conversation.unreadCount && (
+                                <Box
+                                    sx={{
+                                        width: 8,
+                                        height: 8,
+                                        bgcolor: 'info.main',
+                                        borderRadius: '50%',
+                                    }}
+                                />
+                            )}
+                        </Stack>
+                    </>
+                )}
+            </ListItemButton>
+        </Box>
+    );
 }

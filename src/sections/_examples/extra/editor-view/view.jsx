@@ -6,7 +6,7 @@ import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { Editor } from '~/components/editor';
 import { Markdown } from '~/components/markdown';
@@ -37,69 +37,69 @@ const defaultValue = `
 // ----------------------------------------------------------------------
 
 export function EditorView() {
-  const [checked, setChecked] = useState(true);
+    const [checked, setChecked] = useState(true);
 
-  const [content, setContent] = useState(defaultValue);
+    const [content, setContent] = useState(defaultValue);
 
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
-  };
+    const handleChange = (event) => {
+        setChecked(event.target.checked);
+    };
 
-  return (
-    <>
-      <ComponentHero>
-        <CustomBreadcrumbs
-          heading="Editor"
-          links={[{ name: 'Components', href: paths.components }, { name: 'Editor' }]}
-          moreLink={['https://tiptap.dev/docs/editor/introduction']}
-        />
-      </ComponentHero>
+    return (
+        <>
+            <ComponentHero>
+                <CustomBreadcrumbs
+                    heading="Editor"
+                    links={[{ name: 'Components', href: paths.components }, { name: 'Editor' }]}
+                    moreLink={['https://tiptap.dev/docs/editor/introduction']}
+                />
+            </ComponentHero>
 
-      <ComponentContainer
-        maxWidth={false}
-        sx={{
-          rowGap: 5,
-          columnGap: 3,
-          display: 'grid',
-          gridTemplateColumns: { xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' },
-        }}
-      >
-        <Card
-          sx={{
-            p: 3,
-            gap: 2,
-            flexShrink: 0,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <FormControlLabel
-            control={<Switch name="fullItem" checked={checked} onChange={handleChange} />}
-            label="Full item"
-            labelPlacement="start"
-            sx={{ ml: 'auto' }}
-          />
-          <Editor
-            fullItem={checked}
-            value={content}
-            onChange={(value) => setContent(value)}
-            sx={{ maxHeight: 720 }}
-          />
-        </Card>
+            <ComponentContainer
+                maxWidth={false}
+                sx={{
+                    rowGap: 5,
+                    columnGap: 3,
+                    display: 'grid',
+                    gridTemplateColumns: { xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' },
+                }}
+            >
+                <Card
+                    sx={{
+                        p: 3,
+                        gap: 2,
+                        flexShrink: 0,
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}
+                >
+                    <FormControlLabel
+                        control={<Switch name="fullItem" checked={checked} onChange={handleChange} />}
+                        label="Full item"
+                        labelPlacement="start"
+                        sx={{ ml: 'auto' }}
+                    />
+                    <Editor
+                        fullItem={checked}
+                        value={content}
+                        onChange={(value) => setContent(value)}
+                        sx={{ maxHeight: 720 }}
+                    />
+                </Card>
 
-        <Stack
-          spacing={1}
-          sx={{
-            p: 3,
-            borderRadius: 2,
-            overflowX: 'auto',
-            bgcolor: 'background.neutral',
-          }}
-        >
-          <Typography variant="h6">Preview</Typography>
-          <Markdown children={content} />
-        </Stack>
-      </ComponentContainer>
-    </>
-  );
+                <Stack
+                    spacing={1}
+                    sx={{
+                        p: 3,
+                        borderRadius: 2,
+                        overflowX: 'auto',
+                        bgcolor: 'background.neutral',
+                    }}
+                >
+                    <Typography variant="h6">Preview</Typography>
+                    <Markdown children={content} />
+                </Stack>
+            </ComponentContainer>
+        </>
+    );
 }

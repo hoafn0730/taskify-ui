@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 
-import { paths } from '~/routes/paths';
+import { paths } from '~/configs/paths';
 
 import { _mock } from '~/_mock';
 
@@ -19,82 +19,82 @@ import { ScrollToViewTemplate } from '../../component-template';
 // ----------------------------------------------------------------------
 
 const _accordions = [...Array(4)].map((_, index) => ({
-  id: _mock.id(index),
-  value: `panel${index + 1}`,
-  heading: `Accordion ${index + 1}`,
-  subHeading: _mock.postTitle(index),
-  detail: _mock.description(index),
+    id: _mock.id(index),
+    value: `panel${index + 1}`,
+    heading: `Accordion ${index + 1}`,
+    subHeading: _mock.postTitle(index),
+    detail: _mock.description(index),
 }));
 
 // ----------------------------------------------------------------------
 
 export function AccordionView() {
-  const [controlled, setControlled] = useState(false);
+    const [controlled, setControlled] = useState(false);
 
-  const handleChangeControlled = (panel) => (event, isExpanded) => {
-    setControlled(isExpanded ? panel : false);
-  };
+    const handleChangeControlled = (panel) => (event, isExpanded) => {
+        setControlled(isExpanded ? panel : false);
+    };
 
-  const DEMO = [
-    {
-      name: 'Simple',
-      component: (
-        <ComponentBlock>
-          <div>
-            {_accordions.map((accordion, index) => (
-              <Accordion key={accordion.value} disabled={index === 3}>
-                <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
-                  <Typography variant="subtitle1">{accordion.heading}</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>{accordion.detail}</Typography>
-                </AccordionDetails>
-              </Accordion>
-            ))}
-          </div>
-        </ComponentBlock>
-      ),
-    },
-    {
-      name: 'Controlled',
-      component: (
-        <ComponentBlock>
-          <div>
-            {_accordions.map((item, index) => (
-              <Accordion
-                key={item.value}
-                disabled={index === 3}
-                expanded={controlled === item.value}
-                onChange={handleChangeControlled(item.value)}
-              >
-                <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
-                  <Typography variant="subtitle1" sx={{ width: '33%', flexShrink: 0 }}>
-                    {item.heading}
-                  </Typography>
-                  <Typography sx={{ color: 'text.secondary' }}>{item.subHeading}</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>{item.detail}</Typography>
-                </AccordionDetails>
-              </Accordion>
-            ))}
-          </div>
-        </ComponentBlock>
-      ),
-    },
-  ];
+    const DEMO = [
+        {
+            name: 'Simple',
+            component: (
+                <ComponentBlock>
+                    <div>
+                        {_accordions.map((accordion, index) => (
+                            <Accordion key={accordion.value} disabled={index === 3}>
+                                <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
+                                    <Typography variant="subtitle1">{accordion.heading}</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography>{accordion.detail}</Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                        ))}
+                    </div>
+                </ComponentBlock>
+            ),
+        },
+        {
+            name: 'Controlled',
+            component: (
+                <ComponentBlock>
+                    <div>
+                        {_accordions.map((item, index) => (
+                            <Accordion
+                                key={item.value}
+                                disabled={index === 3}
+                                expanded={controlled === item.value}
+                                onChange={handleChangeControlled(item.value)}
+                            >
+                                <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
+                                    <Typography variant="subtitle1" sx={{ width: '33%', flexShrink: 0 }}>
+                                        {item.heading}
+                                    </Typography>
+                                    <Typography sx={{ color: 'text.secondary' }}>{item.subHeading}</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography>{item.detail}</Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                        ))}
+                    </div>
+                </ComponentBlock>
+            ),
+        },
+    ];
 
-  return (
-    <>
-      <ComponentHero>
-        <CustomBreadcrumbs
-          heading="Accordion"
-          links={[{ name: 'Components', href: paths.components }, { name: 'Accordion' }]}
-          moreLink={['https://mui.com/components/accordion']}
-        />
-      </ComponentHero>
+    return (
+        <>
+            <ComponentHero>
+                <CustomBreadcrumbs
+                    heading="Accordion"
+                    links={[{ name: 'Components', href: paths.components }, { name: 'Accordion' }]}
+                    moreLink={['https://mui.com/components/accordion']}
+                />
+            </ComponentHero>
 
-      <ScrollToViewTemplate data={DEMO} />
-    </>
-  );
+            <ScrollToViewTemplate data={DEMO} />
+        </>
+    );
 }

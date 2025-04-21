@@ -1,106 +1,51 @@
-import Box from '@mui/material/Box';
-import { Fragment, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
-import config from '~/config';
-import { privateRoutes, publicRoutes } from '~/routes';
-import Card from '~/pages/Card';
-import DefaultLayout from '~/layouts/DefaultLayout';
-import ProtectedRoute from '~/components/ProtectedRoute';
-import { getCurrentUser } from '~/store/actions/userAction';
+import '~/global.css';
 
-function App() {
-    const location = useLocation();
-    const dispatch = useDispatch();
-    const { userInfo } = useSelector((state) => state.user);
-    const state = location.state;
+import { Router } from '~/routes/sections';
 
-    useEffect(() => {
-        // 🐳
-        if (!userInfo) {
-            dispatch(getCurrentUser());
-        }
+import { useScrollToTop } from '~/hooks/use-scroll-to-top';
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+import { CONFIG } from '~/configs/config-global';
+import { LocalizationProvider } from '~/locales';
+import { I18nProvider } from '~/locales/i18n-provider';
+import { ThemeProvider } from '~/theme/theme-provider';
 
-    useEffect(() => {
-        if (Notification.permission === 'default') {
-            Notification.requestPermission().then((permission) => {
-                console.log(`Notification permission: ${permission}`);
-            });
-        }
+import { Snackbar } from '~/components/snackbar';
+import { ProgressBar } from '~/components/progress-bar';
+import { MotionLazy } from '~/components/animate/motion-lazy';
+import { SettingsDrawer, defaultSettings, SettingsProvider } from '~/components/settings';
 
-        // document.addEventListener(
-        //     'wheel',
-        //     (e) => {
-        //         e.preventDefault();
-        //     },
-        //     { passive: false },
-        // );
-    }, []);
+import { CheckoutProvider } from '~/sections/checkout/context';
+
+import { persistor, store } from './store';
+
+// ----------------------------------------------------------------------
+
+export default function App() {
+    useScrollToTop();
 
     return (
-        <Box>
-            <Routes location={state?.backgroundLocation || location}>
-                {publicRoutes.map((route, index) => {
-                    let Layout = DefaultLayout;
-                    const Page = route.component;
-
-                    if (route.layout) {
-                        Layout = route.layout;
-                    } else if (route.layout === null) {
-                        Layout = Fragment;
-                    }
-
-                    return (
-                        <Route
-                            key={index}
-                            path={route.path}
-                            element={
-                                <Layout>
-                                    <Page />
-                                </Layout>
-                            }
-                        />
-                    );
-                })}
-                <Route path="/card/:slug" element={<Card />} />
-
-                {privateRoutes.map((route, index) => {
-                    let Layout = DefaultLayout;
-                    const Page = route.component;
-
-                    if (route.layout) {
-                        Layout = route.layout;
-                    } else if (route.layout === null) {
-                        Layout = Fragment;
-                    }
-
-                    return (
-                        <Route
-                            key={index}
-                            path={route.path}
-                            element={
-                                <ProtectedRoute>
-                                    <Layout>
-                                        <Page />
-                                    </Layout>
-                                </ProtectedRoute>
-                            }
-                        />
-                    );
-                })}
-            </Routes>
-
-            {state?.backgroundLocation && (
-                <Routes>
-                    <Route path={config.paths.card} element={<Card />} />
-                </Routes>
-            )}
-        </Box>
+        <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+                <I18nProvider>
+                    <LocalizationProvider>
+                        <SettingsProvider settings={defaultSettings}>
+                            <ThemeProvider>
+                                <MotionLazy>
+                                    <CheckoutProvider>
+                                        <Snackbar />
+                                        <ProgressBar />
+                                        <SettingsDrawer />
+                                        <Router />
+                                    </CheckoutProvider>
+                                </MotionLazy>
+                            </ThemeProvider>
+                        </SettingsProvider>
+                    </LocalizationProvider>
+                </I18nProvider>
+            </PersistGate>
+        </Provider>
     );
 }
-
-export default App;

@@ -1,5 +1,6 @@
 import { cloneDeep, isEmpty } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
+
 import { fetchBoardDetail } from '../actions/boardAction';
 import { mapOrder } from '~/utils/sort';
 import { generatePlaceholderCard } from '~/utils/formatters';

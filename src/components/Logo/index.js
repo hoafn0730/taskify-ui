@@ -1,1 +1,3 @@
-export { default } from './Logo';
+export * from './logo';
+
+export * from './classes';

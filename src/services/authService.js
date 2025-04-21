@@ -1,57 +1,34 @@
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import axiosInstance, { endpoints } from '~/utils/axios';
 
-const authRequest = axios.create({
-    baseURL: import.meta.env.VITE_APP_SSO_BACKEND_URL,
-    withCredentials: true,
-});
+const signIn = ({ email, password }) => {
+    return axiosInstance.post(endpoints.auth.signIn, {
+        email,
+        password,
+    });
+};
 
-authRequest.interceptors.request.use(
-    function (config) {
-        // Do something before request is sent
+const signUp = ({ username, email, password, firstName, lastName }) => {
+    return axiosInstance.post(endpoints.auth.signUp, {
+        username,
+        email,
+        password,
+        fullName: firstName + ' ' + lastName,
+    });
+};
 
-        return config;
-    },
-    function (error) {
-        // Do something with request error
-        return Promise.reject(error);
-    },
-);
-
-// Add a response interceptor
-authRequest.interceptors.response.use(
-    function (response) {
-        // Any status code that lie within the range of 2xx cause this function to trigger
-        // Do something with response data
-        return response?.data;
-    },
-    function (error) {
-        if (error?.response?.status !== 410) {
-            toast.error(error?.response?.data?.message);
-        }
-
-        if (error?.response?.status === 410) {
-            refreshToken();
-            // return error.
-        }
-
-        return Promise.reject(error);
-    },
-);
-
-const logout = () => {
-    return authRequest.delete(import.meta.env.VITE_APP_SSO_BACKEND_URL + '/auth/logout');
+const signOut = () => {
+    return axiosInstance.delete('/auth/sign-out');
 };
 
 const getCurrentUser = async () => {
-    const res = await authRequest.get(import.meta.env.VITE_APP_SSO_BACKEND_URL + '/auth/current-user');
+    const res = await axiosInstance.get('/auth/current-user');
 
     return res.data;
 };
 
 const refreshToken = async () => {
-    const res = await authRequest.post(import.meta.env.VITE_APP_SSO_BACKEND_URL + '/auth/refresh-token', {});
+    const res = await axiosInstance.post('/auth/refresh-token');
     return res.data;
 };
 
-export default { logout, getCurrentUser, refreshToken };
+export const authService = { signIn, signUp, signOut, getCurrentUser, refreshToken };

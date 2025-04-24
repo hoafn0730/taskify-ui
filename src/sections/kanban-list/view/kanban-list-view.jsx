@@ -4,7 +4,6 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 import { paths } from '~/configs/paths';
-import { RouterLink } from '~/components/router-link';
 
 import { useBoolean } from '~/hooks/use-boolean';
 import { useSetState } from '~/hooks/use-set-state';
@@ -19,16 +18,18 @@ import { Iconify } from '~/components/iconify';
 import { EmptyContent } from '~/components/empty-content';
 import { CustomBreadcrumbs } from '~/components/custom-breadcrumbs';
 
-import { TourList } from '../tour-list';
-import { TourSort } from '../tour-sort';
-import { TourSearch } from '../tour-search';
-import { TourFilters } from '../tour-filters';
-import { TourFiltersResult } from '../tour-filters-result';
+import { KanbanList } from '../kanban-list';
+import { KanbanSort } from '../kanban-sort';
+import { KanbanSearch } from '../kanban-search';
+import { KanbanFilters } from '../kanban-filters';
+import { KanbanFiltersResult } from '../kanban-filters-result';
+import { KanbanDialog } from '../kanban-dialog';
 
 // ----------------------------------------------------------------------
 
-export function TourListView() {
+export function KanbanListView() {
     const openFilters = useBoolean();
+    const dialog = useBoolean();
 
     const [sortBy, setSortBy] = useState('latest');
 
@@ -36,11 +37,15 @@ export function TourListView() {
 
     const filters = useSetState({
         destination: [],
-        tourGuides: [],
+        boardGuides: [],
         services: [],
         startDate: null,
         endDate: null,
     });
+
+    const handleClickOpen = useCallback(() => {
+        dialog.onTrue();
+    }, [dialog]);
 
     const dateError = fIsAfter(filters.state.startDate, filters.state.endDate);
 
@@ -53,7 +58,7 @@ export function TourListView() {
 
     const canReset =
         filters.state.destination.length > 0 ||
-        filters.state.tourGuides.length > 0 ||
+        filters.state.boardGuides.length > 0 ||
         filters.state.services.length > 0 ||
         (!!filters.state.startDate && !!filters.state.endDate);
 
@@ -69,7 +74,7 @@ export function TourListView() {
 
             if (inputValue) {
                 const results = _tours.filter(
-                    (tour) => tour.name.toLowerCase().indexOf(search.state.query.toLowerCase()) !== -1,
+                    (board) => board.name.toLowerCase().indexOf(search.state.query.toLowerCase()) !== -1,
                 );
 
                 search.setState({ results });
@@ -85,10 +90,10 @@ export function TourListView() {
             alignItems={{ xs: 'flex-end', sm: 'center' }}
             direction={{ xs: 'column', sm: 'row' }}
         >
-            <TourSearch search={search} onSearch={handleSearch} />
+            <KanbanSearch search={search} onSearch={handleSearch} />
 
             <Stack direction="row" spacing={1} flexShrink={0}>
-                <TourFilters
+                <KanbanFilters
                     filters={filters}
                     canReset={canReset}
                     dateError={dateError}
@@ -96,17 +101,17 @@ export function TourListView() {
                     onOpen={openFilters.onTrue}
                     onClose={openFilters.onFalse}
                     options={{
-                        tourGuides: _tourGuides,
+                        boardGuides: _tourGuides,
                         services: TOUR_SERVICE_OPTIONS.map((option) => option.label),
                     }}
                 />
 
-                <TourSort sort={sortBy} onSort={handleSortBy} sortOptions={TOUR_SORT_OPTIONS} />
+                <KanbanSort sort={sortBy} onSort={handleSortBy} sortOptions={TOUR_SORT_OPTIONS} />
             </Stack>
         </Stack>
     );
 
-    const renderResults = <TourFiltersResult filters={filters} totalResults={dataFiltered.length} />;
+    const renderResults = <KanbanFiltersResult filters={filters} totalResults={dataFiltered.length} />;
 
     return (
         <DashboardContent>
@@ -119,10 +124,10 @@ export function TourListView() {
                 ]}
                 action={
                     <Button
-                        component={RouterLink}
-                        href={paths.dashboard.kanban.new}
+                        // href={paths.dashboard.kanban.new}
                         variant="contained"
                         startIcon={<Iconify icon="mingcute:add-line" />}
+                        onClick={handleClickOpen}
                     >
                         New Kanban
                     </Button>
@@ -138,15 +143,17 @@ export function TourListView() {
 
             {notFound && <EmptyContent filled sx={{ py: 10 }} />}
 
-            <TourList tours={dataFiltered} />
+            <KanbanList boards={dataFiltered} />
+
+            <KanbanDialog dialog={dialog} />
         </DashboardContent>
     );
 }
 
 const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
-    const { services, destination, startDate, endDate, tourGuides } = filters;
+    const { services, destination, startDate, endDate, boardGuides } = filters;
 
-    const tourGuideIds = tourGuides.map((tourGuide) => tourGuide.id);
+    const boardGuideIds = boardGuides.map((boardGuide) => boardGuide.id);
 
     // Sort by
     if (sortBy === 'latest') {
@@ -166,9 +173,9 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
         inputData = inputData.filter((tour) => destination.includes(tour.destination));
     }
 
-    if (tourGuideIds.length) {
+    if (boardGuideIds.length) {
         inputData = inputData.filter((tour) =>
-            tour.tourGuides.some((filterItem) => tourGuideIds.includes(filterItem.id)),
+            tour.boardGuides.some((filterItem) => boardGuideIds.includes(filterItem.id)),
         );
     }
 

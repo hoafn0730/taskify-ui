@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 

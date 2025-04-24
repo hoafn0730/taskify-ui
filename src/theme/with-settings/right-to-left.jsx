@@ -11,7 +11,6 @@ const cacheRtl = createCache({
     stylisPlugins: [rtlPlugin],
 });
 
-// eslint-disable-next-line react/prop-types
 export function RTL({ children, direction }) {
     useEffect(() => {
         document.dir = direction;

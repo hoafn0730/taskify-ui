@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/display-name */
 import { memo } from 'react';
 
 import Box from '@mui/material/Box';

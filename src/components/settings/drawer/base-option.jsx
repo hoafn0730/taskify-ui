@@ -12,7 +12,6 @@ import { SvgColor } from '../../svg-color';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function BaseOption({ icon, label, tooltip, selected, ...other }) {
     return (
         <ButtonBase

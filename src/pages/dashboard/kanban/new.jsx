@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from '~/configs/config-global';
 
-import { TourCreateView } from '~/sections/tour/view';
+import { TourCreateView } from '~/sections/kanban-list/view';
 
 // ----------------------------------------------------------------------
 

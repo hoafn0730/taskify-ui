@@ -5,7 +5,6 @@ import { AnimateLogo1 } from '~/components/animate';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function SplashScreen({ portal = true, sx, ...other }) {
     const content = (
         <Box sx={{ overflow: 'hidden' }}>

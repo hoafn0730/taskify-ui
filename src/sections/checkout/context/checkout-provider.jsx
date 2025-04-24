@@ -29,7 +29,6 @@ const initialState = {
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function CheckoutProvider({ children }) {
     return (
         <Suspense fallback={<SplashScreen />}>
@@ -40,7 +39,6 @@ export function CheckoutProvider({ children }) {
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 function Container({ children }) {
     const router = useRouter();
 

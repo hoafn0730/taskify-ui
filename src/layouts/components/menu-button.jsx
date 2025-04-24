@@ -3,7 +3,6 @@ import IconButton from '@mui/material/IconButton';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function MenuButton({ sx, ...other }) {
     return (
         <IconButton sx={sx} {...other}>

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState, useCallback } from 'react';
 
 import Collapse from '@mui/material/Collapse';

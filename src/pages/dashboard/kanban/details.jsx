@@ -5,7 +5,7 @@ import { useParams } from '~/routes/hooks';
 import { _tours } from '~/_mock/_tour';
 import { CONFIG } from '~/configs/config-global';
 
-import { TourDetailsView } from '~/sections/tour/view';
+import { TourDetailsView } from '~/sections/kanban-list/view';
 
 // ----------------------------------------------------------------------
 

@@ -16,7 +16,7 @@ import { SearchNotFound } from '~/components/search-not-found';
 
 // ----------------------------------------------------------------------
 
-export function TourSearch({ search, onSearch }) {
+export function KanbanSearch({ search, onSearch }) {
     const router = useRouter();
 
     const { state } = search;
@@ -28,7 +28,7 @@ export function TourSearch({ search, onSearch }) {
     const handleKeyUp = (event) => {
         if (state.query) {
             if (event.key === 'Enter') {
-                const selectProduct = state.results.filter((tour) => tour.name === state.query)[0];
+                const selectProduct = state.results.filter((board) => board.name === state.query)[0];
 
                 handleClick(selectProduct.id);
             }
@@ -64,16 +64,16 @@ export function TourSearch({ search, onSearch }) {
                     }}
                 />
             )}
-            renderOption={(props, tour, { inputValue }) => {
-                const matches = match(tour.name, inputValue);
-                const parts = parse(tour.name, matches);
+            renderOption={(props, board, { inputValue }) => {
+                const matches = match(board.name, inputValue);
+                const parts = parse(board.name, matches);
 
                 return (
-                    <Box component="li" {...props} onClick={() => handleClick(tour.id)} key={tour.id}>
+                    <Box component="li" {...props} onClick={() => handleClick(board.id)} key={board.id}>
                         <Avatar
-                            key={tour.id}
-                            alt={tour.name}
-                            src={tour.images[0]}
+                            key={board.id}
+                            alt={board.name}
+                            src={board.images[0]}
                             variant="rounded"
                             sx={{
                                 mr: 1.5,

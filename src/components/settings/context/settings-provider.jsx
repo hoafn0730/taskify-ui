@@ -12,7 +12,6 @@ export const SettingsConsumer = SettingsContext.Consumer;
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function SettingsProvider({ children, settings }) {
     const values = useLocalStorage(STORAGE_KEY, settings);
 

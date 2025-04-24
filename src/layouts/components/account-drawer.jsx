@@ -29,7 +29,6 @@ import { SignOutButton } from './sign-out-button';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function AccountDrawer({ data = [], sx, ...other }) {
     const theme = useTheme();
 

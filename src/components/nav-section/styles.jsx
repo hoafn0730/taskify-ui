@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/display-name */
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import ListSubheader from '@mui/material/ListSubheader';

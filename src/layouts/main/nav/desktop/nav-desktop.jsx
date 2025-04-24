@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import Stack from '@mui/material/Stack';
 
 import { NavUl } from '~/components/nav-section';

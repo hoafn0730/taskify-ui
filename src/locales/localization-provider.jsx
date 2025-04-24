@@ -13,7 +13,6 @@ import { useTranslate } from './use-locales';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function LocalizationProvider({ children }) {
     const { currentLang } = useTranslate();
 

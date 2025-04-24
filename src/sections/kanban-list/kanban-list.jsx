@@ -6,11 +6,11 @@ import Pagination, { paginationClasses } from '@mui/material/Pagination';
 import { paths } from '~/configs/paths';
 import { useRouter } from '~/routes/hooks';
 
-import { TourItem } from './tour-item';
+import { KanbanItem } from './kanban-item';
 
 // ----------------------------------------------------------------------
 
-export function TourList({ tours }) {
+export function KanbanList({ boards }) {
     const router = useRouter();
 
     const handleView = useCallback(
@@ -38,18 +38,18 @@ export function TourList({ tours }) {
                 display="grid"
                 gridTemplateColumns={{ xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }}
             >
-                {tours.map((tour) => (
-                    <TourItem
-                        key={tour.id}
-                        tour={tour}
-                        onView={() => handleView(tour.id)}
-                        onEdit={() => handleEdit(tour.id)}
-                        onDelete={() => handleDelete(tour.id)}
+                {boards.map((board) => (
+                    <KanbanItem
+                        key={board.id}
+                        board={board}
+                        onView={() => handleView(board.id)}
+                        onEdit={() => handleEdit(board.id)}
+                        onDelete={() => handleDelete(board.id)}
                     />
                 ))}
             </Box>
 
-            {tours.length > 8 && (
+            {boards.length > 8 && (
                 <Pagination
                     count={8}
                     sx={{

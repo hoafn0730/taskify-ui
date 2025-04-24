@@ -2,11 +2,11 @@ import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from '~/configs/config-global';
 
-import { TourListView } from '~/sections/tour/view';
+import { KanbanListView } from '~/sections/kanban-list/view';
 
 // ----------------------------------------------------------------------
 
-const metadata = { title: `Tour list | Dashboard - ${CONFIG.site.name}` };
+const metadata = { title: `Kanban list | Dashboard - ${CONFIG.site.name}` };
 
 export default function Page() {
     return (
@@ -15,7 +15,7 @@ export default function Page() {
                 <title> {metadata.title}</title>
             </Helmet>
 
-            <TourListView />
+            <KanbanListView />
         </>
     );
 }

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import Box from '@mui/material/Box';
 import GlobalStyles from '@mui/material/GlobalStyles';
 

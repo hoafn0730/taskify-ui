@@ -32,7 +32,6 @@ const TABS = [
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function NotificationsDrawer({ data = [], sx, ...other }) {
     const drawer = useBoolean();
 

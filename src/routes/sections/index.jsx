@@ -24,15 +24,15 @@ export function Router() {
              * Skip home page
              * element: <Navigate to={CONFIG.auth.redirectPath} replace />,
              */
-            element: <Navigate to={CONFIG.auth.redirectPath} replace />,
+            // element: <Navigate to={CONFIG.auth.redirectPath} replace />,
 
-            // element: (
-            //     <Suspense fallback={<SplashScreen />}>
-            //         <MainLayout>
-            //             <HomePage />
-            //         </MainLayout>
-            //     </Suspense>
-            // ),
+            element: (
+                <Suspense fallback={<SplashScreen />}>
+                    <MainLayout>
+                        <HomePage />
+                    </MainLayout>
+                </Suspense>
+            ),
         },
 
         // Auth

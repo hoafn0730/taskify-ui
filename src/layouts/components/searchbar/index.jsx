@@ -28,7 +28,6 @@ import { groupItems, applyFilter, getAllItems } from './utils';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function Searchbar({ data: navItems = [], sx, ...other }) {
     const theme = useTheme();
 

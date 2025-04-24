@@ -5,7 +5,6 @@ import { layoutClasses } from '~/layouts/classes';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function Main({ sx, children, layoutQuery, ...other }) {
     const theme = useTheme();
 
@@ -31,7 +30,6 @@ export function Main({ sx, children, layoutQuery, ...other }) {
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function Content({ sx, children, layoutQuery, ...other }) {
     const theme = useTheme();
 

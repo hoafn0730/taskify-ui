@@ -12,7 +12,6 @@ import { usePopover, CustomPopover } from '~/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function WorkspacesPopover({ data = [], sx, ...other }) {
     const popover = usePopover();
 

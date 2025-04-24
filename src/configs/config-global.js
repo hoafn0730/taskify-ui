@@ -1,6 +1,6 @@
 import { paths } from '~/configs/paths';
 
-import packageJson from '../package.json';
+import packageJson from '../../package.json';
 
 // ----------------------------------------------------------------------
 

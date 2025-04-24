@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { listClasses } from '@mui/material/List';
 import { paperClasses } from '@mui/material/Paper';
 import { textFieldClasses } from '@mui/material/TextField';
@@ -75,7 +74,10 @@ const MuiDataGrid = {
             '--unstable_DataGrid-headWeight': theme.typography.fontWeightSemiBold,
             borderWidth: 0,
             scrollbarWidth: 'thin',
-            scrollbarColor: `${varAlpha(theme.vars.palette.text.disabledChannel, 0.4)} ${varAlpha(theme.vars.palette.text.disabledChannel, 0.08)}`,
+            scrollbarColor: `${varAlpha(theme.vars.palette.text.disabledChannel, 0.4)} ${varAlpha(
+                theme.vars.palette.text.disabledChannel,
+                0.08,
+            )}`,
             '& .MuiDataGrid-filler > div': { borderTopStyle: 'dashed' },
             '& .MuiDataGrid-topContainer::after': { height: 0 },
         }),

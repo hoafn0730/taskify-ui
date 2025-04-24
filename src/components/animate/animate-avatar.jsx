@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { m } from 'framer-motion';
 
 import Box from '@mui/material/Box';

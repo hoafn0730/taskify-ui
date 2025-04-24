@@ -4,7 +4,6 @@ import { layoutClasses } from '../classes';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function Main({ children, sx, ...other }) {
     return (
         <Box

@@ -1,13 +1,10 @@
-/* eslint-disable react/display-name */
 import { forwardRef } from 'react';
 
 import SvgIcon from '@mui/material/SvgIcon';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export const SocialIcon = forwardRef(({ icon, width = 20, sx, ...other }, ref) => {
-    // eslint-disable-next-line react/prop-types
     const socialName = icon?.trim().toLowerCase();
 
     return (

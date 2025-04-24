@@ -11,7 +11,6 @@ import { schemeConfig } from './color-scheme-script';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function ThemeProvider({ children }) {
     const { currentLang } = useTranslate();
 

@@ -4,7 +4,6 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function LoadingScreen({ portal, sx, ...other }) {
     const content = (
         <Box

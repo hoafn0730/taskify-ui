@@ -7,7 +7,6 @@ import { Iconify } from '~/components/iconify';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function BackToTop({ value = 90, sx, ...other }) {
     const { scrollYProgress } = useScroll();
 

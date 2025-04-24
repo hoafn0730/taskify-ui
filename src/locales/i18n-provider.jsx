@@ -24,7 +24,6 @@ i18next
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function I18nProvider({ children }) {
     return <Provider i18n={i18next}>{children}</Provider>;
 }

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { m } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 
@@ -61,13 +60,21 @@ export function AnimateBorder({ animate, sx }) {
     const background = (color) => {
         const degs = [-55, 35, 125, 215, 305];
 
-        const end = `transparent ${values.angle - (2 + values.length)}deg, ${color}  ${values.angle}deg, transparent ${values.angle + values.length}deg`;
+        const end = `transparent ${values.angle - (2 + values.length)}deg, ${color}  ${values.angle}deg, transparent ${
+            values.angle + values.length
+        }deg`;
 
         return [
             `conic-gradient(from ${degs[0]}deg at ${values.distance / aspectRatio}% ${values.distance}% , ${end})`,
-            `conic-gradient(from ${degs[1]}deg at ${100 - values.distance / aspectRatio}% ${values.distance}% , ${end})`,
-            `conic-gradient(from ${degs[2]}deg at ${100 - values.distance / aspectRatio}% ${100 - values.distance}% , ${end})`,
-            `conic-gradient(from ${degs[3]}deg at ${values.distance / aspectRatio}% ${100 - values.distance}% , ${end})`,
+            `conic-gradient(from ${degs[1]}deg at ${100 - values.distance / aspectRatio}% ${
+                values.distance
+            }% , ${end})`,
+            `conic-gradient(from ${degs[2]}deg at ${100 - values.distance / aspectRatio}% ${
+                100 - values.distance
+            }% , ${end})`,
+            `conic-gradient(from ${degs[3]}deg at ${values.distance / aspectRatio}% ${
+                100 - values.distance
+            }% , ${end})`,
             `conic-gradient(from ${degs[4]}deg at ${values.distance / aspectRatio}% ${values.distance}% , ${end})`,
         ];
     };

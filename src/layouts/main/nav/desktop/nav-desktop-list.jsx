@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useRef, useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';

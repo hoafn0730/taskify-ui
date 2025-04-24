@@ -8,7 +8,6 @@ import { useSettingsContext } from '~/components/settings/context';
 
 // ----------------------------------------------------------------------
 
-// eslint-disable-next-line react/prop-types
 export function SettingsButton({ sx, ...other }) {
     const settings = useSettingsContext();
 

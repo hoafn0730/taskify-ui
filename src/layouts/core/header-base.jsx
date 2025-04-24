@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';

@@ -6,9 +6,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Grow from '@mui/material/Grow';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+import { KanbanNewEditForm } from './kanban-new-edit-form';
+
+// eslint-disable-next-line react/display-name
 const Transition = forwardRef((props, ref) => <Grow ref={ref} {...props} />);
 
 export function KanbanDialog({ dialog }) {
@@ -22,14 +24,7 @@ export function KanbanDialog({ dialog }) {
                         occasionally.
                     </Typography>
 
-                    <TextField
-                        autoFocus
-                        fullWidth
-                        type="email"
-                        margin="dense"
-                        variant="outlined"
-                        label="Email address"
-                    />
+                    <KanbanNewEditForm />
                 </DialogContent>
 
                 <DialogActions>

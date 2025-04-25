@@ -24,9 +24,7 @@ import { _tags, _tourGuides, TOUR_SERVICE_OPTIONS } from '~/_mock';
 import { toast } from '~/components/snackbar';
 import { Form, Field, schemaHelper } from '~/components/hook-form';
 
-// ----------------------------------------------------------------------
-
-export const NewTourSchema = zod
+export const NewKanbanSchema = zod
     .object({
         name: zod.string().min(1, { message: 'Name is required!' }),
         content: schemaHelper.editor({
@@ -35,7 +33,7 @@ export const NewTourSchema = zod
         images: schemaHelper.files({
             message: { required_error: 'Images is required!' },
         }),
-        tourGuides: zod
+        boardGuides: zod
             .array(
                 zod.object({
                     id: zod.string(),
@@ -65,30 +63,30 @@ export const NewTourSchema = zod
         path: ['available.endDate'],
     });
 
-export function TourNewEditForm({ currentTour }) {
+export function KanbanNewEditForm({ currentBoard }) {
     const router = useRouter();
 
     const defaultValues = useMemo(
         () => ({
-            name: currentTour?.name || '',
-            content: currentTour?.content || '',
-            images: currentTour?.images || [],
-            tourGuides: currentTour?.tourGuides || [],
+            name: currentBoard?.name || '',
+            content: currentBoard?.content || '',
+            images: currentBoard?.images || [],
+            boardGuides: currentBoard?.boardGuides || [],
             available: {
-                startDate: currentTour?.available.startDate || null,
-                endDate: currentTour?.available.endDate || null,
+                startDate: currentBoard?.available.startDate || null,
+                endDate: currentBoard?.available.endDate || null,
             },
-            durations: currentTour?.durations || '',
-            destination: currentTour?.destination || '',
-            services: currentTour?.services || [],
-            tags: currentTour?.tags || [],
+            durations: currentBoard?.durations || '',
+            destination: currentBoard?.destination || '',
+            services: currentBoard?.services || [],
+            tags: currentBoard?.tags || [],
         }),
-        [currentTour],
+        [currentBoard],
     );
 
     const methods = useForm({
         mode: 'all',
-        resolver: zodResolver(NewTourSchema),
+        resolver: zodResolver(NewKanbanSchema),
         defaultValues,
     });
 
@@ -103,16 +101,16 @@ export function TourNewEditForm({ currentTour }) {
     const values = watch();
 
     useEffect(() => {
-        if (currentTour) {
+        if (currentBoard) {
             reset(defaultValues);
         }
-    }, [currentTour, defaultValues, reset]);
+    }, [currentBoard, defaultValues, reset]);
 
     const onSubmit = handleSubmit(async (data) => {
         try {
             await new Promise((resolve) => setTimeout(resolve, 500));
             reset();
-            toast.success(currentTour ? 'Update success!' : 'Create success!');
+            toast.success(currentBoard ? 'Update success!' : 'Create success!');
             router.push(paths.dashboard.kanban.root);
             console.info('DATA', data);
         } catch (error) {
@@ -174,38 +172,38 @@ export function TourNewEditForm({ currentTour }) {
             <Stack spacing={3} sx={{ p: 3 }}>
                 <div>
                     <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-                        Tour guide
+                        Kanban guide
                     </Typography>
 
                     <Field.Autocomplete
                         multiple
-                        name="tourGuides"
-                        placeholder="+ Tour Guides"
+                        name="boardGuides"
+                        placeholder="+ Kanban Guides"
                         disableCloseOnSelect
                         options={_tourGuides}
                         getOptionLabel={(option) => option.name}
                         isOptionEqualToValue={(option, value) => option.id === value.id}
-                        renderOption={(props, tourGuide) => (
-                            <li {...props} key={tourGuide.id}>
+                        renderOption={(props, kanbanGuide) => (
+                            <li {...props} key={kanbanGuide.id}>
                                 <Avatar
-                                    key={tourGuide.id}
-                                    alt={tourGuide.avatarUrl}
-                                    src={tourGuide.avatarUrl}
+                                    key={kanbanGuide.id}
+                                    alt={kanbanGuide.avatarUrl}
+                                    src={kanbanGuide.avatarUrl}
                                     sx={{ mr: 1, width: 24, height: 24, flexShrink: 0 }}
                                 />
 
-                                {tourGuide.name}
+                                {kanbanGuide.name}
                             </li>
                         )}
                         renderTags={(selected, getTagProps) =>
-                            selected.map((tourGuide, index) => (
+                            selected.map((kanbanGuide, index) => (
                                 <Chip
                                     {...getTagProps({ index })}
-                                    key={tourGuide.id}
+                                    key={kanbanGuide.id}
                                     size="small"
                                     variant="soft"
-                                    label={tourGuide.name}
-                                    avatar={<Avatar alt={tourGuide.name} src={tourGuide.avatarUrl} />}
+                                    label={kanbanGuide.name}
+                                    avatar={<Avatar alt={kanbanGuide.name} src={kanbanGuide.avatarUrl} />}
                                 />
                             ))
                         }
@@ -281,7 +279,7 @@ export function TourNewEditForm({ currentTour }) {
             />
 
             <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting} sx={{ ml: 2 }}>
-                {!currentTour ? 'Create tour' : 'Save changes'}
+                {!currentBoard ? 'Create kanban' : 'Save changes'}
             </LoadingButton>
         </Stack>
     );

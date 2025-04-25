@@ -3,10 +3,7 @@ import { paths } from '~/configs/paths';
 import { DashboardContent } from '~/layouts/dashboard';
 
 import { CustomBreadcrumbs } from '~/components/custom-breadcrumbs';
-
-import { TourNewEditForm } from '../tour-new-edit-form';
-
-// ----------------------------------------------------------------------
+import { KanbanNewEditForm } from '../kanban-new-edit-form';
 
 export function TourEditView({ tour }) {
     return (
@@ -21,7 +18,7 @@ export function TourEditView({ tour }) {
                 sx={{ mb: { xs: 3, md: 5 } }}
             />
 
-            <TourNewEditForm currentTour={tour} />
+            <KanbanNewEditForm currentBoard={tour} />
         </DashboardContent>
     );
 }

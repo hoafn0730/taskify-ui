@@ -170,23 +170,23 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
 
     // Filters
     if (destination.length) {
-        inputData = inputData.filter((tour) => destination.includes(tour.destination));
+        inputData = inputData.filter((board) => destination.includes(board.destination));
     }
 
     if (boardGuideIds.length) {
-        inputData = inputData.filter((tour) =>
-            tour.boardGuides.some((filterItem) => boardGuideIds.includes(filterItem.id)),
+        inputData = inputData.filter((board) =>
+            board.boardGuides.some((filterItem) => boardGuideIds.includes(filterItem.id)),
         );
     }
 
     if (services.length) {
-        inputData = inputData.filter((tour) => tour.services.some((item) => services.includes(item)));
+        inputData = inputData.filter((board) => board.services.some((item) => services.includes(item)));
     }
 
     if (!dateError) {
         if (startDate && endDate) {
-            inputData = inputData.filter((tour) =>
-                fIsBetween(startDate, tour.available.startDate, tour.available.endDate),
+            inputData = inputData.filter((board) =>
+                fIsBetween(startDate, board.available.startDate, board.available.endDate),
             );
         }
     }

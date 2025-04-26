@@ -4,18 +4,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMemo, useEffect, useCallback } from 'react';
 
 import Chip from '@mui/material/Chip';
-import Card from '@mui/material/Card';
+
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
-import Switch from '@mui/material/Switch';
-import Divider from '@mui/material/Divider';
-import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 import LoadingButton from '@mui/lab/LoadingButton';
-import FormControlLabel from '@mui/material/FormControlLabel';
-
-import { paths } from '~/configs/paths';
-import { useRouter } from '~/routes/hooks';
 
 import { fIsAfter } from '~/utils/format-time';
 
@@ -26,9 +23,9 @@ import { Form, Field, schemaHelper } from '~/components/hook-form';
 
 export const NewKanbanSchema = zod
     .object({
-        name: zod.string().min(1, { message: 'Name is required!' }),
-        content: schemaHelper.editor({
-            message: { required_error: 'Content is required!' },
+        title: zod.string().min(1, { message: 'Title is required!' }),
+        description: schemaHelper.editor({
+            message: { required_error: 'Description is required!' },
         }),
         images: schemaHelper.files({
             message: { required_error: 'Images is required!' },
@@ -63,13 +60,11 @@ export const NewKanbanSchema = zod
         path: ['available.endDate'],
     });
 
-export function KanbanNewEditForm({ currentBoard }) {
-    const router = useRouter();
-
+export function KanbanNewEditForm({ currentBoard, onCancel }) {
     const defaultValues = useMemo(
         () => ({
-            name: currentBoard?.name || '',
-            content: currentBoard?.content || '',
+            title: currentBoard?.name || '',
+            description: currentBoard?.content || '',
             images: currentBoard?.images || [],
             boardGuides: currentBoard?.boardGuides || [],
             available: {
@@ -108,11 +103,12 @@ export function KanbanNewEditForm({ currentBoard }) {
 
     const onSubmit = handleSubmit(async (data) => {
         try {
-            await new Promise((resolve) => setTimeout(resolve, 500));
+
+            await new Promise((resolve) => setTimeout(resolve, 3000));
             reset();
             toast.success(currentBoard ? 'Update success!' : 'Create success!');
-            router.push(paths.dashboard.kanban.root);
             console.info('DATA', data);
+            onCancel();
         } catch (error) {
             console.error(error);
         }
@@ -131,168 +127,155 @@ export function KanbanNewEditForm({ currentBoard }) {
     }, [setValue]);
 
     const renderDetails = (
-        <Card>
-            <CardHeader title="Details" subheader="Title, short description, image..." sx={{ mb: 3 }} />
 
-            <Divider />
-
-            <Stack spacing={3} sx={{ p: 3 }}>
-                <Stack spacing={1.5}>
-                    <Typography variant="subtitle2">Name</Typography>
-                    <Field.Text name="name" placeholder="Ex: Adventure Seekers Expedition..." />
-                </Stack>
-
-                <Stack spacing={1.5}>
-                    <Typography variant="subtitle2">Content</Typography>
-                    <Field.Editor name="content" sx={{ maxHeight: 480 }} />
-                </Stack>
-
-                <Stack spacing={1.5}>
-                    <Typography variant="subtitle2">Images</Typography>
-                    <Field.Upload
-                        multiple
-                        thumbnail
-                        name="images"
-                        maxSize={3145728}
-                        onRemove={handleRemoveFile}
-                        onRemoveAll={handleRemoveAllFiles}
-                        onUpload={() => console.info('ON UPLOAD')}
-                    />
-                </Stack>
+        <Stack spacing={3}>
+            <Stack spacing={1.5}>
+                <Typography variant="subtitle2">Title</Typography>
+                <Field.Text name="title" placeholder="Ex: Adventure Seekers Expedition..." />
             </Stack>
-        </Card>
+
+            <Stack spacing={1.5}>
+                <Typography variant="subtitle2">Description</Typography>
+                <Field.Editor name="description" sx={{ maxHeight: 480 }} />
+            </Stack>
+
+            <Stack spacing={1.5}>
+                <Typography variant="subtitle2">Images</Typography>
+                <Field.Upload
+                    multiple
+                    thumbnail
+                    name="images"
+                    maxSize={3145728}
+                    onRemove={handleRemoveFile}
+                    onRemoveAll={handleRemoveAllFiles}
+                    onUpload={() => console.info('ON UPLOAD')}
+                />
+            </Stack>
+        </Stack>
     );
 
     const renderProperties = (
-        <Card>
-            <CardHeader title="Properties" subheader="Additional functions and attributes..." sx={{ mb: 3 }} />
+        <Stack spacing={3}>
+            <div>
+                <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
+                    Kanban guide
+                </Typography>
 
-            <Divider />
+                <Field.Autocomplete
+                    multiple
+                    name="boardGuides"
+                    placeholder="+ Kanban Guides"
+                    disableCloseOnSelect
+                    options={_tourGuides}
+                    getOptionLabel={(option) => option.name}
+                    isOptionEqualToValue={(option, value) => option.id === value.id}
+                    renderOption={(props, kanbanGuide) => (
+                        <li {...props} key={kanbanGuide.id}>
+                            <Avatar
+                                key={kanbanGuide.id}
+                                alt={kanbanGuide.avatarUrl}
+                                src={kanbanGuide.avatarUrl}
+                                sx={{ mr: 1, width: 24, height: 24, flexShrink: 0 }}
+                            />
 
-            <Stack spacing={3} sx={{ p: 3 }}>
-                <div>
-                    <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-                        Kanban guide
-                    </Typography>
+                            {kanbanGuide.name}
+                        </li>
+                    )}
+                    renderTags={(selected, getTagProps) =>
+                        selected.map((kanbanGuide, index) => (
+                            <Chip
+                                {...getTagProps({ index })}
+                                key={kanbanGuide.id}
+                                size="small"
+                                variant="soft"
+                                label={kanbanGuide.name}
+                                avatar={<Avatar alt={kanbanGuide.name} src={kanbanGuide.avatarUrl} />}
+                            />
+                        ))
+                    }
+                />
+            </div>
 
-                    <Field.Autocomplete
-                        multiple
-                        name="boardGuides"
-                        placeholder="+ Kanban Guides"
-                        disableCloseOnSelect
-                        options={_tourGuides}
-                        getOptionLabel={(option) => option.name}
-                        isOptionEqualToValue={(option, value) => option.id === value.id}
-                        renderOption={(props, kanbanGuide) => (
-                            <li {...props} key={kanbanGuide.id}>
-                                <Avatar
-                                    key={kanbanGuide.id}
-                                    alt={kanbanGuide.avatarUrl}
-                                    src={kanbanGuide.avatarUrl}
-                                    sx={{ mr: 1, width: 24, height: 24, flexShrink: 0 }}
-                                />
-
-                                {kanbanGuide.name}
-                            </li>
-                        )}
-                        renderTags={(selected, getTagProps) =>
-                            selected.map((kanbanGuide, index) => (
-                                <Chip
-                                    {...getTagProps({ index })}
-                                    key={kanbanGuide.id}
-                                    size="small"
-                                    variant="soft"
-                                    label={kanbanGuide.name}
-                                    avatar={<Avatar alt={kanbanGuide.name} src={kanbanGuide.avatarUrl} />}
-                                />
-                            ))
-                        }
-                    />
-                </div>
-
-                <Stack spacing={1.5}>
-                    <Typography variant="subtitle2">Available</Typography>
-                    <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                        <Field.DatePicker name="available.startDate" label="Start date" />
-                        <Field.DatePicker name="available.endDate" label="End date" />
-                    </Stack>
-                </Stack>
-
-                <Stack spacing={1.5}>
-                    <Typography variant="subtitle2">Duration</Typography>
-                    <Field.Text name="durations" placeholder="Ex: 2 days, 4 days 3 nights..." />
-                </Stack>
-
-                <Stack spacing={1.5}>
-                    <Typography variant="subtitle2">Destination</Typography>
-                    <Field.CountrySelect fullWidth name="destination" placeholder="+ Destination" />
-                </Stack>
-
-                <Stack spacing={1}>
-                    <Typography variant="subtitle2">Services</Typography>
-                    <Field.MultiCheckbox
-                        name="services"
-                        options={TOUR_SERVICE_OPTIONS}
-                        sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}
-                    />
-                </Stack>
-
-                <Stack spacing={1.5}>
-                    <Typography variant="subtitle2">Tags</Typography>
-                    <Field.Autocomplete
-                        name="tags"
-                        placeholder="+ Tags"
-                        multiple
-                        freeSolo
-                        disableCloseOnSelect
-                        options={_tags.map((option) => option)}
-                        getOptionLabel={(option) => option}
-                        renderOption={(props, option) => (
-                            <li {...props} key={option}>
-                                {option}
-                            </li>
-                        )}
-                        renderTags={(selected, getTagProps) =>
-                            selected.map((option, index) => (
-                                <Chip
-                                    {...getTagProps({ index })}
-                                    key={option}
-                                    label={option}
-                                    size="small"
-                                    color="info"
-                                    variant="soft"
-                                />
-                            ))
-                        }
-                    />
+            <Stack spacing={1.5}>
+                <Typography variant="subtitle2">Available</Typography>
+                <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+                    <Field.DatePicker name="available.startDate" label="Start date" />
+                    <Field.DatePicker name="available.endDate" label="End date" />
                 </Stack>
             </Stack>
-        </Card>
-    );
 
-    const renderActions = (
-        <Stack direction="row" alignItems="center" flexWrap="wrap">
-            <FormControlLabel
-                control={<Switch defaultChecked inputProps={{ id: 'publish-switch' }} />}
-                label="Publish"
-                sx={{ flexGrow: 1, pl: 3 }}
-            />
+            <Stack spacing={1.5}>
+                <Typography variant="subtitle2">Duration</Typography>
+                <Field.Text name="durations" placeholder="Ex: 2 days, 4 days 3 nights..." />
+            </Stack>
 
-            <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting} sx={{ ml: 2 }}>
-                {!currentBoard ? 'Create kanban' : 'Save changes'}
-            </LoadingButton>
+            <Stack spacing={1.5}>
+                <Typography variant="subtitle2">Destination</Typography>
+                <Field.CountrySelect fullWidth name="destination" placeholder="+ Destination" />
+            </Stack>
+
+            <Stack spacing={1}>
+                <Typography variant="subtitle2">Services</Typography>
+                <Field.MultiCheckbox
+                    name="services"
+                    options={TOUR_SERVICE_OPTIONS}
+                    sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}
+                />
+            </Stack>
+
+            <Stack spacing={1.5}>
+                <Typography variant="subtitle2">Tags</Typography>
+                <Field.Autocomplete
+                    name="tags"
+                    placeholder="+ Tags"
+                    multiple
+                    freeSolo
+                    disableCloseOnSelect
+                    options={_tags.map((option) => option)}
+                    getOptionLabel={(option) => option}
+                    renderOption={(props, option) => (
+                        <li {...props} key={option}>
+                            {option}
+                        </li>
+                    )}
+                    renderTags={(selected, getTagProps) =>
+                        selected.map((option, index) => (
+                            <Chip
+                                {...getTagProps({ index })}
+                                key={option}
+                                label={option}
+                                size="small"
+                                color="info"
+                                variant="soft"
+                            />
+                        ))
+                    }
+                />
+            </Stack>
         </Stack>
     );
 
     return (
         <Form methods={methods} onSubmit={onSubmit}>
-            <Stack spacing={{ xs: 3, md: 5 }} sx={{ mx: 'auto', maxWidth: { xs: 720, xl: 880 } }}>
-                {renderDetails}
 
-                {renderProperties}
+            <DialogTitle sx={{ pb: 2 }}> {!currentBoard ? 'New Kanban' : 'Edit Kanban'} </DialogTitle>
+            <DialogContent>
+                <Stack spacing={{ xs: 3, md: 5 }} sx={{ mx: 'auto', maxWidth: { xs: 720, xl: 880 } }}>
+                    {renderDetails}
 
-                {renderActions}
-            </Stack>
+                    {renderProperties}
+                </Stack>
+            </DialogContent>
+
+            <DialogActions>
+                <Button onClick={onCancel} variant="outlined" color="inherit">
+                    Cancel
+                </Button>
+
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                    {!currentBoard ? 'Create kanban' : 'Save changes'}
+                </LoadingButton>
+            </DialogActions>
         </Form>
     );
 }

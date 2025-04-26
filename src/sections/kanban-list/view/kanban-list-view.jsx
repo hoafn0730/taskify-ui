@@ -36,9 +36,7 @@ export function KanbanListView() {
     const search = useSetState({ query: '', results: [] });
 
     const filters = useSetState({
-        destination: [],
         boardGuides: [],
-        services: [],
         startDate: null,
         endDate: null,
     });
@@ -56,11 +54,7 @@ export function KanbanListView() {
         dateError,
     });
 
-    const canReset =
-        filters.state.destination.length > 0 ||
-        filters.state.boardGuides.length > 0 ||
-        filters.state.services.length > 0 ||
-        (!!filters.state.startDate && !!filters.state.endDate);
+    const canReset = filters.state.boardGuides.length > 0 || (!!filters.state.startDate && !!filters.state.endDate);
 
     const notFound = !dataFiltered.length && canReset;
 
@@ -102,7 +96,6 @@ export function KanbanListView() {
                     onClose={openFilters.onFalse}
                     options={{
                         boardGuides: _tourGuides,
-                        services: TOUR_SERVICE_OPTIONS.map((option) => option.label),
                     }}
                 />
 
@@ -151,7 +144,7 @@ export function KanbanListView() {
 }
 
 const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
-    const { services, destination, startDate, endDate, boardGuides } = filters;
+    const { startDate, endDate, boardGuides } = filters;
 
     const boardGuideIds = boardGuides.map((boardGuide) => boardGuide.id);
 
@@ -168,19 +161,10 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
         inputData = orderBy(inputData, ['totalViews'], ['desc']);
     }
 
-    // Filters
-    if (destination.length) {
-        inputData = inputData.filter((board) => destination.includes(board.destination));
-    }
-
     if (boardGuideIds.length) {
         inputData = inputData.filter((board) =>
             board.boardGuides.some((filterItem) => boardGuideIds.includes(filterItem.id)),
         );
-    }
-
-    if (services.length) {
-        inputData = inputData.filter((board) => board.services.some((item) => services.includes(item)));
     }
 
     if (!dateError) {

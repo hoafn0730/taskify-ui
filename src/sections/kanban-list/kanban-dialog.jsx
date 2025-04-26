@@ -5,6 +5,7 @@ import Grow from '@mui/material/Grow';
 
 import { KanbanNewEditForm } from './kanban-new-edit-form';
 
+// eslint-disable-next-line react/display-name
 const Transition = forwardRef((props, ref) => <Grow ref={ref} {...props} />);
 
 export function KanbanDialog({ dialog }) {

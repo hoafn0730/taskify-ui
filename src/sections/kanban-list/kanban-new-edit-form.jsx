@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMemo, useEffect, useCallback } from 'react';
 
 import Chip from '@mui/material/Chip';
+
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
@@ -102,6 +103,7 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
 
     const onSubmit = handleSubmit(async (data) => {
         try {
+
             await new Promise((resolve) => setTimeout(resolve, 3000));
             reset();
             toast.success(currentBoard ? 'Update success!' : 'Create success!');
@@ -125,6 +127,7 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
     }, [setValue]);
 
     const renderDetails = (
+
         <Stack spacing={3}>
             <Stack spacing={1.5}>
                 <Typography variant="subtitle2">Title</Typography>
@@ -254,6 +257,7 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
 
     return (
         <Form methods={methods} onSubmit={onSubmit}>
+
             <DialogTitle sx={{ pb: 2 }}> {!currentBoard ? 'New Kanban' : 'Edit Kanban'} </DialogTitle>
             <DialogContent>
                 <Stack spacing={{ xs: 3, md: 5 }} sx={{ mx: 'auto', maxWidth: { xs: 720, xl: 880 } }}>

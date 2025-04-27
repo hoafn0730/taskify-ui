@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -12,7 +12,7 @@ import { orderBy } from '~/utils/helper';
 import { fIsAfter, fIsBetween } from '~/utils/format-time';
 
 import { DashboardContent } from '~/layouts/dashboard';
-import { _tours, _tourGuides, TOUR_SORT_OPTIONS, TOUR_SERVICE_OPTIONS } from '~/_mock';
+import { _tours, _tourGuides, TOUR_SORT_OPTIONS } from '~/_mock';
 
 import { Iconify } from '~/components/iconify';
 import { EmptyContent } from '~/components/empty-content';
@@ -25,13 +25,12 @@ import { KanbanFilters } from '../kanban-filters';
 import { KanbanFiltersResult } from '../kanban-filters-result';
 import { KanbanDialog } from '../kanban-dialog';
 
-// ----------------------------------------------------------------------
-
 export function KanbanListView() {
     const openFilters = useBoolean();
     const dialog = useBoolean();
 
     const [sortBy, setSortBy] = useState('latest');
+    const [boards, setBoards] = useState([..._tours].sort((a, b) => b.star - a.star));
 
     const search = useSetState({ query: '', results: [] });
 
@@ -39,8 +38,18 @@ export function KanbanListView() {
         boardGuides: [],
         startDate: null,
         endDate: null,
-        star: false,
     });
+
+    const handleStarToggle = useCallback(
+        (boardId, isStarred) => {
+            const updatedBoards = boards.map((board) =>
+                board.id === boardId ? { ...board, star: !isStarred } : board,
+            );
+
+            setBoards(updatedBoards);
+        },
+        [boards],
+    );
 
     const handleClickOpen = useCallback(() => {
         dialog.onTrue();
@@ -48,12 +57,15 @@ export function KanbanListView() {
 
     const dateError = fIsAfter(filters.state.startDate, filters.state.endDate);
 
-    const dataFiltered = applyFilter({
-        inputData: _tours,
-        filters: filters.state,
-        sortBy,
-        dateError,
-    });
+    // Tính toán lại dataFiltered khi boards, filters.state, sortBy, hoặc dateError thay đổi
+    const dataFiltered = useMemo(() => {
+        return applyFilter({
+            inputData: boards,
+            filters: filters.state,
+            sortBy,
+            dateError,
+        });
+    }, [boards, filters.state, sortBy, dateError]);
 
     const canReset = filters.state.boardGuides.length > 0 || (!!filters.state.startDate && !!filters.state.endDate);
 
@@ -67,13 +79,9 @@ export function KanbanListView() {
         (inputValue) => {
             search.setState({ query: inputValue });
 
-            if (inputValue) {
-                const results = _tours.filter(
-                    (board) => board.name.toLowerCase().indexOf(search.state.query.toLowerCase()) !== -1,
-                );
+            const results = _tours.filter((board) => board.name.toLowerCase().includes(inputValue.toLowerCase()));
 
-                search.setState({ results });
-            }
+            search.setState({ results });
         },
         [search],
     );
@@ -137,7 +145,7 @@ export function KanbanListView() {
 
             {notFound && <EmptyContent filled sx={{ py: 10 }} />}
 
-            <KanbanList boards={dataFiltered} />
+            <KanbanList boards={dataFiltered} onStarToggle={handleStarToggle} />
 
             <KanbanDialog dialog={dialog} />
         </DashboardContent>
@@ -149,25 +157,37 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
 
     const boardGuideIds = boardGuides.map((boardGuide) => boardGuide.id);
 
-    // Sort by
+    // Luôn luôn ưu tiên Starred trước
+    let sortFields = ['star'];
+    let sortOrders = ['desc'];
+
+    // Thêm các tiêu chí sắp xếp theo sortBy
     if (sortBy === 'latest') {
-        inputData = orderBy(inputData, ['createdAt'], ['desc']);
+        sortFields.push('createdAt');
+        sortOrders.push('desc');
     }
 
     if (sortBy === 'oldest') {
-        inputData = orderBy(inputData, ['createdAt'], ['asc']);
+        sortFields.push('createdAt');
+        sortOrders.push('asc');
     }
 
     if (sortBy === 'popular') {
-        inputData = orderBy(inputData, ['totalViews'], ['desc']);
+        sortFields.push('totalViews');
+        sortOrders.push('desc');
     }
 
+    // Sắp xếp theo các tiêu chí đã xác định
+    inputData = orderBy(inputData, sortFields, sortOrders);
+
+    // Filter theo Guide
     if (boardGuideIds.length) {
         inputData = inputData.filter((board) =>
             board.boardGuides.some((filterItem) => boardGuideIds.includes(filterItem.id)),
         );
     }
 
+    // Filter theo Date
     if (!dateError) {
         if (startDate && endDate) {
             inputData = inputData.filter((board) =>

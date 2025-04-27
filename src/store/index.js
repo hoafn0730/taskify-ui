@@ -2,12 +2,12 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 
-import boardReducer from './slices/boardSlice';
+import kanbanReducer from './slices/kanbanSlice';
 import userReducer from './slices/userSlice';
 
 const reducers = combineReducers({
     user: userReducer,
-    board: boardReducer,
+    kanban: kanbanReducer,
 });
 
 const persistConfig = {

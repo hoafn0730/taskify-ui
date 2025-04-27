@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useSWR, { mutate } from 'swr';
 import { useParams } from '~/routes/hooks';
-import { fetchBoardDetail } from '~/store/actions/boardAction';
+import { fetchBoardDetail } from '~/store/actions/kanbanAction';
 
 import axios, { fetcher, endpoints } from '~/utils/axios';
 
@@ -23,7 +23,7 @@ const swrOptions = {
 export function useGetBoard() {
     const { slug } = useParams();
     const dispatch = useDispatch();
-    const { activeBoard: board, isLoading, isError } = useSelector((state) => state.board);
+    const { activeBoard: board, isLoading, isError } = useSelector((state) => state.kanban);
     // const { data: board, isLoading, isError } = useSWR(`${BOARD_ENDPOINT}/${slug}`, fetcher, swrOptions);
 
     useEffect(() => {

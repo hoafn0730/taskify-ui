@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Pagination, { paginationClasses } from '@mui/material/Pagination';
@@ -16,6 +16,25 @@ export function KanbanList({ boards }) {
     const router = useRouter();
     const dialog = useBoolean();
     const { state, setState } = useSetState(null);
+    // Hàm sắp xếp boards theo star
+    const sortBoardsByStar = (boards) => {
+        return [...boards].sort((a, b) => b.star - a.star);
+    };
+
+    // Sắp xếp boards khi khởi tạo
+    const [sortedBoards, setSortedBoards] = useState(() => sortBoardsByStar(boards));
+
+    // Hàm xử lý khi toggle star
+    const handleStarToggle = useCallback(
+        (boardId, isStarred) => {
+            const updatedBoards = sortedBoards.map((board) =>
+                board.id === boardId ? { ...board, star: !isStarred } : board,
+            );
+
+            setSortedBoards(sortBoardsByStar(updatedBoards)); // Sắp xếp lại danh sách
+        },
+        [sortedBoards],
+    );
 
     const handleView = useCallback(
         (id) => {
@@ -43,10 +62,11 @@ export function KanbanList({ boards }) {
                 display="grid"
                 gridTemplateColumns={{ xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }}
             >
-                {boards.map((board) => (
+                {sortedBoards.map((board) => (
                     <KanbanItem
                         key={board.id}
                         board={board}
+                        onStarToggle={handleStarToggle}
                         onView={() => handleView(board.id)}
                         onEdit={() => handleEdit(board)}
                         onDelete={() => handleDelete(board.id)}

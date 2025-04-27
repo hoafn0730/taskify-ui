@@ -1,4 +1,4 @@
-import axiosInstance from '~/utils/axios';
+import axiosInstance, { endpoints } from '~/utils/axios';
 
 const getBoards = () => {
     return axiosInstance.get('/boards');
@@ -13,7 +13,7 @@ const searchBoards = (query) => {
 };
 
 const getBoardBySlug = (slug) => {
-    return axiosInstance.get('/api/v1/boards/' + slug);
+    return axiosInstance.get(endpoints.kanban.boards + '/' + slug);
 };
 
 const getCombinedBoards = () => {
@@ -37,13 +37,7 @@ const generateBoard = async (data) => {
 };
 
 const updateBoard = (boardId, data) => {
-    return axiosInstance.put('/boards/' + boardId, {
-        ...data,
-    });
-};
-
-const moveCardToDifferentColumn = (boardId, data) => {
-    return axiosInstance.put(`/boards/${boardId}/moving-card`, {
+    return axiosInstance.put(endpoints.kanban.boards + '/' + boardId, {
         ...data,
     });
 };
@@ -56,7 +50,34 @@ const updateBoardBackground = (boardId, data) => {
         .then((res) => res.data);
 };
 
-export const boardService = {
+// Column
+const createNewColumn = async (data) => {
+    const res = await axiosInstance.post(endpoints.kanban.columns, data);
+    return res.data;
+};
+
+const updateColumn = (columnId, data) => {
+    return axiosInstance.put(endpoints.kanban.columns + '/' + columnId, data);
+};
+
+const deleteColumn = (columnId) => {
+    return axiosInstance.delete(endpoints.kanban.columns + '/' + columnId);
+};
+
+const moveCardToDifferentColumn = (
+    boardId,
+    { currentCardId, prevColumnId, prevCardOrderIds, nextColumnId, nextCardOrderIds },
+) => {
+    return axiosInstance.put(`${endpoints.kanban.boards}/${boardId}/moving-card`, {
+        currentCardId,
+        prevColumnId,
+        prevCardOrderIds,
+        nextColumnId,
+        nextCardOrderIds,
+    });
+};
+
+export const kanbanService = {
     searchBoards,
     getBoards,
     getBoardBySlug,
@@ -66,4 +87,7 @@ export const boardService = {
     moveCardToDifferentColumn,
     generateBoard,
     updateBoardBackground,
+    createNewColumn,
+    updateColumn,
+    deleteColumn,
 };

@@ -1,4 +1,6 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
+import { debounce } from 'lodash';
+import { useDispatch } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -8,82 +10,81 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 import { useBoolean } from '~/hooks/use-boolean';
 
-import { uuidv4 } from '~/utils/uuidv4';
-
-import { createColumn } from '~/actions/kanban';
-
 import { Iconify } from '~/components/iconify';
+import { createNewColumn } from '~/store/actions/kanbanAction';
 
-// ----------------------------------------------------------------------
+export function KanbanColumnAdd({ sx, board, ...other }) {
+    const dispatch = useDispatch();
+    const [columnTitle, setColumnTitle] = useState('');
 
-export function KanbanColumnAdd({ sx, ...other }) {
-  const [columnName, setColumnName] = useState('');
+    const openAddColumn = useBoolean();
 
-  const openAddColumn = useBoolean();
+    const handleChangeName = useCallback((event) => {
+        setColumnTitle(event.target.value);
+    }, []);
 
-  const handleChangeName = useCallback((event) => {
-    setColumnName(event.target.value);
-  }, []);
+    const handleCreateColumn = useCallback(async () => {
+        const columnData = { title: columnTitle.trim() ? columnTitle : 'Untitled', boardId: board?.id };
 
-  const handleCreateColumn = useCallback(async () => {
-    try {
-      const columnData = { id: uuidv4(), name: columnName.trim() ? columnName : 'Untitled' };
+        dispatch(createNewColumn(columnData));
 
-      createColumn(columnData);
+        setColumnTitle('');
+        openAddColumn.onFalse();
+    }, [board, columnTitle, dispatch, openAddColumn]);
 
-      setColumnName('');
+    const debouncedHandleCreateColumn = useMemo(
+        () =>
+            debounce((event) => {
+                if (event.key === 'Enter') {
+                    handleCreateColumn();
+                }
+            }, 500),
+        [handleCreateColumn],
+    );
 
-      openAddColumn.onFalse();
-    } catch (error) {
-      console.error(error);
-    }
-  }, [columnName, openAddColumn]);
+    const handleKeyUpCreateColumn = useCallback(
+        (event) => {
+            debouncedHandleCreateColumn(event);
+        },
+        [debouncedHandleCreateColumn],
+    );
 
-  const handleKeyUpCreateColumn = useCallback(
-    (event) => {
-      if (event.key === 'Enter') {
-        handleCreateColumn();
-      }
-    },
-    [handleCreateColumn]
-  );
+    const handleCancel = useCallback(() => {
+        setColumnTitle('');
+        openAddColumn.onFalse();
+    }, [openAddColumn]);
 
-  const handleCancel = useCallback(() => {
-    setColumnName('');
-    openAddColumn.onFalse();
-  }, [openAddColumn]);
+    return (
+        <>
+            <Box sx={{ width: 'var(--column-width)', flex: '0 0 auto', ...sx }} {...other}>
+                {openAddColumn.value ? (
+                    <ClickAwayListener onClickAway={handleCancel}>
+                        <TextField
+                            autoFocus
+                            fullWidth
+                            placeholder="Untitled"
+                            value={columnTitle}
+                            onChange={handleChangeName}
+                            onKeyUp={handleKeyUpCreateColumn}
+                            helperText="Press Enter to create the column."
+                            sx={{ [`& .${inputBaseClasses.input}`]: { typography: 'h6' } }}
+                        />
+                    </ClickAwayListener>
+                ) : (
+                    <Button
+                        fullWidth
+                        size="large"
+                        color="inherit"
+                        variant="outlined"
+                        startIcon={<Iconify icon="mingcute:add-line" sx={{ mr: -0.5 }} />}
+                        onClick={openAddColumn.onTrue}
+                    >
+                        Add column
+                    </Button>
+                )}
+            </Box>
 
-  return (
-    <>
-      <Box sx={{ width: 'var(--column-width)', flex: '0 0 auto', ...sx }} {...other}>
-        {openAddColumn.value ? (
-          <ClickAwayListener onClickAway={handleCancel}>
-            <TextField
-              autoFocus
-              fullWidth
-              placeholder="Untitled"
-              value={columnName}
-              onChange={handleChangeName}
-              onKeyUp={handleKeyUpCreateColumn}
-              helperText="Press Enter to create the column."
-              sx={{ [`& .${inputBaseClasses.input}`]: { typography: 'h6' } }}
-            />
-          </ClickAwayListener>
-        ) : (
-          <Button
-            fullWidth
-            size="large"
-            color="inherit"
-            variant="outlined"
-            startIcon={<Iconify icon="mingcute:add-line" sx={{ mr: -0.5 }} />}
-            onClick={openAddColumn.onTrue}
-          >
-            Add column
-          </Button>
-        )}
-      </Box>
-
-      <Box sx={{ width: '1px', flexShrink: 0 }} />
-    </>
-  );
+            <Box sx={{ width: '1px', flexShrink: 0 }} />
+        </>
+    );
 }

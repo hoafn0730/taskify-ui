@@ -43,6 +43,7 @@ export default [
             'no-unused-vars': ['warn', { varsIgnorePattern: '^[A-Z_]' }],
             'react/prop-types': 0,
             'react/display-name': 0,
+            'no-console': 1,
 
             'react/no-children-prop': 0,
         },

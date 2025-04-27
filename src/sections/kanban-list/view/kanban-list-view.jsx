@@ -39,6 +39,7 @@ export function KanbanListView() {
         boardGuides: [],
         startDate: null,
         endDate: null,
+        star: false,
     });
 
     const handleClickOpen = useCallback(() => {

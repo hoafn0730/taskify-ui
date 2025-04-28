@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
+import { mutate } from 'swr';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -25,12 +26,17 @@ import { KanbanFilters } from '../kanban-filters';
 import { KanbanFiltersResult } from '../kanban-filters-result';
 import { KanbanDialog } from '../kanban-dialog';
 
+import { useGetBoardList } from '~/actions/kanban';
+import { endpoints } from '~/utils/axios';
+
 export function KanbanListView() {
     const openFilters = useBoolean();
     const dialog = useBoolean();
 
     const [sortBy, setSortBy] = useState('latest');
-    const [boards, setBoards] = useState([..._tours].sort((a, b) => b.star - a.star));
+    // Sử dụng useGetBoardList để lấy danh sách boards
+    const { boards, boardsLoading, boardsError, boardsEmpty } = useGetBoardList();
+    // const [boards, setBoards] = useState([..._tours].sort((a, b) => b.starred - a.star));
 
     const search = useSetState({ query: '', results: [] });
 
@@ -40,16 +46,25 @@ export function KanbanListView() {
         endDate: null,
     });
 
-    const handleStarToggle = useCallback(
-        (boardId, isStarred) => {
-            const updatedBoards = boards.map((board) =>
-                board.id === boardId ? { ...board, star: !isStarred } : board,
-            );
+    const handleStarToggle = useCallback(async (boardId, isStarred) => {
+        try {
+            // Gọi API để cập nhật trạng thái starred của board
+            // await axios.post(`/api/boards/${boardId}/toggle-star`, { star: !isStarred });
 
-            setBoards(updatedBoards);
-        },
-        [boards],
-    );
+            // Cập nhật trạng thái starred trong state
+            mutate(
+                endpoints.kanban.boards,
+                (currentBoards) => {
+                    return currentBoards.map((board) =>
+                        board.id === boardId ? { ...board, star: !isStarred } : board,
+                    );
+                },
+                false,
+            );
+        } catch (error) {
+            console.error('Failed to toggle star:', error);
+        }
+    }, []);
 
     const handleClickOpen = useCallback(() => {
         dialog.onTrue();

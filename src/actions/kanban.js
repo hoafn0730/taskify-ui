@@ -45,6 +45,22 @@ export function useGetBoard() {
     return memoizedValue;
 }
 
+export function useGetBoardList() {
+    const { data: boards, error, isValidating } = useSWR(endpoints.kanban.boards, fetcher, swrOptions);
+
+    const memoizedValue = useMemo(() => {
+        return {
+            boards: boards || [],
+            boardsLoading: !error && !boards,
+            boardsError: error,
+            boardsValidating: isValidating,
+            boardsEmpty: !boards || boards.length === 0,
+        };
+    }, [boards, error, isValidating]);
+
+    return memoizedValue;
+}
+
 // ----------------------------------------------------------------------
 
 export async function createColumn(columnData) {

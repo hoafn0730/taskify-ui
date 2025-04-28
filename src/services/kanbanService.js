@@ -23,9 +23,7 @@ const getCombinedBoards = () => {
 };
 
 const createNewBoard = async (data) => {
-    const res = await axiosInstance.post('/boards', {
-        ...data,
-    });
+    const res = await axiosInstance.post(endpoints.kanban.boards, data);
     return res.data;
 };
 

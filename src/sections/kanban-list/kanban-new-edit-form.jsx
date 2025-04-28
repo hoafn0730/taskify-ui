@@ -20,6 +20,9 @@ import { _tags, _tourGuides } from '~/_mock';
 
 import { toast } from '~/components/snackbar';
 import { Form, Field, schemaHelper } from '~/components/hook-form';
+import { kanbanService } from '~/services/kanbanService';
+import { mutate } from 'swr';
+import { endpoints } from '~/utils/axios';
 
 export const NewKanbanSchema = zod
     .object({
@@ -90,13 +93,31 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
         }
     }, [currentBoard, defaultValues, reset]);
 
+    // [ ] TODO: Handle create and update kanban
     const onSubmit = handleSubmit(async (data) => {
         try {
-            await new Promise((resolve) => setTimeout(resolve, 3000));
+            const resData = await kanbanService.createNewBoard({
+                title: data.title,
+                description: data.description,
+                image: data.image[0],
+                type: 'public',
+                // tags: data.tags,
+                // available: {
+                //     startDate: data.available.startDate,
+                //     endDate: data.available.endDate,
+                // },
+            });
+            console.log('🚀 ~ onSubmit ~ resData:', resData);
             reset();
             toast.success(currentBoard ? 'Update success!' : 'Create success!');
-            console.info('DATA', data);
             onCancel();
+            mutate(
+                endpoints.kanban.boards,
+                (currentBoards) => {
+                    return [...currentBoards, data];
+                },
+                false,
+            );
         } catch (error) {
             console.error(error);
         }

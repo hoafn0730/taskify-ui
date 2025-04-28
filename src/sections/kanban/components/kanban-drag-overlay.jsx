@@ -5,6 +5,7 @@ import Portal from '@mui/material/Portal';
 import ItemBase from '../item/item-base';
 import ColumnBase from '../column/column-base';
 import KanbanColumnToolBar from '../column/kanban-column-toolbar';
+import { mapOrder } from '~/utils/sort';
 
 const dropAnimation = {
     sideEffects: defaultDropAnimationSideEffects({ styles: { active: { opacity: '0.5' } } }),
@@ -25,7 +26,11 @@ export function KanbanDragOverlay({ columns, tasks, activeId, sx }) {
                 {activeId ? (
                     <>
                         {columnIds.includes(activeId) ? (
-                            <ColumnOverlay column={activeColumn} tasks={tasks[activeId]} sx={sx} />
+                            <ColumnOverlay
+                                column={activeColumn}
+                                tasks={mapOrder(tasks[activeId], activeColumn.cardOrderIds, 'uuid')}
+                                sx={sx}
+                            />
                         ) : (
                             <TaskItemOverlay task={activeTask} sx={sx} />
                         )}

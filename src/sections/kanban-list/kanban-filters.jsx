@@ -24,17 +24,6 @@ import { CountrySelect } from '~/components/country-select';
 // ----------------------------------------------------------------------
 
 export function KanbanFilters({ open, onOpen, onClose, filters, options, canReset, dateError }) {
-    const handleFilterServices = useCallback(
-        (newValue) => {
-            const checked = filters.state.services.includes(newValue)
-                ? filters.state.services.filter((value) => value !== newValue)
-                : [...filters.state.services, newValue];
-
-            filters.setState({ services: checked });
-        },
-        [filters],
-    );
-
     const handleFilterStartDate = useCallback(
         (newValue) => {
             filters.setState({ startDate: newValue });
@@ -45,13 +34,6 @@ export function KanbanFilters({ open, onOpen, onClose, filters, options, canRese
     const handleFilterEndDate = useCallback(
         (newValue) => {
             filters.setState({ endDate: newValue });
-        },
-        [filters],
-    );
-
-    const handleFilterDestination = useCallback(
-        (newValue) => {
-            filters.setState({ destination: newValue });
         },
         [filters],
     );
@@ -114,23 +96,6 @@ export function KanbanFilters({ open, onOpen, onClose, filters, options, canRese
         </Box>
     );
 
-    const renderDestination = (
-        <Box display="flex" flexDirection="column">
-            <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-                Destination
-            </Typography>
-
-            <CountrySelect
-                id="multiple-destinations"
-                multiple
-                fullWidth
-                placeholder={filters.state.destination.length ? '+ Destination' : 'Select Destination'}
-                value={filters.state.destination}
-                onChange={(event, newValue) => handleFilterDestination(newValue)}
-            />
-        </Box>
-    );
-
     const renderKanbanGuide = (
         <Box display="flex" flexDirection="column">
             <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
@@ -173,26 +138,6 @@ export function KanbanFilters({ open, onOpen, onClose, filters, options, canRese
         </Box>
     );
 
-    const renderServices = (
-        <Box display="flex" flexDirection="column">
-            <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                Services
-            </Typography>
-            {options.services.map((option) => (
-                <FormControlLabel
-                    key={option}
-                    control={
-                        <Checkbox
-                            checked={filters.state.services.includes(option)}
-                            onClick={() => handleFilterServices(option)}
-                        />
-                    }
-                    label={option}
-                />
-            ))}
-        </Box>
-    );
-
     return (
         <>
             <Button
@@ -220,9 +165,7 @@ export function KanbanFilters({ open, onOpen, onClose, filters, options, canRese
                 <Scrollbar sx={{ px: 2.5, py: 3 }}>
                     <Stack spacing={3}>
                         {renderDateRange}
-                        {renderDestination}
                         {renderKanbanGuide}
-                        {renderServices}
                     </Stack>
                 </Scrollbar>
             </Drawer>

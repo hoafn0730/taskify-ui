@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Pagination, { paginationClasses } from '@mui/material/Pagination';
@@ -7,24 +7,41 @@ import { paths } from '~/configs/paths';
 import { useRouter } from '~/routes/hooks';
 
 import { KanbanItem } from './kanban-item';
+import { KanbanDialog } from './kanban-dialog';
 
-// ----------------------------------------------------------------------
+import { useBoolean } from '~/hooks/use-boolean';
+import { useSetState } from '~/hooks/use-set-state';
 
-export function KanbanList({ boards }) {
+export function KanbanList({ boards, onStarToggle }) {
     const router = useRouter();
+    const dialog = useBoolean();
+    const { state, setState } = useSetState(null);
+
+    //     const handleStarToggle = useCallback(
+    //         (boardId, isStarred) => {
+    //             const updatedBoards = boards.map((board) =>
+    //                 board.id === boardId ? { ...board, star: !isStarred } : board,
+    //             );
+    //
+    //             // No need to sort here, as sorting is handled in `applyFilter`
+    //             console.log(updatedBoards);
+    //         },
+    //         [boards],
+    //     );
 
     const handleView = useCallback(
         (id) => {
-            router.push(paths.dashboard.kanban.details(id));
+            router.push(paths.dashboard.kanban.details('remote-class'));
         },
         [router],
     );
 
     const handleEdit = useCallback(
-        (id) => {
-            router.push(paths.dashboard.kanban.edit(id));
+        (board) => {
+            setState(board);
+            dialog.onTrue();
         },
-        [router],
+        [dialog, setState],
     );
 
     const handleDelete = useCallback((id) => {
@@ -42,8 +59,9 @@ export function KanbanList({ boards }) {
                     <KanbanItem
                         key={board.id}
                         board={board}
+                        onStarToggle={onStarToggle}
                         onView={() => handleView(board.id)}
-                        onEdit={() => handleEdit(board.id)}
+                        onEdit={() => handleEdit(board)}
                         onDelete={() => handleDelete(board.id)}
                     />
                 ))}
@@ -58,6 +76,8 @@ export function KanbanList({ boards }) {
                     }}
                 />
             )}
+
+            <KanbanDialog currentBoard={state} dialog={dialog} />
         </>
     );
 }

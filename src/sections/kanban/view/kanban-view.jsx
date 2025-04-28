@@ -27,7 +27,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 
 import { hideScrollY } from '~/theme/styles';
 import { DashboardContent } from '~/layouts/dashboard';
-import { moveTask, moveColumn, useGetBoard } from '~/actions/kanban';
+import { useGetBoard } from '~/actions/kanban';
 
 import { EmptyContent } from '~/components/empty-content';
 
@@ -39,7 +39,10 @@ import { KanbanColumnAdd } from '../column/kanban-column-add';
 import { KanbanColumnSkeleton } from '../components/kanban-skeleton';
 import { KanbanDragOverlay } from '../components/kanban-drag-overlay';
 
-import { updateBoardData } from '~/store/slices/boardSlice';
+import { updateBoardData } from '~/store/slices/kanbanSlice';
+import { kanbanService } from '~/services/kanbanService';
+import { mapOrder } from '~/utils/sort';
+import { cloneDeep } from 'lodash';
 
 const PLACEHOLDER_ID = 'placeholder';
 
@@ -133,11 +136,8 @@ export function KanbanView() {
     );
 
     const findColumn = (id) => {
-        if (id in board.tasks) {
-            return id;
-        }
-
-        return Object.keys(board.tasks).find((key) => board.tasks[key].map((task) => task.uuid).includes(id));
+        if (id in board.tasks) return id;
+        return Object.keys(board.tasks).find((key) => board.tasks[key].some((task) => task.uuid === id));
     };
 
     useEffect(() => {
@@ -146,8 +146,7 @@ export function KanbanView() {
         });
     }, []);
 
-    // [ ] move func moveColumn
-    const moveColumns = (orderedColumns) => {
+    const moveColumn = (orderedColumns) => {
         const dndOrderedColumnsIds = orderedColumns.map((c) => c.uuid);
 
         const newBoard = { ...board };
@@ -157,7 +156,48 @@ export function KanbanView() {
         dispatch(updateBoardData(newBoard));
 
         // fetch API update board
-        // boardService.updateBoard(newBoard.id, { columnOrderIds: dndOrderedColumnsIds });
+        kanbanService.updateBoard(board.id, { columnOrderIds: orderedColumns.map((col) => col.uuid) });
+    };
+
+    const moveTaskInSameColumn = (updateTasks, orderedTasks, columnId) => {
+        const newBoard = cloneDeep(board);
+        newBoard.tasks = updateTasks;
+
+        const dndOrderedTasksIds = orderedTasks.map((task) => task.uuid);
+        const newColumn = newBoard.columns.find((col) => col.id === columnId);
+        newColumn.cardOrderIds = dndOrderedTasksIds;
+
+        // Cập nhật store với trạng thái mới sau khi kéo thả
+        dispatch(updateBoardData(newBoard));
+
+        kanbanService.updateColumn(columnId, { cardOrderIds: orderedTasks.map((task) => task.uuid) });
+    };
+
+    const moveTaskToDifferentColumn = (
+        updateTasks,
+        updatedColumns,
+        currentCardId,
+        prevColumnId,
+        prevCardOrderIds,
+        nextColumnId,
+        nextCardOrderIds,
+    ) => {
+        const newBoard = {
+            ...board,
+            columns: updatedColumns,
+            tasks: updateTasks,
+        };
+
+        dispatch(updateBoardData(newBoard));
+
+        // fetch API update board
+        kanbanService.moveCardToDifferentColumn(board.id, {
+            currentCardId,
+            prevColumnId,
+            prevCardOrderIds,
+            nextColumnId,
+            nextCardOrderIds,
+        });
     };
 
     /**
@@ -216,29 +256,59 @@ export function KanbanView() {
             // Đánh dấu là vừa mới chuyển task sang column khác
             recentlyMovedToNewContainer.current = true;
 
+            const prevColumn = board.columns.find((col) => col.uuid === activeColumn);
+            const nextColumn = board.columns.find((col) => col.uuid === overColumn);
+
+            const activeTasks = board.tasks[activeColumn].filter((task) => task.uuid !== active.id);
+            const overTasks = board.tasks[overColumn].toSpliced(newIndex, 0, {
+                ...board.tasks[activeColumn][activeIndex],
+                columnId: nextColumn.id,
+            });
+
             // Cập nhật lại danh sách task trong các column
             const updateTasks = {
                 ...board.tasks,
-                [activeColumn]: board.tasks[activeColumn].filter((task) => task.uuid !== active.id), // Xóa task khỏi column cũ
-                [overColumn]: [
-                    ...board.tasks[overColumn].slice(0, newIndex),
-                    board.tasks[activeColumn][activeIndex], // Thêm task vào vị trí mới trong column mới
-                    ...board.tasks[overColumn].slice(newIndex, board.tasks[overColumn].length),
-                ],
+                [activeColumn]: activeTasks, // Xóa task khỏi column cũ
+                [overColumn]: overTasks,
             };
 
-            // Cập nhật lại state board với task đã di chuyển
-            const newBoard = { ...board, tasks: updateTasks };
-            dispatch(updateBoardData(newBoard));
+            // Đồng thời update luôn board.columns
+            const updatedColumns = board.columns.map((col) => {
+                if (col.uuid === activeColumn) {
+                    return {
+                        ...col,
+                        cardOrderIds: activeTasks.map((task) => task.uuid),
+                    };
+                }
+                if (col.uuid === overColumn) {
+                    return {
+                        ...col,
+                        cardOrderIds: overTasks.map((task) => task.uuid),
+                    };
+                }
+                return col;
+            });
 
-            // Nếu có API thì dùng moveTask(updateTasks) thay vì dispatch trực tiếp
-            // moveTask(updateTasks);
+            const currentCardId = active.data.current.id;
+            const prevColumnId = prevColumn.id;
+            const prevCardOrderIds = activeTasks.map((task) => task.uuid);
+            const nextColumnId = nextColumn.id;
+            const nextCardOrderIds = overTasks.map((task) => task.uuid);
+
+            moveTaskToDifferentColumn(
+                updateTasks,
+                updatedColumns,
+                currentCardId,
+                prevColumnId,
+                prevCardOrderIds,
+                nextColumnId,
+                nextCardOrderIds,
+            );
         }
     };
 
     /**
      * onDragEnd
-     * TODO: Handle api move col card
      */
     const onDragEnd = ({ active, over }) => {
         // Nếu phần tử đang kéo (active) là một column và có phần tử đang hover lên (over)
@@ -248,8 +318,7 @@ export function KanbanView() {
 
             // Di chuyển column trong danh sách theo vị trí mới
             const updateColumns = arrayMove(board.columns, activeIndex, overIndex);
-            moveColumns(updateColumns); // cập nhật thứ tự column mới
-            // moveColumn(updateColumns); // nếu bạn dùng API server, có thể gọi hàm này thay vì dispatch trực tiếp
+            moveColumn(updateColumns); // cập nhật thứ tự column mới
         }
 
         // Tìm column chứa task đang kéo
@@ -276,33 +345,27 @@ export function KanbanView() {
         if (overColumn) {
             // Lấy danh sách ID task trong column chứa task đang kéo
             const activeContainerTaskIds = board.tasks[activeColumn].map((task) => task.uuid);
-            console.log('🚀 ~ onDragEnd ~ activeContainerTaskIds:', activeContainerTaskIds);
 
             // Lấy danh sách ID task trong column nơi sẽ thả
             const overContainerTaskIds = board.tasks[overColumn].map((task) => task.uuid);
-            console.log('🚀 ~ onDragEnd ~ overContainerTaskIds:', overContainerTaskIds);
 
             // Tìm vị trí (index) của task đang kéo trong column gốc
             const activeIndex = activeContainerTaskIds.indexOf(active.id);
-            console.log('🚀 ~ onDragEnd ~ activeIndex:', activeIndex);
 
             // Tìm vị trí (index) trong column đích (nơi task đang hover)
             const overIndex = overContainerTaskIds.indexOf(overId);
-            console.log('🚀 ~ onDragEnd ~ overIndex:', overIndex);
 
             // Nếu vị trí khác nhau thì thực hiện di chuyển
             if (activeIndex !== overIndex) {
+                const orderedTasks = arrayMove(board.tasks[overColumn], activeIndex, overIndex);
                 const updateTasks = {
                     ...board.tasks,
                     // Sử dụng arrayMove để thay đổi thứ tự task trong column đích
-                    [overColumn]: arrayMove(board.tasks[overColumn], activeIndex, overIndex),
+                    [overColumn]: orderedTasks,
                 };
+                const columnId = board.columns.find((col) => col.uuid === overColumn)?.id;
 
-                const newBoard = { ...board, tasks: updateTasks };
-
-                // Cập nhật store với trạng thái mới sau khi kéo thả
-                dispatch(updateBoardData(newBoard));
-                // moveTask(updateTasks); // Nếu bạn muốn gọi API để lưu thay đổi lên server
+                moveTaskInSameColumn(updateTasks, orderedTasks, columnId);
             }
         }
 
@@ -352,12 +415,13 @@ export function KanbanView() {
                             strategy={horizontalListSortingStrategy}
                         >
                             {board?.columns.map((column) => {
-                                const taskIds = board.tasks[column.uuid]?.map((task) => task.uuid) || [];
+                                const taskIds = column.cardOrderIds || [];
+                                const orderedTasks = mapOrder(board.tasks[column.uuid], taskIds, 'uuid');
 
                                 return (
-                                    <KanbanColumn key={column.id} column={column} tasks={board.tasks[column.uuid]}>
+                                    <KanbanColumn key={column.id} column={column} tasks={orderedTasks}>
                                         <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>
-                                            {board.tasks[column.uuid].map((task) => (
+                                            {orderedTasks.map((task) => (
                                                 <KanbanTaskItem
                                                     task={task}
                                                     key={task.id}
@@ -370,7 +434,7 @@ export function KanbanView() {
                                 );
                             })}
 
-                            <KanbanColumnAdd id={PLACEHOLDER_ID} />
+                            <KanbanColumnAdd id={PLACEHOLDER_ID} board={board} />
                         </SortableContext>
                     </Stack>
                 </Stack>

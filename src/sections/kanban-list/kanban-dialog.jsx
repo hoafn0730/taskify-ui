@@ -8,10 +8,10 @@ import { KanbanNewEditForm } from './kanban-new-edit-form';
 // eslint-disable-next-line react/display-name
 const Transition = forwardRef((props, ref) => <Grow ref={ref} {...props} />);
 
-export function KanbanDialog({ dialog }) {
+export function KanbanDialog({ dialog, currentBoard }) {
     return (
         <Dialog open={dialog.value} onClose={dialog.onFalse} TransitionComponent={Transition} scroll={'body'}>
-            <KanbanNewEditForm onCancel={dialog.onFalse} />
+            <KanbanNewEditForm currentBoard={currentBoard} onCancel={dialog.onFalse} />
         </Dialog>
     );
 }

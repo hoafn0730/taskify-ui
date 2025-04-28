@@ -16,7 +16,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import { fIsAfter } from '~/utils/format-time';
 
-import { _tags, _tourGuides, TOUR_SERVICE_OPTIONS } from '~/_mock';
+import { _tags, _tourGuides } from '~/_mock';
 
 import { toast } from '~/components/snackbar';
 import { Form, Field, schemaHelper } from '~/components/hook-form';
@@ -27,10 +27,10 @@ export const NewKanbanSchema = zod
         description: schemaHelper.editor({
             message: { required_error: 'Description is required!' },
         }),
-        images: schemaHelper.files({
-            message: { required_error: 'Images is required!' },
+        image: schemaHelper.file({
+            message: { required_error: 'Image is required!' },
         }),
-        boardGuides: zod
+        members: zod
             .array(
                 zod.object({
                     id: zod.string(),
@@ -39,7 +39,7 @@ export const NewKanbanSchema = zod
                     phoneNumber: zod.string(),
                 }),
             )
-            .nonempty({ message: 'Must have at least 1 guide!' }),
+            .nonempty({ message: 'Must have at least 1 member!' }),
         available: zod.object({
             startDate: schemaHelper.date({
                 message: { required_error: 'Start date is required!' },
@@ -48,11 +48,6 @@ export const NewKanbanSchema = zod
                 message: { required_error: 'End date is required!' },
             }),
         }),
-        durations: zod.string().min(1, { message: 'Durations is required!' }),
-        destination: schemaHelper.objectOrNull({
-            message: { required_error: 'Destination is required!' },
-        }),
-        services: zod.string().array().min(2, { message: 'Must have at least 2 items!' }),
         tags: zod.string().array().min(2, { message: 'Must have at least 2 items!' }),
     })
     .refine((data) => !fIsAfter(data.available.startDate, data.available.endDate), {
@@ -65,15 +60,12 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
         () => ({
             title: currentBoard?.name || '',
             description: currentBoard?.content || '',
-            images: currentBoard?.images || [],
-            boardGuides: currentBoard?.boardGuides || [],
+            image: currentBoard?.images[0] || '',
+            members: currentBoard?.boardGuides || [],
             available: {
                 startDate: currentBoard?.available.startDate || null,
                 endDate: currentBoard?.available.endDate || null,
             },
-            durations: currentBoard?.durations || '',
-            destination: currentBoard?.destination || '',
-            services: currentBoard?.services || [],
             tags: currentBoard?.tags || [],
         }),
         [currentBoard],
@@ -86,14 +78,11 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
     });
 
     const {
-        watch,
         reset,
         setValue,
         handleSubmit,
         formState: { isSubmitting },
     } = methods;
-
-    const values = watch();
 
     useEffect(() => {
         if (currentBoard) {
@@ -103,7 +92,6 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
 
     const onSubmit = handleSubmit(async (data) => {
         try {
-
             await new Promise((resolve) => setTimeout(resolve, 3000));
             reset();
             toast.success(currentBoard ? 'Update success!' : 'Create success!');
@@ -114,20 +102,11 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
         }
     });
 
-    const handleRemoveFile = useCallback(
-        (inputFile) => {
-            const filtered = values.images && values.images?.filter((file) => file !== inputFile);
-            setValue('images', filtered, { shouldValidate: true });
-        },
-        [setValue, values.images],
-    );
-
-    const handleRemoveAllFiles = useCallback(() => {
-        setValue('images', [], { shouldValidate: true });
+    const handleRemoveFile = useCallback(() => {
+        setValue('image', '', { shouldValidate: true });
     }, [setValue]);
 
     const renderDetails = (
-
         <Stack spacing={3}>
             <Stack spacing={1.5}>
                 <Typography variant="subtitle2">Title</Typography>
@@ -140,16 +119,8 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
             </Stack>
 
             <Stack spacing={1.5}>
-                <Typography variant="subtitle2">Images</Typography>
-                <Field.Upload
-                    multiple
-                    thumbnail
-                    name="images"
-                    maxSize={3145728}
-                    onRemove={handleRemoveFile}
-                    onRemoveAll={handleRemoveAllFiles}
-                    onUpload={() => console.info('ON UPLOAD')}
-                />
+                <Typography variant="subtitle2">Image</Typography>
+                <Field.Upload name="image" thumbnail maxSize={3145728} onDelete={handleRemoveFile} />
             </Stack>
         </Stack>
     );
@@ -158,13 +129,13 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
         <Stack spacing={3}>
             <div>
                 <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-                    Kanban guide
+                    Members
                 </Typography>
 
                 <Field.Autocomplete
                     multiple
-                    name="boardGuides"
-                    placeholder="+ Kanban Guides"
+                    name="members"
+                    placeholder="+ Members"
                     disableCloseOnSelect
                     options={_tourGuides}
                     getOptionLabel={(option) => option.name}
@@ -205,25 +176,6 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
             </Stack>
 
             <Stack spacing={1.5}>
-                <Typography variant="subtitle2">Duration</Typography>
-                <Field.Text name="durations" placeholder="Ex: 2 days, 4 days 3 nights..." />
-            </Stack>
-
-            <Stack spacing={1.5}>
-                <Typography variant="subtitle2">Destination</Typography>
-                <Field.CountrySelect fullWidth name="destination" placeholder="+ Destination" />
-            </Stack>
-
-            <Stack spacing={1}>
-                <Typography variant="subtitle2">Services</Typography>
-                <Field.MultiCheckbox
-                    name="services"
-                    options={TOUR_SERVICE_OPTIONS}
-                    sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}
-                />
-            </Stack>
-
-            <Stack spacing={1.5}>
                 <Typography variant="subtitle2">Tags</Typography>
                 <Field.Autocomplete
                     name="tags"
@@ -257,7 +209,6 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
 
     return (
         <Form methods={methods} onSubmit={onSubmit}>
-
             <DialogTitle sx={{ pb: 2 }}> {!currentBoard ? 'New Kanban' : 'Edit Kanban'} </DialogTitle>
             <DialogContent>
                 <Stack spacing={{ xs: 3, md: 5 }} sx={{ mx: 'auto', maxWidth: { xs: 720, xl: 880 } }}>

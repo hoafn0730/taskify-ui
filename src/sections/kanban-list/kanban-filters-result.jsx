@@ -7,18 +7,7 @@ import { fDateRangeShortLabel } from '~/utils/format-time';
 
 import { chipProps, FiltersBlock, FiltersResult } from '~/components/filters-result';
 
-// ----------------------------------------------------------------------
-
 export function KanbanFiltersResult({ filters, totalResults, sx }) {
-    const handleRemoveServices = useCallback(
-        (inputValue) => {
-            const newValue = filters.state.services.filter((item) => item !== inputValue);
-
-            filters.setState({ services: newValue });
-        },
-        [filters],
-    );
-
     const handleRemoveAvailable = useCallback(() => {
         filters.setState({ startDate: null, endDate: null });
     }, [filters]);
@@ -28,15 +17,6 @@ export function KanbanFiltersResult({ filters, totalResults, sx }) {
             const newValue = filters.state.boardGuides.filter((item) => item.name !== inputValue.name);
 
             filters.setState({ boardGuides: newValue });
-        },
-        [filters],
-    );
-
-    const handleRemoveDestination = useCallback(
-        (inputValue) => {
-            const newValue = filters.state.destination.filter((item) => item !== inputValue);
-
-            filters.setState({ destination: newValue });
         },
         [filters],
     );
@@ -51,12 +31,6 @@ export function KanbanFiltersResult({ filters, totalResults, sx }) {
                 />
             </FiltersBlock>
 
-            <FiltersBlock label="Services:" isShow={!!filters.state.services.length}>
-                {filters.state.services.map((item) => (
-                    <Chip {...chipProps} key={item} label={item} onDelete={() => handleRemoveServices(item)} />
-                ))}
-            </FiltersBlock>
-
             <FiltersBlock label="Kanban guide:" isShow={!!filters.state.boardGuides.length}>
                 {filters.state.boardGuides.map((item) => (
                     <Chip
@@ -66,12 +40,6 @@ export function KanbanFiltersResult({ filters, totalResults, sx }) {
                         label={item.name}
                         onDelete={() => handleRemoveKanbanGuide(item)}
                     />
-                ))}
-            </FiltersBlock>
-
-            <FiltersBlock label="Destination:" isShow={!!filters.state.destination.length}>
-                {filters.state.destination.map((item) => (
-                    <Chip {...chipProps} key={item} label={item} onDelete={() => handleRemoveDestination(item)} />
                 ))}
             </FiltersBlock>
         </FiltersResult>

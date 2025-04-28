@@ -18,10 +18,8 @@ import { usePopover, CustomPopover } from '~/components/custom-popover';
 
 import KanbanInputName from '../components/kanban-input-name';
 
-// ----------------------------------------------------------------------
-
 function KanbanColumnToolBar({
-    columnName,
+    columnTitle,
     totalTasks,
     handleProps,
     onClearColumn,
@@ -35,7 +33,7 @@ function KanbanColumnToolBar({
 
     const confirmDialog = useBoolean();
 
-    const [name, setName] = useState(columnName);
+    const [name, setName] = useState(columnTitle);
 
     useEffect(() => {
         if (popover.open) {

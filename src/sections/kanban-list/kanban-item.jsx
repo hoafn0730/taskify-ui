@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
@@ -7,7 +5,7 @@ import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
-import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
 
 import { RouterLink } from '~/components/router-link';
 import { Image } from '~/components/image';
@@ -17,34 +15,33 @@ import { usePopover, CustomPopover } from '~/components/custom-popover';
 import { paths } from '~/configs/paths';
 
 import { fDateTime } from '~/utils/format-time';
+import { useBoolean } from '~/hooks/use-boolean';
 
-export function KanbanItem({ board, onView, onEdit, onDelete, onStar }) {
+export function KanbanItem({ board, onView, onEdit, onDelete, onStarToggle }) {
     const popover = usePopover();
-    const [isStarred, setIsStarred] = useState(!!board.star);
+    const favorite = useBoolean(!!board.star);
 
     const buttonStar = (
-        <Button
+        <Checkbox
             className="star-button"
+            color="warning"
+            icon={<Iconify icon="eva:star-outline" />}
+            checkedIcon={<Iconify icon="eva:star-fill" />}
+            checked={favorite.value}
+            onChange={() => {
+                onStarToggle(board.id, favorite.value);
+                favorite.onToggle();
+            }}
             sx={{
+                p: 0.75,
                 top: 8,
                 right: 8,
                 zIndex: 9,
-                borderRadius: 1,
                 position: 'absolute',
-                typography: 'subtitle2',
-                p: 0.5,
-                minWidth: 'auto',
                 opacity: 0,
                 transition: 'opacity 0.3s ease',
             }}
-            onClick={() => setIsStarred((prev) => !prev)}
-        >
-            {isStarred ? (
-                <Iconify icon="eva:star-fill" sx={{ color: 'warning.main' }} />
-            ) : (
-                <Iconify icon="eva:star-outline" sx={{ color: 'warning.main' }} />
-            )}
-        </Button>
+        />
     );
 
     const renderImages = (
@@ -84,6 +81,9 @@ export function KanbanItem({ board, onView, onEdit, onDelete, onStar }) {
             <Card
                 sx={{
                     '&:hover .star-button': {
+                        opacity: 1,
+                    },
+                    '.star-button.Mui-checked': {
                         opacity: 1,
                     },
                 }}

@@ -50,7 +50,7 @@ export function useGetBoardList() {
 
     const memoizedValue = useMemo(() => {
         return {
-            boards: boards || [],
+            boards: boards?.sort((a, b) => b?.starred - a?.starred) || [],
             boardsLoading: !error && !boards,
             boardsError: error,
             boardsValidating: isValidating,

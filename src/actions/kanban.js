@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { useParams } from '~/routes/hooks';
 import { fetchBoardDetail } from '~/store/actions/kanbanAction';
 
-import axios, { fetcher, endpoints } from '~/utils/axios';
+import axios, { fetcher, endpoints, fetcher1 } from '~/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -46,11 +46,15 @@ export function useGetBoard() {
 }
 
 export function useGetBoardList() {
-    const { data: boards, error, isValidating } = useSWR(endpoints.kanban.boards, fetcher, swrOptions);
+    const {
+        data: boards,
+        error,
+        isValidating,
+    } = useSWR(import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.boards, fetcher1, swrOptions);
 
     const memoizedValue = useMemo(() => {
         return {
-            boards: boards?.sort((a, b) => b?.starred - a?.starred) || [],
+            boards: boards?.data?.data?.sort((a, b) => b?.starred - a?.starred) || [],
             boardsLoading: !error && !boards,
             boardsError: error,
             boardsValidating: isValidating,

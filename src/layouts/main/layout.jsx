@@ -41,6 +41,8 @@ export function MainLayout({ sx, data, children }) {
                         layoutQuery={layoutQuery}
                         onOpenNav={mobileNavOpen.onTrue}
                         slotsDisplay={{
+                            goToDashboard: false,
+                            purchase: false,
                             account: false,
                             helpLink: false,
                             contacts: false,

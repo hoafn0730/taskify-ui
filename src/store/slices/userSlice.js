@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { signIn } from '../actions/userAction';
+import { signIn, signOut } from '../actions/userAction';
 import { endpoints } from '~/utils/axios';
 import { isValidToken } from '../utils';
 
@@ -56,6 +56,13 @@ export const userSlice = createSlice({
                 state.error = action.error;
                 state.status = 'unauthenticated';
             });
+
+        builder.addCase(signOut.fulfilled, (state) => {
+            state.user = null;
+            state.isLoading = false;
+            state.error = null;
+            state.status = 'unauthenticated';
+        });
     },
 });
 

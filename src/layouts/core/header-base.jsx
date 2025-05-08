@@ -18,6 +18,8 @@ import { LanguagePopover } from '../components/language-popover';
 import { ContactsPopover } from '../components/contacts-popover';
 import { WorkspacesPopover } from '../components/workspaces-popover';
 import { NotificationsDrawer } from '../components/notifications-drawer';
+import { SignUpButton } from '../components/sign-up-button';
+import { GoToDashboardButton } from '../components/go-to-dashboard-button';
 
 // ----------------------------------------------------------------------
 
@@ -58,6 +60,8 @@ export function HeaderBase({
 
     slotsDisplay: {
         signIn = true,
+        signUp = true,
+        goToDashboard = true,
         account = true,
         helpLink = true,
         settings = true,
@@ -157,6 +161,12 @@ export function HeaderBase({
 
                             {/* -- Sign in button -- */}
                             {signIn && <SignInButton />}
+
+                            {/* -- Sign up button -- */}
+                            {signUp && <SignUpButton />}
+
+                            {/* -- Go to dashboard button -- */}
+                            {goToDashboard && <GoToDashboardButton />}
 
                             {/* -- Purchase button -- */}
                             {purchase && (

@@ -26,6 +26,8 @@ export function AuthSplitLayout({ sx, section, children }) {
                     onOpenNav={mobileNavOpen.onTrue}
                     slotsDisplay={{
                         signIn: false,
+                        signUp: false,
+                        goToDashboard: false,
                         account: false,
                         purchase: false,
                         contacts: false,

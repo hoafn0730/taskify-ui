@@ -31,7 +31,7 @@ export function KanbanList({ boards, onStarToggle }) {
 
     const handleView = useCallback(
         (id) => {
-            router.push(paths.dashboard.kanban.details('remote-class'));
+            router.push(paths.dashboard.kanban.details(id));
         },
         [router],
     );
@@ -60,7 +60,7 @@ export function KanbanList({ boards, onStarToggle }) {
                         key={board.id}
                         board={board}
                         onStarToggle={onStarToggle}
-                        onView={() => handleView(board.id)}
+                        onView={() => handleView(board.slug)}
                         onEdit={() => handleEdit(board)}
                         onDelete={() => handleDelete(board.id)}
                     />

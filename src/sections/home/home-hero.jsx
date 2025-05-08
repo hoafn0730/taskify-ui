@@ -60,15 +60,15 @@ export function HomeHero({ sx, ...other }) {
                     ...theme.typography.h2,
                     my: 0,
                     mx: 'auto',
-                    maxWidth: 680,
+                    maxWidth: 1200,
                     fontFamily: theme.typography.fontSecondaryFamily,
                     [theme.breakpoints.up(lgKey)]: { fontSize: 72, lineHeight: '90px' },
                 }}
             >
                 <Box component="span" sx={{ width: 1, opacity: 0.24 }}>
-                    Boost your building
+                    Simple. Fast. Effective
                 </Box>
-                process with
+                Streamline your workflow with
                 <Box
                     component={m.span}
                     animate={{ backgroundPosition: '200% center' }}
@@ -86,7 +86,7 @@ export function HomeHero({ sx, ...other }) {
                         ml: { xs: 0.75, md: 1, xl: 1.5 },
                     }}
                 >
-                    Minimal
+                    Taskify
                 </Box>
             </Box>
         </MInview>
@@ -102,7 +102,7 @@ export function HomeHero({ sx, ...other }) {
                     [theme.breakpoints.up(lgKey)]: { fontSize: 20, lineHeight: '36px' },
                 }}
             >
-                {`The starting point for your next project is based on MUI. \nEasy customization helps you build apps faster and better.`}
+                {`Escape the clutter and chaos—unleash your productivity with Taskify.`}
             </Typography>
         </MInview>
     );
@@ -132,7 +132,7 @@ export function HomeHero({ sx, ...other }) {
     );
 
     const renderButtons = (
-        <Box display="flex" flexWrap="wrap" justifyContent="center" gap={{ xs: 1.5, sm: 2 }}>
+        <Box display="flex" flexWrap="wrap" justifyContent="center" gap={{ xs: 1.5, sm: 2, zIndex: 9999 }}>
             <MInview>
                 <Stack alignItems="center" spacing={2.5}>
                     <Button
@@ -141,53 +141,11 @@ export function HomeHero({ sx, ...other }) {
                         color="inherit"
                         size="large"
                         variant="contained"
-                        startIcon={<Iconify width={24} icon="iconoir:flash" />}
+                        endIcon={<Iconify width={24} icon="iconamoon:arrow-right-2-light" />}
                     >
-                        <span>
-                            Live preview
-                            <Box
-                                component="small"
-                                sx={{
-                                    mt: '-3px',
-                                    opacity: 0.64,
-                                    display: 'flex',
-                                    fontSize: theme.typography.pxToRem(10),
-                                    fontWeight: theme.typography.fontWeightMedium,
-                                }}
-                            >
-                                v{CONFIG.site.version}
-                            </Box>
-                        </span>
+                        <span>Get started now</span>
                     </Button>
-
-                    <Link
-                        color="inherit"
-                        variant="body2"
-                        target="_blank"
-                        rel="noopener"
-                        href={paths.freeUI}
-                        underline="always"
-                        sx={{ gap: 0.5, alignItems: 'center', display: 'inline-flex' }}
-                    >
-                        Get free version
-                        <Iconify width={16} icon="eva:external-link-fill" />
-                    </Link>
                 </Stack>
-            </MInview>
-
-            <MInview>
-                <Button
-                    color="inherit"
-                    size="large"
-                    variant="outlined"
-                    target="_blank"
-                    rel="noopener"
-                    href={paths.figma}
-                    startIcon={<Iconify width={24} icon="solar:figma-outline" />}
-                    sx={{ borderColor: 'text.primary' }}
-                >
-                    Figma preview
-                </Button>
             </MInview>
         </Box>
     );
@@ -279,7 +237,7 @@ export function HomeHero({ sx, ...other }) {
                     </Stack>
                     <m.div style={{ y: y3 }}>{renderRatings}</m.div>
                     <m.div style={{ y: y4 }}>{renderButtons}</m.div>
-                    <m.div style={{ y: y5 }}>{renderIcons}</m.div>
+                    {/* <m.div style={{ y: y5 }}>{renderIcons}</m.div> */}
                 </Container>
 
                 <HeroBackground />

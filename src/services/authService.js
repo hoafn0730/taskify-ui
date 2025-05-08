@@ -1,14 +1,14 @@
 import axiosInstance, { endpoints } from '~/utils/axios';
 
 const signIn = ({ email, password }) => {
-    return axiosInstance.post(endpoints.auth.signIn, {
+    return axiosInstance.post(import.meta.env.VITE_SERVER_BE_URL + endpoints.auth.signIn, {
         email,
         password,
     });
 };
 
 const signUp = ({ username, email, password, firstName, lastName }) => {
-    return axiosInstance.post(endpoints.auth.signUp, {
+    return axiosInstance.post(import.meta.env.VITE_SERVER_BE_URL + endpoints.auth.signUp, {
         username,
         email,
         password,
@@ -17,7 +17,7 @@ const signUp = ({ username, email, password, firstName, lastName }) => {
 };
 
 const signOut = () => {
-    return axiosInstance.delete('/auth/sign-out');
+    return axiosInstance.delete(import.meta.env.VITE_SERVER_BE_URL + endpoints.auth.signOut);
 };
 
 const getCurrentUser = async () => {

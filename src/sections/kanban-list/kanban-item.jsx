@@ -49,11 +49,7 @@ export function KanbanItem({ board, onView, onEdit, onDelete, onStarToggle }) {
         <Box gap={0.5} display="flex" sx={{ p: 1 }}>
             <Box flexGrow={1} sx={{ position: 'relative' }}>
                 {buttonStar}
-                <Image
-                    alt={board?.images?.[0]}
-                    src={board?.images?.[0]}
-                    sx={{ width: 1, height: 164, borderRadius: 1 }}
-                />
+                <Image alt={board?.image} src={board?.image} sx={{ width: 1, height: 164, borderRadius: 1 }} />
             </Box>
         </Box>
     );
@@ -62,7 +58,7 @@ export function KanbanItem({ board, onView, onEdit, onDelete, onStarToggle }) {
         <ListItemText
             sx={{ p: (theme) => theme.spacing(1, 2.5, 2, 2.5) }}
             primary={
-                <Link component={RouterLink} href={paths.dashboard.kanban.details(board.id)} color="inherit">
+                <Link component={RouterLink} href={paths.dashboard.kanban.details(board.slug)} color="inherit">
                     {board.title}
                 </Link>
             }

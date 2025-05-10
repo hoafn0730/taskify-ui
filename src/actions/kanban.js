@@ -44,13 +44,20 @@ export function useGetBoard() {
 
     return memoizedValue;
 }
+const page = 1; // hoặc state: const [page, setPage] = useState(1);
+const pageSize = 20;
 
 export function useGetBoardList() {
+    // [ ]: sort boards
     const {
         data: boards,
         error,
         isValidating,
-    } = useSWR(import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.boards, fetcher1, swrOptions);
+    } = useSWR(
+        `${import.meta.env.VITE_SERVER_BE_URL}${endpoints.kanban.boards}?page=${page}&pageSize=${pageSize}`,
+        fetcher1,
+        swrOptions,
+    );
 
     const memoizedValue = useMemo(() => {
         return {

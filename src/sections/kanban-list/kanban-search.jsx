@@ -30,7 +30,7 @@ export function KanbanSearch({ search, onSearch }) {
             if (event.key === 'Enter') {
                 const selectProduct = state.results.filter((board) => board.name === state.query)[0];
 
-                handleClick(selectProduct.id);
+                handleClick(selectProduct.slug);
             }
         }
     };
@@ -42,7 +42,7 @@ export function KanbanSearch({ search, onSearch }) {
             popupIcon={null}
             options={state.results}
             onInputChange={(event, newValue) => onSearch(newValue)}
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={(option) => option.title}
             noOptionsText={<SearchNotFound query={state.query} />}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             slotProps={{
@@ -65,15 +65,15 @@ export function KanbanSearch({ search, onSearch }) {
                 />
             )}
             renderOption={(props, board, { inputValue }) => {
-                const matches = match(board.name, inputValue);
-                const parts = parse(board.name, matches);
+                const matches = match(board.title, inputValue);
+                const parts = parse(board.title, matches);
 
                 return (
-                    <Box component="li" {...props} onClick={() => handleClick(board.id)} key={board.id}>
+                    <Box component="li" {...props} onClick={() => handleClick(board.slug)} key={board.id}>
                         <Avatar
                             key={board.id}
-                            alt={board.name}
-                            src={board.images[0]}
+                            alt={board.title}
+                            src={board.image}
                             variant="rounded"
                             sx={{
                                 mr: 1.5,

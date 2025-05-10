@@ -8,11 +8,11 @@ import { Iconify } from '~/components/iconify';
 
 export const navData = [
     { title: 'Home', path: '/', icon: <Iconify width={22} icon="solar:home-2-bold-duotone" /> },
-    {
-        title: 'Components',
-        path: paths.components,
-        icon: <Iconify width={22} icon="solar:atom-bold-duotone" />,
-    },
+    // {
+    //     title: 'Components',
+    //     path: paths.components,
+    //     icon: <Iconify width={22} icon="solar:atom-bold-duotone" />,
+    // },
     {
         title: 'Pages',
         path: '/pages',
@@ -66,9 +66,9 @@ export const navData = [
             { subheader: 'Dashboard', items: [{ title: 'Dashboard', path: CONFIG.auth.redirectPath }] },
         ],
     },
-    {
-        title: 'Docs',
-        icon: <Iconify width={22} icon="solar:notebook-bold-duotone" />,
-        path: paths.docs,
-    },
+    // {
+    //     title: 'Docs',
+    //     icon: <Iconify width={22} icon="solar:notebook-bold-duotone" />,
+    //     path: paths.docs,
+    // },
 ];

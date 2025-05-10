@@ -60,19 +60,42 @@ export const navData = [
     {
         subheader: 'Management',
         items: [
-            // {
-            //     title: 'User',
-            //     path: paths.dashboard.user.root,
-            //     icon: ICONS.user,
-            //     children: [
-            //         { title: 'Profile', path: paths.dashboard.user.root },
-            //         { title: 'Cards', path: paths.dashboard.user.cards },
-            //         { title: 'List', path: paths.dashboard.user.list },
-            //         { title: 'Create', path: paths.dashboard.user.new },
-            //         { title: 'Edit', path: paths.dashboard.user.demo.edit },
-            //         { title: 'Account', path: paths.dashboard.user.account },
-            //     ],
-            // },
+            {
+                title: 'User',
+                path: paths.dashboard.user.root,
+                icon: ICONS.user,
+                children: [
+                    { title: 'Profile', path: paths.dashboard.user.root },
+                    { title: 'Cards', path: paths.dashboard.user.cards },
+                    { title: 'List', path: paths.dashboard.user.list },
+                    { title: 'Create', path: paths.dashboard.user.new },
+                    { title: 'Edit', path: paths.dashboard.user.demo.edit },
+                    { title: 'Account', path: paths.dashboard.user.account },
+                ],
+            },
+
+            {
+                title: 'Invoice',
+                path: paths.dashboard.invoice.root,
+                icon: ICONS.invoice,
+                children: [
+                    { title: 'List', path: paths.dashboard.invoice.root },
+                    { title: 'Details', path: paths.dashboard.invoice.demo.details },
+                    { title: 'Create', path: paths.dashboard.invoice.new },
+                    { title: 'Edit', path: paths.dashboard.invoice.demo.edit },
+                ],
+            },
+            {
+                title: 'Blog',
+                path: paths.dashboard.post.root,
+                icon: ICONS.blog,
+                children: [
+                    { title: 'List', path: paths.dashboard.post.root },
+                    { title: 'Details', path: paths.dashboard.post.demo.details },
+                    { title: 'Create', path: paths.dashboard.post.new },
+                    { title: 'Edit', path: paths.dashboard.post.demo.edit },
+                ],
+            },
             // {
             //     title: 'Product',
             //     path: paths.dashboard.product.root,
@@ -82,28 +105,6 @@ export const navData = [
             //         { title: 'Details', path: paths.dashboard.product.demo.details },
             //         { title: 'Create', path: paths.dashboard.product.new },
             //         { title: 'Edit', path: paths.dashboard.product.demo.edit },
-            //     ],
-            // },
-            // {
-            //     title: 'Invoice',
-            //     path: paths.dashboard.invoice.root,
-            //     icon: ICONS.invoice,
-            //     children: [
-            //         { title: 'List', path: paths.dashboard.invoice.root },
-            //         { title: 'Details', path: paths.dashboard.invoice.demo.details },
-            //         { title: 'Create', path: paths.dashboard.invoice.new },
-            //         { title: 'Edit', path: paths.dashboard.invoice.demo.edit },
-            //     ],
-            // },
-            // {
-            //     title: 'Blog',
-            //     path: paths.dashboard.post.root,
-            //     icon: ICONS.blog,
-            //     children: [
-            //         { title: 'List', path: paths.dashboard.post.root },
-            //         { title: 'Details', path: paths.dashboard.post.demo.details },
-            //         { title: 'Create', path: paths.dashboard.post.new },
-            //         { title: 'Edit', path: paths.dashboard.post.demo.edit },
             //     ],
             // },
             // {

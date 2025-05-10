@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -7,41 +9,41 @@ import { PaymentSummary } from '../payment-summary';
 import { PaymentMethods } from '../payment-methods';
 import { PaymentBillingAddress } from '../payment-billing-address';
 
-// ----------------------------------------------------------------------
-
 export function PaymentView() {
-  return (
-    <Container sx={{ pt: 5, pb: 10 }}>
-      <Typography variant="h3" align="center" sx={{ mb: 2 }}>
-        {`Let's finish powering you up!`}
-      </Typography>
+    const [method, setMethod] = useState('paypal');
 
-      <Typography align="center" sx={{ color: 'text.secondary', mb: 5 }}>
-        Professional plan is right for you.
-      </Typography>
+    return (
+        <Container sx={{ pt: 5, pb: 10 }}>
+            <Typography variant="h3" align="center" sx={{ mb: 2 }}>
+                {`Let's finish powering you up!`}
+            </Typography>
 
-      <Grid container rowSpacing={{ xs: 5, md: 0 }} columnSpacing={{ xs: 0, md: 5 }}>
-        <Grid xs={12} md={8}>
-          <Box
-            gap={5}
-            display="grid"
-            gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
-            sx={{
-              p: { md: 5 },
-              borderRadius: 2,
-              border: (theme) => ({ md: `dashed 1px ${theme.vars.palette.divider}` }),
-            }}
-          >
-            <PaymentBillingAddress />
+            <Typography align="center" sx={{ color: 'text.secondary', mb: 5 }}>
+                Professional plan is right for you.
+            </Typography>
 
-            <PaymentMethods />
-          </Box>
-        </Grid>
+            <Grid container rowSpacing={{ xs: 5, md: 0 }} columnSpacing={{ xs: 0, md: 5 }}>
+                <Grid xs={12} md={8}>
+                    <Box
+                        gap={5}
+                        display="grid"
+                        gridTemplateColumns={{ xs: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
+                        sx={{
+                            p: { md: 5 },
+                            borderRadius: 2,
+                            border: (theme) => ({ md: `dashed 1px ${theme.vars.palette.divider}` }),
+                        }}
+                    >
+                        <PaymentBillingAddress />
 
-        <Grid xs={12} md={4}>
-          <PaymentSummary />
-        </Grid>
-      </Grid>
-    </Container>
-  );
+                        <PaymentMethods method={method} setMethod={setMethod} />
+                    </Box>
+                </Grid>
+
+                <Grid xs={12} md={4}>
+                    <PaymentSummary method={method} />
+                </Grid>
+            </Grid>
+        </Container>
+    );
 }

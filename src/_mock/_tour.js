@@ -81,6 +81,25 @@ export const _tourGuides = [...Array(12)].map((_, index) => ({
     phoneNumber: _mock.phoneNumber(index),
 }));
 
+export const _members = [
+    {
+        id: 4,
+        username: 'hoantran0730',
+        email: 'hoantran0730@gmail.com',
+        displayName: 'Hoàn Trần',
+        phoneNumber: '',
+        avatar: 'https://lh3.googleusercontent.com/a/ACg8ocIA4VZJ2R6vzPgIg25aT-NJPd_wINKfgxcHMjCizdoCV0FFxA4Y=s96-c',
+    },
+    {
+        id: 5,
+        username: 'hoantran0730',
+        email: 'hoantran0730@gmail.com',
+        displayName: 'Hoàn Trần',
+        phoneNumber: '',
+        avatar: 'https://lh3.googleusercontent.com/a/ACg8ocIA4VZJ2R6vzPgIg25aT-NJPd_wINKfgxcHMjCizdoCV0FFxA4Y=s96-c',
+    },
+];
+
 export const TRAVEL_IMAGES = [...Array(16)].map((_, index) => _mock.image.travel(index));
 
 export const _tours = [...Array(12)].map((_, index) => {

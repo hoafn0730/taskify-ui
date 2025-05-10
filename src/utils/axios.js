@@ -2,8 +2,6 @@ import axios from 'axios';
 
 import { CONFIG } from '~/configs/config-global';
 
-// ----------------------------------------------------------------------
-
 const axiosInstance = axios.create({
     baseURL: CONFIG.site.serverUrl,
     // withCredentials: true,

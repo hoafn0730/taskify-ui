@@ -56,7 +56,7 @@ export function KanbanListView() {
                 endpoints.kanban.boards,
                 (currentBoards) => {
                     return currentBoards.map((board) =>
-                        board.id === boardId ? { ...board, star: !isStarred } : board,
+                        board.id === boardId ? { ...board, starred: !isStarred } : board,
                     );
                 },
                 false,
@@ -94,11 +94,11 @@ export function KanbanListView() {
         (inputValue) => {
             search.setState({ query: inputValue });
 
-            const results = _tours.filter((board) => board.name.toLowerCase().includes(inputValue.toLowerCase()));
+            const results = boards.filter((board) => board.title.toLowerCase().includes(inputValue.toLowerCase()));
 
             search.setState({ results });
         },
-        [search],
+        [boards, search],
     );
 
     const renderFilters = (
@@ -173,7 +173,7 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
     const boardGuideIds = boardGuides.map((boardGuide) => boardGuide.id);
 
     // Luôn luôn ưu tiên Starred trước
-    let sortFields = ['star'];
+    let sortFields = ['starred'];
     let sortOrders = ['desc'];
 
     // Thêm các tiêu chí sắp xếp theo sortBy

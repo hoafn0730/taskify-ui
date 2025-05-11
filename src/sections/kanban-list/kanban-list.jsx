@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Pagination, { paginationClasses } from '@mui/material/Pagination';
@@ -12,10 +12,15 @@ import { KanbanDialog } from './kanban-dialog';
 import { useBoolean } from '~/hooks/use-boolean';
 import { useSetState } from '~/hooks/use-set-state';
 
-export function KanbanList({ boards, onStarToggle }) {
+import { kanbanService } from '~/services/kanbanService';
+import { useKanban } from '~/actions/kanban/useKanban';
+
+export function KanbanList({ boards }) {
     const router = useRouter();
     const dialog = useBoolean();
     const { state, setState } = useSetState(null);
+
+    const { refetch, meta, setPage } = useKanban();
 
     const handleView = useCallback(
         (id) => {
@@ -36,6 +41,21 @@ export function KanbanList({ boards, onStarToggle }) {
         console.info('DELETE', id);
     }, []);
 
+    const handleStarToggle = useCallback(
+        async (boardId, isStarred) => {
+            // Gọi API để cập nhật trạng thái starred của board
+            await kanbanService.toggleStarBoard(boardId, isStarred);
+
+            // Cập nhật trạng thái starred trong state
+            refetch();
+        },
+        [refetch],
+    );
+
+    const handleChange = (_, value) => {
+        setPage(value);
+    };
+
     return (
         <>
             <Box
@@ -47,7 +67,7 @@ export function KanbanList({ boards, onStarToggle }) {
                     <KanbanItem
                         key={board.id}
                         board={board}
-                        onStarToggle={onStarToggle}
+                        onStarToggle={handleStarToggle}
                         onView={() => handleView(board.slug)}
                         onEdit={() => handleEdit(board)}
                         onDelete={() => handleDelete(board.id)}
@@ -55,9 +75,11 @@ export function KanbanList({ boards, onStarToggle }) {
                 ))}
             </Box>
 
-            {boards.length > 8 && (
+            {meta?.total > 4 && (
                 <Pagination
-                    count={8}
+                    page={meta?.page}
+                    onChange={handleChange}
+                    count={Math.ceil(meta?.total / meta?.pageSize)}
                     sx={{
                         mt: { xs: 5, md: 8 },
                         [`& .${paginationClasses.ul}`]: { justifyContent: 'center' },

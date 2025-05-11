@@ -24,7 +24,7 @@ import { Form, Field, schemaHelper } from '~/components/hook-form';
 import { kanbanService } from '~/services/kanbanService';
 
 import { convertBase64 } from '~/utils/convertBase64';
-import { useGetBoardList } from '~/actions/kanban';
+import { useKanban } from '~/actions/kanban/useKanban';
 
 export const NewKanbanSchema = zod.object({
     title: zod.string().min(1, { message: 'Title is required!' }),
@@ -41,8 +41,7 @@ export const NewKanbanSchema = zod.object({
                 username: zod.string(),
                 email: zod.string(),
                 displayName: zod.string(),
-                avatar: zod.string(),
-                phoneNumber: zod.string(),
+                avatar: zod.string().nullable().optional(),
             }),
         )
         .nonempty({ message: 'Must have at least 1 member!' }),
@@ -51,15 +50,15 @@ export const NewKanbanSchema = zod.object({
 });
 
 export function KanbanNewEditForm({ currentBoard, onCancel }) {
+    const { refetch } = useKanban();
     const { user } = useSelector((state) => state.user);
-    const { addBoard } = useGetBoardList();
     const defaultValues = useMemo(
         () => ({
             title: currentBoard?.title || '',
             description: currentBoard?.description || '',
             image: currentBoard?.image || '',
-            members: currentBoard?.members || [],
-            tags: currentBoard?.tags || [],
+            members: currentBoard?.members.filter((f) => f.id !== user.id) || [],
+            tags: currentBoard?.tags.split(',') || [],
         }),
         [currentBoard],
     );
@@ -74,7 +73,7 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
         reset,
         setValue,
         handleSubmit,
-        formState: { isSubmitting },
+        formState: { isSubmitting, errors },
     } = methods;
 
     useEffect(() => {
@@ -88,7 +87,7 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
         try {
             const base64 = await convertBase64(data.image);
 
-            const resData = await kanbanService.createNewBoard({
+            await kanbanService.createNewBoard({
                 title: data.title,
                 description: data.description,
                 image: base64,
@@ -99,7 +98,7 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
             reset();
             toast.success(currentBoard ? 'Update success!' : 'Create success!');
             onCancel();
-            addBoard(resData);
+            refetch();
         } catch (error) {
             console.error(error);
         }

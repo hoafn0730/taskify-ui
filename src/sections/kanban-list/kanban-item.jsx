@@ -30,7 +30,7 @@ export function KanbanItem({ board, onView, onEdit, onDelete, onStarToggle }) {
             checked={favorite.value}
             onChange={() => {
                 favorite.onToggle();
-                onStarToggle(board.id, favorite.value);
+                onStarToggle(board.id, !favorite.value);
             }}
             sx={{
                 p: 0.75,
@@ -44,7 +44,6 @@ export function KanbanItem({ board, onView, onEdit, onDelete, onStarToggle }) {
         />
     );
 
-    // [ ] TODO: update image kanban
     const renderImages = (
         <Box gap={0.5} display="flex" sx={{ p: 1 }}>
             <Box flexGrow={1} sx={{ position: 'relative' }}>

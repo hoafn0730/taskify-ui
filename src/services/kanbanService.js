@@ -79,10 +79,10 @@ const moveCardToDifferentColumn = (
     });
 };
 
-const toggleStarBoard = async (boardId) => {
+const toggleStarBoard = async (boardId, isStarred) => {
     const response = await axiosInstance.post(
         `${import.meta.env.VITE_SERVER_BE_URL}${endpoints.kanban.boards}/${boardId}/toggle-star`,
-        {},
+        { starred: isStarred },
         { withCredentials: true },
     );
     return response.data;

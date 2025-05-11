@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { KanbanProvider } from '~/actions/kanban/KanbanProvider';
 
 import { CONFIG } from '~/configs/config-global';
 import { KanbanListView } from '~/sections/kanban-list/view';
@@ -12,7 +14,9 @@ export default function Page() {
                 <title> {metadata.title}</title>
             </Helmet>
 
-            <KanbanListView />
+            <KanbanProvider>
+                <KanbanListView />
+            </KanbanProvider>
         </>
     );
 }

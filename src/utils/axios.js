@@ -42,7 +42,7 @@ export const fetcher1 = async (args) => {
 
         const res = await axiosInstance.get(url, { ...config, withCredentials: true });
 
-        return res.data;
+        return res;
     } catch (error) {
         console.error('Failed to fetch:', error);
         throw error;

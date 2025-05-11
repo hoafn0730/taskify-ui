@@ -44,55 +44,6 @@ export function useGetBoard() {
 
     return memoizedValue;
 }
-const page = 1; // hoặc state: const [page, setPage] = useState(1);
-const pageSize = 20;
-
-export function useGetBoardList() {
-    const key = `${import.meta.env.VITE_SERVER_BE_URL}${endpoints.kanban.boards}?page=${page}&pageSize=${pageSize}`;
-
-    const {
-        data: boards,
-        error,
-        isValidating,
-        mutate: mutateBoard,
-    } = useSWR(key, fetcher1, {
-        revalidateOnFocus: false,
-        ...swrOptions,
-    });
-
-    const addBoard = useCallback(
-        (newBoard) => {
-            mutate(key, (currentBoards = []) => [...currentBoards, newBoard], false);
-        },
-        [key],
-    );
-
-    const toggleStarBoard = useCallback(
-        (boardId, isStarred) => {
-            mutate(
-                key,
-                (currentBoards = []) =>
-                    currentBoards.map((board) => (board.id === boardId ? { ...board, starred: !isStarred } : board)),
-                false,
-            );
-        },
-        [key],
-    );
-
-    return useMemo(
-        () => ({
-            boards: boards || [],
-            boardsLoading: !error && !boards,
-            boardsError: error,
-            boardsValidating: isValidating,
-            boardsEmpty: !boards || boards.length === 0,
-            addBoard,
-            toggleStarBoard,
-            mutate: mutateBoard, // nếu muốn manual re-fetch
-        }),
-        [boards, error, isValidating, addBoard, toggleStarBoard, mutateBoard],
-    );
-}
 
 // ----------------------------------------------------------------------
 

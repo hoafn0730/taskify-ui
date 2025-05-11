@@ -8,7 +8,7 @@ export const TOUR_DETAILS_TABS = [
     { label: 'Booker', value: 'bookers' },
 ];
 
-export const TOUR_SORT_OPTIONS = [
+export const SORT_OPTIONS = [
     { label: 'Latest', value: 'latest' },
     { label: 'Popular', value: 'popular' },
     { label: 'Oldest', value: 'oldest' },

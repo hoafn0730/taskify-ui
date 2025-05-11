@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -12,7 +12,7 @@ import { orderBy } from '~/utils/helper';
 import { fIsAfter, fIsBetween } from '~/utils/format-time';
 
 import { DashboardContent } from '~/layouts/dashboard';
-import { _tours, _tourGuides, TOUR_SORT_OPTIONS } from '~/_mock';
+import { _tours, _tourGuides, SORT_OPTIONS } from '~/_mock';
 
 import { Iconify } from '~/components/iconify';
 import { EmptyContent } from '~/components/empty-content';
@@ -25,16 +25,14 @@ import { KanbanFilters } from '../kanban-filters';
 import { KanbanFiltersResult } from '../kanban-filters-result';
 import { KanbanDialog } from '../kanban-dialog';
 
-import { useGetBoardList } from '~/actions/kanban';
-import { kanbanService } from '~/services/kanbanService';
+import { useKanban } from '~/actions/kanban/useKanban';
 
 export function KanbanListView() {
     const openFilters = useBoolean();
     const dialog = useBoolean();
 
-    const [sortBy, setSortBy] = useState('latest');
-    // Sử dụng useGetBoardList để lấy danh sách boards
-    const { boards, boardsLoading, boardsError, boardsEmpty, toggleStarBoard } = useGetBoardList();
+    // Lấy danh sách boards
+    const { boards, sortBy, setSortBy } = useKanban();
 
     const search = useSetState({ query: '', results: [] });
 
@@ -45,28 +43,12 @@ export function KanbanListView() {
         endDate: null,
     });
 
-    const handleStarToggle = useCallback(
-        async (boardId, isStarred) => {
-            try {
-                // Gọi API để cập nhật trạng thái starred của board
-                kanbanService.toggleStarBoard(boardId);
-
-                // Cập nhật trạng thái starred trong state
-                toggleStarBoard(boardId, isStarred);
-            } catch (error) {
-                console.error('Failed to toggle star:', error);
-            }
-        },
-        [toggleStarBoard],
-    );
-
     const handleClickOpen = useCallback(() => {
         dialog.onTrue();
     }, [dialog]);
 
     const dateError = fIsAfter(filters.state.startDate, filters.state.endDate);
 
-    // Tính toán lại dataFiltered khi boards, filters.state, sortBy, hoặc dateError thay đổi
     const dataFiltered = useMemo(() => {
         return applyFilter({
             inputData: boards,
@@ -78,11 +60,14 @@ export function KanbanListView() {
 
     const canReset = filters.state.boardGuides.length > 0 || (!!filters.state.startDate && !!filters.state.endDate);
 
-    const notFound = !dataFiltered.length && canReset;
+    const notFound = !dataFiltered.length; // && canReset;
 
-    const handleSortBy = useCallback((newValue) => {
-        setSortBy(newValue);
-    }, []);
+    const handleSortBy = useCallback(
+        (newValue) => {
+            setSortBy(newValue);
+        },
+        [setSortBy],
+    );
 
     const handleSearch = useCallback(
         (inputValue) => {
@@ -105,7 +90,8 @@ export function KanbanListView() {
             <KanbanSearch search={search} onSearch={handleSearch} />
 
             <Stack direction="row" spacing={1} flexShrink={0}>
-                <KanbanFilters
+                {/* [ ]: Modify filters */}
+                {/* <KanbanFilters
                     filters={filters}
                     canReset={canReset}
                     dateError={dateError}
@@ -115,9 +101,9 @@ export function KanbanListView() {
                     options={{
                         boardGuides: _tourGuides,
                     }}
-                />
+                /> */}
 
-                <KanbanSort sort={sortBy} onSort={handleSortBy} sortOptions={TOUR_SORT_OPTIONS} />
+                <KanbanSort sort={sortBy} onSort={handleSortBy} sortOptions={SORT_OPTIONS} />
             </Stack>
         </Stack>
     );
@@ -153,8 +139,7 @@ export function KanbanListView() {
             </Stack>
 
             {notFound && <EmptyContent filled sx={{ py: 10 }} />}
-
-            <KanbanList boards={dataFiltered} onStarToggle={handleStarToggle} />
+            <KanbanList boards={dataFiltered} />
 
             <KanbanDialog dialog={dialog} />
         </DashboardContent>

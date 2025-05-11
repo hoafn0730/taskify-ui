@@ -40,10 +40,9 @@ export const fetcher1 = async (args) => {
     try {
         const [url, config] = Array.isArray(args) ? args : [args];
 
-        const res = await axios.get(url, { ...config });
+        const res = await axiosInstance.get(url, { ...config, withCredentials: true });
 
-        // return res.data;
-        return res;
+        return res.data;
     } catch (error) {
         console.error('Failed to fetch:', error);
         throw error;
@@ -60,7 +59,7 @@ export const endpoints = {
     },
     calendar: '/api/calendar',
     auth: {
-        me: '/api/auth/me',
+        me: '/api/v1/auth/me',
         signIn: '/api/v1/auth/sign-in',
         signUp: '/api/v1/auth/sign-up',
         signOut: '/api/v1/auth/sign-out',

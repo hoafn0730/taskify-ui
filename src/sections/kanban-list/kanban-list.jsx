@@ -17,18 +17,6 @@ export function KanbanList({ boards, onStarToggle }) {
     const dialog = useBoolean();
     const { state, setState } = useSetState(null);
 
-    //     const handleStarToggle = useCallback(
-    //         (boardId, isStarred) => {
-    //             const updatedBoards = boards.map((board) =>
-    //                 board.id === boardId ? { ...board, star: !isStarred } : board,
-    //             );
-    //
-    //             // No need to sort here, as sorting is handled in `applyFilter`
-    //             console.log(updatedBoards);
-    //         },
-    //         [boards],
-    //     );
-
     const handleView = useCallback(
         (id) => {
             router.push(paths.dashboard.kanban.details(id));

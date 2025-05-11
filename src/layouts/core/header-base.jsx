@@ -15,7 +15,7 @@ import { SignInButton } from '../components/sign-in-button';
 import { AccountDrawer } from '../components/account-drawer';
 import { SettingsButton } from '../components/settings-button';
 import { LanguagePopover } from '../components/language-popover';
-import { ContactsPopover } from '../components/contacts-popover';
+import { FriendsPopover } from '../components/friends-popover';
 import { WorkspacesPopover } from '../components/workspaces-popover';
 import { NotificationsDrawer } from '../components/notifications-drawer';
 import { SignUpButton } from '../components/sign-up-button';
@@ -151,7 +151,7 @@ export function HeaderBase({
                             )}
 
                             {/* -- Contacts popover -- */}
-                            {contacts && <ContactsPopover data-slot="contacts" data={data?.contacts} />}
+                            {contacts && <FriendsPopover data-slot="friends" data={data?.friends} />}
 
                             {/* -- Settings button -- */}
                             {settings && <SettingsButton data-slot="settings" />}

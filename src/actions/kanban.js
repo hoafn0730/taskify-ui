@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useSWR, { mutate } from 'swr';
 import { useParams } from '~/routes/hooks';
@@ -48,28 +48,50 @@ const page = 1; // hoặc state: const [page, setPage] = useState(1);
 const pageSize = 20;
 
 export function useGetBoardList() {
-    // [ ]: sort boards
+    const key = `${import.meta.env.VITE_SERVER_BE_URL}${endpoints.kanban.boards}?page=${page}&pageSize=${pageSize}`;
+
     const {
         data: boards,
         error,
         isValidating,
-    } = useSWR(
-        `${import.meta.env.VITE_SERVER_BE_URL}${endpoints.kanban.boards}?page=${page}&pageSize=${pageSize}`,
-        fetcher1,
-        swrOptions,
+        mutate: mutateBoard,
+    } = useSWR(key, fetcher1, {
+        revalidateOnFocus: false,
+        ...swrOptions,
+    });
+
+    const addBoard = useCallback(
+        (newBoard) => {
+            mutate(key, (currentBoards = []) => [...currentBoards, newBoard], false);
+        },
+        [key],
     );
 
-    const memoizedValue = useMemo(() => {
-        return {
-            boards: boards?.data?.data?.sort((a, b) => b?.starred - a?.starred) || [],
+    const toggleStarBoard = useCallback(
+        (boardId, isStarred) => {
+            mutate(
+                key,
+                (currentBoards = []) =>
+                    currentBoards.map((board) => (board.id === boardId ? { ...board, starred: !isStarred } : board)),
+                false,
+            );
+        },
+        [key],
+    );
+
+    return useMemo(
+        () => ({
+            boards: boards || [],
             boardsLoading: !error && !boards,
             boardsError: error,
             boardsValidating: isValidating,
             boardsEmpty: !boards || boards.length === 0,
-        };
-    }, [boards, error, isValidating]);
-
-    return memoizedValue;
+            addBoard,
+            toggleStarBoard,
+            mutate: mutateBoard, // nếu muốn manual re-fetch
+        }),
+        [boards, error, isValidating, addBoard, toggleStarBoard, mutateBoard],
+    );
 }
 
 // ----------------------------------------------------------------------

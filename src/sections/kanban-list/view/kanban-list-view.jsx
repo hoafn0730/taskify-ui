@@ -1,5 +1,4 @@
 import { useState, useCallback, useMemo } from 'react';
-import { mutate } from 'swr';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -27,7 +26,7 @@ import { KanbanFiltersResult } from '../kanban-filters-result';
 import { KanbanDialog } from '../kanban-dialog';
 
 import { useGetBoardList } from '~/actions/kanban';
-import { endpoints } from '~/utils/axios';
+import { kanbanService } from '~/services/kanbanService';
 
 export function KanbanListView() {
     const openFilters = useBoolean();
@@ -35,36 +34,31 @@ export function KanbanListView() {
 
     const [sortBy, setSortBy] = useState('latest');
     // Sử dụng useGetBoardList để lấy danh sách boards
-    const { boards, boardsLoading, boardsError, boardsEmpty } = useGetBoardList();
-    // const [boards, setBoards] = useState([..._tours].sort((a, b) => b.starred - a.star));
+    const { boards, boardsLoading, boardsError, boardsEmpty, toggleStarBoard } = useGetBoardList();
 
     const search = useSetState({ query: '', results: [] });
 
+    //[ ] modify filters
     const filters = useSetState({
         boardGuides: [],
         startDate: null,
         endDate: null,
     });
 
-    const handleStarToggle = useCallback(async (boardId, isStarred) => {
-        try {
-            // Gọi API để cập nhật trạng thái starred của board
-            // await axios.post(`/api/boards/${boardId}/toggle-star`, { star: !isStarred });
+    const handleStarToggle = useCallback(
+        async (boardId, isStarred) => {
+            try {
+                // Gọi API để cập nhật trạng thái starred của board
+                kanbanService.toggleStarBoard(boardId);
 
-            // Cập nhật trạng thái starred trong state
-            mutate(
-                endpoints.kanban.boards,
-                (currentBoards) => {
-                    return currentBoards.map((board) =>
-                        board.id === boardId ? { ...board, starred: !isStarred } : board,
-                    );
-                },
-                false,
-            );
-        } catch (error) {
-            console.error('Failed to toggle star:', error);
-        }
-    }, []);
+                // Cập nhật trạng thái starred trong state
+                toggleStarBoard(boardId, isStarred);
+            } catch (error) {
+                console.error('Failed to toggle star:', error);
+            }
+        },
+        [toggleStarBoard],
+    );
 
     const handleClickOpen = useCallback(() => {
         dialog.onTrue();

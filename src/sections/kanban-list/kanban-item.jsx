@@ -19,7 +19,7 @@ import { useBoolean } from '~/hooks/use-boolean';
 
 export function KanbanItem({ board, onView, onEdit, onDelete, onStarToggle }) {
     const popover = usePopover();
-    const favorite = useBoolean(!!board.star);
+    const favorite = useBoolean(!!board.starred);
 
     const buttonStar = (
         <Checkbox
@@ -29,8 +29,8 @@ export function KanbanItem({ board, onView, onEdit, onDelete, onStarToggle }) {
             checkedIcon={<Iconify icon="eva:star-fill" />}
             checked={favorite.value}
             onChange={() => {
-                onStarToggle(board.id, favorite.value);
                 favorite.onToggle();
+                onStarToggle(board.id, favorite.value);
             }}
             sx={{
                 p: 0.75,

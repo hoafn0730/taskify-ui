@@ -21,8 +21,6 @@ import { CheckoutProvider } from '~/sections/checkout/context';
 
 import { persistor, store } from './store';
 
-// ----------------------------------------------------------------------
-
 export default function App() {
     useScrollToTop();
 

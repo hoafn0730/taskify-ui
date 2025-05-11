@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { paths } from '~/configs/paths';
 import { useRouter, usePathname, useSearchParams } from '~/routes/hooks';
@@ -7,11 +7,13 @@ import { useRouter, usePathname, useSearchParams } from '~/routes/hooks';
 import { CONFIG } from '~/configs/config-global';
 
 import { SplashScreen } from '~/components/loading-screen';
+import { getCurrentUser } from '~/store/actions/userAction';
 
 export function AuthGuard({ children }) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const dispatch = useDispatch();
 
     const { status, isLoading } = useSelector((state) => state.user);
     const [isChecking, setIsChecking] = useState(true);
@@ -46,6 +48,10 @@ export function AuthGuard({ children }) {
 
         setIsChecking(false);
     };
+
+    useEffect(() => {
+        dispatch(getCurrentUser());
+    }, [dispatch]);
 
     useEffect(() => {
         checkPermissions();

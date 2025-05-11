@@ -2,6 +2,7 @@ import { z as zod } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMemo, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
 import Chip from '@mui/material/Chip';
 
@@ -21,8 +22,9 @@ import { _members, _tags, _tourGuides } from '~/_mock';
 import { toast } from '~/components/snackbar';
 import { Form, Field, schemaHelper } from '~/components/hook-form';
 import { kanbanService } from '~/services/kanbanService';
-import { mutate } from 'swr';
-import { endpoints } from '~/utils/axios';
+
+import { convertBase64 } from '~/utils/convertBase64';
+import { useGetBoardList } from '~/actions/kanban';
 
 export const NewKanbanSchema = zod.object({
     title: zod.string().min(1, { message: 'Title is required!' }),
@@ -49,6 +51,8 @@ export const NewKanbanSchema = zod.object({
 });
 
 export function KanbanNewEditForm({ currentBoard, onCancel }) {
+    const { user } = useSelector((state) => state.user);
+    const { addBoard } = useGetBoardList();
     const defaultValues = useMemo(
         () => ({
             title: currentBoard?.title || '',
@@ -79,26 +83,23 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
         }
     }, [currentBoard, defaultValues, reset]);
 
-    // [ ] TODO: Handle create and update kanban
+    // [ ] TODO: Handle update kanban
     const onSubmit = handleSubmit(async (data) => {
         try {
+            const base64 = await convertBase64(data.image);
+
             const resData = await kanbanService.createNewBoard({
                 title: data.title,
                 description: data.description,
-                image: data.image[0],
+                image: base64,
                 type: 'public',
-                // tags: data.tags,
+                members: data.members.map((m) => m.id),
+                tags: data.tags,
             });
             reset();
             toast.success(currentBoard ? 'Update success!' : 'Create success!');
             onCancel();
-            mutate(
-                `${import.meta.env.VITE_SERVER_BE_URL}${endpoints.kanban.boards}?page=${1}&pageSize=${20}`,
-                (currentBoards) => {
-                    return [...currentBoards, data];
-                },
-                false,
-            );
+            addBoard(resData);
         } catch (error) {
             console.error(error);
         }
@@ -139,7 +140,7 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
                     name="members"
                     placeholder="+ Members"
                     disableCloseOnSelect
-                    options={_members}
+                    options={user?.friends}
                     getOptionLabel={(option) => option.displayName}
                     isOptionEqualToValue={(option, value) => option.id === value.id}
                     renderOption={(props, member) => (

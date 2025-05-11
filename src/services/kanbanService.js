@@ -23,7 +23,9 @@ const getCombinedBoards = () => {
 };
 
 const createNewBoard = async (data) => {
-    const res = await axiosInstance.post(import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.boards, data);
+    const res = await axiosInstance.post(import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.boards, data, {
+        withCredentials: true,
+    });
     return res.data;
 };
 
@@ -50,7 +52,9 @@ const updateBoardBackground = (boardId, data) => {
 
 // Column
 const createNewColumn = async (data) => {
-    const res = await axiosInstance.post(import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.columns, data);
+    const res = await axiosInstance.post(import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.columns, data, {
+        withCredentials: true,
+    });
     return res.data;
 };
 
@@ -75,6 +79,15 @@ const moveCardToDifferentColumn = (
     });
 };
 
+const toggleStarBoard = async (boardId) => {
+    const response = await axiosInstance.post(
+        `${import.meta.env.VITE_SERVER_BE_URL}${endpoints.kanban.boards}/${boardId}/toggle-star`,
+        {},
+        { withCredentials: true },
+    );
+    return response.data;
+};
+
 export const kanbanService = {
     searchBoards,
     getBoards,
@@ -88,4 +101,5 @@ export const kanbanService = {
     createNewColumn,
     updateColumn,
     deleteColumn,
+    toggleStarBoard,
 };

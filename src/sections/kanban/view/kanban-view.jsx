@@ -19,6 +19,7 @@ import {
     closestCorners,
 } from '@dnd-kit/core';
 import { useDispatch } from 'react-redux';
+import { cloneDeep } from 'lodash';
 
 import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
@@ -42,7 +43,6 @@ import { KanbanDragOverlay } from '../components/kanban-drag-overlay';
 import { updateBoardData } from '~/store/slices/kanbanSlice';
 import { kanbanService } from '~/services/kanbanService';
 import { mapOrder } from '~/utils/sort';
-import { cloneDeep } from 'lodash';
 
 const PLACEHOLDER_ID = 'placeholder';
 
@@ -57,7 +57,7 @@ const cssVars = {
 
 export function KanbanView() {
     const dispatch = useDispatch();
-    const { board, boardLoading, boardEmpty } = useGetBoard();
+    const { board, boardLoading } = useGetBoard();
 
     const [columnFixed, setColumnFixed] = useState(true);
 
@@ -481,7 +481,8 @@ export function KanbanView() {
                 />
             </Stack>
 
-            {boardLoading ? renderLoading : <>{boardEmpty ? renderEmpty : renderList}</>}
+            {/* {boardLoading ? renderLoading : <>{boardEmpty ? renderEmpty : renderList}</>} */}
+            {boardLoading ? renderLoading : renderList}
         </DashboardContent>
     );
 }

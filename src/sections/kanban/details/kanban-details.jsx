@@ -58,9 +58,9 @@ const StyledLabel = styled('span')(({ theme }) => ({
 function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseDetails }) {
     const tabs = useTabs('overview');
 
-    const [priority, setPriority] = useState(task.priority);
+    const [priority, setPriority] = useState(task?.priority);
 
-    const [taskName, setTaskName] = useState(task.title);
+    const [taskName, setTaskName] = useState(task?.title);
 
     const [subtaskCompleted, setSubtaskCompleted] = useState(SUBTASKS.slice(0, 2));
 
@@ -68,17 +68,18 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
 
     const contacts = useBoolean();
 
-    const [taskDescription, setTaskDescription] = useState(task.description);
+    const [taskDescription, setTaskDescription] = useState(task?.description);
 
     const rangePicker = useDateRangePicker(
-        dayjs(task.dueStart || dayjs()),
-        dayjs(task.dueDate || dayjs().add(1, 'day')),
+        dayjs(task?.dueStart || dayjs()),
+        dayjs(task?.dueDate || dayjs().add(1, 'day')),
     );
 
     const handleChangeTaskName = useCallback((event) => {
         setTaskName(event.target.value);
     }, []);
 
+    // [ ] handleUpdateTask
     const handleUpdateTask = useCallback(
         (event) => {
             try {
@@ -113,7 +114,7 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
     const renderToolbar = (
         <KanbanDetailsToolbar
             liked={like.value}
-            taskName={task.name}
+            taskName={task.title}
             onLike={like.onToggle}
             onDelete={onDeleteTask}
             taskStatus={task.status}
@@ -126,7 +127,7 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
             {[
                 { value: 'overview', label: 'Overview' },
                 { value: 'subTasks', label: 'Subtasks' },
-                { value: 'comments', label: `Comments (${task.comments.length})` },
+                { value: 'comments', label: `Comments (${task?.comments?.length ?? 0})` },
             ].map((tab) => (
                 <Tab key={tab.value} value={tab.value} label={tab.label} />
             ))}
@@ -156,9 +157,8 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
                 <StyledLabel sx={{ height: 40, lineHeight: '40px' }}>Assignee</StyledLabel>
 
                 <Box sx={{ gap: 1, display: 'flex', flexWrap: 'wrap' }}>
-                    {task.assignee.map((user) => (
-                        <Avatar key={user.id} alt={user.name} src={user.avatarUrl} />
-                    ))}
+                    {task?.assignee?.length &&
+                        task.assignee.map((user) => <Avatar key={user.id} alt={user.name} src={user.avatarUrl} />)}
 
                     <Tooltip title="Add assignee">
                         <IconButton
@@ -172,7 +172,7 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
                         </IconButton>
                     </Tooltip>
 
-                    <KanbanContactsDialog assignee={task.assignee} open={contacts.value} onClose={contacts.onFalse} />
+                    <KanbanContactsDialog assignee={task?.assignee} open={contacts.value} onClose={contacts.onFalse} />
                 </Box>
             </Box>
 
@@ -249,7 +249,7 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
             {/* Attachments */}
             <Box sx={{ display: 'flex' }}>
                 <StyledLabel>Attachments</StyledLabel>
-                <KanbanDetailsAttachments attachments={task.attachments} />
+                <KanbanDetailsAttachments attachments={task?.attachments} />
             </Box>
         </Box>
     );
@@ -287,7 +287,7 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
         </Box>
     );
 
-    const renderTabComments = <>{!!task.comments.length && <KanbanDetailsCommentList comments={task.comments} />}</>;
+    const renderTabComments = <>{!!task?.comments?.length && <KanbanDetailsCommentList comments={task?.comments} />}</>;
 
     return (
         <Drawer

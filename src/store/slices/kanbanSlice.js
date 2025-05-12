@@ -1,9 +1,8 @@
-import { cloneDeep, isEmpty } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
 
-import { createNewColumn, deleteColumn, fetchBoardDetail } from '../actions/kanbanAction';
+import { clearColumn, createNewColumn, createTask, deleteColumn, fetchBoardDetail } from '../actions/kanbanAction';
 import { mapOrder } from '~/utils/sort';
-import { generatePlaceholderCard } from '~/utils/formatters';
 
 const initialState = {
     activeBoard: null,
@@ -54,7 +53,7 @@ export const kanbanSlice = createSlice({
             .addCase(createNewColumn.fulfilled, (state, action) => {
                 const newBoard = cloneDeep(state.activeBoard);
 
-                const createdColumn = action.payload; // Giả sử `action.payload` chứa thông tin về column mới tạo
+                const createdColumn = action.payload;
 
                 // Thêm column mới vào columns
                 newBoard.columns.push(createdColumn);
@@ -82,10 +81,48 @@ export const kanbanSlice = createSlice({
                 // Xóa id của column khỏi columnOrderIds
                 newBoard.columnOrderIds = newBoard.columnOrderIds.filter((id) => id !== columnToDelete.uuid);
 
+                // delete tasks by column deleted
+                newBoard.tasks = Object.keys(newBoard.tasks)
+                    .filter((key) => key !== columnToDelete.uuid)
+                    .reduce((obj, key) => {
+                        obj[key] = newBoard.tasks[key];
+                        return obj;
+                    }, {});
+
                 state.activeBoard = newBoard;
                 state.isLoading = false;
                 state.isError = false;
+            })
+            .addCase(clearColumn.fulfilled, (state, action) => {
+                const newBoard = cloneDeep(state.activeBoard);
+
+                const columnIdToClear = newBoard.columns.find((col) => col.id === action.payload.columnId);
+
+                const tasks = { ...newBoard.tasks, [columnIdToClear.uuid]: [] };
+
+                state.activeBoard = { ...newBoard, tasks };
+                state.isLoading = false;
+                state.isError = false;
             });
+
+        // cARD
+        builder.addCase(createTask.fulfilled, (state, action) => {
+            const newBoard = cloneDeep(state.activeBoard);
+
+            const columnUuid = action.payload.columnUuid;
+            const taskData = action.payload.taskData;
+
+            const currentTasks = newBoard.tasks[columnUuid] || [];
+
+            const tasks = {
+                ...newBoard.tasks,
+                [columnUuid]: [taskData, ...currentTasks],
+            };
+
+            state.activeBoard = { ...newBoard, tasks };
+            state.isLoading = false;
+            state.isError = false;
+        });
     },
 });
 

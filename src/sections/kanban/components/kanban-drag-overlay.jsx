@@ -12,11 +12,11 @@ const dropAnimation = {
 };
 
 export function KanbanDragOverlay({ columns, tasks, activeId, sx }) {
-    const columnIds = columns.map((column) => column.uuid);
+    const columnIds = columns?.map((column) => column.uuid);
 
-    const activeColumn = columns.find((column) => column.uuid === activeId);
+    const activeColumn = columns?.find((column) => column.uuid === activeId);
 
-    const allTasks = Object.values(tasks).flat();
+    const allTasks = Object.values(tasks || []).flat();
 
     const activeTask = allTasks.find((task) => task.uuid === activeId);
 

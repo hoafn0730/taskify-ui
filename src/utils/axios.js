@@ -56,6 +56,7 @@ export const endpoints = {
     kanban: {
         boards: '/api/v1/boards',
         columns: '/api/v1/columns',
+        cards: '/api/v1/cards',
     },
     calendar: '/api/calendar',
     auth: {

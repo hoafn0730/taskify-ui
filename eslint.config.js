@@ -39,7 +39,7 @@ export default [
             ...reactHooks.configs.recommended.rules,
 
             'react/jsx-no-target-blank': 'off',
-            'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+            'react-refresh/only-export-components': 'off',
             'no-unused-vars': ['warn', { varsIgnorePattern: '^[A-Z_]' }],
             'react/prop-types': 0,
             'react/display-name': 0,

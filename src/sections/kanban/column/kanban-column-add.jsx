@@ -67,7 +67,14 @@ export function KanbanColumnAdd({ sx, board, ...other }) {
                             onChange={handleChangeName}
                             onKeyUp={handleKeyUpCreateColumn}
                             helperText="Press Enter to create the column."
-                            sx={{ [`& .${inputBaseClasses.input}`]: { typography: 'h6' } }}
+                            sx={{
+                                [`& .${inputBaseClasses.input}`]: {
+                                    typography: 'h6',
+                                },
+                                [`& fieldset.Mui-focused`]: {
+                                    borderWidth: '1px',
+                                },
+                            }}
                         />
                     </ClickAwayListener>
                 ) : (

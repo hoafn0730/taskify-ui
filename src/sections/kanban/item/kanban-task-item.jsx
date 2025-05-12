@@ -11,8 +11,6 @@ import { imageClasses } from '~/components/image';
 import ItemBase from './item-base';
 import KanbanDetails from '../details/kanban-details';
 
-// ----------------------------------------------------------------------
-
 function KanbanTaskItem({ task, disabled, columnId, sx }) {
     const openDetails = useBoolean();
 
@@ -25,6 +23,7 @@ function KanbanTaskItem({ task, disabled, columnId, sx }) {
 
     const mountedWhileDragging = isDragging && !mounted;
 
+    // [ ]: handleDeleteTask
     const handleDeleteTask = useCallback(async () => {
         try {
             deleteTask(columnId, task.id);
@@ -34,6 +33,7 @@ function KanbanTaskItem({ task, disabled, columnId, sx }) {
         }
     }, [columnId, task.id]);
 
+    // [ ]: handleUpdateTask
     const handleUpdateTask = useCallback(
         async (taskData) => {
             try {

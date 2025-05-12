@@ -2,6 +2,7 @@ import { z as zod } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMemo, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
 import Chip from '@mui/material/Chip';
 
@@ -16,60 +17,48 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import { fIsAfter } from '~/utils/format-time';
 
-import { _tags, _tourGuides } from '~/_mock';
+import { _members, _tags, _tourGuides } from '~/_mock';
 
 import { toast } from '~/components/snackbar';
 import { Form, Field, schemaHelper } from '~/components/hook-form';
 import { kanbanService } from '~/services/kanbanService';
-import { mutate } from 'swr';
-import { endpoints } from '~/utils/axios';
 
-export const NewKanbanSchema = zod
-    .object({
-        title: zod.string().min(1, { message: 'Title is required!' }),
-        description: schemaHelper.editor({
-            message: { required_error: 'Description is required!' },
-        }),
-        image: schemaHelper.file({
-            message: { required_error: 'Image is required!' },
-        }),
-        members: zod
-            .array(
-                zod.object({
-                    id: zod.string(),
-                    name: zod.string(),
-                    avatarUrl: zod.string(),
-                    phoneNumber: zod.string(),
-                }),
-            )
-            .nonempty({ message: 'Must have at least 1 member!' }),
-        available: zod.object({
-            startDate: schemaHelper.date({
-                message: { required_error: 'Start date is required!' },
+import { convertBase64 } from '~/utils/convertBase64';
+import { useKanban } from '~/actions/kanban/useKanban';
+
+export const NewKanbanSchema = zod.object({
+    title: zod.string().min(1, { message: 'Title is required!' }),
+    description: schemaHelper.editor({
+        message: { required_error: 'Description is required!' },
+    }),
+    image: schemaHelper.file({
+        message: { required_error: 'Image is required!' },
+    }),
+    members: zod
+        .array(
+            zod.object({
+                id: zod.number(),
+                username: zod.string(),
+                email: zod.string(),
+                displayName: zod.string(),
+                avatar: zod.string().nullable().optional(),
             }),
-            endDate: schemaHelper.date({
-                message: { required_error: 'End date is required!' },
-            }),
-        }),
-        tags: zod.string().array().min(2, { message: 'Must have at least 2 items!' }),
-    })
-    .refine((data) => !fIsAfter(data.available.startDate, data.available.endDate), {
-        message: 'End date cannot be earlier than start date!',
-        path: ['available.endDate'],
-    });
+        )
+        .nonempty({ message: 'Must have at least 1 member!' }),
+
+    tags: zod.string().array().min(1, { message: 'Must have at least 1 items!' }),
+});
 
 export function KanbanNewEditForm({ currentBoard, onCancel }) {
+    const { refetch } = useKanban();
+    const { user } = useSelector((state) => state.user);
     const defaultValues = useMemo(
         () => ({
-            title: currentBoard?.name || '',
-            description: currentBoard?.content || '',
-            image: currentBoard?.images[0] || '',
-            members: currentBoard?.boardGuides || [],
-            available: {
-                startDate: currentBoard?.available.startDate || null,
-                endDate: currentBoard?.available.endDate || null,
-            },
-            tags: currentBoard?.tags || [],
+            title: currentBoard?.title || '',
+            description: currentBoard?.description || '',
+            image: currentBoard?.image || '',
+            members: currentBoard?.members.filter((f) => f.id !== user.id) || [],
+            tags: currentBoard?.tags.split(',') || [],
         }),
         [currentBoard],
     );
@@ -84,7 +73,7 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
         reset,
         setValue,
         handleSubmit,
-        formState: { isSubmitting },
+        formState: { isSubmitting, errors },
     } = methods;
 
     useEffect(() => {
@@ -93,31 +82,24 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
         }
     }, [currentBoard, defaultValues, reset]);
 
-    // [ ] TODO: Handle create and update kanban
+
+    // [ ] TODO: Handle update kanban
     const onSubmit = handleSubmit(async (data) => {
         try {
-            const resData = await kanbanService.createNewBoard({
+            const base64 = await convertBase64(data.image);
+
+            await kanbanService.createNewBoard({
                 title: data.title,
                 description: data.description,
-                image: data.image[0],
+                image: base64,
                 type: 'public',
-                // tags: data.tags,
-                // available: {
-                //     startDate: data.available.startDate,
-                //     endDate: data.available.endDate,
-                // },
+                members: data.members.map((m) => m.id),
+                tags: data.tags,
             });
-            console.log('🚀 ~ onSubmit ~ resData:', resData);
             reset();
             toast.success(currentBoard ? 'Update success!' : 'Create success!');
             onCancel();
-            mutate(
-                endpoints.kanban.boards,
-                (currentBoards) => {
-                    return [...currentBoards, data];
-                },
-                false,
-            );
+            refetch();
         } catch (error) {
             console.error(error);
         }
@@ -158,43 +140,35 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
                     name="members"
                     placeholder="+ Members"
                     disableCloseOnSelect
-                    options={_tourGuides}
-                    getOptionLabel={(option) => option.name}
+                    options={user?.friends}
+                    getOptionLabel={(option) => option.displayName}
                     isOptionEqualToValue={(option, value) => option.id === value.id}
-                    renderOption={(props, kanbanGuide) => (
-                        <li {...props} key={kanbanGuide.id}>
+                    renderOption={(props, member) => (
+                        <li {...props} key={member.id}>
                             <Avatar
-                                key={kanbanGuide.id}
-                                alt={kanbanGuide.avatarUrl}
-                                src={kanbanGuide.avatarUrl}
+                                key={member.id}
+                                alt={member.displayName}
+                                src={member.avatar}
                                 sx={{ mr: 1, width: 24, height: 24, flexShrink: 0 }}
                             />
 
-                            {kanbanGuide.name}
+                            {member.displayName}
                         </li>
                     )}
                     renderTags={(selected, getTagProps) =>
-                        selected.map((kanbanGuide, index) => (
+                        selected.map((member, index) => (
                             <Chip
                                 {...getTagProps({ index })}
-                                key={kanbanGuide.id}
+                                key={member.id}
                                 size="small"
                                 variant="soft"
-                                label={kanbanGuide.name}
-                                avatar={<Avatar alt={kanbanGuide.name} src={kanbanGuide.avatarUrl} />}
+                                label={member.displayName}
+                                avatar={<Avatar alt={member.displayName} src={member.avatar} />}
                             />
                         ))
                     }
                 />
             </div>
-
-            <Stack spacing={1.5}>
-                <Typography variant="subtitle2">Available</Typography>
-                <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                    <Field.DatePicker name="available.startDate" label="Start date" />
-                    <Field.DatePicker name="available.endDate" label="End date" />
-                </Stack>
-            </Stack>
 
             <Stack spacing={1.5}>
                 <Typography variant="subtitle2">Tags</Typography>

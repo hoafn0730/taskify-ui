@@ -7,91 +7,108 @@ import Typography from '@mui/material/Typography';
 
 import { Label } from '~/components/label';
 import { Iconify } from '~/components/iconify';
+import { useBoolean } from '~/hooks/use-boolean';
+import { QrCodeDialog } from './qr-code-dialog';
 
 // ----------------------------------------------------------------------
 
-export function PaymentSummary({ sx, ...other }) {
-  const renderPrice = (
-    <Stack direction="row" justifyContent="flex-end">
-      <Typography variant="h4">$</Typography>
+export function PaymentSummary({ method, sx, ...other }) {
+    const qrCode = useBoolean();
 
-      <Typography variant="h2">9.99</Typography>
+    const renderPrice = (
+        <Stack direction="row" justifyContent="flex-end">
+            <Typography variant="h4">$</Typography>
 
-      <Typography
-        component="span"
-        sx={{
-          ml: 1,
-          alignSelf: 'center',
-          typography: 'body2',
-          color: 'text.disabled',
-        }}
-      >
-        / mo
-      </Typography>
-    </Stack>
-  );
+            <Typography variant="h2">9.99</Typography>
 
-  return (
-    <Box
-      sx={{
-        p: 5,
-        borderRadius: 2,
-        bgcolor: 'background.neutral',
-        ...sx,
-      }}
-      {...other}
-    >
-      <Typography variant="h6" sx={{ mb: 5 }}>
-        Summary
-      </Typography>
-
-      <Stack spacing={2.5}>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Subscription
-          </Typography>
-
-          <Label color="error">PREMIUM</Label>
+            <Typography
+                component="span"
+                sx={{
+                    ml: 1,
+                    alignSelf: 'center',
+                    typography: 'body2',
+                    color: 'text.disabled',
+                }}
+            >
+                / mo
+            </Typography>
         </Stack>
+    );
 
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Billed monthly
-          </Typography>
-          <Switch defaultChecked />
-        </Stack>
+    const handleUpgradePlan = () => {
+        switch (method) {
+            case 'bank': {
+                qrCode.onTrue();
+                break;
+            }
+            default:
+                break;
+        }
+    };
 
-        {renderPrice}
+    return (
+        <Box
+            sx={{
+                p: 5,
+                borderRadius: 2,
+                bgcolor: 'background.neutral',
+                ...sx,
+            }}
+            {...other}
+        >
+            <Typography variant="h6" sx={{ mb: 5 }}>
+                Summary
+            </Typography>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+            <Stack spacing={2.5}>
+                <Stack direction="row" justifyContent="space-between">
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        Subscription
+                    </Typography>
 
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Typography variant="subtitle1">Total billed</Typography>
+                    <Label color="error">PREMIUM</Label>
+                </Stack>
 
-          <Typography variant="subtitle1">$9.99*</Typography>
-        </Stack>
+                <Stack direction="row" justifyContent="space-between">
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        Billed monthly
+                    </Typography>
+                    <Switch defaultChecked />
+                </Stack>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
-      </Stack>
+                {renderPrice}
 
-      <Typography component="div" variant="caption" sx={{ color: 'text.secondary', mt: 1 }}>
-        * Plus applicable taxes
-      </Typography>
+                <Divider sx={{ borderStyle: 'dashed' }} />
 
-      <Button fullWidth size="large" variant="contained" sx={{ mt: 5, mb: 3 }}>
-        Upgrade plan
-      </Button>
+                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    <Typography variant="subtitle1">Total billed</Typography>
 
-      <Stack alignItems="center" spacing={1}>
-        <Stack direction="row" alignItems="center" spacing={1}>
-          <Iconify icon="solar:shield-check-bold" sx={{ color: 'success.main' }} />
-          <Typography variant="subtitle2">Secure credit card payment</Typography>
-        </Stack>
+                    <Typography variant="subtitle1">$9.99*</Typography>
+                </Stack>
 
-        <Typography variant="caption" sx={{ color: 'text.disabled', textAlign: 'center' }}>
-          This is a secure 128-bit SSL encrypted payment
-        </Typography>
-      </Stack>
-    </Box>
-  );
+                <Divider sx={{ borderStyle: 'dashed' }} />
+            </Stack>
+
+            <Typography component="div" variant="caption" sx={{ color: 'text.secondary', mt: 1 }}>
+                * Plus applicable taxes
+            </Typography>
+
+            <Button fullWidth size="large" variant="contained" sx={{ mt: 5, mb: 3 }} onClick={handleUpgradePlan}>
+                Upgrade plan
+            </Button>
+
+            <Stack alignItems="center" spacing={1}>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                    <Iconify icon="solar:shield-check-bold" sx={{ color: 'success.main' }} />
+                    <Typography variant="subtitle2">Secure credit card payment</Typography>
+                </Stack>
+
+                <Typography variant="caption" sx={{ color: 'text.disabled', textAlign: 'center' }}>
+                    This is a secure 128-bit SSL encrypted payment
+                </Typography>
+            </Stack>
+
+            <QrCodeDialog open={qrCode.value} onClose={qrCode.onFalse} />
+        </Box>
+    );
 }

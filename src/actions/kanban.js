@@ -1,10 +1,10 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useSWR, { mutate } from 'swr';
 import { useParams } from '~/routes/hooks';
 import { fetchBoardDetail } from '~/store/actions/kanbanAction';
 
-import axios, { fetcher, endpoints } from '~/utils/axios';
+import axios, { fetcher, endpoints, fetcher1 } from '~/utils/axios';
 
 // ----------------------------------------------------------------------
 

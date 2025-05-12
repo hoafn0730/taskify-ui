@@ -15,9 +15,11 @@ import { SignInButton } from '../components/sign-in-button';
 import { AccountDrawer } from '../components/account-drawer';
 import { SettingsButton } from '../components/settings-button';
 import { LanguagePopover } from '../components/language-popover';
-import { ContactsPopover } from '../components/contacts-popover';
+import { FriendsPopover } from '../components/friends-popover';
 import { WorkspacesPopover } from '../components/workspaces-popover';
 import { NotificationsDrawer } from '../components/notifications-drawer';
+import { SignUpButton } from '../components/sign-up-button';
+import { GoToDashboardButton } from '../components/go-to-dashboard-button';
 
 // ----------------------------------------------------------------------
 
@@ -58,6 +60,8 @@ export function HeaderBase({
 
     slotsDisplay: {
         signIn = true,
+        signUp = true,
+        goToDashboard = true,
         account = true,
         helpLink = true,
         settings = true,
@@ -147,7 +151,7 @@ export function HeaderBase({
                             )}
 
                             {/* -- Contacts popover -- */}
-                            {contacts && <ContactsPopover data-slot="contacts" data={data?.contacts} />}
+                            {contacts && <FriendsPopover data-slot="friends" data={data?.friends} />}
 
                             {/* -- Settings button -- */}
                             {settings && <SettingsButton data-slot="settings" />}
@@ -157,6 +161,12 @@ export function HeaderBase({
 
                             {/* -- Sign in button -- */}
                             {signIn && <SignInButton />}
+
+                            {/* -- Sign up button -- */}
+                            {signUp && <SignUpButton />}
+
+                            {/* -- Go to dashboard button -- */}
+                            {goToDashboard && <GoToDashboardButton />}
 
                             {/* -- Purchase button -- */}
                             {purchase && (

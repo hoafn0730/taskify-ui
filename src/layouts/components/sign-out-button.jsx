@@ -12,10 +12,6 @@ import { toast } from '~/components/snackbar';
 import { checkUserSession } from '~/store/slices/userSlice';
 import { signOut } from '~/store/actions/userAction';
 
-// ----------------------------------------------------------------------
-
-// ----------------------------------------------------------------------
-
 export function SignOutButton({ onClose, ...other }) {
     const router = useRouter();
     const dispatch = useDispatch();
@@ -23,10 +19,9 @@ export function SignOutButton({ onClose, ...other }) {
     const handleLogout = useCallback(async () => {
         try {
             dispatch(signOut());
-            dispatch(checkUserSession());
+            // dispatch(checkUserSession());
 
             onClose?.();
-            router.refresh();
         } catch (error) {
             console.error(error);
             toast.error('Unable to logout!');

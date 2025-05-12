@@ -24,8 +24,6 @@ import { _workspaces } from '../config-nav-workspace';
 import { LayoutSection } from '../core/layout-section';
 import { navData as dashboardNavData } from '../config-nav-dashboard';
 
-// ----------------------------------------------------------------------
-
 export function DashboardLayout({ sx, children, data }) {
     const theme = useTheme();
 
@@ -73,6 +71,8 @@ export function DashboardLayout({ sx, children, data }) {
                         }}
                         slotsDisplay={{
                             signIn: false,
+                            signUp: false,
+                            goToDashboard: false,
                             purchase: false,
                             helpLink: false,
                         }}

@@ -55,7 +55,11 @@ export function NavUpgrade({ sx, ...other }) {
                     </Typography>
                 </Stack>
 
-                <Button variant="contained" href={paths.minimalStore} target="_blank" rel="noopener">
+                <Button
+                    variant="contained"
+                    href={paths.pricing}
+                    // target="_blank" rel="noopener"
+                >
                     Upgrade to Pro
                 </Button>
             </Stack>
@@ -124,7 +128,7 @@ export function UpgradeBlock({ sx, ...other }) {
                     Power up Productivity!
                 </Box>
 
-                <Button variant="contained" size="small" color="warning">
+                <Button variant="contained" href={paths.pricing} size="small" color="warning">
                     Upgrade to Pro
                 </Button>
             </Stack>

@@ -18,41 +18,37 @@ import { HomeHighlightFeatures } from '../home-highlight-features';
 // ----------------------------------------------------------------------
 
 export function HomeView() {
-  const pageProgress = useScrollProgress();
+    const pageProgress = useScrollProgress();
 
-  return (
-    <>
-      <ScrollProgress
-        variant="linear"
-        progress={pageProgress.scrollYProgress}
-        sx={{ position: 'fixed' }}
-      />
+    return (
+        <>
+            <ScrollProgress variant="linear" progress={pageProgress.scrollYProgress} sx={{ position: 'fixed' }} />
 
-      <BackToTop />
+            <BackToTop />
 
-      <HomeHero />
+            <HomeHero />
 
-      <Stack sx={{ position: 'relative', bgcolor: 'background.default' }}>
-        <HomeMinimal />
+            <Stack sx={{ position: 'relative', bgcolor: 'background.default' }}>
+                <HomeMinimal />
 
-        <HomeHugePackElements />
+                {/* <HomeHugePackElements /> */}
 
-        <HomeForDesigner />
+                {/* <HomeForDesigner /> */}
 
-        <HomeHighlightFeatures />
+                <HomeHighlightFeatures />
 
-        <HomeIntegrations />
+                {/* <HomeIntegrations /> */}
 
-        <HomePricing />
+                <HomePricing />
 
-        <HomeTestimonials />
+                <HomeTestimonials />
 
-        <HomeFAQs />
+                <HomeFAQs />
 
-        <HomeZoneUI />
+                {/* <HomeZoneUI /> */}
 
-        <HomeAdvertisement />
-      </Stack>
-    </>
-  );
+                {/* <HomeAdvertisement /> */}
+            </Stack>
+        </>
+    );
 }

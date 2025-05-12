@@ -2,11 +2,9 @@ import axios from 'axios';
 
 import { CONFIG } from '~/configs/config-global';
 
-// ----------------------------------------------------------------------
-
 const axiosInstance = axios.create({
     baseURL: CONFIG.site.serverUrl,
-    withCredentials: true,
+    // withCredentials: true,
 });
 
 axiosInstance.interceptors.response.use(
@@ -30,7 +28,21 @@ export const fetcher = async (args) => {
 
         const res = await axiosInstance.get(url, { ...config });
 
-        return res.data;
+        // return res.data;
+        return res;
+    } catch (error) {
+        console.error('Failed to fetch:', error);
+        throw error;
+    }
+};
+
+export const fetcher1 = async (args) => {
+    try {
+        const [url, config] = Array.isArray(args) ? args : [args];
+
+        const res = await axiosInstance.get(url, { ...config, withCredentials: true });
+
+        return res;
     } catch (error) {
         console.error('Failed to fetch:', error);
         throw error;
@@ -47,9 +59,10 @@ export const endpoints = {
     },
     calendar: '/api/calendar',
     auth: {
-        me: '/api/auth/me',
+        me: '/api/v1/auth/me',
         signIn: '/api/v1/auth/sign-in',
         signUp: '/api/v1/auth/sign-up',
+        signOut: '/api/v1/auth/sign-out',
     },
     mail: {
         list: '/api/mail/list',
@@ -61,10 +74,5 @@ export const endpoints = {
         details: '/api/post/details',
         latest: '/api/post/latest',
         search: '/api/post/search',
-    },
-    product: {
-        list: '/api/product/list',
-        details: '/api/product/details',
-        search: '/api/product/search',
     },
 };

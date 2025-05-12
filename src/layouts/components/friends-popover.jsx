@@ -1,4 +1,5 @@
 import { m } from 'framer-motion';
+import { useSelector } from 'react-redux';
 
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
@@ -14,10 +15,9 @@ import { varHover } from '~/components/animate';
 import { Scrollbar } from '~/components/scrollbar';
 import { usePopover, CustomPopover } from '~/components/custom-popover';
 
-// ----------------------------------------------------------------------
-
-export function ContactsPopover({ data = [], sx, ...other }) {
+export function FriendsPopover({ data = [], sx, ...other }) {
     const popover = usePopover();
+    const { user } = useSelector((state) => state.user);
 
     return (
         <>
@@ -51,28 +51,29 @@ export function ContactsPopover({ data = [], sx, ...other }) {
                 }}
             >
                 <Typography variant="h6" sx={{ p: 1.5 }}>
-                    Contacts <span>({data.length})</span>
+                    Friends <span>({user?.friends?.length ?? 0})</span>
                 </Typography>
 
                 <Scrollbar sx={{ height: 320, width: 320 }}>
-                    {data.map((contact) => (
-                        <MenuItem key={contact.id} sx={{ p: 1 }}>
-                            <Badge
-                                variant={contact.status}
-                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                sx={{ mr: 2 }}
-                            >
-                                <Avatar alt={contact.name} src={contact.avatarUrl} />
-                            </Badge>
+                    {user?.friends?.length &&
+                        user?.friends.map((friend) => (
+                            <MenuItem key={friend.id} sx={{ p: 1 }}>
+                                <Badge
+                                    variant={friend.status}
+                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                    sx={{ mr: 2 }}
+                                >
+                                    <Avatar alt={friend.displayName} src={friend.avatar} />
+                                </Badge>
 
-                            <ListItemText
-                                primary={contact.name}
-                                secondary={contact.status === 'offline' ? fToNow(contact.lastActivity) : ''}
-                                primaryTypographyProps={{ typography: 'subtitle2' }}
-                                secondaryTypographyProps={{ typography: 'caption', color: 'text.disabled' }}
-                            />
-                        </MenuItem>
-                    ))}
+                                <ListItemText
+                                    primary={friend.displayName}
+                                    secondary={friend.status === 'offline' ? fToNow(friend.lastActivity) : ''}
+                                    primaryTypographyProps={{ typography: 'subtitle2' }}
+                                    secondaryTypographyProps={{ typography: 'caption', color: 'text.disabled' }}
+                                />
+                            </MenuItem>
+                        ))}
                 </Scrollbar>
             </CustomPopover>
         </>

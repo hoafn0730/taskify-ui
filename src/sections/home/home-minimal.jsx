@@ -33,7 +33,7 @@ export function HomeMinimal({ sx, ...other }) {
             <SectionTitle
                 caption="Visualizing Success"
                 title="What's in"
-                txtGradient="Minimal?"
+                txtGradient="Taskify?"
                 sx={{ mb: { xs: 5, md: 8 }, textAlign: { xs: 'center', md: 'left' } }}
             />
 
@@ -134,18 +134,20 @@ export function HomeMinimal({ sx, ...other }) {
 
 const ITEMS = [
     {
-        icon: `${CONFIG.site.basePath}/assets/icons/home/ic-make-brand.svg`,
-        title: 'Branding',
-        description: 'Consistent design makes it easy to brand your own.',
+        // icon: `${CONFIG.site.basePath}/assets/icons/home/ic-make-brand.svg`,
+        title: 'Inbox',
+        description: 'When it’s on your mind, it goes in your Inbox. Capture your to-dos from anywhere, anytime.',
     },
     {
-        icon: `${CONFIG.site.basePath}/assets/icons/home/ic-design.svg`,
-        title: 'UI & UX design',
-        description: 'The kit is built on the principles of the atomic design system.',
+        // icon: `${CONFIG.site.basePath}/assets/icons/home/ic-design.svg`,
+        title: 'Boards',
+        description:
+            'Your to-do list may be long, but it can be manageable! Keep tabs on everything from "to-dos to tackle" to "mission accomplished!”',
     },
     {
-        icon: `${CONFIG.site.basePath}/assets/icons/home/ic-development.svg`,
-        title: 'Development',
-        description: 'Easy to customize and extend, saving you time and money.',
+        // icon: `${CONFIG.site.basePath}/assets/icons/home/ic-development.svg`,
+        title: 'Planner',
+        description:
+            'Drag, drop, get it done. Snap your top tasks into your calendar and make time for what truly matters.',
     },
 ];

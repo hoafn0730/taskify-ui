@@ -1,5 +1,5 @@
-import { useState, useCallback, useMemo } from 'react';
-import { mutate } from 'swr';
+
+import { useCallback, useMemo } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -13,7 +13,7 @@ import { orderBy } from '~/utils/helper';
 import { fIsAfter, fIsBetween } from '~/utils/format-time';
 
 import { DashboardContent } from '~/layouts/dashboard';
-import { _tours, _tourGuides, TOUR_SORT_OPTIONS } from '~/_mock';
+import { _tours, _tourGuides, SORT_OPTIONS } from '~/_mock';
 
 import { Iconify } from '~/components/iconify';
 import { EmptyContent } from '~/components/empty-content';
@@ -26,45 +26,24 @@ import { KanbanFilters } from '../kanban-filters';
 import { KanbanFiltersResult } from '../kanban-filters-result';
 import { KanbanDialog } from '../kanban-dialog';
 
-import { useGetBoardList } from '~/actions/kanban';
-import { endpoints } from '~/utils/axios';
+import { useKanban } from '~/actions/kanban/useKanban';
 
 export function KanbanListView() {
     const openFilters = useBoolean();
     const dialog = useBoolean();
 
-    const [sortBy, setSortBy] = useState('latest');
-    // Sử dụng useGetBoardList để lấy danh sách boards
-    const { boards, boardsLoading, boardsError, boardsEmpty } = useGetBoardList();
-    // const [boards, setBoards] = useState([..._tours].sort((a, b) => b.starred - a.star));
+    // Lấy danh sách boards
+    const { boards, sortBy, setSortBy } = useKanban();
 
     const search = useSetState({ query: '', results: [] });
 
+    //[ ] modify filters
     const filters = useSetState({
         boardGuides: [],
         startDate: null,
         endDate: null,
     });
 
-    const handleStarToggle = useCallback(async (boardId, isStarred) => {
-        try {
-            // Gọi API để cập nhật trạng thái starred của board
-            // await axios.post(`/api/boards/${boardId}/toggle-star`, { star: !isStarred });
-
-            // Cập nhật trạng thái starred trong state
-            mutate(
-                endpoints.kanban.boards,
-                (currentBoards) => {
-                    return currentBoards.map((board) =>
-                        board.id === boardId ? { ...board, star: !isStarred } : board,
-                    );
-                },
-                false,
-            );
-        } catch (error) {
-            console.error('Failed to toggle star:', error);
-        }
-    }, []);
 
     const handleClickOpen = useCallback(() => {
         dialog.onTrue();
@@ -72,7 +51,6 @@ export function KanbanListView() {
 
     const dateError = fIsAfter(filters.state.startDate, filters.state.endDate);
 
-    // Tính toán lại dataFiltered khi boards, filters.state, sortBy, hoặc dateError thay đổi
     const dataFiltered = useMemo(() => {
         return applyFilter({
             inputData: boards,
@@ -84,21 +62,24 @@ export function KanbanListView() {
 
     const canReset = filters.state.boardGuides.length > 0 || (!!filters.state.startDate && !!filters.state.endDate);
 
-    const notFound = !dataFiltered.length && canReset;
+    const notFound = !dataFiltered.length; // && canReset;
 
-    const handleSortBy = useCallback((newValue) => {
-        setSortBy(newValue);
-    }, []);
+    const handleSortBy = useCallback(
+        (newValue) => {
+            setSortBy(newValue);
+        },
+        [setSortBy],
+    );
 
     const handleSearch = useCallback(
         (inputValue) => {
             search.setState({ query: inputValue });
 
-            const results = _tours.filter((board) => board.name.toLowerCase().includes(inputValue.toLowerCase()));
+            const results = boards.filter((board) => board.title.toLowerCase().includes(inputValue.toLowerCase()));
 
             search.setState({ results });
         },
-        [search],
+        [boards, search],
     );
 
     const renderFilters = (
@@ -111,7 +92,8 @@ export function KanbanListView() {
             <KanbanSearch search={search} onSearch={handleSearch} />
 
             <Stack direction="row" spacing={1} flexShrink={0}>
-                <KanbanFilters
+                {/* [ ]: Modify filters */}
+                {/* <KanbanFilters
                     filters={filters}
                     canReset={canReset}
                     dateError={dateError}
@@ -121,9 +103,9 @@ export function KanbanListView() {
                     options={{
                         boardGuides: _tourGuides,
                     }}
-                />
+                /> */}
 
-                <KanbanSort sort={sortBy} onSort={handleSortBy} sortOptions={TOUR_SORT_OPTIONS} />
+                <KanbanSort sort={sortBy} onSort={handleSortBy} sortOptions={SORT_OPTIONS} />
             </Stack>
         </Stack>
     );
@@ -159,8 +141,7 @@ export function KanbanListView() {
             </Stack>
 
             {notFound && <EmptyContent filled sx={{ py: 10 }} />}
-
-            <KanbanList boards={dataFiltered} onStarToggle={handleStarToggle} />
+            <KanbanList boards={dataFiltered} />
 
             <KanbanDialog dialog={dialog} />
         </DashboardContent>
@@ -173,7 +154,7 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
     const boardGuideIds = boardGuides.map((boardGuide) => boardGuide.id);
 
     // Luôn luôn ưu tiên Starred trước
-    let sortFields = ['star'];
+    let sortFields = ['starred'];
     let sortOrders = ['desc'];
 
     // Thêm các tiêu chí sắp xếp theo sortBy

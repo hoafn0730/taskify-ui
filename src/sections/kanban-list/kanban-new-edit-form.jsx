@@ -82,6 +82,7 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
         }
     }, [currentBoard, defaultValues, reset]);
 
+
     // [ ] TODO: Handle update kanban
     const onSubmit = handleSubmit(async (data) => {
         try {

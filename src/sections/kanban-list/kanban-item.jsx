@@ -44,6 +44,7 @@ export function KanbanItem({ board, onView, onEdit, onDelete, onStarToggle }) {
         />
     );
 
+    // [ ] TODO: update image kanban
     const renderImages = (
         <Box gap={0.5} display="flex" sx={{ p: 1 }}>
             <Box flexGrow={1} sx={{ position: 'relative' }}>
@@ -57,6 +58,7 @@ export function KanbanItem({ board, onView, onEdit, onDelete, onStarToggle }) {
         <ListItemText
             sx={{ p: (theme) => theme.spacing(1, 2.5, 2, 2.5) }}
             primary={
+
                 <Link component={RouterLink} href={paths.dashboard.kanban.details(board.slug)} color="inherit">
                     {board.title}
                 </Link>

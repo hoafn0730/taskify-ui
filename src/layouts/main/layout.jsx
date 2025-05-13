@@ -11,7 +11,7 @@ import { NavDesktop } from './nav/desktop';
 import { Footer, HomeFooter } from './footer';
 import { HeaderBase } from '../core/header-base';
 import { LayoutSection } from '../core/layout-section';
-import { navData as mainNavData } from '../config-nav-main';
+import { navData as mainNavData } from '~/configs/config-nav-main';
 
 // ----------------------------------------------------------------------
 

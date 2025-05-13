@@ -10,8 +10,7 @@ import { toast } from '~/components/snackbar';
 import ColumnBase from './column-base';
 import KanbanTaskAdd from '../components/kanban-task-add';
 import KanbanColumnToolBar from './kanban-column-toolbar';
-import { clearColumn, createTask, deleteColumn } from '~/store/actions/kanbanAction';
-import { kanbanService } from '~/services/kanbanService';
+import { clearColumn, createTask, deleteColumn, updateColumn } from '~/store/actions/kanbanAction';
 
 function KanbanColumn({ children, column, tasks = [], disabled, sx }) {
     const dispatch = useDispatch();
@@ -32,15 +31,14 @@ function KanbanColumn({ children, column, tasks = [], disabled, sx }) {
     const handleUpdateColumn = useCallback(
         async (columnTitle) => {
             if (column.title !== columnTitle) {
-                kanbanService.updateColumn(column.id, { title: columnTitle });
+                dispatch(updateColumn({ columnId: column.id, columnData: { title: columnTitle } }));
 
                 toast.success('Update success!', { position: 'top-center' });
             }
         },
-        [column.id, column.title],
+        [column.id, column.title, dispatch],
     );
 
-    // [ ] update api clear column
     const handleClearColumn = useCallback(async () => {
         dispatch(clearColumn(column.id));
     }, [column.id, dispatch]);

@@ -1,18 +1,21 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { useState, useEffect, useCallback, memo } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useBoolean } from '~/hooks/use-boolean';
 
-import { deleteTask, updateTask } from '~/actions/kanban';
+import { deleteTask } from '~/actions/kanban';
 
 import { toast } from '~/components/snackbar';
 import { imageClasses } from '~/components/image';
 
 import ItemBase from './item-base';
 import KanbanDetails from '../details/kanban-details';
+import { updateTask } from '~/store/actions/kanbanAction';
 
 function KanbanTaskItem({ task, disabled, columnId, sx }) {
     const openDetails = useBoolean();
+    const dispatch = useDispatch();
 
     const { setNodeRef, listeners, isDragging, isSorting, transform, transition } = useSortable({
         id: task?.uuid,
@@ -36,13 +39,9 @@ function KanbanTaskItem({ task, disabled, columnId, sx }) {
     // [ ]: handleUpdateTask
     const handleUpdateTask = useCallback(
         async (taskData) => {
-            try {
-                updateTask(columnId, taskData);
-            } catch (error) {
-                console.error(error);
-            }
+            dispatch(updateTask({ columnId, taskData }));
         },
-        [columnId],
+        [columnId, dispatch],
     );
 
     return (

@@ -1,5 +1,4 @@
 import { paths } from '~/configs/paths';
-
 import { CONFIG } from '~/configs/config-global';
 
 import { Label } from '~/components/label';
@@ -117,7 +116,7 @@ const ICONS = {
 //                     { title: 'Edit', path: paths.dashboard.job.demo.edit },
 //                 ],
 //             },
-// 
+//
 //             { title: 'File manager', path: paths.dashboard.fileManager, icon: ICONS.folder },
 //             {
 //                 title: 'Mail',
@@ -142,7 +141,7 @@ const ICONS = {
 //             //         { title: 'Edit', path: paths.dashboard.tour.demo.edit },
 //             //     ],
 //             // },
-// 
+//
 //             { title: 'Kanban', path: paths.dashboard.kanban.root, icon: ICONS.kanban },
 //         ],
 //     },
@@ -164,7 +163,7 @@ const ICONS = {
 //                 roles: ['admin', 'manager'],
 //                 caption: 'Only admin can see this item',
 //             },
-// 
+//
 //             // {
 //             //     title: 'Level',
 //             //     path: '#/dashboard/menu_level',
@@ -295,17 +294,17 @@ export const navData = (t) => [
                     { title: t('management.blog.edit'), path: paths.dashboard.post.demo.edit },
                 ],
             },
-            {
-                title: t('management.job.title'),
-                path: paths.dashboard.job.root,
-                icon: ICONS.job,
-                children: [
-                    { title: t('management.job.list'), path: paths.dashboard.job.root },
-                    { title: t('management.job.details'), path: paths.dashboard.job.demo.details },
-                    { title: t('management.job.create'), path: paths.dashboard.job.new },
-                    { title: t('management.job.edit'), path: paths.dashboard.job.demo.edit },
-                ],
-            },
+            // {
+            //     title: t('management.job.title'),
+            //     path: paths.dashboard.job.root,
+            //     icon: ICONS.job,
+            //     children: [
+            //         { title: t('management.job.list'), path: paths.dashboard.job.root },
+            //         { title: t('management.job.details'), path: paths.dashboard.job.demo.details },
+            //         { title: t('management.job.create'), path: paths.dashboard.job.new },
+            //         { title: t('management.job.edit'), path: paths.dashboard.job.demo.edit },
+            //     ],
+            // },
             { title: t('management.fileManager'), path: paths.dashboard.fileManager, icon: ICONS.folder },
             {
                 title: t('management.mail'),

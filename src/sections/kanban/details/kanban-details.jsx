@@ -68,7 +68,7 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
 
     const contacts = useBoolean();
 
-    const [taskDescription, setTaskDescription] = useState(task?.description);
+    const [taskDescription, setTaskDescription] = useState(task?.description || '');
 
     const rangePicker = useDateRangePicker(
         dayjs(task?.dueStart || dayjs()),
@@ -82,14 +82,10 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
     // [ ] handleUpdateTask
     const handleUpdateTask = useCallback(
         (event) => {
-            try {
-                if (event.key === 'Enter') {
-                    if (taskName) {
-                        onUpdateTask({ ...task, name: taskName });
-                    }
+            if (event.key === 'Enter') {
+                if (taskName) {
+                    onUpdateTask({ ...task, name: taskName });
                 }
-            } catch (error) {
-                console.error(error);
             }
         },
         [onUpdateTask, task, taskName],

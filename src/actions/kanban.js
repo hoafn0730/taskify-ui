@@ -37,41 +37,6 @@ export function useGetBoard() {
 
 // ----------------------------------------------------------------------
 
-export async function updateColumn(columnId, columnName) {
-    /**
-     * Work on server
-     */
-    if (enableServer) {
-        const data = { columnId, columnName };
-        await axios.post(BOARD_ENDPOINT, data, { params: { endpoint: 'update-column' } });
-    }
-
-    /**
-     * Work in local
-     */
-    mutate(
-        BOARD_ENDPOINT,
-        (currentData) => {
-            const { board } = currentData;
-
-            const columns = board.columns.map((column) =>
-                column.id === columnId
-                    ? {
-                          // Update data when found
-                          ...column,
-                          name: columnName,
-                      }
-                    : column,
-            );
-
-            return { ...currentData, board: { ...board, columns } };
-        },
-        false,
-    );
-}
-
-// ----------------------------------------------------------------------
-
 export async function updateTask(columnId, taskData) {
     /**
      * Work on server

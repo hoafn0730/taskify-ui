@@ -128,6 +128,12 @@ const createTask = async (data) => {
     return res.data;
 };
 
+const updateTask = (cardId, data) => {
+    return axiosInstance.put(import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.cards + '/' + cardId, data, {
+        withCredentials: true,
+    });
+};
+
 export const kanbanService = {
     searchBoards,
     getBoards,
@@ -144,4 +150,5 @@ export const kanbanService = {
     toggleStarBoard,
     clearColumn,
     createTask,
+    updateTask,
 };

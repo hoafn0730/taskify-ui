@@ -5,17 +5,13 @@ import { useSortable, defaultAnimateLayoutChanges } from '@dnd-kit/sortable';
 
 import { useBoolean } from '~/hooks/use-boolean';
 
-import { createTask, clearColumn } from '~/actions/kanban';
-
 import { toast } from '~/components/snackbar';
 
 import ColumnBase from './column-base';
 import KanbanTaskAdd from '../components/kanban-task-add';
 import KanbanColumnToolBar from './kanban-column-toolbar';
-import { deleteColumn } from '~/store/actions/kanbanAction';
+import { clearColumn, createTask, deleteColumn } from '~/store/actions/kanbanAction';
 import { kanbanService } from '~/services/kanbanService';
-
-// ----------------------------------------------------------------------
 
 function KanbanColumn({ children, column, tasks = [], disabled, sx }) {
     const dispatch = useDispatch();
@@ -35,14 +31,10 @@ function KanbanColumn({ children, column, tasks = [], disabled, sx }) {
 
     const handleUpdateColumn = useCallback(
         async (columnTitle) => {
-            try {
-                if (column.title !== columnTitle) {
-                    kanbanService.updateColumn(column.id, { title: columnTitle });
+            if (column.title !== columnTitle) {
+                kanbanService.updateColumn(column.id, { title: columnTitle });
 
-                    toast.success('Update success!', { position: 'top-center' });
-                }
-            } catch (error) {
-                console.error(error);
+                toast.success('Update success!', { position: 'top-center' });
             }
         },
         [column.id, column.title],
@@ -50,35 +42,28 @@ function KanbanColumn({ children, column, tasks = [], disabled, sx }) {
 
     // [ ] update api clear column
     const handleClearColumn = useCallback(async () => {
-        try {
-            clearColumn(column.id);
-        } catch (error) {
-            console.error(error);
-        }
-    }, [column.id]);
-
-    const handleDeleteColumn = useCallback(async () => {
-        try {
-            dispatch(deleteColumn(column.id));
-
-            toast.success('Delete success!', { position: 'top-center' });
-        } catch (error) {
-            console.error(error);
-        }
+        dispatch(clearColumn(column.id));
     }, [column.id, dispatch]);
 
-    // [ ] update add task
+    const handleDeleteColumn = useCallback(async () => {
+        dispatch(deleteColumn(column.id));
+
+        toast.success('Delete success!', { position: 'top-center' });
+    }, [column.id, dispatch]);
+
     const handleAddTask = useCallback(
         async (taskData) => {
-            try {
-                createTask(column.id, taskData);
+            dispatch(
+                createTask({
+                    columnUuid: column.uuid,
+                    columnId: column.id,
+                    taskData: { boardId: column.boardId, ...taskData },
+                }),
+            );
 
-                openAddTask.onFalse();
-            } catch (error) {
-                console.error(error);
-            }
+            openAddTask.onFalse();
         },
-        [column.id, openAddTask],
+        [column.boardId, column.id, column.uuid, dispatch, openAddTask],
     );
 
     return (
@@ -105,7 +90,7 @@ function KanbanColumn({ children, column, tasks = [], disabled, sx }) {
                 main: <>{children}</>,
                 action: (
                     <KanbanTaskAdd
-                        status={column.name}
+                        status={column.title}
                         openAddTask={openAddTask.value}
                         onAddTask={handleAddTask}
                         onCloseAddTask={openAddTask.onFalse}

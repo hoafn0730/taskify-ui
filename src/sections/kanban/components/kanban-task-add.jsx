@@ -18,7 +18,7 @@ function KanbanTaskAdd({ status, openAddTask, onAddTask, onCloseAddTask }) {
         () => ({
             id: uuidv4(),
             status,
-            name: taskName.trim() ? taskName : 'Untitled',
+            title: taskName.trim() ? taskName : 'Untitled',
             priority: 'medium',
             attachments: [],
             labels: [],

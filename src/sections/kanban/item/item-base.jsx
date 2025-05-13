@@ -82,24 +82,24 @@ const ItemBase = forwardRef(({ task, stateProps, sx, ...other }, ref) => {
             '',
     );
 
-    // TODO: Uncomment when priority is available
-    // const renderPriority = (
-    //     <Iconify
-    //         icon={
-    //             (task.priority === 'low' && 'solar:double-alt-arrow-down-bold-duotone') ||
-    //             (task.priority === 'medium' && 'solar:double-alt-arrow-right-bold-duotone') ||
-    //             'solar:double-alt-arrow-up-bold-duotone'
-    //         }
-    //         sx={{
-    //             top: 4,
-    //             right: 4,
-    //             position: 'absolute',
-    //             ...(task.priority === 'low' && { color: 'info.main' }),
-    //             ...(task.priority === 'medium' && { color: 'warning.main' }),
-    //             ...(task.priority === 'hight' && { color: 'error.main' }),
-    //         }}
-    //     />
-    // );
+    // [ ] TODO: Uncomment when priority is available
+    const renderPriority = (
+        <Iconify
+            icon={
+                (task.priority === 'low' && 'solar:double-alt-arrow-down-bold-duotone') ||
+                (task.priority === 'medium' && 'solar:double-alt-arrow-right-bold-duotone') ||
+                'solar:double-alt-arrow-up-bold-duotone'
+            }
+            sx={{
+                top: 4,
+                right: 4,
+                position: 'absolute',
+                ...(task.priority === 'low' && { color: 'info.main' }),
+                ...(task.priority === 'medium' && { color: 'warning.main' }),
+                ...(task.priority === 'hight' && { color: 'error.main' }),
+            }}
+        />
+    );
 
     const renderImg = !!task?.attachments?.length && (
         <Box sx={{ p: theme.spacing(1, 1, 0, 1) }}>
@@ -130,11 +130,11 @@ const ItemBase = forwardRef(({ task, stateProps, sx, ...other }, ref) => {
                 <Iconify width={16} icon="solar:chat-round-dots-bold" sx={{ mr: 0.25 }} />
 
                 <Box component="span" sx={{ mr: 1 }}>
-                    {task?.comments?.length}
+                    {task?.comments?.length ?? 0}
                 </Box>
 
                 <Iconify width={16} icon="eva:attach-2-fill" sx={{ mr: 0.25 }} />
-                <Box component="span">{task?.attachments?.length}</Box>
+                <Box component="span">{task?.attachments?.length ?? 0}</Box>
             </Stack>
 
             <AvatarGroup sx={{ [`& .${avatarGroupClasses.avatar}`]: { width: 24, height: 24 } }}>

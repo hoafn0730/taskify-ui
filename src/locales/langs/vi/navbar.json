@@ -1,12 +1,61 @@
 {
-  "app": "Ứng dụng",
-  "job": "Công việc",
-  "user": "Người dùng",
-  "travel": "Du lịch",
-  "invoice": "Hóa đơn",
-  "blog": {
-    "title": "Blog",
-    "caption": "Phím tắt tùy chỉnh."
-  },
-  "subheader": "Tiêu đề phụ"
+    "overview": {
+        "title": "Tổng quan",
+        "app": "Ứng dụng",
+        "analytics": "Phân tích",
+        "banking": "Ngân hàng",
+        "file": "Tệp"
+    },
+    "management": {
+        "title": "Quản lý",
+        "user": {
+            "title": "Người dùng",
+            "profile": "Hồ sơ",
+            "cards": "Thẻ",
+            "list": "Danh sách",
+            "create": "Tạo mới",
+            "edit": "Chỉnh sửa",
+            "account": "Tài khoản"
+        },
+        "product": {
+            "title": "Sản phẩm",
+            "list": "Danh sách",
+            "details": "Chi tiết",
+            "create": "Tạo mới",
+            "edit": "Chỉnh sửa"
+        },
+        "invoice": {
+            "title": "Hóa đơn",
+            "list": "Danh sách",
+            "details": "Chi tiết",
+            "create": "Tạo mới",
+            "edit": "Chỉnh sửa"
+        },
+        "blog": {
+            "title": "Bài viết",
+            "list": "Danh sách",
+            "details": "Chi tiết",
+            "create": "Tạo mới",
+            "edit": "Chỉnh sửa"
+        },
+        "job": {
+            "title": "Công việc",
+            "list": "Danh sách",
+            "details": "Chi tiết",
+            "create": "Tạo mới",
+            "edit": "Chỉnh sửa"
+        },
+        "fileManager": "Quản lý tệp",
+        "mail": "Thư",
+        "chat": "Trò chuyện",
+        "calendar": "Lịch",
+        "kanban": "Kanban"
+    },
+    "misc": {
+        "title": "Khác",
+        "permission": {
+            "title": "Phân quyền",
+            "caption": "Chỉ admin hoặc quản lý có thể xem"
+        }
+    }
 }

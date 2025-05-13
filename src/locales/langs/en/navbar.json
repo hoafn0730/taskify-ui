@@ -1,12 +1,61 @@
 {
-  "app": "App",
-  "job": "Job",
-  "user": "User",
-  "travel": "Travel",
-  "invoice": "Invoice",
-  "blog": {
-    "title": "Blog",
-    "caption": "Custom keyboard shortcuts."
-  },
-  "subheader": "Sub header"
+    "overview": {
+        "title": "Overview",
+        "app": "App",
+        "analytics": "Analytics",
+        "banking": "Banking",
+        "file": "File"
+    },
+    "management": {
+        "title": "Management",
+        "user": {
+            "title": "User",
+            "profile": "Profile",
+            "cards": "Cards",
+            "list": "List",
+            "create": "Create",
+            "edit": "Edit",
+            "account": "Account"
+        },
+        "product": {
+            "title": "Product",
+            "list": "List",
+            "details": "Details",
+            "create": "Create",
+            "edit": "Edit"
+        },
+        "invoice": {
+            "title": "Invoice",
+            "list": "List",
+            "details": "Details",
+            "create": "Create",
+            "edit": "Edit"
+        },
+        "blog": {
+            "title": "Blog",
+            "list": "List",
+            "details": "Details",
+            "create": "Create",
+            "edit": "Edit"
+        },
+        "job": {
+            "title": "Job",
+            "list": "List",
+            "details": "Details",
+            "create": "Create",
+            "edit": "Edit"
+        },
+        "fileManager": "File Manager",
+        "mail": "Mail",
+        "chat": "Chat",
+        "calendar": "Calendar",
+        "kanban": "Kanban"
+    },
+    "misc": {
+        "title": "Misc",
+        "permission": {
+            "title": "Permission",
+            "caption": "Only admin or manager can see this item"
+        }
+    }
 }

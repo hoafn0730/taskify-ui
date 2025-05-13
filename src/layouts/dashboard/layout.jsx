@@ -6,7 +6,7 @@ import { iconButtonClasses } from '@mui/material/IconButton';
 
 import { useBoolean } from '~/hooks/use-boolean';
 
-import { allLangs } from '~/locales';
+import { allLangs, useTranslate } from '~/locales';
 import { _contacts, _notifications } from '~/_mock';
 import { varAlpha, stylesMode } from '~/theme/styles';
 
@@ -18,11 +18,12 @@ import { NavMobile } from './nav-mobile';
 import { layoutClasses } from '../classes';
 import { NavVertical } from './nav-vertical';
 import { NavHorizontal } from './nav-horizontal';
-import { _account } from '../config-nav-account';
 import { HeaderBase } from '../core/header-base';
-import { _workspaces } from '../config-nav-workspace';
 import { LayoutSection } from '../core/layout-section';
-import { navData as dashboardNavData } from '../config-nav-dashboard';
+
+import { navData as dashboardNavData } from '~/configs/config-nav-dashboard';
+import { _account } from '~/configs/config-nav-account';
+import { _workspaces } from '~/configs/config-nav-workspace';
 
 export function DashboardLayout({ sx, children, data }) {
     const theme = useTheme();
@@ -35,7 +36,9 @@ export function DashboardLayout({ sx, children, data }) {
 
     const layoutQuery = 'lg';
 
-    const navData = data?.nav ?? dashboardNavData;
+    const { t: tnav } = useTranslate('navbar');
+
+    const navData = data?.nav ?? dashboardNavData(tnav);
 
     const isNavMini = settings.navLayout === 'mini';
 

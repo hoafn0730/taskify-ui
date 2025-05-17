@@ -17,6 +17,14 @@
             "edit": "Edit",
             "account": "Account"
         },
+        "member": {
+            "title": "Member",
+            "profile": "Profile",
+            "cards": "Cards",
+            "list": "List",
+            "create": "Create",
+            "edit": "Edit"
+        },
         "product": {
             "title": "Product",
             "list": "List",
@@ -49,7 +57,8 @@
         "mail": "Mail",
         "chat": "Chat",
         "calendar": "Calendar",
-        "kanban": "Kanban"
+        "kanban": "Kanban",
+        "list": "List"
     },
     "misc": {
         "title": "Misc",

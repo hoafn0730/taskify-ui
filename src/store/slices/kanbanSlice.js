@@ -6,6 +6,7 @@ import {
     createNewColumn,
     createTask,
     deleteColumn,
+    deleteTask,
     fetchBoardDetail,
     updateColumn,
     updateTask,
@@ -139,13 +140,14 @@ export const kanbanSlice = createSlice({
                 const newBoard = cloneDeep(state.activeBoard);
 
                 const column = newBoard.columns.find((col) => col.id === action.payload.columnId);
+                const reporter = action.payload.reporter;
                 const taskData = action.payload.taskData;
 
                 const currentTasks = newBoard.tasks[column.uuid] || [];
 
                 const tasks = {
                     ...newBoard.tasks,
-                    [column.uuid]: [taskData, ...currentTasks],
+                    [column.uuid]: [{ ...taskData, reporter: [reporter], assignees: [reporter] }, ...currentTasks],
                 };
 
                 state.activeBoard = { ...newBoard, tasks };
@@ -174,6 +176,23 @@ export const kanbanSlice = createSlice({
                 );
 
                 const tasks = { ...newBoard.tasks, [column.uuid]: updateTasks };
+
+                state.activeBoard = { ...newBoard, tasks };
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(deleteTask.fulfilled, (state, action) => {
+                const newBoard = cloneDeep(state.activeBoard);
+
+                const column = newBoard.columns.find((col) => col.id === action.payload.columnId);
+
+                const taskId = action.payload.taskId;
+
+                // delete task in column
+                const tasks = {
+                    ...newBoard.tasks,
+                    [column.uuid]: newBoard.tasks[column.uuid].filter((task) => task.id !== taskId),
+                };
 
                 state.activeBoard = { ...newBoard, tasks };
                 state.isLoading = false;

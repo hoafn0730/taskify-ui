@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -14,21 +15,20 @@ import { Iconify } from '~/components/iconify';
 import { ConfirmDialog } from '~/components/custom-dialog';
 import { usePopover, CustomPopover } from '~/components/custom-popover';
 
-// ----------------------------------------------------------------------
-
-export function KanbanDetailsToolbar({ liked, onLike, taskName, onDelete, taskStatus, onCloseDetails }) {
+export function KanbanDetailsToolbar({ liked, onLike, taskName, onDelete, task, onCloseDetails }) {
+    const { activeBoard: board } = useSelector((state) => state.kanban);
     const smUp = useResponsive('up', 'sm');
 
     const confirm = useBoolean();
 
     const popover = usePopover();
 
-    const [status, setStatus] = useState(taskStatus);
+    const [listId, setListId] = useState(task.columnId);
 
-    const handleChangeStatus = useCallback(
+    const handleChangeList = useCallback(
         (newValue) => {
             popover.onClose();
-            setStatus(newValue);
+            setListId(newValue);
         },
         [popover],
     );
@@ -57,7 +57,7 @@ export function KanbanDetailsToolbar({ liked, onLike, taskName, onDelete, taskSt
                     endIcon={<Iconify icon="eva:arrow-ios-downward-fill" width={16} sx={{ ml: -0.5 }} />}
                     onClick={popover.onOpen}
                 >
-                    {status}
+                    {board?.columns?.find((col) => col.id === listId).title}
                 </Button>
 
                 <Stack direction="row" justifyContent="flex-end" flexGrow={1}>
@@ -73,9 +73,10 @@ export function KanbanDetailsToolbar({ liked, onLike, taskName, onDelete, taskSt
                         </IconButton>
                     </Tooltip>
 
-                    <IconButton>
+                    {/* [ ] more btn*/}
+                    {/* <IconButton>
                         <Iconify icon="eva:more-vertical-fill" />
-                    </IconButton>
+                    </IconButton> */}
                 </Stack>
             </Stack>
 
@@ -86,17 +87,18 @@ export function KanbanDetailsToolbar({ liked, onLike, taskName, onDelete, taskSt
                 slotProps={{ arrow: { placement: 'top-right' } }}
             >
                 <MenuList>
-                    {['To do', 'In progress', 'Ready to test', 'Done'].map((option) => (
-                        <MenuItem
-                            key={option}
-                            selected={status === option}
-                            onClick={() => {
-                                handleChangeStatus(option);
-                            }}
-                        >
-                            {option}
-                        </MenuItem>
-                    ))}
+                    {!!board?.columns?.length &&
+                        board?.columns?.map((option) => (
+                            <MenuItem
+                                key={option.id}
+                                selected={listId === option.id}
+                                onClick={() => {
+                                    handleChangeList(option.id);
+                                }}
+                            >
+                                {option.title}
+                            </MenuItem>
+                        ))}
                 </MenuList>
             </CustomPopover>
 

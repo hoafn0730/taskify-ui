@@ -38,6 +38,13 @@ const UserListPage = lazy(() => import('~/pages/dashboard/user/list'));
 const UserAccountPage = lazy(() => import('~/pages/dashboard/user/account'));
 const UserCreatePage = lazy(() => import('~/pages/dashboard/user/new'));
 const UserEditPage = lazy(() => import('~/pages/dashboard/user/edit'));
+// Member
+const MemberProfilePage = lazy(() => import('~/pages/dashboard/member/profile'));
+const MemberCardsPage = lazy(() => import('~/pages/dashboard/member/cards'));
+const MemberListPage = lazy(() => import('~/pages/dashboard/member/list'));
+const MemberAccountPage = lazy(() => import('~/pages/dashboard/member/account'));
+const MemberCreatePage = lazy(() => import('~/pages/dashboard/member/new'));
+const MemberEditPage = lazy(() => import('~/pages/dashboard/member/edit'));
 // Blog
 const BlogPostsPage = lazy(() => import('~/pages/dashboard/post/list'));
 const BlogPostPage = lazy(() => import('~/pages/dashboard/post/details'));
@@ -95,6 +102,18 @@ export const dashboardRoutes = [
                     { path: 'new', element: <UserCreatePage /> },
                     { path: ':id/edit', element: <UserEditPage /> },
                     { path: 'account', element: <UserAccountPage /> },
+                ],
+            },
+            {
+                path: 'member',
+                children: [
+                    { element: <MemberProfilePage />, index: true },
+                    { path: 'profile', element: <MemberProfilePage /> },
+                    { path: 'cards', element: <MemberCardsPage /> },
+                    { path: 'list', element: <MemberListPage /> },
+                    { path: 'new', element: <MemberCreatePage /> },
+                    { path: ':id/edit', element: <MemberEditPage /> },
+                    { path: 'account', element: <MemberAccountPage /> },
                 ],
             },
             {

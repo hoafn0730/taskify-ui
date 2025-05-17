@@ -33,15 +33,20 @@ export const clearColumn = createAsyncThunk('kanban/clearColumn', async (columnI
 });
 
 // card
-export const createTask = createAsyncThunk('kanban/createTask', async ({ columnId, taskData }) => {
+export const createTask = createAsyncThunk('kanban/createTask', async ({ columnId, taskData, reporter }) => {
     const res = await kanbanService.createTask({ columnId, title: taskData.title, boardId: taskData.boardId });
 
-    return { columnId, taskData: res };
+    return { columnId, taskData: res, reporter };
 });
 
 export const updateTask = createAsyncThunk('kanban/updateTask', async ({ columnId, taskData }) => {
-    console.log('🚀 ~ updateTask ~ taskData:', taskData);
     await kanbanService.updateTask(taskData.id, taskData);
 
     return { columnId, taskData };
+});
+
+export const deleteTask = createAsyncThunk('kanban/deleteTask', async ({ columnId, taskId }) => {
+    await kanbanService.deleteTask(taskId);
+
+    return { columnId, taskId };
 });

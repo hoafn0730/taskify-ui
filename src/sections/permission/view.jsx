@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -13,7 +14,6 @@ import { DashboardContent } from '~/layouts/dashboard';
 
 import { CustomBreadcrumbs } from '~/components/custom-breadcrumbs';
 
-import { useMockedUser } from '~/auth/hooks';
 import { RoleBasedGuard } from '~/auth/guard';
 
 // ----------------------------------------------------------------------
@@ -21,7 +21,8 @@ import { RoleBasedGuard } from '~/auth/guard';
 export function PermissionDeniedView() {
     const [role, setRole] = useState('admin');
 
-    const { user } = useMockedUser();
+    // const { user } = useMockedUser();
+    const { user } = useSelector((state) => state.user);
 
     const handleChangeRole = useCallback((event, newRole) => {
         if (newRole !== null) {

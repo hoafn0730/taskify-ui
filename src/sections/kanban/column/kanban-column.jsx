@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { memo, useCallback } from 'react';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable, defaultAnimateLayoutChanges } from '@dnd-kit/sortable';
@@ -15,6 +15,7 @@ import { clearColumn, createTask, deleteColumn, updateColumn } from '~/store/act
 function KanbanColumn({ children, column, tasks = [], disabled, sx }) {
     const dispatch = useDispatch();
     const openAddTask = useBoolean();
+    const { user } = useSelector((state) => state.user);
 
     const { attributes, isDragging, listeners, setNodeRef, transition, active, over, transform } = useSortable({
         id: column.uuid,
@@ -53,15 +54,21 @@ function KanbanColumn({ children, column, tasks = [], disabled, sx }) {
         async (taskData) => {
             dispatch(
                 createTask({
-                    columnUuid: column.uuid,
                     columnId: column.id,
                     taskData: { boardId: column.boardId, ...taskData },
+                    reporter: {
+                        id: user.id,
+                        email: user.email,
+                        username: user.username,
+                        displayName: user.displayName,
+                        avatar: user.avatar,
+                    },
                 }),
             );
 
             openAddTask.onFalse();
         },
-        [column.boardId, column.id, column.uuid, dispatch, openAddTask],
+        [column.boardId, column.id, dispatch, openAddTask, user],
     );
 
     return (
@@ -88,7 +95,6 @@ function KanbanColumn({ children, column, tasks = [], disabled, sx }) {
                 main: <>{children}</>,
                 action: (
                     <KanbanTaskAdd
-                        status={column.title}
                         openAddTask={openAddTask.value}
                         onAddTask={handleAddTask}
                         onCloseAddTask={openAddTask.onFalse}

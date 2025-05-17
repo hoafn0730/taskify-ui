@@ -25,6 +25,7 @@ import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Box from '@mui/material/Box';
 
 import { hideScrollY } from '~/theme/styles';
 import { DashboardContent } from '~/layouts/dashboard';
@@ -43,6 +44,7 @@ import { KanbanDragOverlay } from '../components/kanban-drag-overlay';
 import { updateBoardData } from '~/store/slices/kanbanSlice';
 import { kanbanService } from '~/services/kanbanService';
 import { mapOrder } from '~/utils/sort';
+import KanbanMenu from '../menu/kanban-menu';
 
 const PLACEHOLDER_ID = 'placeholder';
 
@@ -462,23 +464,26 @@ export function KanbanView() {
                 direction="row"
                 alignItems="center"
                 justifyContent="space-between"
-                sx={{ pr: { sm: 3 }, mb: { xs: 3, md: 5 } }}
+                sx={{ pr: { sm: 3, md: 3, lg: 0 }, mb: { xs: 3, md: 5 } }}
             >
                 <Typography variant="h4">Kanban</Typography>
 
-                <FormControlLabel
-                    label="Column fixed"
-                    labelPlacement="start"
-                    control={
-                        <Switch
-                            checked={columnFixed}
-                            onChange={(event) => {
-                                setColumnFixed(event.target.checked);
-                            }}
-                            inputProps={{ id: 'column-fixed-switch' }}
-                        />
-                    }
-                />
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                    <FormControlLabel
+                        label="Column fixed"
+                        labelPlacement="start"
+                        control={
+                            <Switch
+                                checked={columnFixed}
+                                onChange={(event) => {
+                                    setColumnFixed(event.target.checked);
+                                }}
+                                inputProps={{ id: 'column-fixed-switch' }}
+                            />
+                        }
+                    />
+                    <KanbanMenu />
+                </Box>
             </Stack>
 
             {/* {boardLoading ? renderLoading : <>{boardEmpty ? renderEmpty : renderList}</>} */}

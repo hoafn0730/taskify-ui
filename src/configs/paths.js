@@ -71,7 +71,7 @@ export const paths = {
         mail: `${ROOTS.DASHBOARD}/mail`,
         chat: `${ROOTS.DASHBOARD}/chat`,
         blank: `${ROOTS.DASHBOARD}/blank`,
-        // kanban: `${ROOTS.DASHBOARD}/kanban`,
+        list: `${ROOTS.DASHBOARD}/list`,
         calendar: `${ROOTS.DASHBOARD}/calendar`,
         fileManager: `${ROOTS.DASHBOARD}/file-manager`,
         permission: `${ROOTS.DASHBOARD}/permission`,
@@ -94,6 +94,17 @@ export const paths = {
             edit: (id) => `${ROOTS.DASHBOARD}/user/${id}/edit`,
             demo: {
                 edit: `${ROOTS.DASHBOARD}/user/${MOCK_ID}/edit`,
+            },
+        },
+        member: {
+            root: `${ROOTS.DASHBOARD}/member`,
+            new: `${ROOTS.DASHBOARD}/member/new`,
+            list: `${ROOTS.DASHBOARD}/member/list`,
+            cards: `${ROOTS.DASHBOARD}/member/cards`,
+            profile: `${ROOTS.DASHBOARD}/member/profile`,
+            edit: (id) => `${ROOTS.DASHBOARD}/member/${id}/edit`,
+            demo: {
+                edit: `${ROOTS.DASHBOARD}/member/${MOCK_ID}/edit`,
             },
         },
         product: {

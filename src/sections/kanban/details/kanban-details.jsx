@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 import { useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { cloneDeep } from 'lodash';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -34,8 +36,9 @@ import { KanbanDetailsAttachments } from './kanban-details-attachments';
 import { KanbanDetailsCommentList } from './kanban-details-comment-list';
 import { KanbanDetailsCommentInput } from './kanban-details-comment-input';
 import { KanbanContactsDialog } from '../components/kanban-contacts-dialog';
+import { kanbanService } from '~/services/kanbanService';
 
-// ----------------------------------------------------------------------
+import { updateBoardData } from '~/store/slices/kanbanSlice';
 
 const SUBTASKS = [
     'Complete project proposal',
@@ -53,9 +56,10 @@ const StyledLabel = styled('span')(({ theme }) => ({
     fontWeight: theme.typography.fontWeightSemiBold,
 }));
 
-// ----------------------------------------------------------------------
-
 function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseDetails }) {
+    const dispatch = useDispatch();
+    const { activeBoard: board } = useSelector((state) => state.kanban);
+
     const tabs = useTabs('overview');
 
     const [priority, setPriority] = useState(task?.priority);
@@ -68,6 +72,8 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
 
     const contacts = useBoolean();
 
+    const saveBtn = useBoolean();
+
     const [taskDescription, setTaskDescription] = useState(task?.description || '');
 
     const rangePicker = useDateRangePicker(
@@ -75,16 +81,17 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
         dayjs(task?.dueDate || dayjs().add(1, 'day')),
     );
 
+    const labels = task?.labels?.split(',') || [];
+
     const handleChangeTaskName = useCallback((event) => {
         setTaskName(event.target.value);
     }, []);
 
-    // [ ] handleUpdateTask
     const handleUpdateTask = useCallback(
         (event) => {
             if (event.key === 'Enter') {
                 if (taskName) {
-                    onUpdateTask({ ...task, name: taskName });
+                    onUpdateTask({ ...task, title: taskName });
                 }
             }
         },
@@ -95,9 +102,13 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
         setTaskDescription(event.target.value);
     }, []);
 
-    const handleChangePriority = useCallback((newValue) => {
-        setPriority(newValue);
-    }, []);
+    const handleChangePriority = useCallback(
+        (newValue) => {
+            onUpdateTask({ ...task, priority: newValue });
+            setPriority(newValue);
+        },
+        [onUpdateTask, task],
+    );
 
     const handleClickSubtaskComplete = (taskId) => {
         const selected = subtaskCompleted.includes(taskId)
@@ -107,13 +118,53 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
         setSubtaskCompleted(selected);
     };
 
+    const handleSaveDescription = useCallback(() => {
+        if (taskDescription) {
+            onUpdateTask({ ...task, description: taskDescription });
+        }
+    }, [onUpdateTask, task, taskDescription]);
+
+    const handleToggleAssignee = useCallback(
+        async (contact) => {
+            if (!contact) return;
+
+            await kanbanService.toggleAssignee(task.id, contact.id);
+
+            const newBoard = cloneDeep(board);
+            const column = newBoard.columns.find((col) => col.id === task.columnId);
+            if (!column) return;
+
+            const tasksInColumn = newBoard.tasks[column.uuid] || [];
+
+            const updatedTasks = tasksInColumn.map((tk) =>
+                tk.id === task.id
+                    ? {
+                          ...tk,
+                          assignees: tk.assignees?.some((u) => u.id === contact.id)
+                              ? tk.assignees.filter((u) => u.id !== contact.id)
+                              : [...(tk.assignees || []), contact],
+                      }
+                    : tk,
+            );
+
+            newBoard.tasks[column.uuid] = updatedTasks;
+            dispatch(updateBoardData(newBoard));
+        },
+        [board, dispatch, task.columnId, task.id],
+    );
+
+    const handleApply = useCallback(async () => {
+        onUpdateTask({ ...task, dueStart: rangePicker.startDate, dueDate: rangePicker.endDate });
+        rangePicker.onClose();
+    }, [onUpdateTask, rangePicker, task]);
+
     const renderToolbar = (
         <KanbanDetailsToolbar
             liked={like.value}
             taskName={task.title}
             onLike={like.onToggle}
             onDelete={onDeleteTask}
-            taskStatus={task.status}
+            task={task}
             onCloseDetails={onCloseDetails}
         />
     );
@@ -142,19 +193,20 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
             />
 
             {/* Reporter */}
-            {/* // TODO: Reporter */}
-            {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <StyledLabel>Reporter</StyledLabel>
-                <Avatar alt={task.reporter.name} src={task.reporter.avatarUrl} />
-            </Box> */}
+                <Avatar alt={task?.reporter?.[0]?.displayName} src={task?.reporter?.[0]?.avatar} />
+            </Box>
 
-            {/* Assignee */}
+            {/* Assignees */}
             <Box sx={{ display: 'flex' }}>
                 <StyledLabel sx={{ height: 40, lineHeight: '40px' }}>Assignee</StyledLabel>
 
                 <Box sx={{ gap: 1, display: 'flex', flexWrap: 'wrap' }}>
-                    {task?.assignee?.length &&
-                        task.assignee.map((user) => <Avatar key={user.id} alt={user.name} src={user.avatarUrl} />)}
+                    {!!task?.assignees?.length &&
+                        task.assignees
+                            .filter((as) => as.id !== task?.reporter?.[0]?.id)
+                            .map((user) => <Avatar key={user.id} alt={user.displayName} src={user.avatar} />)}
 
                     <Tooltip title="Add assignee">
                         <IconButton
@@ -168,22 +220,28 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
                         </IconButton>
                     </Tooltip>
 
-                    <KanbanContactsDialog assignee={task?.assignee} open={contacts.value} onClose={contacts.onFalse} />
+                    <KanbanContactsDialog
+                        assignees={task?.assignees}
+                        reporter={task?.reporter?.[0]}
+                        open={contacts.value}
+                        onClose={contacts.onFalse}
+                        onToggleAssignee={handleToggleAssignee}
+                    />
                 </Box>
             </Box>
 
-            {/* Label */}
+            {/* Labels */}
+            {/* // Add label */}
             <Box sx={{ display: 'flex' }}>
                 <StyledLabel sx={{ height: 24, lineHeight: '24px' }}>Labels</StyledLabel>
 
-                {/*// TODO: Label */}
-                {/* {!!task.labels.length && (
+                {!!labels?.length && (
                     <Box sx={{ gap: 1, display: 'flex', flexWrap: 'wrap' }}>
-                        {task.labels.map((label) => (
+                        {labels.map((label) => (
                             <Chip key={label} color="info" label={label} size="small" variant="soft" />
                         ))}
                     </Box>
-                )} */}
+                )}
             </Box>
 
             {/* Due date */}
@@ -219,6 +277,7 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
                     onClose={rangePicker.onClose}
                     selected={rangePicker.selected}
                     error={rangePicker.error}
+                    onApply={handleApply}
                 />
             </Box>
 
@@ -231,15 +290,30 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
             {/* Description */}
             <Box sx={{ display: 'flex' }}>
                 <StyledLabel> Description </StyledLabel>
-                <TextField
-                    fullWidth
-                    multiline
-                    size="small"
-                    minRows={4}
-                    value={taskDescription}
-                    onChange={handleChangeTaskDescription}
-                    InputProps={{ sx: { typography: 'body2' } }}
-                />
+                <Box sx={{ width: '100%' }}>
+                    <TextField
+                        fullWidth
+                        multiline
+                        size="small"
+                        minRows={4}
+                        value={taskDescription}
+                        onChange={handleChangeTaskDescription}
+                        InputProps={{ sx: { typography: 'body2' } }}
+                        onFocus={saveBtn.onTrue}
+                        onBlur={() => setTimeout(() => saveBtn.onFalse(), 200)}
+                    />
+
+                    {saveBtn.value && (
+                        <Button
+                            variant="contained"
+                            sx={{ mt: 1 }}
+                            onClick={handleSaveDescription}
+                            disabled={taskDescription === task?.description}
+                        >
+                            Save
+                        </Button>
+                    )}
+                </Box>
             </Box>
 
             {/* Attachments */}

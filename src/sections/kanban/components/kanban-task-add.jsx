@@ -9,25 +9,22 @@ import { uuidv4 } from '~/utils/uuidv4';
 
 import { _mock } from '~/_mock';
 
-// ----------------------------------------------------------------------
-
-function KanbanTaskAdd({ status, openAddTask, onAddTask, onCloseAddTask }) {
+function KanbanTaskAdd({ openAddTask, onAddTask, onCloseAddTask }) {
     const [taskName, setTaskName] = useState('');
 
     const defaultTask = useMemo(
         () => ({
             id: uuidv4(),
-            status,
+
             title: taskName.trim() ? taskName : 'Untitled',
             priority: 'medium',
             attachments: [],
             labels: [],
             comments: [],
-            assignee: [],
-            due: [null, null],
-            reporter: { id: _mock.id(16), name: _mock.fullName(16), avatarUrl: _mock.image.avatar(16) },
+            assignees: [],
+            reporter: [],
         }),
-        [status, taskName],
+        [taskName],
     );
 
     const handleChangeName = useCallback((event) => {

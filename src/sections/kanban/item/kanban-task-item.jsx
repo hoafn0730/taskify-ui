@@ -4,14 +4,12 @@ import { useDispatch } from 'react-redux';
 
 import { useBoolean } from '~/hooks/use-boolean';
 
-import { deleteTask } from '~/actions/kanban';
-
 import { toast } from '~/components/snackbar';
 import { imageClasses } from '~/components/image';
 
 import ItemBase from './item-base';
 import KanbanDetails from '../details/kanban-details';
-import { updateTask } from '~/store/actions/kanbanAction';
+import { deleteTask, updateTask } from '~/store/actions/kanbanAction';
 
 function KanbanTaskItem({ task, disabled, columnId, sx }) {
     const openDetails = useBoolean();
@@ -26,17 +24,11 @@ function KanbanTaskItem({ task, disabled, columnId, sx }) {
 
     const mountedWhileDragging = isDragging && !mounted;
 
-    // [ ]: handleDeleteTask
     const handleDeleteTask = useCallback(async () => {
-        try {
-            deleteTask(columnId, task.id);
-            toast.success('Delete success!', { position: 'top-center' });
-        } catch (error) {
-            console.error(error);
-        }
-    }, [columnId, task.id]);
+        dispatch(deleteTask({ columnId, taskId: task.id }));
+        toast.success('Delete success!', { position: 'top-center' });
+    }, [columnId, dispatch, task.id]);
 
-    // [ ]: handleUpdateTask
     const handleUpdateTask = useCallback(
         async (taskData) => {
             dispatch(updateTask({ columnId, taskData }));
@@ -71,8 +63,6 @@ function KanbanTaskItem({ task, disabled, columnId, sx }) {
         </>
     );
 }
-
-// ----------------------------------------------------------------------
 
 function useMountStatus() {
     const [isMounted, setIsMounted] = useState(false);

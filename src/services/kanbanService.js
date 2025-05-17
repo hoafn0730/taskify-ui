@@ -134,6 +134,22 @@ const updateTask = (cardId, data) => {
     });
 };
 
+const deleteTask = (cardId) => {
+    return axiosInstance.delete(import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.cards + '/' + cardId, {
+        withCredentials: true,
+    });
+};
+
+const toggleAssignee = (cardId, userId) => {
+    return axiosInstance.post(
+        import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.cards + '/' + cardId + '/toggle-assignee',
+        { userId },
+        {
+            withCredentials: true,
+        },
+    );
+};
+
 export const kanbanService = {
     searchBoards,
     getBoards,
@@ -151,4 +167,6 @@ export const kanbanService = {
     clearColumn,
     createTask,
     updateTask,
+    deleteTask,
+    toggleAssignee,
 };

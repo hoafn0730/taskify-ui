@@ -15,8 +15,6 @@ import { imageClasses } from '~/components/image';
 
 import { kanbanClasses } from '../classes';
 
-// ----------------------------------------------------------------------
-
 export const StyledItemWrap = styled(ListItem)(() => ({
     '@keyframes fadeIn': { '0%': { opacity: 0 }, '100%': { opacity: 1 } },
     transform:
@@ -101,13 +99,13 @@ const ItemBase = forwardRef(({ task, stateProps, sx, ...other }, ref) => {
         />
     );
 
-    const renderImg = !!task?.attachments?.length && (
+    const renderImg = !!task?.cover?.length && (
         <Box sx={{ p: theme.spacing(1, 1, 0, 1) }}>
             <Box
                 component="img"
                 className={imageClasses.root}
-                alt={task?.cover?.fileUrl}
-                src={task?.cover?.fileUrl}
+                alt={task?.cover?.[0].name}
+                src={task?.cover?.[0].preview}
                 sx={{
                     width: 320,
                     height: 'auto',

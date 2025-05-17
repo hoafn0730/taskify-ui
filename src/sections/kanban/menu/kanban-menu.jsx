@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Button from '@mui/material/Button';
@@ -10,16 +9,10 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
-// import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-// import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
-// import PhotoSizeSelectActualOutlinedIcon from '@mui/icons-material/PhotoSizeSelectActualOutlined';
-// import CancelPresentationOutlinedIcon from '@mui/icons-material/CancelPresentationOutlined';
-
 import MenuHeader from './MenuHeader';
 import BoardInfo from './BoardInfo';
 import Archive from './Archive';
 import ChangeBackground from './ChangeBackground';
-import { useBoolean } from '~/hooks/use-boolean';
 import { Iconify } from '~/components/iconify';
 
 const drawerWidth = 320;
@@ -104,8 +97,7 @@ const BOARD_MENU = [
     },
 ];
 
-function KanbanMenu() {
-    const openMenu = useBoolean();
+function KanbanMenu({ open, onClose }) {
     const [history, setHistory] = useState([{ data: BOARD_MENU }]);
     const current = history[history.length - 1];
 
@@ -116,7 +108,6 @@ function KanbanMenu() {
             case 'close':
                 // call api delete board
                 // update state board
-                console.log('🚀 ~ handleMenuChange ~ menuItem:', menuItem);
                 break;
 
             default:
@@ -124,17 +115,14 @@ function KanbanMenu() {
     };
 
     const handleClose = () => {
-        openMenu.onFalse();
+        onClose();
         setHistory([{ data: BOARD_MENU }]);
     };
 
     return (
         <>
-            <IconButton onClick={openMenu.onTrue}>
-                <Iconify icon="eva:more-horizontal-fill" />
-            </IconButton>
             <Drawer
-                open={openMenu.value}
+                open={open}
                 onClose={handleClose}
                 anchor="right"
                 slotProps={{ backdrop: { invisible: true } }}

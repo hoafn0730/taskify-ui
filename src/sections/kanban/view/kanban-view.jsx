@@ -20,18 +20,21 @@ import {
 } from '@dnd-kit/core';
 import { useDispatch } from 'react-redux';
 import { cloneDeep } from 'lodash';
+import { toast } from 'sonner';
 
 import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
 
 import { hideScrollY } from '~/theme/styles';
 import { DashboardContent } from '~/layouts/dashboard';
 import { useGetBoard } from '~/actions/kanban';
 
 import { EmptyContent } from '~/components/empty-content';
+import { Iconify } from '~/components/iconify';
 
 import { kanbanClasses } from '../classes';
 import { coordinateGetter } from '../utils';
@@ -45,6 +48,10 @@ import { updateBoardData } from '~/store/slices/kanbanSlice';
 import { kanbanService } from '~/services/kanbanService';
 import { mapOrder } from '~/utils/sort';
 import KanbanMenu from '../menu/kanban-menu';
+import { KanbanShareDialog } from '../components/kanban-share-dialog';
+
+import { useBoolean } from '~/hooks/use-boolean';
+import { useCopyToClipboard } from '~/hooks/use-copy-to-clipboard';
 
 const PLACEHOLDER_ID = 'placeholder';
 
@@ -60,6 +67,21 @@ const cssVars = {
 export function KanbanView() {
     const dispatch = useDispatch();
     const { board, boardLoading } = useGetBoard();
+
+    const openMenu = useBoolean();
+
+    const share = useBoolean();
+    const { copy } = useCopyToClipboard();
+    const [inviteEmail, setInviteEmail] = useState('');
+
+    const handleChangeInvite = useCallback((event) => {
+        setInviteEmail(event.target.value);
+    }, []);
+
+    const handleCopy = useCallback(() => {
+        toast.success('Copied!');
+        copy(`${window.location.origin}/dashboard/kanban/${board?.slug}`);
+    }, [board?.slug, copy]);
 
     const [columnFixed, setColumnFixed] = useState(true);
 
@@ -381,8 +403,6 @@ export function KanbanView() {
         </Stack>
     );
 
-    const renderEmpty = <EmptyContent filled sx={{ py: 10, maxHeight: { md: 480 } }} />;
-
     const renderList = (
         <DndContext
             id="dnd-kanban"
@@ -482,12 +502,30 @@ export function KanbanView() {
                             />
                         }
                     />
-                    <KanbanMenu />
+                    <IconButton onClick={share.onTrue}>
+                        <Iconify icon="solar:users-group-rounded-bold" />
+                    </IconButton>
+                    <IconButton onClick={openMenu.onTrue}>
+                        <Iconify icon="eva:more-horizontal-fill" />
+                    </IconButton>
                 </Box>
             </Stack>
 
-            {/* {boardLoading ? renderLoading : <>{boardEmpty ? renderEmpty : renderList}</>} */}
             {boardLoading ? renderLoading : renderList}
+
+            <KanbanMenu open={openMenu.value} onClose={openMenu.onFalse} />
+
+            <KanbanShareDialog
+                open={share.value}
+                members={board?.members}
+                inviteEmail={inviteEmail}
+                onChangeInvite={handleChangeInvite}
+                onCopyLink={handleCopy}
+                onClose={() => {
+                    share.onFalse();
+                    setInviteEmail('');
+                }}
+            />
         </DashboardContent>
     );
 }

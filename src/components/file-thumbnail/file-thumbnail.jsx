@@ -6,10 +6,8 @@ import { fileThumbnailClasses } from './classes';
 import { fileData, fileThumb, fileFormat } from './utils';
 import { RemoveButton, DownloadButton } from './action-buttons';
 
-// ----------------------------------------------------------------------
-
-export function FileThumbnail({ sx, file, tooltip, onRemove, imageView, slotProps, onDownload, ...other }) {
-    const previewUrl = typeof file === 'string' ? file : file.fileUrl;
+export function FileThumbnail({ sx, file, tooltip, onRemove, imageView, slotProps, onDownload, disabled, ...other }) {
+    const previewUrl = typeof file === 'string' ? file : file.preview;
     // const previewUrl = typeof file === 'string' ? file : URL.createObjectURL(file);
 
     const { name, path } = fileData(file);
@@ -26,6 +24,7 @@ export function FileThumbnail({ sx, file, tooltip, onRemove, imageView, slotProp
                 height: 1,
                 objectFit: 'cover',
                 borderRadius: 'inherit',
+                cursor: 'pointer',
                 ...slotProps?.img,
             }}
         />
@@ -59,7 +58,7 @@ export function FileThumbnail({ sx, file, tooltip, onRemove, imageView, slotProp
         >
             {format === 'image' && imageView ? renderImg : renderIcon}
 
-            {onRemove && (
+            {onRemove && !disabled && (
                 <RemoveButton onClick={onRemove} className={fileThumbnailClasses.removeBtn} sx={slotProps?.removeBtn} />
             )}
 

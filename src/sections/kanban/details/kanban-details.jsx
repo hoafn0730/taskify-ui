@@ -319,7 +319,7 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
             {/* Attachments */}
             <Box sx={{ display: 'flex' }}>
                 <StyledLabel>Attachments</StyledLabel>
-                <KanbanDetailsAttachments attachments={task?.attachments} />
+                <KanbanDetailsAttachments attachments={task?.attachments} taskId={task.id} />
             </Box>
         </Box>
     );

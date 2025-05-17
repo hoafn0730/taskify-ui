@@ -150,6 +150,27 @@ const toggleAssignee = (cardId, userId) => {
     );
 };
 
+const uploadFile = async (cardId, data) => {
+    const res = await axiosInstance.post(
+        import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.cards + '/' + cardId + '/files',
+        data,
+        {
+            withCredentials: true,
+        },
+    );
+
+    return res.data;
+};
+
+const deleteFile = (cardId, fileId) => {
+    return axiosInstance.delete(
+        import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.cards + '/' + cardId + '/files/' + fileId,
+        {
+            withCredentials: true,
+        },
+    );
+};
+
 export const kanbanService = {
     searchBoards,
     getBoards,
@@ -169,4 +190,6 @@ export const kanbanService = {
     updateTask,
     deleteTask,
     toggleAssignee,
+    uploadFile,
+    deleteFile,
 };

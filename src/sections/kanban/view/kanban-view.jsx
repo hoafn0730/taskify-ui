@@ -33,7 +33,6 @@ import { hideScrollY } from '~/theme/styles';
 import { DashboardContent } from '~/layouts/dashboard';
 import { useGetBoard } from '~/actions/kanban';
 
-import { EmptyContent } from '~/components/empty-content';
 import { Iconify } from '~/components/iconify';
 
 import { kanbanClasses } from '../classes';
@@ -486,7 +485,7 @@ export function KanbanView() {
                 justifyContent="space-between"
                 sx={{ pr: { sm: 3, md: 3, lg: 0 }, mb: { xs: 3, md: 5 } }}
             >
-                <Typography variant="h4">Kanban</Typography>
+                <Typography variant="h4">{board?.title}</Typography>
 
                 <Box sx={{ display: 'flex', gap: 2 }}>
                     <FormControlLabel
@@ -505,6 +504,11 @@ export function KanbanView() {
                     <IconButton onClick={share.onTrue}>
                         <Iconify icon="solar:users-group-rounded-bold" />
                     </IconButton>
+
+                    <IconButton onClick={share.onTrue}>
+                        <Iconify icon="ic:round-filter-list" />
+                    </IconButton>
+
                     <IconButton onClick={openMenu.onTrue}>
                         <Iconify icon="eva:more-horizontal-fill" />
                     </IconButton>

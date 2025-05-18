@@ -21,7 +21,7 @@ const BOARD_MENU = [
     {
         title: 'About this board',
         subTitle: 'Add a description to your board',
-        icon: <Iconify icon="eva:info-outline" />,
+        icon: <Iconify icon="solar:info-circle-bold" />,
         type: 'info',
         children: {
             title: 'About this board',
@@ -34,7 +34,7 @@ const BOARD_MENU = [
     },
     {
         title: 'Archived items',
-        icon: <Iconify icon="material-symbols-light:inventory-2-outline-rounded" />,
+        icon: <Iconify icon="solar:archive-down-minimlistic-bold" />,
         type: 'archived',
         children: {
             title: 'Archived items',
@@ -47,7 +47,7 @@ const BOARD_MENU = [
     },
     {
         title: 'Change background',
-        icon: <Iconify icon="si:info-line" />,
+        icon: <Iconify icon="solar:gallery-add-bold" />,
         type: 'background',
         children: {
             title: 'Change background',
@@ -92,7 +92,7 @@ const BOARD_MENU = [
     },
     {
         title: 'Close board',
-        icon: <Iconify icon="si:info-line" />,
+        icon: <Iconify icon="solar:close-circle-bold" />,
         type: 'close',
     },
 ];

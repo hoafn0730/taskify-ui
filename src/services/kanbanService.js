@@ -14,12 +14,6 @@ const searchBoards = (query) => {
     });
 };
 
-const getBoardBySlug = (slug) => {
-    return axiosInstance.get(import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.boards + '/' + slug, {
-        withCredentials: true,
-    });
-};
-
 // [ ]
 const getCombinedBoards = () => {
     return axiosInstance.get('/boards/combined', {
@@ -27,17 +21,32 @@ const getCombinedBoards = () => {
     });
 };
 
-const createNewBoard = async (data) => {
-    const res = await axiosInstance.post(import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.boards, data, {
-        withCredentials: true,
+// [ ]
+const generateBoard = async (data) => {
+    const res = await axiosInstance.post('/boards/generate', {
+        ...data,
     });
     return res.data;
 };
 
 // [ ]
-const generateBoard = async (data) => {
-    const res = await axiosInstance.post('/boards/generate', {
-        ...data,
+const updateBoardBackground = (boardId, data) => {
+    return axiosInstance
+        .put(`/boards/${boardId}/update-background`, {
+            ...data,
+        })
+        .then((res) => res.data);
+};
+
+const getBoardBySlug = (slug) => {
+    return axiosInstance.get(import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.boards + '/' + slug, {
+        withCredentials: true,
+    });
+};
+
+const createNewBoard = async (data) => {
+    const res = await axiosInstance.post(import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.boards, data, {
+        withCredentials: true,
     });
     return res.data;
 };
@@ -61,15 +70,6 @@ const toggleStarBoard = async (boardId, isStarred) => {
         { withCredentials: true },
     );
     return response.data;
-};
-
-// [ ]
-const updateBoardBackground = (boardId, data) => {
-    return axiosInstance
-        .put(`/boards/${boardId}/update-background`, {
-            ...data,
-        })
-        .then((res) => res.data);
 };
 
 // Column
@@ -171,6 +171,55 @@ const deleteFile = (cardId, fileId) => {
     );
 };
 
+// checklist
+const createChecklist = async ({ cardId, title, copyFrom }) => {
+    const res = await axiosInstance.post(
+        `${import.meta.env.VITE_SERVER_BE_URL}/api/v1/checklists`,
+        { cardId, title, copyFrom },
+        {
+            withCredentials: true,
+        },
+    );
+    return res.data;
+};
+
+const deleteChecklist = (checklistId) => {
+    return axiosInstance.delete(`${import.meta.env.VITE_SERVER_BE_URL}/api/v1/checklists/${checklistId}`, {
+        withCredentials: true,
+    });
+};
+
+const createNewCheckItem = async (checklistId, data) => {
+    const res = await axiosInstance.post(
+        `${import.meta.env.VITE_SERVER_BE_URL}/api/v1/checklists/${checklistId}/items`,
+        data,
+        {
+            withCredentials: true,
+        },
+    );
+    return res.data;
+};
+
+const updateCheckItem = async (checklistId, checkItemId, data) => {
+    const res = await axiosInstance.put(
+        `${import.meta.env.VITE_SERVER_BE_URL}/api/v1/checklists/${checklistId}/items/${checkItemId}`,
+        data,
+        {
+            withCredentials: true,
+        },
+    );
+    return res.data;
+};
+
+const deleteCheckItem = (checklistId, checkItemId) => {
+    return axiosInstance.delete(
+        `${import.meta.env.VITE_SERVER_BE_URL}/api/v1/checklists/${checklistId}/items/${checkItemId}`,
+        {
+            withCredentials: true,
+        },
+    );
+};
+
 export const kanbanService = {
     searchBoards,
     getBoards,
@@ -178,18 +227,27 @@ export const kanbanService = {
     getCombinedBoards,
     createNewBoard,
     updateBoard,
-    moveCardToDifferentColumn,
+    toggleStarBoard,
     generateBoard,
     updateBoardBackground,
+    //
+    moveCardToDifferentColumn,
     createNewColumn,
     updateColumn,
     deleteColumn,
-    toggleStarBoard,
     clearColumn,
+
+    //
     createTask,
     updateTask,
     deleteTask,
     toggleAssignee,
     uploadFile,
     deleteFile,
+    //
+    createChecklist,
+    deleteChecklist,
+    createNewCheckItem,
+    updateCheckItem,
+    deleteCheckItem,
 };

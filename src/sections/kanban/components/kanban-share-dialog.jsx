@@ -10,7 +10,16 @@ import { Iconify } from '~/components/iconify';
 import { Scrollbar } from '~/components/scrollbar';
 import { KanbanInvitedItem } from './kanban-invited-item';
 
-export function KanbanShareDialog({ open, members, onClose, onCopyLink, inviteEmail, onChangeInvite, ...other }) {
+export function KanbanShareDialog({
+    open,
+    members,
+    onClose,
+    onCopyLink,
+    inviteEmail,
+    onChangeInvite,
+    onSendInvite,
+    ...other
+}) {
     const hasShared = members && !!members.length;
 
     return (
@@ -32,6 +41,7 @@ export function KanbanShareDialog({ open, members, onClose, onCopyLink, inviteEm
                                         variant="contained"
                                         disabled={!inviteEmail}
                                         sx={{ mr: -0.75 }}
+                                        onClick={onSendInvite}
                                     >
                                         Send Invite
                                     </Button>

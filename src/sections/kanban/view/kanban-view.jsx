@@ -82,6 +82,12 @@ export function KanbanView() {
         copy(`${window.location.origin}/dashboard/kanban/${board?.slug}`);
     }, [board?.slug, copy]);
 
+    const handleSendInvite = useCallback(async () => {
+        await kanbanService.invite(board?.id, inviteEmail);
+        setInviteEmail('');
+        toast.success(`Invitation sent to ${inviteEmail}`);
+    }, [board?.id, inviteEmail]);
+
     const [columnFixed, setColumnFixed] = useState(true);
 
     const recentlyMovedToNewContainer = useRef(false);
@@ -525,6 +531,7 @@ export function KanbanView() {
                 inviteEmail={inviteEmail}
                 onChangeInvite={handleChangeInvite}
                 onCopyLink={handleCopy}
+                onSendInvite={handleSendInvite}
                 onClose={() => {
                     share.onFalse();
                     setInviteEmail('');

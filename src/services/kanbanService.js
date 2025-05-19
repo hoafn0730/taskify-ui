@@ -72,6 +72,16 @@ const toggleStarBoard = async (boardId, isStarred) => {
     return response.data;
 };
 
+const invite = (boardId, inviteEmail) => {
+    return axiosInstance.post(
+        import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.boards + '/' + boardId + '/invite',
+        { inviteEmail },
+        {
+            withCredentials: true,
+        },
+    );
+};
+
 // Column
 const createNewColumn = async (data) => {
     const res = await axiosInstance.post(import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.columns, data, {
@@ -250,4 +260,6 @@ export const kanbanService = {
     createNewCheckItem,
     updateCheckItem,
     deleteCheckItem,
+    //
+    invite,
 };

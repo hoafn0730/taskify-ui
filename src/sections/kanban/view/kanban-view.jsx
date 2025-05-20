@@ -18,7 +18,7 @@ import {
     MeasuringStrategy,
     closestCorners,
 } from '@dnd-kit/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { cloneDeep } from 'lodash';
 import { toast } from 'sonner';
 
@@ -51,6 +51,7 @@ import { KanbanShareDialog } from '../components/kanban-share-dialog';
 
 import { useBoolean } from '~/hooks/use-boolean';
 import { useCopyToClipboard } from '~/hooks/use-copy-to-clipboard';
+import { KanbanGuard } from '~/auth/guard/kanban-guard';
 
 const PLACEHOLDER_ID = 'placeholder';
 
@@ -65,6 +66,7 @@ const cssVars = {
 
 export function KanbanView() {
     const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.user);
     const { board, boardLoading } = useGetBoard();
 
     const openMenu = useBoolean();
@@ -485,58 +487,67 @@ export function KanbanView() {
                 flexDirection: 'column',
             }}
         >
-            <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="space-between"
-                sx={{ pr: { sm: 3, md: 3, lg: 0 }, mb: { xs: 3, md: 5 } }}
+            <KanbanGuard
+                hasContent
+                boardMembers={board?.members}
+                user={user}
+                acceptRoles={['member', 'admin', 'owner']}
+                isActive={true}
+                sx={{ py: 10 }}
             >
-                <Typography variant="h4">{board?.title}</Typography>
+                <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    sx={{ pr: { sm: 3, md: 3, lg: 0 }, mb: { xs: 3, md: 5 } }}
+                >
+                    <Typography variant="h4">{board?.title}</Typography>
 
-                <Box sx={{ display: 'flex', gap: 2 }}>
-                    <FormControlLabel
-                        label="Column fixed"
-                        labelPlacement="start"
-                        control={
-                            <Switch
-                                checked={columnFixed}
-                                onChange={(event) => {
-                                    setColumnFixed(event.target.checked);
-                                }}
-                                inputProps={{ id: 'column-fixed-switch' }}
-                            />
-                        }
-                    />
-                    <IconButton onClick={share.onTrue}>
-                        <Iconify icon="solar:users-group-rounded-bold" />
-                    </IconButton>
+                    <Box sx={{ display: 'flex', gap: 2 }}>
+                        <FormControlLabel
+                            label="Column fixed"
+                            labelPlacement="start"
+                            control={
+                                <Switch
+                                    checked={columnFixed}
+                                    onChange={(event) => {
+                                        setColumnFixed(event.target.checked);
+                                    }}
+                                    inputProps={{ id: 'column-fixed-switch' }}
+                                />
+                            }
+                        />
+                        <IconButton onClick={share.onTrue}>
+                            <Iconify icon="solar:users-group-rounded-bold" />
+                        </IconButton>
 
-                    <IconButton onClick={share.onTrue}>
-                        <Iconify icon="ic:round-filter-list" />
-                    </IconButton>
+                        <IconButton onClick={share.onTrue}>
+                            <Iconify icon="ic:round-filter-list" />
+                        </IconButton>
 
-                    <IconButton onClick={openMenu.onTrue}>
-                        <Iconify icon="eva:more-horizontal-fill" />
-                    </IconButton>
-                </Box>
-            </Stack>
+                        <IconButton onClick={openMenu.onTrue}>
+                            <Iconify icon="eva:more-horizontal-fill" />
+                        </IconButton>
+                    </Box>
+                </Stack>
 
-            {boardLoading ? renderLoading : renderList}
+                {boardLoading ? renderLoading : renderList}
 
-            <KanbanMenu open={openMenu.value} onClose={openMenu.onFalse} />
+                <KanbanMenu open={openMenu.value} onClose={openMenu.onFalse} />
 
-            <KanbanShareDialog
-                open={share.value}
-                members={board?.members}
-                inviteEmail={inviteEmail}
-                onChangeInvite={handleChangeInvite}
-                onCopyLink={handleCopy}
-                onSendInvite={handleSendInvite}
-                onClose={() => {
-                    share.onFalse();
-                    setInviteEmail('');
-                }}
-            />
+                <KanbanShareDialog
+                    open={share.value}
+                    members={board?.members}
+                    inviteEmail={inviteEmail}
+                    onChangeInvite={handleChangeInvite}
+                    onCopyLink={handleCopy}
+                    onSendInvite={handleSendInvite}
+                    onClose={() => {
+                        share.onFalse();
+                        setInviteEmail('');
+                    }}
+                />
+            </KanbanGuard>
         </DashboardContent>
     );
 }

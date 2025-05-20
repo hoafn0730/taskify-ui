@@ -7,6 +7,7 @@ import { DashboardLayout } from '~/layouts/dashboard';
 import { LoadingScreen } from '~/components/loading-screen';
 
 import { AuthGuard } from '~/auth/guard';
+import AcceptInvite from '~/pages/dashboard/kanban/accept-invite';
 
 // ----------------------------------------------------------------------
 
@@ -57,7 +58,7 @@ const JobCreatePage = lazy(() => import('~/pages/dashboard/job/new'));
 const JobEditPage = lazy(() => import('~/pages/dashboard/job/edit'));
 // Tour
 const TourDetailsPage = lazy(() => import('~/pages/dashboard/kanban/details'));
-const TourListPage = lazy(() => import('~/pages/dashboard/kanban/list'));
+const KanbanListPage = lazy(() => import('~/pages/dashboard/kanban/list'));
 const TourCreatePage = lazy(() => import('~/pages/dashboard/kanban/new'));
 const TourEditPage = lazy(() => import('~/pages/dashboard/kanban/edit'));
 // File manager
@@ -159,13 +160,16 @@ export const dashboardRoutes = [
             {
                 path: 'kanban',
                 children: [
-                    { element: <TourListPage />, index: true },
-                    // { path: '::id', element: <TourDetailsPage /> },
+                    { element: <KanbanListPage />, index: true },
+                    { path: 'accept-invite', element: <AcceptInvite /> },
                     { path: ':slug', element: <KanbanPage /> },
+                    //
+                    // { path: '::id', element: <TourDetailsPage /> },
                     { path: 'new', element: <TourCreatePage /> },
                     { path: ':id/edit', element: <TourEditPage /> },
                 ],
             },
+
             { path: 'file-manager', element: <FileManagerPage /> },
             { path: 'mail', element: <MailPage /> },
             { path: 'chat', element: <ChatPage /> },

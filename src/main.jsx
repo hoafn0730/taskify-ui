@@ -9,19 +9,19 @@ import { CONFIG } from '~/configs/config-global';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-    <StrictMode>
-        <HelmetProvider>
-            <BrowserRouter
-                basename={CONFIG.site.basePath}
-                future={{
-                    v7_startTransition: true,
-                    v7_relativeSplatPath: true,
-                }}
-            >
-                <Suspense>
-                    <App />
-                </Suspense>
-            </BrowserRouter>
-        </HelmetProvider>
-    </StrictMode>,
+    // <StrictMode>
+    <HelmetProvider>
+        <BrowserRouter
+            basename={CONFIG.site.basePath}
+            future={{
+                v7_startTransition: true,
+                v7_relativeSplatPath: true,
+            }}
+        >
+            <Suspense>
+                <App />
+            </Suspense>
+        </BrowserRouter>
+    </HelmetProvider>,
+    // </StrictMode>,
 );

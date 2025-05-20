@@ -82,6 +82,17 @@ const invite = (boardId, inviteEmail) => {
     );
 };
 
+const acceptInvite = async (token) => {
+    const res = await axiosInstance.post(
+        import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.boards + '/accept-invite',
+        { token },
+        {
+            withCredentials: true,
+        },
+    );
+    return res;
+};
+
 // Column
 const createNewColumn = async (data) => {
     const res = await axiosInstance.post(import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.columns, data, {
@@ -262,4 +273,5 @@ export const kanbanService = {
     deleteCheckItem,
     //
     invite,
+    acceptInvite,
 };

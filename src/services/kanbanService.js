@@ -93,6 +93,17 @@ const acceptInvite = async (token) => {
     return res;
 };
 
+const changePermission = async ({ boardId, memberId, role }) => {
+    const res = await axiosInstance.put(
+        `${import.meta.env.VITE_SERVER_BE_URL}${endpoints.kanban.boards}/${boardId}/members/${memberId}/permission`,
+        { role },
+        {
+            withCredentials: true,
+        },
+    );
+    return res;
+};
+
 // Column
 const createNewColumn = async (data) => {
     const res = await axiosInstance.post(import.meta.env.VITE_SERVER_BE_URL + endpoints.kanban.columns, data, {
@@ -274,4 +285,5 @@ export const kanbanService = {
     //
     invite,
     acceptInvite,
+    changePermission,
 };

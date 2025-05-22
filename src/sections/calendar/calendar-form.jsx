@@ -11,155 +11,156 @@ import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import DialogActions from '@mui/material/DialogActions';
 
-import { uuidv4 } from '~/utils/uuidv4';
 import { fIsAfter } from '~/utils/format-time';
 
-import { createEvent, updateEvent, deleteEvent } from '~/actions/calendar';
+import { useGetEvents } from '~/actions/calendar';
 
 import { toast } from '~/components/snackbar';
 import { Iconify } from '~/components/iconify';
 import { Scrollbar } from '~/components/scrollbar';
 import { Form, Field } from '~/components/hook-form';
 import { ColorPicker } from '~/components/color-utils';
-
-// ----------------------------------------------------------------------
+import { calendarService } from '~/services/calendarService';
 
 export const EventSchema = zod.object({
-  title: zod
-    .string()
-    .min(1, { message: 'Title is required!' })
-    .max(100, { message: 'Title must be less than 100 characters' }),
-  description: zod
-    .string()
-    .min(1, { message: 'Description is required!' })
-    .min(50, { message: 'Description must be at least 50 characters' }),
-  // Not required
-  color: zod.string(),
-  allDay: zod.boolean(),
-  start: zod.union([zod.string(), zod.number()]),
-  end: zod.union([zod.string(), zod.number()]),
+    title: zod
+        .string()
+        .min(1, { message: 'Title is required!' })
+        .max(100, { message: 'Title must be less than 100 characters' }),
+    description: zod
+        .string()
+        .min(1, { message: 'Description is required!' })
+        .min(50, { message: 'Description must be at least 50 characters' }),
+    // Not required
+    color: zod.string(),
+    allDay: zod.boolean(),
+    start: zod.union([zod.string(), zod.number()]),
+    end: zod.union([zod.string(), zod.number()]),
 });
 
-// ----------------------------------------------------------------------
-
 export function CalendarForm({ currentEvent, colorOptions, onClose }) {
-  const methods = useForm({
-    mode: 'all',
-    resolver: zodResolver(EventSchema),
-    defaultValues: currentEvent,
-  });
+    const methods = useForm({
+        mode: 'all',
+        resolver: zodResolver(EventSchema),
+        defaultValues: currentEvent,
+    });
 
-  const {
-    reset,
-    watch,
-    control,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
+    const {
+        reset,
+        watch,
+        control,
+        handleSubmit,
+        formState: { isSubmitting },
+    } = methods;
 
-  const values = watch();
+    const { mutateEvents } = useGetEvents();
 
-  const dateError = fIsAfter(values.start, values.end);
+    const values = watch();
 
-  const onSubmit = handleSubmit(async (data) => {
-    const eventData = {
-      id: currentEvent?.id ? currentEvent?.id : uuidv4(),
-      color: data?.color,
-      title: data?.title,
-      allDay: data?.allDay,
-      description: data?.description,
-      end: data?.end,
-      start: data?.start,
-    };
+    const dateError = fIsAfter(values.start, values.end);
 
-    try {
-      if (!dateError) {
-        if (currentEvent?.id) {
-          await updateEvent(eventData);
-          toast.success('Update success!');
-        } else {
-          await createEvent(eventData);
-          toast.success('Create success!');
+    const onSubmit = handleSubmit(async (data) => {
+        const eventData = {
+            color: data?.color,
+            title: data?.title,
+            allDay: data?.allDay,
+            description: data?.description,
+            end: data?.end,
+            start: data?.start,
+        };
+
+        if (!dateError) {
+            if (currentEvent?.id) {
+                // ✅ Gọi API cập nhật
+                await calendarService.updateEvent(currentEvent.id, eventData);
+
+                // ✅ Cập nhật cache local
+                mutateEvents((events) =>
+                    events.map((event) =>
+                        event.id === currentEvent.id ? { ...event, ...eventData, id: currentEvent.id } : event,
+                    ),
+                );
+
+                toast.success('Update success!');
+            } else {
+                // ✅ Gọi API tạo mới
+                const res = await calendarService.createEvent(eventData);
+
+                // ✅ Thêm vào cache local
+                mutateEvents((events) => [...events, res]);
+
+                toast.success('Create success!');
+            }
+
+            onClose();
+            reset();
         }
+    });
+
+    const onDelete = useCallback(async () => {
+        await calendarService.deleteEvent(currentEvent?.id);
+
+        mutateEvents((events) => events.filter((event) => event.id !== currentEvent?.id));
+        toast.success('Delete success!');
         onClose();
-        reset();
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  });
+    }, [currentEvent?.id, mutateEvents, onClose]);
 
-  const onDelete = useCallback(async () => {
-    try {
-      await deleteEvent(`${currentEvent?.id}`);
-      toast.success('Delete success!');
-      onClose();
-    } catch (error) {
-      console.error(error);
-    }
-  }, [currentEvent?.id, onClose]);
+    return (
+        <Form methods={methods} onSubmit={onSubmit}>
+            <Scrollbar sx={{ p: 3, bgcolor: 'background.neutral' }}>
+                <Stack spacing={3}>
+                    <Field.Text name="title" label="Title" />
 
-  return (
-    <Form methods={methods} onSubmit={onSubmit}>
-      <Scrollbar sx={{ p: 3, bgcolor: 'background.neutral' }}>
-        <Stack spacing={3}>
-          <Field.Text name="title" label="Title" />
+                    <Field.Text name="description" label="Description" multiline rows={3} />
 
-          <Field.Text name="description" label="Description" multiline rows={3} />
+                    <Field.Switch name="allDay" label="All day" />
 
-          <Field.Switch name="allDay" label="All day" />
+                    <Field.MobileDateTimePicker name="start" label="Start date" />
 
-          <Field.MobileDateTimePicker name="start" label="Start date" />
+                    <Field.MobileDateTimePicker
+                        name="end"
+                        label="End date"
+                        slotProps={{
+                            textField: {
+                                error: dateError,
+                                helperText: dateError ? 'End date must be later than start date' : null,
+                            },
+                        }}
+                    />
 
-          <Field.MobileDateTimePicker
-            name="end"
-            label="End date"
-            slotProps={{
-              textField: {
-                error: dateError,
-                helperText: dateError ? 'End date must be later than start date' : null,
-              },
-            }}
-          />
+                    <Controller
+                        name="color"
+                        control={control}
+                        render={({ field }) => (
+                            <ColorPicker
+                                selected={field.value}
+                                onSelectColor={(color) => field.onChange(color)}
+                                colors={colorOptions}
+                            />
+                        )}
+                    />
+                </Stack>
+            </Scrollbar>
 
-          <Controller
-            name="color"
-            control={control}
-            render={({ field }) => (
-              <ColorPicker
-                selected={field.value}
-                onSelectColor={(color) => field.onChange(color)}
-                colors={colorOptions}
-              />
-            )}
-          />
-        </Stack>
-      </Scrollbar>
+            <DialogActions sx={{ flexShrink: 0 }}>
+                {!!currentEvent?.id && (
+                    <Tooltip title="Delete event">
+                        <IconButton onClick={onDelete}>
+                            <Iconify icon="solar:trash-bin-trash-bold" />
+                        </IconButton>
+                    </Tooltip>
+                )}
 
-      <DialogActions sx={{ flexShrink: 0 }}>
-        {!!currentEvent?.id && (
-          <Tooltip title="Delete event">
-            <IconButton onClick={onDelete}>
-              <Iconify icon="solar:trash-bin-trash-bold" />
-            </IconButton>
-          </Tooltip>
-        )}
+                <Box sx={{ flexGrow: 1 }} />
 
-        <Box sx={{ flexGrow: 1 }} />
+                <Button variant="outlined" color="inherit" onClick={onClose}>
+                    Cancel
+                </Button>
 
-        <Button variant="outlined" color="inherit" onClick={onClose}>
-          Cancel
-        </Button>
-
-        <LoadingButton
-          type="submit"
-          variant="contained"
-          loading={isSubmitting}
-          disabled={dateError}
-        >
-          Save changes
-        </LoadingButton>
-      </DialogActions>
-    </Form>
-  );
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting} disabled={dateError}>
+                    Save changes
+                </LoadingButton>
+            </DialogActions>
+        </Form>
+    );
 }

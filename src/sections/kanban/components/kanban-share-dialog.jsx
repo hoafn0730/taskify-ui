@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -22,6 +24,17 @@ export function KanbanShareDialog({
 }) {
     const hasShared = members && !!members.length;
 
+    const [sending, setSending] = useState(false);
+
+    const handleInvite = async () => {
+        try {
+            setSending(true);
+            await onSendInvite?.();
+        } finally {
+            setSending(false);
+        }
+    };
+
     return (
         <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose} {...other}>
             <DialogTitle> Invite </DialogTitle>
@@ -41,9 +54,9 @@ export function KanbanShareDialog({
                                         variant="contained"
                                         disabled={!inviteEmail}
                                         sx={{ mr: -0.75 }}
-                                        onClick={onSendInvite}
+                                        onClick={handleInvite}
                                     >
-                                        Send Invite
+                                        {sending ? 'Sending...' : 'Send Invite'}
                                     </Button>
                                 </InputAdornment>
                             ),

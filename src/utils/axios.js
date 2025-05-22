@@ -58,7 +58,7 @@ export const endpoints = {
         columns: '/api/v1/columns',
         cards: '/api/v1/cards',
     },
-    calendar: '/api/calendar',
+    calendar: '/api/v1/calendar',
     auth: {
         me: '/api/v1/auth/me',
         signIn: '/api/v1/auth/sign-in',

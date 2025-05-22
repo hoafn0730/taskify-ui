@@ -1,122 +1,55 @@
-import { useMemo } from 'react';
-import useSWR, { mutate } from 'swr';
+import { useCallback, useMemo } from 'react';
+import useSWR from 'swr';
 
-import axios, { fetcher, endpoints } from '~/utils/axios';
+import { endpoints, fetcher1 } from '~/utils/axios';
 
 // ----------------------------------------------------------------------
 
 const enableServer = false;
 
-const CALENDAR_ENDPOINT = endpoints.calendar;
+const CALENDAR_ENDPOINT = import.meta.env.VITE_SERVER_BE_URL + endpoints.calendar;
 
 const swrOptions = {
-  revalidateIfStale: enableServer,
-  revalidateOnFocus: enableServer,
-  revalidateOnReconnect: enableServer,
+    revalidateIfStale: enableServer,
+    revalidateOnFocus: enableServer,
+    revalidateOnReconnect: enableServer,
 };
 
-// ----------------------------------------------------------------------
-
 export function useGetEvents() {
-  const { data, isLoading, error, isValidating } = useSWR(CALENDAR_ENDPOINT, fetcher, swrOptions);
+    const { data, isLoading, error, isValidating, mutate } = useSWR(CALENDAR_ENDPOINT, fetcher1, swrOptions);
 
-  const memoizedValue = useMemo(() => {
-    const events = data?.events.map((event) => ({
-      ...event,
-      textColor: event.color,
-    }));
+    const events = useMemo(() => {
+        return (
+            data?.data.map((event) => ({
+                ...event,
+                textColor: event.color,
+            })) || []
+        );
+    }, [data?.data]);
+
+    const eventsEmpty = !isLoading && !data?.data?.length;
+
+    // ✅ Hàm cập nhật local events trong cache (thêm, sửa, xóa)
+    const mutateEvents = useCallback(
+        (updater) => {
+            mutate(
+                (currentData) => {
+                    const currentEvents = currentData?.data || [];
+                    const updatedEvents = updater(currentEvents);
+                    return { ...currentData, data: updatedEvents };
+                },
+                false, // false = không revalidate lại từ server
+            );
+        },
+        [mutate],
+    );
 
     return {
-      events: events || [],
-      eventsLoading: isLoading,
-      eventsError: error,
-      eventsValidating: isValidating,
-      eventsEmpty: !isLoading && !data?.events.length,
+        events,
+        eventsLoading: isLoading,
+        eventsError: error,
+        eventsValidating: isValidating,
+        eventsEmpty,
+        mutateEvents,
     };
-  }, [data?.events, error, isLoading, isValidating]);
-
-  return memoizedValue;
-}
-
-// ----------------------------------------------------------------------
-
-export async function createEvent(eventData) {
-  /**
-   * Work on server
-   */
-  if (enableServer) {
-    const data = { eventData };
-    await axios.post(CALENDAR_ENDPOINT, data);
-  }
-
-  /**
-   * Work in local
-   */
-  mutate(
-    CALENDAR_ENDPOINT,
-    (currentData) => {
-      const currentEvents = currentData?.events;
-
-      const events = [...currentEvents, eventData];
-
-      return { ...currentData, events };
-    },
-    false
-  );
-}
-
-// ----------------------------------------------------------------------
-
-export async function updateEvent(eventData) {
-  /**
-   * Work on server
-   */
-  if (enableServer) {
-    const data = { eventData };
-    await axios.put(CALENDAR_ENDPOINT, data);
-  }
-
-  /**
-   * Work in local
-   */
-  mutate(
-    CALENDAR_ENDPOINT,
-    (currentData) => {
-      const currentEvents = currentData?.events;
-
-      const events = currentEvents.map((event) =>
-        event.id === eventData.id ? { ...event, ...eventData } : event
-      );
-
-      return { ...currentData, events };
-    },
-    false
-  );
-}
-
-// ----------------------------------------------------------------------
-
-export async function deleteEvent(eventId) {
-  /**
-   * Work on server
-   */
-  if (enableServer) {
-    const data = { eventId };
-    await axios.patch(CALENDAR_ENDPOINT, data);
-  }
-
-  /**
-   * Work in local
-   */
-  mutate(
-    CALENDAR_ENDPOINT,
-    (currentData) => {
-      const currentEvents = currentData?.events;
-
-      const events = currentEvents.filter((event) => event.id !== eventId);
-
-      return { ...currentData, events };
-    },
-    false
-  );
 }

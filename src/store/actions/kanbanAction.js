@@ -34,7 +34,7 @@ export const clearColumn = createAsyncThunk('kanban/clearColumn', async (columnI
 
 // card
 export const createTask = createAsyncThunk('kanban/createTask', async ({ columnId, taskData, reporter }) => {
-    const res = await kanbanService.createTask({ columnId, title: taskData.title, boardId: taskData.boardId });
+    const res = await kanbanService.createTask({ ...taskData, columnId, boardId: taskData.boardId });
 
     return { columnId, taskData: res, reporter };
 });

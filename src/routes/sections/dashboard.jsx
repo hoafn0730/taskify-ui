@@ -24,6 +24,9 @@ const ProductDetailsPage = lazy(() => import('~/pages/dashboard/product/details'
 const ProductListPage = lazy(() => import('~/pages/dashboard/product/list'));
 const ProductCreatePage = lazy(() => import('~/pages/dashboard/product/new'));
 const ProductEditPage = lazy(() => import('~/pages/dashboard/product/edit'));
+// List
+const ListPage = lazy(() => import('~/pages/dashboard/list/list'));
+const ListDetailsPage = lazy(() => import('~/pages/dashboard/list/details'));
 // Order
 const OrderListPage = lazy(() => import('~/pages/dashboard/order/list'));
 const OrderDetailsPage = lazy(() => import('~/pages/dashboard/order/details'));
@@ -174,6 +177,7 @@ export const dashboardRoutes = [
             { path: 'mail', element: <MailPage /> },
             { path: 'chat', element: <ChatPage /> },
             { path: 'calendar', element: <CalendarPage /> },
+            { path: 'list', element: <ListPage /> },
             { path: 'permission', element: <PermissionDeniedPage /> },
             { path: 'blank', element: <BlankPage /> },
         ],

@@ -446,123 +446,127 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
     const renderTabSubtasks = (
         <>
             <Box sx={{ gap: 3, display: 'flex', flexDirection: 'column' }}>
-                {task.checklists.map((checklist, checklistIndex) => {
-                    const completedItems = checklist.items.filter((item) => item.status === 'complete');
-                    const progress =
-                        checklist.items.length > 0 ? (completedItems.length / checklist.items.length) * 100 : 0;
+                {!!task?.checklists?.length &&
+                    task.checklists.map((checklist, checklistIndex) => {
+                        const completedItems = checklist.items.filter((item) => item.status === 'complete');
+                        const progress =
+                            checklist.items.length > 0 ? (completedItems.length / checklist.items.length) * 100 : 0;
 
-                    return (
-                        <Box
-                            key={checklist.id}
-                            sx={{
-                                p: 2,
-                                borderRadius: 1,
-                                bgcolor: 'background.neutral',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: 1.5,
-                            }}
-                        >
-                            {/* Checklist header */}
-                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <Typography variant="subtitle1">{checklist.title}</Typography>
-                                <Button
-                                    variant="soft"
-                                    color="inherit"
-                                    size="small"
-                                    onClick={() => handleDeleteChecklist(checklistIndex)}
-                                >
-                                    Delete
-                                </Button>
-                            </Box>
-
-                            {/* Progress */}
-                            <Typography variant="caption">{Math.round(progress)}%</Typography>
-                            <LinearProgress variant="determinate" value={progress} />
-
-                            {/* Items */}
-                            <FormGroup>
-                                {checklist.items.map((item) => (
-                                    <Box
-                                        key={item.id}
-                                        sx={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'space-between',
-                                        }}
+                        return (
+                            <Box
+                                key={checklist.id}
+                                sx={{
+                                    p: 2,
+                                    borderRadius: 1,
+                                    bgcolor: 'background.neutral',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: 1.5,
+                                }}
+                            >
+                                {/* Checklist header */}
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <Typography variant="subtitle1">{checklist.title}</Typography>
+                                    <Button
+                                        variant="soft"
+                                        color="inherit"
+                                        size="small"
+                                        onClick={() => handleDeleteChecklist(checklistIndex)}
                                     >
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    disableRipple
-                                                    checked={item.status === 'complete'}
-                                                    onChange={() => handleClickSubtaskComplete(item)}
-                                                />
-                                            }
-                                            label={item.title}
-                                            sx={{ flexGrow: 1 }} // giúp label chiếm hết chiều ngang còn lại
-                                        />
-                                        <IconButton
-                                            color={popover.open ? 'inherit' : 'default'}
-                                            onClick={(e) => {
-                                                setSelectedCheckItem({ checklistId: checklist.id, item });
-                                                popover.onOpen(e);
+                                        Delete
+                                    </Button>
+                                </Box>
+
+                                {/* Progress */}
+                                <Typography variant="caption">{Math.round(progress)}%</Typography>
+                                <LinearProgress variant="determinate" value={progress} />
+
+                                {/* Items */}
+                                <FormGroup>
+                                    {checklist.items.map((item) => (
+                                        <Box
+                                            key={item.id}
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'space-between',
                                             }}
                                         >
-                                            <Iconify icon="eva:more-horizontal-fill" />
-                                        </IconButton>
-                                    </Box>
-                                ))}
-                            </FormGroup>
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        disableRipple
+                                                        checked={item.status === 'complete'}
+                                                        onChange={() => handleClickSubtaskComplete(item)}
+                                                    />
+                                                }
+                                                label={item.title}
+                                                sx={{ flexGrow: 1 }} // giúp label chiếm hết chiều ngang còn lại
+                                            />
+                                            <IconButton
+                                                color={popover.open ? 'inherit' : 'default'}
+                                                onClick={(e) => {
+                                                    setSelectedCheckItem({ checklistId: checklist.id, item });
+                                                    popover.onOpen(e);
+                                                }}
+                                            >
+                                                <Iconify icon="eva:more-horizontal-fill" />
+                                            </IconButton>
+                                        </Box>
+                                    ))}
+                                </FormGroup>
 
-                            {/* Add item */}
-                            {activeChecklistIndex === checklistIndex ? (
-                                <Box sx={{ display: 'flex', gap: 1, flexDirection: 'column' }}>
-                                    <InputBase
-                                        fullWidth
-                                        autoFocus
-                                        value={newItemText}
-                                        onChange={(e) => setNewItemText(e.target.value)}
-                                        placeholder="Add an item"
-                                        sx={{
-                                            px: 1.5,
-                                            py: 0.75,
-                                            borderRadius: 1,
-                                            bgcolor: 'background.paper',
-                                            border: '1px solid #555',
-                                            color: 'text.primary',
-                                            fontSize: 14,
-                                        }}
-                                    />
+                                {/* Add item */}
+                                {activeChecklistIndex === checklistIndex ? (
+                                    <Box sx={{ display: 'flex', gap: 1, flexDirection: 'column' }}>
+                                        <InputBase
+                                            fullWidth
+                                            autoFocus
+                                            value={newItemText}
+                                            onChange={(e) => setNewItemText(e.target.value)}
+                                            placeholder="Add an item"
+                                            sx={{
+                                                px: 1.5,
+                                                py: 0.75,
+                                                borderRadius: 1,
+                                                bgcolor: 'background.paper',
+                                                border: '1px solid #555',
+                                                color: 'text.primary',
+                                                fontSize: 14,
+                                            }}
+                                        />
+                                        <Box sx={{ display: 'flex', gap: 1 }}>
+                                            <Button
+                                                variant="contained"
+                                                onClick={() => handleConfirmAddItem(checklistIndex)}
+                                            >
+                                                Add
+                                            </Button>
+                                            <Button
+                                                variant="text"
+                                                color="inherit"
+                                                onClick={() => {
+                                                    setActiveChecklistIndex(null);
+                                                    setNewItemText('');
+                                                }}
+                                            >
+                                                Cancel
+                                            </Button>
+                                        </Box>
+                                    </Box>
+                                ) : (
                                     <Box sx={{ display: 'flex', gap: 1 }}>
                                         <Button
                                             variant="contained"
-                                            onClick={() => handleConfirmAddItem(checklistIndex)}
+                                            onClick={() => setActiveChecklistIndex(checklistIndex)}
                                         >
-                                            Add
-                                        </Button>
-                                        <Button
-                                            variant="text"
-                                            color="inherit"
-                                            onClick={() => {
-                                                setActiveChecklistIndex(null);
-                                                setNewItemText('');
-                                            }}
-                                        >
-                                            Cancel
+                                            Add an item
                                         </Button>
                                     </Box>
-                                </Box>
-                            ) : (
-                                <Box sx={{ display: 'flex', gap: 1 }}>
-                                    <Button variant="contained" onClick={() => setActiveChecklistIndex(checklistIndex)}>
-                                        Add an item
-                                    </Button>
-                                </Box>
-                            )}
-                        </Box>
-                    );
-                })}
+                                )}
+                            </Box>
+                        );
+                    })}
             </Box>
 
             <CustomPopover open={popover.open} anchorEl={popover.anchorEl} onClose={popover.onClose}>

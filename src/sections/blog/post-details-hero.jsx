@@ -17,88 +17,84 @@ import { varAlpha, bgGradient } from '~/theme/styles';
 
 import { Iconify, SocialIcon } from '~/components/iconify';
 
-// ----------------------------------------------------------------------
-
 export function PostDetailsHero({ title, author, coverUrl, createdAt }) {
-  const theme = useTheme();
+    const theme = useTheme();
 
-  const smUp = useResponsive('up', 'sm');
+    const smUp = useResponsive('up', 'sm');
 
-  return (
-    <Box
-      sx={{
-        ...bgGradient({
-          color: `0deg, ${varAlpha(theme.vars.palette.grey['900Channel'], 0.64)}, ${varAlpha(theme.vars.palette.grey['900Channel'], 0.64)}`,
-          imgUrl: coverUrl,
-        }),
-        height: 480,
-        overflow: 'hidden',
-      }}
-    >
-      <Container sx={{ height: 1, position: 'relative' }}>
-        <Typography
-          variant="h3"
-          component="h1"
-          sx={{
-            zIndex: 9,
-            color: 'common.white',
-            position: 'absolute',
-            maxWidth: 480,
-            pt: { xs: 2, md: 8 },
-          }}
+    return (
+        <Box
+            sx={{
+                ...bgGradient({
+                    color: `0deg, ${varAlpha(theme.vars.palette.grey['900Channel'], 0.64)}, ${varAlpha(
+                        theme.vars.palette.grey['900Channel'],
+                        0.64,
+                    )}`,
+                    imgUrl: coverUrl,
+                }),
+                height: 360,
+                overflow: 'hidden',
+                borderRadius: { xs: 0, md: 2 },
+                ml: { xs: 0, md: 2 },
+                mr: { xs: 0, md: 2 },
+            }}
         >
-          {title}
-        </Typography>
+            <Container sx={{ height: 1, position: 'relative' }}>
+                <Typography
+                    variant="h3"
+                    component="h1"
+                    sx={{
+                        zIndex: 9,
+                        color: 'common.white',
+                        position: 'absolute',
+                        maxWidth: 480,
+                        pt: { xs: 2, md: 8 },
+                    }}
+                >
+                    {title}
+                </Typography>
 
-        <Stack
-          sx={{
-            left: 0,
-            width: 1,
-            bottom: 0,
-            position: 'absolute',
-          }}
-        >
-          {author && createdAt && (
-            <Stack
-              direction="row"
-              alignItems="center"
-              sx={{ px: { xs: 2, md: 3 }, pb: { xs: 3, md: 8 } }}
-            >
-              <Avatar
-                alt={author.name}
-                src={author.avatarUrl}
-                sx={{ width: 64, height: 64, mr: 2 }}
-              />
+                <Stack
+                    sx={{
+                        left: 0,
+                        width: 1,
+                        bottom: 0,
+                        position: 'absolute',
+                    }}
+                >
+                    {author && createdAt && (
+                        <Stack direction="row" alignItems="center" sx={{ px: { xs: 2, md: 3 }, pb: { xs: 3, md: 8 } }}>
+                            <Avatar alt={author.name} src={author.avatarUrl} sx={{ width: 64, height: 64, mr: 2 }} />
 
-              <ListItemText
-                sx={{ color: 'common.white' }}
-                primary={author.name}
-                secondary={fDate(createdAt)}
-                primaryTypographyProps={{ typography: 'subtitle1', mb: 0.5 }}
-                secondaryTypographyProps={{ color: 'inherit', sx: { opacity: 0.64 } }}
-              />
-            </Stack>
-          )}
+                            <ListItemText
+                                sx={{ color: 'common.white' }}
+                                primary={author.name}
+                                secondary={fDate(createdAt)}
+                                primaryTypographyProps={{ typography: 'subtitle1', mb: 0.5 }}
+                                secondaryTypographyProps={{ color: 'inherit', sx: { opacity: 0.64 } }}
+                            />
+                        </Stack>
+                    )}
 
-          <SpeedDial
-            direction={smUp ? 'left' : 'up'}
-            ariaLabel="Share post"
-            icon={<Iconify icon="solar:share-bold" />}
-            FabProps={{ size: 'medium' }}
-            sx={{ position: 'absolute', bottom: { xs: 32, md: 64 }, right: { xs: 16, md: 24 } }}
-          >
-            {_socials.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={<SocialIcon icon={action.name} />}
-                tooltipTitle={action.name}
-                tooltipPlacement="top"
-                FabProps={{ color: 'default' }}
-              />
-            ))}
-          </SpeedDial>
-        </Stack>
-      </Container>
-    </Box>
-  );
+                    <SpeedDial
+                        direction={smUp ? 'left' : 'up'}
+                        ariaLabel="Share post"
+                        icon={<Iconify icon="solar:share-bold" />}
+                        FabProps={{ size: 'medium' }}
+                        sx={{ position: 'absolute', bottom: { xs: 32, md: 64 }, right: { xs: 16, md: 24 } }}
+                    >
+                        {_socials.map((action) => (
+                            <SpeedDialAction
+                                key={action.name}
+                                icon={<SocialIcon icon={action.name} />}
+                                tooltipTitle={action.name}
+                                tooltipPlacement="top"
+                                FabProps={{ color: 'default' }}
+                            />
+                        ))}
+                    </SpeedDial>
+                </Stack>
+            </Container>
+        </Box>
+    );
 }

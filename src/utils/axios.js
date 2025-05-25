@@ -72,7 +72,7 @@ export const endpoints = {
         labels: '/api/mail/labels',
     },
     post: {
-        list: '/api/post/list',
+        list: '/api/v1/posts',
         details: '/api/post/details',
         latest: '/api/post/latest',
         search: '/api/post/search',

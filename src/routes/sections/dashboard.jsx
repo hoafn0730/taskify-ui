@@ -7,7 +7,6 @@ import { DashboardLayout } from '~/layouts/dashboard';
 import { LoadingScreen } from '~/components/loading-screen';
 
 import { AuthGuard } from '~/auth/guard';
-import AcceptInvite from '~/pages/dashboard/kanban/accept-invite';
 
 // Overview
 const IndexPage = lazy(() => import('~/pages/dashboard'));
@@ -15,14 +14,9 @@ const OverviewSummaryPage = lazy(() => import('~/pages/dashboard/summary'));
 const OverviewAnalyticsPage = lazy(() => import('~/pages/dashboard/analytics'));
 const OverviewBankingPage = lazy(() => import('~/pages/dashboard/banking'));
 const OverviewFilePage = lazy(() => import('~/pages/dashboard/file'));
-// Product
-const ProductDetailsPage = lazy(() => import('~/pages/dashboard/product/details'));
-const ProductListPage = lazy(() => import('~/pages/dashboard/product/list'));
-const ProductCreatePage = lazy(() => import('~/pages/dashboard/product/new'));
-const ProductEditPage = lazy(() => import('~/pages/dashboard/product/edit'));
+
 // List
 const ListPage = lazy(() => import('~/pages/dashboard/list/list'));
-const ListDetailsPage = lazy(() => import('~/pages/dashboard/list/details'));
 // Invoice
 const InvoiceListPage = lazy(() => import('~/pages/dashboard/invoice/list'));
 const InvoiceDetailsPage = lazy(() => import('~/pages/dashboard/invoice/details'));
@@ -47,27 +41,24 @@ const BlogPostsPage = lazy(() => import('~/pages/dashboard/post/list'));
 const BlogPostPage = lazy(() => import('~/pages/dashboard/post/details'));
 const BlogNewPostPage = lazy(() => import('~/pages/dashboard/post/new'));
 const BlogEditPostPage = lazy(() => import('~/pages/dashboard/post/edit'));
-// Job
-const JobDetailsPage = lazy(() => import('~/pages/dashboard/job/details'));
-const JobListPage = lazy(() => import('~/pages/dashboard/job/list'));
-const JobCreatePage = lazy(() => import('~/pages/dashboard/job/new'));
-const JobEditPage = lazy(() => import('~/pages/dashboard/job/edit'));
-// Tour
-const TourDetailsPage = lazy(() => import('~/pages/dashboard/kanban/details'));
+
+// Kanban
+const KanbanPage = lazy(() => import('~/pages/dashboard/kanban'));
 const KanbanListPage = lazy(() => import('~/pages/dashboard/kanban/list'));
 const TourCreatePage = lazy(() => import('~/pages/dashboard/kanban/new'));
 const TourEditPage = lazy(() => import('~/pages/dashboard/kanban/edit'));
+const AcceptInvite = lazy(() => import('~/pages/dashboard/kanban/accept-invite'));
+
 // File manager
 const FileManagerPage = lazy(() => import('~/pages/dashboard/file-manager'));
 // App
 const ChatPage = lazy(() => import('~/pages/dashboard/chat'));
 const MailPage = lazy(() => import('~/pages/dashboard/mail'));
 const CalendarPage = lazy(() => import('~/pages/dashboard/calendar'));
-const KanbanPage = lazy(() => import('~/pages/dashboard/kanban'));
+
 // Test render page by role
 const PermissionDeniedPage = lazy(() => import('~/pages/dashboard/permission'));
 // Blank page
-const ParamsPage = lazy(() => import('~/pages/dashboard/params'));
 const BlankPage = lazy(() => import('~/pages/dashboard/blank'));
 
 // ----------------------------------------------------------------------
@@ -115,16 +106,6 @@ export const dashboardRoutes = [
                 ],
             },
             {
-                path: 'product',
-                children: [
-                    { element: <ProductListPage />, index: true },
-                    { path: 'list', element: <ProductListPage /> },
-                    { path: ':id', element: <ProductDetailsPage /> },
-                    { path: 'new', element: <ProductCreatePage /> },
-                    { path: ':id/edit', element: <ProductEditPage /> },
-                ],
-            },
-            {
                 path: 'invoice',
                 children: [
                     { element: <InvoiceListPage />, index: true },
@@ -142,16 +123,6 @@ export const dashboardRoutes = [
                     { path: ':title', element: <BlogPostPage /> },
                     { path: ':title/edit', element: <BlogEditPostPage /> },
                     { path: 'new', element: <BlogNewPostPage /> },
-                ],
-            },
-            {
-                path: 'job',
-                children: [
-                    { element: <JobListPage />, index: true },
-                    { path: 'list', element: <JobListPage /> },
-                    { path: ':id', element: <JobDetailsPage /> },
-                    { path: 'new', element: <JobCreatePage /> },
-                    { path: ':id/edit', element: <JobEditPage /> },
                 ],
             },
             {

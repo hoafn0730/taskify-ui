@@ -82,7 +82,7 @@ export function PostDetailsHomeView({ post, latestPosts, loading, error }) {
                 <Stack sx={{ maxWidth: 720, mx: 'auto' }}>
                     <Typography variant="subtitle1">{post?.description}</Typography>
 
-                    <Markdown children={post?.content} />
+                    <Markdown content={post?.content} />
 
                     <Stack
                         spacing={3}
@@ -114,11 +114,12 @@ export function PostDetailsHomeView({ post, latestPosts, loading, error }) {
                                 sx={{ mr: 1 }}
                             />
 
-                            <AvatarGroup>
+                            {/* [ ] */}
+                            {/* <AvatarGroup>
                                 {post?.favoritePerson.map((person) => (
                                     <Avatar key={person.name} alt={person.name} src={person.avatarUrl} />
                                 ))}
-                            </AvatarGroup>
+                            </AvatarGroup> */}
                         </Stack>
                     </Stack>
 
@@ -126,7 +127,7 @@ export function PostDetailsHomeView({ post, latestPosts, loading, error }) {
                         <Typography variant="h4">Comments</Typography>
 
                         <Typography variant="subtitle2" sx={{ color: 'text.disabled' }}>
-                            ({post?.comments.length})
+                            ({post?.comments?.length})
                         </Typography>
                     </Stack>
 

@@ -79,8 +79,8 @@ export function PostDetailsView({ post, loading, error }) {
             <Container maxWidth={false} sx={{ px: { sm: 5 } }}>
                 <PostDetailsToolbar
                     backLink={paths.dashboard.post.root}
-                    editLink={paths.dashboard.post.edit(`${post?.title}`)}
-                    liveLink={paths.post.details(`${post?.title}`)}
+                    editLink={paths.dashboard.post.edit(`${post?.slug}`)}
+                    liveLink={paths.post.details(`${post?.slug}`)}
                     publish={`${publish}`}
                     onChangePublish={handleChangePublish}
                     publishOptions={POST_PUBLISH_OPTIONS}
@@ -100,7 +100,7 @@ export function PostDetailsView({ post, loading, error }) {
             >
                 <Typography variant="subtitle1">{post?.description}</Typography>
 
-                <Markdown children={post?.content} />
+                <Markdown content={post?.content} />
 
                 <Stack
                     spacing={3}
@@ -132,11 +132,11 @@ export function PostDetailsView({ post, loading, error }) {
                             sx={{ mr: 1 }}
                         />
 
-                        <AvatarGroup sx={{ [`& .${avatarGroupClasses.avatar}`]: { width: 32, height: 32 } }}>
+                        {/* <AvatarGroup sx={{ [`& .${avatarGroupClasses.avatar}`]: { width: 32, height: 32 } }}>
                             {post?.favoritePerson.map((person) => (
                                 <Avatar key={person.name} alt={person.name} src={person.avatarUrl} />
                             ))}
-                        </AvatarGroup>
+                        </AvatarGroup> */}
                     </Stack>
                 </Stack>
 
@@ -144,7 +144,7 @@ export function PostDetailsView({ post, loading, error }) {
                     <Typography variant="h4">Comments</Typography>
 
                     <Typography variant="subtitle2" sx={{ color: 'text.disabled' }}>
-                        ({post?.comments.length})
+                        ({post?.comments?.length || 0})
                     </Typography>
                 </Stack>
 

@@ -8,11 +8,13 @@ import { varAlpha, stylesMode } from '~/theme/styles';
 
 import { Block } from './styles';
 import { SvgColor, svgColorClasses } from '../../svg-color';
+import { useTranslate } from '~/locales';
 
 // ----------------------------------------------------------------------
 
 export function NavOptions({ options, value, onClickOption, hideNavColor, hideNavLayout }) {
     const theme = useTheme();
+    const { t } = useTranslate('header');
 
     const cssVars = {
         '--item-radius': '12px',
@@ -34,7 +36,7 @@ export function NavOptions({ options, value, onClickOption, hideNavColor, hideNa
     const renderLayout = (
         <div>
             <Box component="span" sx={labelStyles}>
-                Layout
+                {t('settings.layout.title')}
             </Box>
             <Box gap={1.5} display="flex" sx={{ mt: 1.5 }}>
                 {options.layouts.map((option) => (
@@ -52,7 +54,7 @@ export function NavOptions({ options, value, onClickOption, hideNavColor, hideNa
     const renderColor = (
         <div>
             <Box component="span" sx={labelStyles}>
-                Color
+                {t('settings.color.title')}
             </Box>
             <Box gap={1.5} display="flex" sx={{ mt: 1.5 }}>
                 {options.colors.map((option) => (
@@ -68,7 +70,11 @@ export function NavOptions({ options, value, onClickOption, hideNavColor, hideNa
     );
 
     return (
-        <Block title="Nav" tooltip="Dashboard only" sx={{ ...cssVars, gap: 2.5 }}>
+        <Block
+            title={t('settings.navigation.title')}
+            tooltip={t('settings.tooltips.dashboardOnly')}
+            sx={{ ...cssVars, gap: 2.5 }}
+        >
             {!hideNavLayout && renderLayout}
             {!hideNavColor && renderColor}
         </Block>
@@ -205,6 +211,7 @@ export function LayoutOption({ option, selected, sx, ...other }) {
 // ----------------------------------------------------------------------
 
 export function ColorOption({ option, selected, sx, ...other }) {
+    const { t } = useTranslate('header');
     return (
         <ButtonBase
             disableRipple
@@ -246,7 +253,7 @@ export function ColorOption({ option, selected, sx, ...other }) {
                     fontSize: (theme) => theme.typography.pxToRem(13),
                 }}
             >
-                {option}
+                {t('settings.color.' + option)}
             </Box>
         </ButtonBase>
     );

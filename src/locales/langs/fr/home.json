@@ -1,0 +1,76 @@
+{
+    "hero": {
+        "tagline": "Simple. Rapide. Efficace",
+        "title": {
+            "prefix": "Optimisez votre flux de travail avec",
+            "brand": "Taskify"
+        },
+        "subtitle": "👋 Échappez au désordre et au chaos — libérez votre productivité avec Taskify.",
+        "socialProof": {
+            "text": "160+ clients satisfaits",
+            "cta": "Commencer"
+        }
+    },
+    "features": {
+        "sectionTitle": {
+            "subtitle": "Visualiser",
+            "title": "Que trouve-t-on dans Taskify ?"
+        },
+        "inbox": {
+            "title": "Boîte de réception",
+            "description": "Quand vous y pensez, mettez-le dans votre boîte de réception. Capturez vos tâches n'importe où, n'importe quand."
+        },
+        "boards": {
+            "title": "Tableaux",
+            "description": "Votre liste de tâches peut être longue, mais elle peut être gérée ! Suivez tout, des \"à faire\" aux \"tâches à accomplir\" jusqu'aux \"tâches terminées\" !"
+        },
+        "planner": {
+            "title": "Planificateur",
+            "description": "Glissez, déposez, c'est fait. Déplacez vos tâches principales dans votre calendrier et consacrez du temps à ce qui compte vraiment."
+        },
+        "analytics": {
+            "title": "Régions installées",
+            "subtitle": "(+43%) par rapport à l'année dernière",
+            "regions": {
+                "asia": "Asie",
+                "europe": "Europe",
+                "americas": "Amériques"
+            },
+            "values": {
+                "asia": "58,9k",
+                "europe": "12,2k",
+                "americas": "80,6k"
+            }
+        }
+    },
+    "highlights": {
+        "sectionTitle": {
+            "subtitle": "points forts",
+            "title": "Fonctionnalités"
+        },
+        "darkMode": {
+            "title": "🌙 Mode sombre",
+            "description": "Une interface sombre plus douce pour les yeux."
+        }
+    },
+    "testimonials": {
+        "title": "Avis clients"
+    },
+    "statistics": {
+        "purchasedOrders": "Commandes achetées",
+        "happyCustomers": "Clients satisfaits",
+        "reviewRate": "Taux d'évaluation"
+    },
+    "faqs": {
+        "sectionTitle": {
+            "subtitle": "Questions fréquentes",
+            "title": "Nous avons des",
+            "titleSuffix": "réponses"
+        }
+    },
+    "contact": {
+        "title": "Encore des questions ?",
+        "description": "Décrivez votre cas pour obtenir les conseils les plus précis",
+        "button": "Contactez-nous"
+    }
+}

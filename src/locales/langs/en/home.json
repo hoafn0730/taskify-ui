@@ -1,0 +1,76 @@
+{
+    "hero": {
+        "tagline": "Simple. Fast. Effective",
+        "title": {
+            "prefix": "Optimize your workflow with",
+            "brand": "Taskify"
+        },
+        "subtitle": "👋 Escape the clutter and chaos — unleash your productivity with Taskify.",
+        "socialProof": {
+            "text": "160+ Happy Customers",
+            "cta": "Get Started"
+        }
+    },
+    "features": {
+        "sectionTitle": {
+            "subtitle": "Visualize",
+            "title": "What's in Taskify?"
+        },
+        "inbox": {
+            "title": "Inbox",
+            "description": "When it's on your mind, it goes into your Inbox. Capture to-dos from anywhere, anytime."
+        },
+        "boards": {
+            "title": "Boards",
+            "description": "Your to-do list can be long, but it can be managed! Track everything from \"to-dos\" to \"tasks to tackle\" to \"tasks completed!\""
+        },
+        "planner": {
+            "title": "Planner",
+            "description": "Drag, drop, done. Move your top tasks into your calendar and make time for what really matters."
+        },
+        "analytics": {
+            "title": "Installed Regions",
+            "subtitle": "(+43%) compared to last year",
+            "regions": {
+                "asia": "Asia",
+                "europe": "Europe",
+                "americas": "Americas"
+            },
+            "values": {
+                "asia": "58.9k",
+                "europe": "12.2k",
+                "americas": "80.6k"
+            }
+        }
+    },
+    "highlights": {
+        "sectionTitle": {
+            "subtitle": "highlights",
+            "title": "Features"
+        },
+        "darkMode": {
+            "title": "🌙 Dark Mode",
+            "description": "A dark interface that's easier on the eyes."
+        }
+    },
+    "testimonials": {
+        "title": "Customer Reviews"
+    },
+    "statistics": {
+        "purchasedOrders": "Purchased Orders",
+        "happyCustomers": "Happy Customers",
+        "reviewRate": "Review Rate"
+    },
+    "faqs": {
+        "sectionTitle": {
+            "subtitle": "Frequently Asked Questions",
+            "title": "We have",
+            "titleSuffix": "answers"
+        }
+    },
+    "contact": {
+        "title": "Still have questions?",
+        "description": "Please describe your case to get the most accurate advice",
+        "button": "Contact Us"
+    }
+}

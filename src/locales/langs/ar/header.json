@@ -1,0 +1,148 @@
+{
+    "header": {
+        "navigation": {
+            "home": "الرئيسية",
+            "pages": "الصفحات",
+            "needHelp": "تحتاج مساعدة؟",
+            "goToDashboard": "الذهاب إلى لوحة التحكم",
+            "signIn": "تسجيل الدخول",
+            "signUp": "إنشاء حساب",
+            "signOut": "تسجيل الخروج"
+        },
+        "search": {
+            "placeholder": "بحث...",
+            "searching": "جاري البحث...",
+            "clear": "مسح البحث",
+            "enterKeywords": "الرجاء إدخال كلمات البحث",
+            "notFound": {
+                "title": "غير موجود",
+                "noResults": "لا توجد نتائج لـ",
+                "suggestions": "حاول التحقق من الإملاء أو استخدام كلمات كاملة."
+            }
+        }
+    },
+    "pages": {
+        "other": {
+            "title": "أخرى",
+            "aboutUs": "من نحن",
+            "contactUs": "اتصل بنا",
+            "faqs": "الأسئلة الشائعة",
+            "pricing": "الأسعار",
+            "payment": "الدفع",
+            "maintenance": "الصيانة",
+            "comingSoon": "قريباً"
+        },
+        "concepts": {
+            "title": "المفاهيم",
+            "shop": "المتجر",
+            "product": "المنتج",
+            "checkout": "الدفع",
+            "posts": "المنشورات",
+            "post": "منشور"
+        },
+        "authDemo": {
+            "title": "تجربة المصادقة",
+            "signIn": "تسجيل الدخول",
+            "signUp": "إنشاء حساب",
+            "resetPassword": "إعادة تعيين كلمة المرور",
+            "updatePassword": "تحديث كلمة المرور",
+            "verify": "التحقق",
+            "signInCentered": "تسجيل الدخول (موسط)",
+            "signUpCentered": "إنشاء حساب (موسط)",
+            "resetPasswordCentered": "إعادة تعيين كلمة المرور (موسط)",
+            "updatePasswordCentered": "تحديث كلمة المرور (موسط)",
+            "verifyCentered": "التحقق (موسط)"
+        },
+        "error": {
+            "title": "خطأ",
+            "page403": "صفحة 403",
+            "page404": "صفحة 404",
+            "page500": "صفحة 500"
+        },
+        "dashboard": {
+            "title": "لوحة التحكم",
+            "dashboard": "لوحة التحكم"
+        }
+    },
+    "settings": {
+        "title": "الإعدادات",
+        "tooltips": {
+            "reset": "إعادة تعيين",
+            "close": "إغلاق",
+            "expand": "توسيع",
+            "fullScreen": "ملء الشاشة",
+            "exit": "خروج",
+            "minimize": "تصغير",
+            "maximize": "تكبير",
+            "dashboardOnly": "لوحة التحكم فقط"
+        },
+        "appearance": {
+            "darkMode": "الوضع الداكن",
+            "contrast": "التباين",
+            "rightToLeft": "من اليمين إلى اليسار",
+            "compact": "مضغوط"
+        },
+        "navigation": {
+            "title": "التنقل",
+            "label": "القائمة"
+        },
+        "layout": {
+            "title": "التخطيط"
+        },
+        "color": {
+            "title": "اللون",
+            "integrate": "دمج",
+            "apparent": "ظاهر"
+        },
+        "presets": {
+            "title": "الإعدادات المسبقة"
+        },
+        "font": {
+            "title": "الخط"
+        }
+    },
+    "notifications": {
+        "title": "الإشعارات",
+        "tooltips": {
+            "markAllAsRead": "تحديد الكل كمقروء",
+            "close": "إغلاق",
+            "settings": "الإعدادات"
+        },
+        "tabs": {
+            "all": "الكل",
+            "unread": "غير مقروء",
+            "archived": "مؤرشف"
+        },
+        "actions": {
+            "viewAll": "عرض الكل",
+            "accept": "قبول",
+            "decline": "رفض",
+            "reply": "رد",
+            "download": "تحميل",
+            "pay": "دفع"
+        },
+        "types": {
+            "friend": "صديق",
+            "project": "مشروع",
+            "file": "ملف",
+            "tags": "وسوم",
+            "payment": "دفع",
+            "order": "طلب",
+            "chat": "محادثة",
+            "mail": "بريد",
+            "delivery": "توصيل"
+        },
+        "labels": {
+            "design": "تصميم",
+            "dashboard": "لوحة التحكم",
+            "designSystem": "نظام التصميم"
+        },
+        "feedback": {
+            "askQuestions": "اطرح أسئلة أو اترك رسالة شكر",
+            "leaveNote": "اترك ملاحظة تقييم"
+        }
+    },
+    "friends": {
+        "title": "الأصدقاء"
+    }
+}

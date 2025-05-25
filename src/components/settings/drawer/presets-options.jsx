@@ -6,12 +6,14 @@ import { CONFIG } from '~/configs/config-global';
 
 import { Block } from './styles';
 import { SvgColor } from '../../svg-color';
+import { useTranslate } from '~/locales';
 
 // ----------------------------------------------------------------------
 
 export function PresetsOptions({ value, options, onClickOption }) {
+    const { t } = useTranslate('header');
     return (
-        <Block title="Presets">
+        <Block title={t('settings.presets.title')}>
             <Box component="ul" gap={1.5} display="grid" gridTemplateColumns="repeat(3, 1fr)">
                 {options.map((option) => {
                     const selected = value === option.name;

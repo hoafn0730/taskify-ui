@@ -4,9 +4,11 @@ import { useSelector } from 'react-redux';
 import { RouterLink } from '~/components/router-link';
 
 import { paths } from '~/configs/paths';
+import { useTranslate } from '~/locales';
 
 export function GoToDashboardButton({ sx, ...other }) {
     const { user } = useSelector((state) => state.user);
+    const { t } = useTranslate('header');
 
     return (
         <Button
@@ -16,7 +18,7 @@ export function GoToDashboardButton({ sx, ...other }) {
             sx={sx}
             {...other}
         >
-            Go to your dashboard
+            {t('header.navigation.goToDashboard')}
         </Button>
     );
 }

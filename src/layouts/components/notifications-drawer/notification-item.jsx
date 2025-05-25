@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -17,6 +19,7 @@ import { FileThumbnail } from '~/components/file-thumbnail';
 // ----------------------------------------------------------------------
 
 export function NotificationItem({ notification }) {
+    const { t } = useTranslation('header');
     const renderAvatar = (
         <ListItemAvatar>
             {notification.avatarUrl ? (
@@ -87,10 +90,10 @@ export function NotificationItem({ notification }) {
     const friendAction = (
         <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
             <Button size="small" variant="contained">
-                Accept
+                {t('notifications.actions.accept')}
             </Button>
             <Button size="small" variant="outlined">
-                Decline
+                {t('notifications.actions.decline')}
             </Button>
         </Stack>
     );
@@ -112,7 +115,7 @@ export function NotificationItem({ notification }) {
             </Box>
 
             <Button size="small" variant="contained">
-                Reply
+                {t('notifications.actions.reply')}
             </Button>
         </Stack>
     );
@@ -163,7 +166,7 @@ export function NotificationItem({ notification }) {
                 />
 
                 <Button size="small" variant="outlined">
-                    Download
+                    {t('notifications.actions.download')}
                 </Button>
             </Stack>
         </Stack>
@@ -172,22 +175,22 @@ export function NotificationItem({ notification }) {
     const tagsAction = (
         <Stack direction="row" spacing={0.75} flexWrap="wrap" sx={{ mt: 1.5 }}>
             <Label variant="outlined" color="info">
-                Design
+                {t('notifications.labels.design')}
             </Label>
             <Label variant="outlined" color="warning">
-                Dashboard
+                {t('notifications.labels.dashboard')}
             </Label>
-            <Label variant="outlined">Design system</Label>
+            <Label variant="outlined">{t('notifications.labels.designSystem')}</Label>
         </Stack>
     );
 
     const paymentAction = (
         <Stack direction="row" spacing={1} sx={{ mt: 1.5 }}>
             <Button size="small" variant="contained">
-                Pay
+                {t('notifications.actions.pay')}
             </Button>
             <Button size="small" variant="outlined">
-                Decline
+                {t('notifications.actions.decline')}
             </Button>
         </Stack>
     );

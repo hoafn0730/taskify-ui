@@ -1,0 +1,76 @@
+{
+    "hero": {
+        "tagline": "Đơn giản. Nhanh chóng. Hiệu quả",
+        "title": {
+            "prefix": "Tối ưu hóa quy trình làm việc của bạn với",
+            "brand": "Taskify"
+        },
+        "subtitle": "👋 Thoát khỏi sự lộn xộn và hỗn loạn — giải phóng năng suất của bạn với Taskify.",
+        "socialProof": {
+            "text": "160+ Khách hàng hài lòng",
+            "cta": "Bắt đầu ngay"
+        }
+    },
+    "features": {
+        "sectionTitle": {
+            "subtitle": "Trực quan hóa",
+            "title": "Có gì trong Taskify?"
+        },
+        "inbox": {
+            "title": "Hộp thư đến",
+            "description": "Khi nó có trong đầu bạn, nó sẽ vào Hộp thư đến của bạn. Ghi lại việc cần làm từ bất cứ đâu, bất cứ lúc nào."
+        },
+        "boards": {
+            "title": "Bảng công việc",
+            "description": "Danh sách việc cần làm của bạn có thể dài, nhưng nó có thể được quản lý! Theo dõi mọi thứ từ \"việc cần làm\" đến \"nhiệm vụ cần giải quyết\" đến \"nhiệm vụ đã hoàn thành! \""
+        },
+        "planner": {
+            "title": "Kế hoạch",
+            "description": "Kéo, thả, hoàn thành. Chuyển các nhiệm vụ hàng đầu của bạn vào lịch và dành thời gian cho những gì thực sự quan trọng."
+        },
+        "analytics": {
+            "title": "Khu vực đã cài đặt",
+            "subtitle": "(+43%) so với năm ngoái",
+            "regions": {
+                "asia": "Châu Á",
+                "europe": "Châu Âu",
+                "americas": "Châu Mỹ"
+            },
+            "values": {
+                "asia": "58.9k",
+                "europe": "12.2k",
+                "americas": "80.6k"
+            }
+        }
+    },
+    "highlights": {
+        "sectionTitle": {
+            "subtitle": "nổi bật",
+            "title": "Tính năng"
+        },
+        "darkMode": {
+            "title": "🌙 Chế độ tối",
+            "description": "Một giao diện tối giúp mắt dễ chịu hơn."
+        }
+    },
+    "testimonials": {
+        "title": "Đánh giá khách hàng"
+    },
+    "statistics": {
+        "purchasedOrders": "Đơn hàng đã mua",
+        "happyCustomers": "Khách hàng hài lòng",
+        "reviewRate": "Tỷ lệ đánh giá"
+    },
+    "faqs": {
+        "sectionTitle": {
+            "subtitle": "Câu hỏi thường gặp",
+            "title": "Chúng tôi có",
+            "titleSuffix": "câu trả lời"
+        }
+    },
+    "contact": {
+        "title": "Vẫn còn thắc mắc?",
+        "description": "Vui lòng mô tả trường hợp của bạn để nhận được lời khuyên chính xác nhất",
+        "button": "Liên hệ với chúng tôi"
+    }
+}

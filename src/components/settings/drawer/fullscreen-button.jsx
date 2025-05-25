@@ -6,11 +6,11 @@ import IconButton from '@mui/material/IconButton';
 import { CONFIG } from '~/configs/config-global';
 
 import { SvgColor, svgColorClasses } from '../../svg-color';
-
-// ----------------------------------------------------------------------
+import { useTranslate } from '~/locales';
 
 export function FullScreenButton() {
     const [fullscreen, setFullscreen] = useState(false);
+    const { t } = useTranslate('header');
 
     const onToggleFullScreen = useCallback(() => {
         if (!document.fullscreenElement) {
@@ -23,7 +23,7 @@ export function FullScreenButton() {
     }, []);
 
     return (
-        <Tooltip title={fullscreen ? 'Exit' : 'Full Screen'}>
+        <Tooltip title={fullscreen ? t('settings.tooltips.minimize') : t('settings.tooltips.fullScreen')}>
             <IconButton
                 onClick={onToggleFullScreen}
                 sx={{

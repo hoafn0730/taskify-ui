@@ -21,19 +21,11 @@ import { Scrollbar } from '~/components/scrollbar';
 import { CustomTabs } from '~/components/custom-tabs';
 
 import { NotificationItem } from './notification-item';
-
-// ----------------------------------------------------------------------
-
-const TABS = [
-    { value: 'all', label: 'All', count: 22 },
-    { value: 'unread', label: 'Unread', count: 12 },
-    { value: 'archived', label: 'Archived', count: 10 },
-];
-
-// ----------------------------------------------------------------------
+import { useTranslate } from '~/locales';
 
 export function NotificationsDrawer({ data = [], sx, ...other }) {
     const drawer = useBoolean();
+    const { t } = useTranslate('header');
 
     const [currentTab, setCurrentTab] = useState('all');
 
@@ -52,26 +44,48 @@ export function NotificationsDrawer({ data = [], sx, ...other }) {
     const renderHead = (
         <Stack direction="row" alignItems="center" sx={{ py: 2, pl: 2.5, pr: 1, minHeight: 68 }}>
             <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                Notifications
+                {t('notifications.title')}
             </Typography>
 
             {!!totalUnRead && (
-                <Tooltip title="Mark all as read">
+                <Tooltip title={t('notifications.tooltips.markAllAsRead')}>
                     <IconButton color="primary" onClick={handleMarkAllAsRead}>
                         <Iconify icon="eva:done-all-fill" />
                     </IconButton>
                 </Tooltip>
             )}
+            <Tooltip title={t('notifications.tooltips.close')}>
+                <IconButton onClick={drawer.onFalse} sx={{ display: { xs: 'inline-flex', sm: 'none' } }}>
+                    <Iconify icon="mingcute:close-line" />
+                </IconButton>
+            </Tooltip>
 
-            <IconButton onClick={drawer.onFalse} sx={{ display: { xs: 'inline-flex', sm: 'none' } }}>
-                <Iconify icon="mingcute:close-line" />
-            </IconButton>
-
-            <IconButton>
-                <Iconify icon="solar:settings-bold-duotone" />
-            </IconButton>
+            <Tooltip title={t('notifications.tooltips.settings')}>
+                <IconButton>
+                    <Iconify icon="solar:settings-bold-duotone" />
+                </IconButton>
+            </Tooltip>
         </Stack>
     );
+
+    // TABS với translation từ header.json
+    const TABS = [
+        {
+            value: 'all',
+            label: t('notifications.tabs.all'),
+            count: 22,
+        },
+        {
+            value: 'unread',
+            label: t('notifications.tabs.unread'),
+            count: 12,
+        },
+        {
+            value: 'archived',
+            label: t('notifications.tabs.archived'),
+            count: 10,
+        },
+    ];
 
     const renderTabs = (
         <CustomTabs variant="fullWidth" value={currentTab} onChange={handleChangeTab}>
@@ -152,7 +166,7 @@ export function NotificationsDrawer({ data = [], sx, ...other }) {
 
                 <Box sx={{ p: 1 }}>
                     <Button fullWidth size="large">
-                        View all
+                        {t('notifications.actions.viewAll')}
                     </Button>
                 </Box>
             </Drawer>

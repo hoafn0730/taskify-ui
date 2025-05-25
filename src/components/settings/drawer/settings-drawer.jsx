@@ -21,6 +21,7 @@ import { useSettingsContext } from '../context';
 import { PresetsOptions } from './presets-options';
 import { defaultSettings } from '../config-settings';
 import { FullScreenButton } from './fullscreen-button';
+import { useTranslate } from '~/locales';
 
 // ----------------------------------------------------------------------
 
@@ -38,18 +39,19 @@ export function SettingsDrawer({
     const theme = useTheme();
 
     const settings = useSettingsContext();
+    const { t } = useTranslate('header');
 
     const { mode, setMode } = useColorScheme();
 
     const renderHead = (
         <Box display="flex" alignItems="center" sx={{ py: 2, pr: 1, pl: 2.5 }}>
             <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                Settings
+                {t('settings.title')}
             </Typography>
 
             <FullScreenButton />
 
-            <Tooltip title="Reset">
+            <Tooltip title={t('settings.tooltips.reset')}>
                 <IconButton
                     onClick={() => {
                         settings.onReset();
@@ -62,7 +64,7 @@ export function SettingsDrawer({
                 </IconButton>
             </Tooltip>
 
-            <Tooltip title="Close">
+            <Tooltip title={t('settings.tooltips.close')}>
                 <IconButton onClick={settings.onCloseDrawer}>
                     <Iconify icon="mingcute:close-line" />
                 </IconButton>
@@ -72,7 +74,7 @@ export function SettingsDrawer({
 
     const renderMode = (
         <BaseOption
-            label="Dark mode"
+            label={t('settings.appearance.darkMode')}
             icon="moon"
             selected={settings.colorScheme === 'dark'}
             onClick={() => {
@@ -84,7 +86,7 @@ export function SettingsDrawer({
 
     const renderContrast = (
         <BaseOption
-            label="Contrast"
+            label={t('settings.appearance.contrast')}
             icon="contrast"
             selected={settings.contrast === 'hight'}
             onClick={() => settings.onUpdateField('contrast', settings.contrast === 'default' ? 'hight' : 'default')}
@@ -93,7 +95,7 @@ export function SettingsDrawer({
 
     const renderRTL = (
         <BaseOption
-            label="Right to left"
+            label={t('settings.appearance.rightToLeft')}
             icon="align-right"
             selected={settings.direction === 'rtl'}
             onClick={() => settings.onUpdateField('direction', settings.direction === 'ltr' ? 'rtl' : 'ltr')}
@@ -103,7 +105,7 @@ export function SettingsDrawer({
     const renderCompact = (
         <BaseOption
             tooltip="Dashboard only and available at large resolutions > 1600px (xl)"
-            label="Compact"
+            label={t('settings.appearance.compact')}
             icon="autofit-width"
             selected={settings.compactLayout}
             onClick={() => settings.onUpdateField('compactLayout', !settings.compactLayout)}

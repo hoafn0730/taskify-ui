@@ -14,10 +14,12 @@ import { fToNow } from '~/utils/format-time';
 import { varHover } from '~/components/animate';
 import { Scrollbar } from '~/components/scrollbar';
 import { usePopover, CustomPopover } from '~/components/custom-popover';
+import { useTranslate } from '~/locales';
 
-export function FriendsPopover({ data = [], sx, ...other }) {
+export function FriendsPopover({ sx, ...other }) {
     const popover = usePopover();
     const { user } = useSelector((state) => state.user);
+    const { t } = useTranslate('header');
 
     return (
         <>
@@ -51,7 +53,7 @@ export function FriendsPopover({ data = [], sx, ...other }) {
                 }}
             >
                 <Typography variant="h6" sx={{ p: 1.5 }}>
-                    Friends <span>({user?.friends?.length ?? 0})</span>
+                    {t('friends.title')} <span>({user?.friends?.length ?? 0})</span>
                 </Typography>
 
                 <Scrollbar sx={{ height: 320, width: 320 }}>

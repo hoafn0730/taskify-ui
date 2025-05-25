@@ -14,12 +14,14 @@ import { Footer, HomeFooter } from './footer';
 import { HeaderBase } from '../core/header-base';
 import { LayoutSection } from '../core/layout-section';
 import { navData as mainNavData } from '~/configs/config-nav-main';
+import { useTranslate } from '~/locales';
 
 // ----------------------------------------------------------------------
 
 export function MainLayout({ sx, data, children }) {
     const theme = useTheme();
     const { user } = useSelector((state) => state.user);
+    const { t } = useTranslate('header');
 
     const pathname = usePathname();
 
@@ -29,7 +31,7 @@ export function MainLayout({ sx, data, children }) {
 
     const layoutQuery = 'md';
 
-    const navData = data?.nav ?? mainNavData;
+    const navData = data?.nav ?? mainNavData(t);
 
     return (
         <>

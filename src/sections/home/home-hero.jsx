@@ -25,6 +25,7 @@ import { SvgColor } from '~/components/svg-color';
 import { varFade, MotionContainer } from '~/components/animate';
 
 import { HeroBackground } from './components/hero-background';
+import { useTranslate } from '~/locales';
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +35,7 @@ const lgKey = 'lg';
 
 export function HomeHero({ sx, ...other }) {
     const theme = useTheme();
+    const { t } = useTranslate('home');
 
     const scroll = useScrollPercent();
 
@@ -45,7 +47,6 @@ export function HomeHero({ sx, ...other }) {
     const y2 = useTransformY(scroll.scrollY, distance * -6);
     const y3 = useTransformY(scroll.scrollY, distance * -5);
     const y4 = useTransformY(scroll.scrollY, distance * -4);
-    const y5 = useTransformY(scroll.scrollY, distance * -3);
 
     const opacity = useTransform(scroll.scrollY, [0, 1], [1, mdUp ? Number((1 - scroll.percent / 100).toFixed(1)) : 1]);
 
@@ -66,9 +67,9 @@ export function HomeHero({ sx, ...other }) {
                 }}
             >
                 <Box component="span" sx={{ width: 1, opacity: 0.24 }}>
-                    Simple. Fast. Effective
+                    {t('hero.tagline')}
                 </Box>
-                Streamline your workflow with
+                {t('hero.title.prefix')}
                 <Box
                     component={m.span}
                     animate={{ backgroundPosition: '200% center' }}
@@ -102,7 +103,7 @@ export function HomeHero({ sx, ...other }) {
                     [theme.breakpoints.up(lgKey)]: { fontSize: 20, lineHeight: '36px' },
                 }}
             >
-                {`Escape the clutter and chaos—unleash your productivity with Taskify.`}
+                {t('hero.subtitle')}
             </Typography>
         </MInview>
     );
@@ -126,7 +127,7 @@ export function HomeHero({ sx, ...other }) {
                         />
                     ))}
                 </AvatarGroup>
-                160+ Happy customers
+                {t('hero.socialProof.text')}
             </Box>
         </MInview>
     );
@@ -143,41 +144,11 @@ export function HomeHero({ sx, ...other }) {
                         variant="contained"
                         endIcon={<Iconify width={24} icon="iconamoon:arrow-right-2-light" />}
                     >
-                        <span>Get started now</span>
+                        <span>{t('hero.socialProof.cta')}</span>
                     </Button>
                 </Stack>
             </MInview>
         </Box>
-    );
-
-    const renderIcons = (
-        <Stack spacing={3} sx={{ textAlign: 'center' }}>
-            <MInview>
-                <Typography variant="overline" sx={{ opacity: 0.4 }}>
-                    Available For
-                </Typography>
-            </MInview>
-
-            <Stack spacing={2.5} direction="row">
-                {['js', 'ts', 'nextjs', 'vite', 'figma'].map((platform) => (
-                    <MInview key={platform}>
-                        {platform === 'nextjs' ? (
-                            <SvgColor
-                                src={`${CONFIG.site.basePath}/assets/icons/platforms/ic-${platform}.svg`}
-                                sx={{ width: 24, height: 24 }}
-                            />
-                        ) : (
-                            <Box
-                                component="img"
-                                alt={platform}
-                                src={`${CONFIG.site.basePath}/assets/icons/platforms/ic-${platform}.svg`}
-                                sx={{ width: 24, height: 24 }}
-                            />
-                        )}
-                    </MInview>
-                ))}
-            </Stack>
-        </Stack>
     );
 
     return (
@@ -237,7 +208,6 @@ export function HomeHero({ sx, ...other }) {
                     </Stack>
                     <m.div style={{ y: y3 }}>{renderRatings}</m.div>
                     <m.div style={{ y: y4 }}>{renderButtons}</m.div>
-                    {/* <m.div style={{ y: y5 }}>{renderIcons}</m.div> */}
                 </Container>
 
                 <HeroBackground />

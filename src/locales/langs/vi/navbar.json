@@ -2,25 +2,27 @@
     "overview": {
         "title": "Tổng quan",
         "app": "Ứng dụng",
-        "analytics": "Phân tích",
+        "summary": "Tóm tắt",
+        "analytics": "Analytics",
         "banking": "Ngân hàng",
-        "file": "Tệp"
+        "file": "File"
     },
     "management": {
         "title": "Quản lý",
         "user": {
             "title": "Người dùng",
             "profile": "Hồ sơ",
-            "cards": "Thẻ",
+            "cards": "Cards",
             "list": "Danh sách",
             "create": "Tạo mới",
             "edit": "Chỉnh sửa",
             "account": "Tài khoản"
         },
-        "product": {
-            "title": "Sản phẩm",
+        "member": {
+            "title": "Thành viên",
+            "profile": "Hồ sơ",
+            "cards": "Cards",
             "list": "Danh sách",
-            "details": "Chi tiết",
             "create": "Tạo mới",
             "edit": "Chỉnh sửa"
         },
@@ -32,30 +34,24 @@
             "edit": "Chỉnh sửa"
         },
         "blog": {
-            "title": "Bài viết",
+            "title": "Blog",
             "list": "Danh sách",
             "details": "Chi tiết",
             "create": "Tạo mới",
             "edit": "Chỉnh sửa"
         },
-        "job": {
-            "title": "Công việc",
-            "list": "Danh sách",
-            "details": "Chi tiết",
-            "create": "Tạo mới",
-            "edit": "Chỉnh sửa"
-        },
-        "fileManager": "Quản lý tệp",
-        "mail": "Thư",
-        "chat": "Trò chuyện",
+        "fileManager": "Quản lý File",
+        "mail": "Email",
+        "chat": "Chat",
         "calendar": "Lịch",
-        "kanban": "Kanban"
+        "kanban": "Kanban",
+        "list": "Danh sách"
     },
     "misc": {
         "title": "Khác",
         "permission": {
             "title": "Phân quyền",
-            "caption": "Chỉ admin hoặc quản lý có thể xem"
+            "caption": "Chỉ admin hoặc manager mới có thể xem mục này"
         }
     }
 }

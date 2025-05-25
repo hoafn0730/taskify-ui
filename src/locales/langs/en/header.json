@@ -1,0 +1,150 @@
+{
+    "header": {
+        "navigation": {
+            "home": "Home",
+            "pages": "Pages",
+            "needHelp": "Need Help?",
+            "goToDashboard": "Go to Dashboard",
+            "signIn": "Sign In",
+            "signUp": "Sign Up",
+            "signOut": "Sign Out"
+        },
+        "search": {
+            "placeholder": "Search...",
+            "searching": "Searching...",
+            "clear": "Clear search",
+            "enterKeywords": "Please enter keywords",
+            "notFound": {
+                "title": "Not Found",
+                "noResults": "No results for",
+                "suggestions": "Try checking spelling or use complete words."
+            }
+        }
+    },
+    "pages": {
+        "other": {
+            "title": "Other",
+            "aboutUs": "About Us",
+            "contactUs": "Contact Us",
+            "faqs": "FAQs",
+            "pricing": "Pricing",
+            "payment": "Payment",
+            "maintenance": "Maintenance",
+            "comingSoon": "Coming Soon"
+        },
+        "concepts": {
+            "title": "Concepts",
+            "shop": "Shop",
+            "product": "Product",
+            "checkout": "Checkout",
+            "posts": "Posts",
+            "post": "Post"
+        },
+        "authDemo": {
+            "title": "Auth Demo",
+            "signIn": "Sign In",
+            "signUp": "Sign Up",
+            "resetPassword": "Reset Password",
+            "updatePassword": "Update Password",
+            "verify": "Verify",
+            "signInCentered": "Sign In (Centered)",
+            "signUpCentered": "Sign Up (Centered)",
+            "resetPasswordCentered": "Reset Password (Centered)",
+            "updatePasswordCentered": "Update Password (Centered)",
+            "verifyCentered": "Verify (Centered)"
+        },
+        "error": {
+            "title": "Error",
+            "page403": "Page 403",
+            "page404": "Page 404",
+            "page500": "Page 500"
+        },
+        "dashboard": {
+            "title": "Dashboard",
+            "dashboard": "Dashboard"
+        }
+    },
+
+    "settings": {
+        "title": "Settings",
+        "tooltips": {
+            "reset": "Reset",
+            "close": "Close",
+            "expand": "Expand",
+            "fullScreen": "Full Screen",
+            "exit": "Exit",
+            "minimize": "Minimize",
+            "maximize": "Maximize",
+            "dashboardOnly": "Dashboard Only"
+        },
+        "appearance": {
+            "darkMode": "Dark Mode",
+            "contrast": "Contrast",
+            "rightToLeft": "Right to Left",
+            "compact": "Compact"
+        },
+        "navigation": {
+            "title": "Navigation",
+            "label": "Nav"
+        },
+        "layout": {
+            "title": "Layout"
+        },
+        "color": {
+            "title": "Color",
+            "integrate": "Integrate",
+            "apparent": "Apparent"
+        },
+        "presets": {
+            "title": "Presets"
+        },
+        "font": {
+            "title": "Font"
+        }
+    },
+
+    "notifications": {
+        "title": "Notifications",
+        "tooltips": {
+            "markAllAsRead": "Mark All as Read",
+            "close": "Close",
+            "settings": "Settings"
+        },
+        "tabs": {
+            "all": "All",
+            "unread": "Unread",
+            "archived": "Archived"
+        },
+        "actions": {
+            "viewAll": "View All",
+            "accept": "Accept",
+            "decline": "Decline",
+            "reply": "Reply",
+            "download": "Download",
+            "pay": "Pay"
+        },
+        "types": {
+            "friend": "Friend",
+            "project": "Project",
+            "file": "File",
+            "tags": "Tags",
+            "payment": "Payment",
+            "order": "Order",
+            "chat": "Chat",
+            "mail": "Mail",
+            "delivery": "Delivery"
+        },
+        "labels": {
+            "design": "Design",
+            "dashboard": "Dashboard",
+            "designSystem": "Design System"
+        },
+        "feedback": {
+            "askQuestions": "ask questions or just leave a thank you note",
+            "leaveNote": "leave a review note"
+        }
+    },
+    "friends": {
+        "title": "Friends"
+    }
+}

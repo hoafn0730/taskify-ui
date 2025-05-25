@@ -14,10 +14,29 @@ import { varFade, MotionViewport } from '~/components/animate';
 
 import { SectionTitle } from './components/section-title';
 import { CircleSvg, FloatLine, FloatPlusIcon } from './components/svg-elements';
-
-// ----------------------------------------------------------------------
+import { useTranslate } from '~/locales';
 
 export function HomeMinimal({ sx, ...other }) {
+    const { t } = useTranslate('home');
+
+    const ITEMS = [
+        {
+            icon: `${CONFIG.site.basePath}/assets/icons/home/ic-make-brand.svg`,
+            title: t('features.inbox.title'),
+            description: t('features.inbox.description'),
+        },
+        {
+            icon: `${CONFIG.site.basePath}/assets/icons/home/ic-design.svg`,
+            title: t('features.boards.title'),
+            description: t('features.boards.description'),
+        },
+        {
+            icon: `${CONFIG.site.basePath}/assets/icons/home/ic-development.svg`,
+            title: t('features.planner.title'),
+            description: t('features.planner.description'),
+        },
+    ];
+
     const renderLines = (
         <>
             <FloatPlusIcon sx={{ top: 72, left: 72 }} />
@@ -31,9 +50,9 @@ export function HomeMinimal({ sx, ...other }) {
     const renderDescription = (
         <>
             <SectionTitle
-                caption="Visualizing Success"
-                title="What's in"
-                txtGradient="Taskify?"
+                caption={t('features.sectionTitle.subtitle')}
+                title={t('features.sectionTitle.title')}
+                txtGradient="Taskify"
                 sx={{ mb: { xs: 5, md: 8 }, textAlign: { xs: 'center', md: 'left' } }}
             />
 
@@ -129,25 +148,3 @@ export function HomeMinimal({ sx, ...other }) {
         </Stack>
     );
 }
-
-// ----------------------------------------------------------------------
-
-const ITEMS = [
-    {
-        // icon: `${CONFIG.site.basePath}/assets/icons/home/ic-make-brand.svg`,
-        title: 'Inbox',
-        description: 'When it’s on your mind, it goes in your Inbox. Capture your to-dos from anywhere, anytime.',
-    },
-    {
-        // icon: `${CONFIG.site.basePath}/assets/icons/home/ic-design.svg`,
-        title: 'Boards',
-        description:
-            'Your to-do list may be long, but it can be manageable! Keep tabs on everything from "to-dos to tackle" to "mission accomplished!”',
-    },
-    {
-        // icon: `${CONFIG.site.basePath}/assets/icons/home/ic-development.svg`,
-        title: 'Planner',
-        description:
-            'Drag, drop, get it done. Snap your top tasks into your calendar and make time for what truly matters.',
-    },
-];

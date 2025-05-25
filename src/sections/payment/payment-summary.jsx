@@ -9,17 +9,21 @@ import { Label } from '~/components/label';
 import { Iconify } from '~/components/iconify';
 import { useBoolean } from '~/hooks/use-boolean';
 import { QrCodeDialog } from './qr-code-dialog';
+import { fNumber } from '~/utils/format-number';
+import { _pricingPlans } from '~/_mock';
 
 // ----------------------------------------------------------------------
 
-export function PaymentSummary({ method, sx, ...other }) {
+export function PaymentSummary({ method, plan, sx, ...other }) {
     const qrCode = useBoolean();
+
+    const currentPlan = _pricingPlans.find((item) => item.subscription === plan);
 
     const renderPrice = (
         <Stack direction="row" justifyContent="flex-end">
-            <Typography variant="h4">$</Typography>
+            <Typography variant="h4">đ</Typography>
 
-            <Typography variant="h2">9.99</Typography>
+            <Typography variant="h2">{fNumber(currentPlan.price)}</Typography>
 
             <Typography
                 component="span"
@@ -66,7 +70,7 @@ export function PaymentSummary({ method, sx, ...other }) {
                         Subscription
                     </Typography>
 
-                    <Label color="error">PREMIUM</Label>
+                    <Label color="error">{currentPlan.subscription.toUpperCase()}</Label>
                 </Stack>
 
                 <Stack direction="row" justifyContent="space-between">
@@ -83,7 +87,7 @@ export function PaymentSummary({ method, sx, ...other }) {
                 <Stack direction="row" alignItems="center" justifyContent="space-between">
                     <Typography variant="subtitle1">Total billed</Typography>
 
-                    <Typography variant="subtitle1">$9.99*</Typography>
+                    <Typography variant="subtitle1">đ{fNumber(currentPlan.price)}</Typography>
                 </Stack>
 
                 <Divider sx={{ borderStyle: 'dashed' }} />
@@ -108,7 +112,7 @@ export function PaymentSummary({ method, sx, ...other }) {
                 </Typography>
             </Stack>
 
-            <QrCodeDialog open={qrCode.value} onClose={qrCode.onFalse} />
+            <QrCodeDialog currentPlan={currentPlan} open={qrCode.value} onClose={qrCode.onFalse} />
         </Box>
     );
 }

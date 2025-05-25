@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { m } from 'framer-motion';
 
 import Box from '@mui/material/Box';
@@ -14,18 +15,14 @@ import { varAlpha, bgGradient } from '~/theme/styles';
 
 import { Label } from '~/components/label';
 
-import { useMockedUser } from '~/auth/hooks';
-
-// ----------------------------------------------------------------------
-
 export function NavUpgrade({ sx, ...other }) {
-    const { user } = useMockedUser();
+    const { user } = useSelector((state) => state.user);
 
     return (
         <Stack sx={{ px: 2, py: 5, textAlign: 'center', ...sx }} {...other}>
             <Stack alignItems="center">
                 <Box sx={{ position: 'relative' }}>
-                    <Avatar src={user?.photoURL} alt={user?.displayName} sx={{ width: 48, height: 48 }}>
+                    <Avatar src={user?.avatar} alt={user?.displayName} sx={{ width: 48, height: 48 }}>
                         {user?.displayName?.charAt(0).toUpperCase()}
                     </Avatar>
 
@@ -55,11 +52,7 @@ export function NavUpgrade({ sx, ...other }) {
                     </Typography>
                 </Stack>
 
-                <Button
-                    variant="contained"
-                    href={paths.pricing}
-                    // target="_blank" rel="noopener"
-                >
+                <Button variant="contained" href={paths.pricing}>
                     Upgrade to Pro
                 </Button>
             </Stack>

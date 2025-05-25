@@ -55,59 +55,57 @@ export function UserProfileView() {
 
     return (
         <DashboardContent>
-            <RoleBasedGuard hasContent currentRole={user?.role} acceptRoles={['admin']} sx={{ py: 10 }}>
-                <CustomBreadcrumbs
-                    heading="Profile"
-                    links={[
-                        { name: 'Dashboard', href: paths.dashboard.root },
-                        { name: 'User', href: paths.dashboard.user.root },
-                        { name: user?.displayName },
-                    ]}
-                    sx={{ mb: { xs: 3, md: 5 } }}
+            <CustomBreadcrumbs
+                heading="Profile"
+                links={[
+                    { name: 'Dashboard', href: paths.dashboard.root },
+                    { name: 'User', href: paths.dashboard.user.root },
+                    { name: user?.displayName },
+                ]}
+                sx={{ mb: { xs: 3, md: 5 } }}
+            />
+
+            <Card sx={{ mb: 3, height: 290 }}>
+                <ProfileCover
+                    username={'@' + user?.username}
+                    name={user?.displayName}
+                    avatarUrl={user?.avatar}
+                    coverUrl={_userAbout.coverUrl}
                 />
 
-                <Card sx={{ mb: 3, height: 290 }}>
-                    <ProfileCover
-                        username={'@' + user?.username}
-                        name={user?.displayName}
-                        avatarUrl={user?.avatar}
-                        coverUrl={_userAbout.coverUrl}
-                    />
+                <Box
+                    display="flex"
+                    justifyContent={{ xs: 'center', md: 'flex-end' }}
+                    sx={{
+                        width: 1,
+                        bottom: 0,
+                        zIndex: 9,
+                        px: { md: 3 },
+                        position: 'absolute',
+                        bgcolor: 'background.paper',
+                    }}
+                >
+                    <Tabs value={tabs.value} onChange={tabs.onChange}>
+                        {TABS.map((tab) => (
+                            <Tab key={tab.value} value={tab.value} icon={tab.icon} label={tab.label} />
+                        ))}
+                    </Tabs>
+                </Box>
+            </Card>
 
-                    <Box
-                        display="flex"
-                        justifyContent={{ xs: 'center', md: 'flex-end' }}
-                        sx={{
-                            width: 1,
-                            bottom: 0,
-                            zIndex: 9,
-                            px: { md: 3 },
-                            position: 'absolute',
-                            bgcolor: 'background.paper',
-                        }}
-                    >
-                        <Tabs value={tabs.value} onChange={tabs.onChange}>
-                            {TABS.map((tab) => (
-                                <Tab key={tab.value} value={tab.value} icon={tab.icon} label={tab.label} />
-                            ))}
-                        </Tabs>
-                    </Box>
-                </Card>
+            {tabs.value === 'profile' && <ProfileHome info={_userAbout} posts={_userFeeds} />}
 
-                {tabs.value === 'profile' && <ProfileHome info={_userAbout} posts={_userFeeds} />}
+            {tabs.value === 'followers' && <ProfileFollowers followers={_userFollowers} />}
 
-                {tabs.value === 'followers' && <ProfileFollowers followers={_userFollowers} />}
+            {tabs.value === 'friends' && (
+                <ProfileFriends
+                    friends={_userFriends}
+                    searchFriends={searchFriends}
+                    onSearchFriends={handleSearchFriends}
+                />
+            )}
 
-                {tabs.value === 'friends' && (
-                    <ProfileFriends
-                        friends={_userFriends}
-                        searchFriends={searchFriends}
-                        onSearchFriends={handleSearchFriends}
-                    />
-                )}
-
-                {tabs.value === 'gallery' && <ProfileGallery gallery={_userGallery} />}
-            </RoleBasedGuard>
+            {tabs.value === 'gallery' && <ProfileGallery gallery={_userGallery} />}
         </DashboardContent>
     );
 }

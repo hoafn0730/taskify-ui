@@ -236,27 +236,24 @@ export const navData1 = [
 export const navData = (t) => [
     {
         subheader: t('overview.title'),
-        items: [
-            { title: t('overview.app'), path: paths.dashboard.root, icon: ICONS.dashboard },
-            { title: t('overview.analytics'), path: paths.dashboard.general.analytics, icon: ICONS.analytics },
-            { title: t('overview.file'), path: paths.dashboard.general.file, icon: ICONS.file },
-        ],
+        items: [{ title: t('overview.summary'), path: paths.dashboard.summary, icon: ICONS.dashboard }],
     },
     {
         subheader: t('management.title'),
         items: [
-            {
-                title: t('management.member.title'),
-                path: paths.dashboard.member.root,
-                icon: ICONS.member,
-                children: [
-                    { title: t('management.member.profile'), path: paths.dashboard.member.root },
-                    { title: t('management.member.cards'), path: paths.dashboard.member.cards },
-                    { title: t('management.member.list'), path: paths.dashboard.member.list },
-                    { title: t('management.member.create'), path: paths.dashboard.member.new },
-                    { title: t('management.member.edit'), path: paths.dashboard.member.demo.edit },
-                ],
-            },
+            // { title: t('management.member.title'), path: paths.dashboard.member.list, icon: ICONS.member },
+            // {
+            //     title: t('management.member.title'),
+            //     path: paths.dashboard.member.root,
+            //     icon: ICONS.member,
+            //     children: [
+            //         { title: t('management.member.profile'), path: paths.dashboard.member.root },
+            //         { title: t('management.member.cards'), path: paths.dashboard.member.cards },
+            //         { title: t('management.member.list'), path: paths.dashboard.member.list },
+            //         { title: t('management.member.create'), path: paths.dashboard.member.new },
+            //         { title: t('management.member.edit'), path: paths.dashboard.member.demo.edit },
+            //     ],
+            // },
             {
                 title: t('management.blog.title'),
                 path: paths.dashboard.post.root,
@@ -283,18 +280,6 @@ export const navData = (t) => [
             { title: t('management.kanban'), path: paths.dashboard.kanban.root, icon: ICONS.kanban },
             { title: t('management.calendar'), path: paths.dashboard.calendar, icon: ICONS.calendar },
             { title: t('management.list'), path: paths.dashboard.list, icon: ICONS.list },
-        ],
-    },
-    {
-        subheader: t('misc.title'),
-        items: [
-            {
-                title: t('misc.permission.title'),
-                path: paths.dashboard.permission,
-                icon: ICONS.lock,
-                roles: ['admin', 'manager'],
-                caption: t('misc.permission.caption'),
-            },
         ],
     },
 ];

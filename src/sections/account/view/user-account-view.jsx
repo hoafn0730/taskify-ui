@@ -1,5 +1,6 @@
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import { useEffect, useState } from 'react';
 
 import { paths } from '~/configs/paths';
 
@@ -17,6 +18,8 @@ import { AccountSocialLinks } from '../account-social-links';
 import { AccountNotifications } from '../account-notifications';
 import { AccountChangePassword } from '../account-change-password';
 
+import { userService } from '~/services/userService';
+
 // ----------------------------------------------------------------------
 
 const TABS = [
@@ -31,10 +34,16 @@ const TABS = [
     { value: 'security', label: 'Security', icon: <Iconify icon="ic:round-vpn-key" width={24} /> },
 ];
 
-// ----------------------------------------------------------------------
-
 export function AccountView() {
-    const tabs = useTabs('general');
+    const hashTab = typeof window !== 'undefined' ? window.location.hash?.replace('#', '') : null;
+    const tabs = useTabs(hashTab || 'general');
+    const [invoices, setInvoices] = useState([]);
+
+    useEffect(() => {
+        userService.getInvoices().then(({ data }) => {
+            setInvoices(data?.data);
+        });
+    }, []);
 
     return (
         <DashboardContent>
@@ -48,7 +57,14 @@ export function AccountView() {
                 sx={{ mb: { xs: 3, md: 5 } }}
             />
 
-            <Tabs value={tabs.value} onChange={tabs.onChange} sx={{ mb: { xs: 3, md: 5 } }}>
+            <Tabs
+                value={tabs.value}
+                onChange={(event, newValue) => {
+                    tabs.onChange(event, newValue);
+                    window.location.hash = newValue;
+                }}
+                sx={{ mb: { xs: 3, md: 5 } }}
+            >
                 {TABS.map((tab) => (
                     <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
                 ))}
@@ -56,14 +72,7 @@ export function AccountView() {
 
             {tabs.value === 'general' && <AccountGeneral />}
 
-            {tabs.value === 'billing' && (
-                <AccountBilling
-                    plans={_userPlans}
-                    cards={_userPayment}
-                    invoices={_userInvoices}
-                    addressBook={_userAddressBook}
-                />
-            )}
+            {tabs.value === 'billing' && <AccountBilling plans={_userPlans} invoices={invoices} />}
 
             {tabs.value === 'notifications' && <AccountNotifications />}
 

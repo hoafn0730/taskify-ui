@@ -3,11 +3,10 @@ import { useTheme } from '@mui/material/styles';
 
 import { fNumber } from '~/utils/format-number';
 
-import { CONFIG } from '~/configs/config-global';
-
 import { Iconify } from '~/components/iconify';
 import { SvgColor } from '~/components/svg-color';
 import { Chart, useChart } from '~/components/chart';
+import { CONFIG } from '~/configs/config-global';
 
 // ----------------------------------------------------------------------
 

@@ -53,6 +53,7 @@ export const fetcher1 = async (args) => {
 
 export const endpoints = {
     chat: '/api/chat',
+    payment: '/api/v1/payment',
     kanban: {
         boards: '/api/v1/boards',
         columns: '/api/v1/columns',
@@ -75,5 +76,12 @@ export const endpoints = {
         details: '/api/post/details',
         latest: '/api/post/latest',
         search: '/api/post/search',
+    },
+    admin: {
+        users: '/api/v1/users',
+        boards: '/api/v1/admin/boards',
+        cards: '/api/v1/admin/cards',
+        columns: '/api/v1/admin/columns',
+        members: '/api/v1/admin/members',
     },
 };

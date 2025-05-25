@@ -9,16 +9,12 @@ import { LoadingScreen } from '~/components/loading-screen';
 import { AuthGuard } from '~/auth/guard';
 import AcceptInvite from '~/pages/dashboard/kanban/accept-invite';
 
-// ----------------------------------------------------------------------
-
 // Overview
 const IndexPage = lazy(() => import('~/pages/dashboard'));
-const OverviewEcommercePage = lazy(() => import('~/pages/dashboard/ecommerce'));
+const OverviewSummaryPage = lazy(() => import('~/pages/dashboard/summary'));
 const OverviewAnalyticsPage = lazy(() => import('~/pages/dashboard/analytics'));
 const OverviewBankingPage = lazy(() => import('~/pages/dashboard/banking'));
-const OverviewBookingPage = lazy(() => import('~/pages/dashboard/booking'));
 const OverviewFilePage = lazy(() => import('~/pages/dashboard/file'));
-const OverviewCoursePage = lazy(() => import('~/pages/dashboard/course'));
 // Product
 const ProductDetailsPage = lazy(() => import('~/pages/dashboard/product/details'));
 const ProductListPage = lazy(() => import('~/pages/dashboard/product/list'));
@@ -27,9 +23,6 @@ const ProductEditPage = lazy(() => import('~/pages/dashboard/product/edit'));
 // List
 const ListPage = lazy(() => import('~/pages/dashboard/list/list'));
 const ListDetailsPage = lazy(() => import('~/pages/dashboard/list/details'));
-// Order
-const OrderListPage = lazy(() => import('~/pages/dashboard/order/list'));
-const OrderDetailsPage = lazy(() => import('~/pages/dashboard/order/details'));
 // Invoice
 const InvoiceListPage = lazy(() => import('~/pages/dashboard/invoice/list'));
 const InvoiceDetailsPage = lazy(() => import('~/pages/dashboard/invoice/details'));
@@ -93,6 +86,7 @@ export const dashboardRoutes = [
         element: CONFIG.auth.skip ? <>{layoutContent}</> : <AuthGuard>{layoutContent}</AuthGuard>,
         children: [
             { element: <IndexPage />, index: true },
+            { path: 'summary', element: <OverviewSummaryPage /> },
             { path: 'analytics', element: <OverviewAnalyticsPage /> },
             { path: 'banking', element: <OverviewBankingPage /> },
             { path: 'file', element: <OverviewFilePage /> },

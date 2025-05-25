@@ -24,14 +24,8 @@ export const _account = [
         ),
     },
     {
-        label: 'Projects',
-        href: '#',
-        icon: <Iconify icon="solar:notes-bold-duotone" />,
-        info: '3',
-    },
-    {
         label: 'Subscription',
-        href: '#',
+        href: paths.dashboard.user.account + '#billing',
         icon: (
             <SvgIcon>
                 <path
@@ -54,7 +48,7 @@ export const _account = [
     },
     {
         label: 'Security',
-        href: '#',
+        href: paths.dashboard.user.account + '#security',
         icon: <Iconify icon="solar:shield-keyhole-bold-duotone" />,
     },
     {

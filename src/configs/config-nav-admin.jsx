@@ -248,35 +248,7 @@ export const navData = (t) => [
     {
         subheader: t('management.title'),
         items: [
-            {
-                title: t('management.user.title'),
-                path: paths.dashboard.user.root,
-                icon: ICONS.user,
-                roles: ['admin', 'manager'],
-                children: [
-                    {
-                        title: t('management.user.profile'),
-                        path: paths.dashboard.user.root,
-                        roles: ['admin', 'manager'],
-                    },
-                    { title: t('management.user.cards'), path: paths.dashboard.user.cards },
-                    { title: t('management.user.list'), path: paths.dashboard.user.list },
-                    { title: t('management.user.create'), path: paths.dashboard.user.new },
-                    { title: t('management.user.edit'), path: paths.dashboard.user.demo.edit },
-                    { title: t('management.user.account'), path: paths.dashboard.user.account },
-                ],
-            },
-            // {
-            //     title: t('management.product.title'),
-            //     path: paths.dashboard.product.root,
-            //     icon: ICONS.product,
-            //     children: [
-            //         { title: t('management.product.list'), path: paths.dashboard.product.root },
-            //         { title: t('management.product.details'), path: paths.dashboard.product.demo.details },
-            //         { title: t('management.product.create'), path: paths.dashboard.product.new },
-            //         { title: t('management.product.edit'), path: paths.dashboard.product.demo.edit },
-            //     ],
-            // },
+            { title: t('management.user.title'), path: paths.dashboard.user.list, icon: ICONS.user },
             {
                 title: t('management.invoice.title'),
                 path: paths.dashboard.invoice.root,
@@ -310,7 +282,7 @@ export const navData = (t) => [
             //         { title: t('management.job.edit'), path: paths.dashboard.job.demo.edit },
             //     ],
             // },
-            { title: t('management.fileManager'), path: paths.dashboard.fileManager, icon: ICONS.folder },
+            // { title: t('management.fileManager'), path: paths.dashboard.fileManager, icon: ICONS.folder },
             {
                 title: t('management.mail'),
                 path: paths.dashboard.mail,

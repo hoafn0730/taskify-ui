@@ -8,7 +8,7 @@ import { iconButtonClasses } from '@mui/material/IconButton';
 import { useBoolean } from '~/hooks/use-boolean';
 
 import { allLangs, useTranslate } from '~/locales';
-import { _contacts, _notifications } from '~/_mock';
+import { _notifications } from '~/_mock';
 import { varAlpha, stylesMode } from '~/theme/styles';
 
 import { bulletColor } from '~/components/nav-section';
@@ -73,7 +73,7 @@ export function DashboardLayout({ sx, children, data }) {
                             nav: navData,
                             langs: allLangs,
                             account: _account,
-                            contacts: _contacts,
+                            contacts: user?.friends,
                             workspaces: _workspaces,
                             notifications: _notifications,
                         }}

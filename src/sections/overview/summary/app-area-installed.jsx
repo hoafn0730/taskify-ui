@@ -42,25 +42,25 @@ export function AppAreaInstalled({ title, subheader, chart, ...other }) {
             <CardHeader
                 title={title}
                 subheader={subheader}
-                action={
-                    <ChartSelect
-                        options={chart.series.map((item) => item.name)}
-                        value={selectedSeries}
-                        onChange={handleChangeSeries}
-                    />
-                }
+                // action={
+                //     <ChartSelect
+                //         options={chart.series.map((item) => item.name)}
+                //         value={selectedSeries}
+                //         onChange={handleChangeSeries}
+                //     />
+                // }
                 sx={{ mb: 3 }}
             />
 
-            <ChartLegends
-                colors={chartOptions?.colors}
-                labels={chart.series[0].data.map((item) => item.name)}
-                values={[fShortenNumber(1234), fShortenNumber(6789), fShortenNumber(1012)]}
-                sx={{
-                    px: 3,
-                    gap: 3,
-                }}
-            />
+            {/* <ChartLegends
+        colors={chartOptions?.colors}
+        labels={chart.series[0].data.map((item) => item.name)}
+        values={[fShortenNumber(1234), fShortenNumber(6789), fShortenNumber(1012)]}
+        sx={{
+          px: 3,
+          gap: 3,
+        }}
+      /> */}
 
             <Chart
                 key={selectedSeries}

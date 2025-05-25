@@ -68,6 +68,7 @@ export const paths = {
     // DASHBOARD
     dashboard: {
         root: ROOTS.DASHBOARD,
+        summary: `${ROOTS.DASHBOARD}/summary`,
         mail: `${ROOTS.DASHBOARD}/mail`,
         chat: `${ROOTS.DASHBOARD}/chat`,
         blank: `${ROOTS.DASHBOARD}/blank`,
@@ -165,4 +166,5 @@ export const paths = {
             },
         },
     },
+    profile: `/:username`,
 };

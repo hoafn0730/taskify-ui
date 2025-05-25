@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -42,6 +42,8 @@ import {
 import { UserTableRow } from '../user-table-row';
 import { UserTableToolbar } from '../user-table-toolbar';
 import { UserTableFiltersResult } from '../user-table-filters-result';
+import { userService } from '~/services/userService';
+import { useGetUsers } from '~/actions/user';
 
 // ----------------------------------------------------------------------
 
@@ -49,23 +51,25 @@ const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
     { id: 'name', label: 'Name' },
-    { id: 'phoneNumber', label: 'Phone number', width: 180 },
-    { id: 'company', label: 'Company', width: 220 },
+    { id: 'email', label: 'Email' },
     { id: 'role', label: 'Role', width: 180 },
     { id: 'status', label: 'Status', width: 100 },
     { id: '', width: 88 },
 ];
 
-// ----------------------------------------------------------------------
-
 export function UserListView() {
     const table = useTable();
 
-    const router = useRouter();
+    const { users } = useGetUsers();
 
     const confirm = useBoolean();
 
-    const [tableData, setTableData] = useState(_userList);
+    const [tableData, setTableData] = useState([]);
+
+    // Cập nhật tableData khi list thay đổi
+    useEffect(() => {
+        setTableData(users);
+    }, [users]);
 
     const filters = useSetState({ name: '', role: [], status: 'all' });
 
@@ -107,13 +111,6 @@ export function UserListView() {
         });
     }, [dataFiltered.length, dataInPage.length, table, tableData]);
 
-    const handleEditRow = useCallback(
-        (id) => {
-            router.push(paths.dashboard.user.edit(id));
-        },
-        [router],
-    );
-
     const handleFilterStatus = useCallback(
         (event, newValue) => {
             table.onResetPage();
@@ -132,16 +129,6 @@ export function UserListView() {
                         { name: 'User', href: paths.dashboard.user.root },
                         { name: 'List' },
                     ]}
-                    action={
-                        <Button
-                            component={RouterLink}
-                            href={paths.dashboard.user.new}
-                            variant="contained"
-                            startIcon={<Iconify icon="mingcute:add-line" />}
-                        >
-                            New user
-                        </Button>
-                    }
                     sx={{ mb: { xs: 3, md: 5 } }}
                 />
 
@@ -183,7 +170,11 @@ export function UserListView() {
                         ))}
                     </Tabs>
 
-                    <UserTableToolbar filters={filters} onResetPage={table.onResetPage} options={{ roles: _roles }} />
+                    <UserTableToolbar
+                        filters={filters}
+                        onResetPage={table.onResetPage}
+                        options={{ roles: ['admin', 'user'] }}
+                    />
 
                     {canReset && (
                         <UserTableFiltersResult
@@ -244,7 +235,6 @@ export function UserListView() {
                                                 selected={table.selected.includes(row.id)}
                                                 onSelectRow={() => table.onSelectRow(row.id)}
                                                 onDeleteRow={() => handleDeleteRow(row.id)}
-                                                onEditRow={() => handleEditRow(row.id)}
                                             />
                                         ))}
 
@@ -311,7 +301,8 @@ function applyFilter({ inputData, comparator, filters }) {
     inputData = stabilizedThis.map((el) => el[0]);
 
     if (name) {
-        inputData = inputData.filter((user) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1);
+        inputData = inputData.filter((user) => user.displayName.toLowerCase().indexOf(name.toLowerCase()) !== -1);
+        // ||     inputData.filter((user) => user.email.toLowerCase().indexOf(name.toLowerCase()) !== -1);
     }
 
     if (status !== 'all') {

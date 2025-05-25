@@ -12,11 +12,13 @@ import { paths } from '~/configs/paths';
 
 import { Label } from '~/components/label';
 import { Iconify } from '~/components/iconify';
+import { fNumber } from '~/utils/format-number';
 
 // ----------------------------------------------------------------------
 
 export function PricingCard({ card, sx, ...other }) {
     const { subscription, price, caption, lists, labelAction } = card;
+
     const router = useRouter();
 
     const basic = subscription === 'basic';
@@ -48,9 +50,9 @@ export function PricingCard({ card, sx, ...other }) {
         <Typography variant="h2">Free</Typography>
     ) : (
         <Stack direction="row">
-            <Typography variant="h4">$</Typography>
+            <Typography variant="h4">đ</Typography>
 
-            <Typography variant="h2">{price}</Typography>
+            <Typography variant="h2">{fNumber(price)}</Typography>
 
             <Typography
                 component="span"
@@ -130,7 +132,7 @@ export function PricingCard({ card, sx, ...other }) {
                 variant="contained"
                 disabled={basic}
                 color={starter ? 'primary' : 'inherit'}
-                onClick={() => router.push(paths.payment)}
+                onClick={() => router.push(paths.payment + `?plan=${subscription}`)}
             >
                 {labelAction}
             </Button>

@@ -2,6 +2,7 @@
     "overview": {
         "title": "Overview",
         "app": "App",
+        "summary": "Summary",
         "analytics": "Analytics",
         "banking": "Banking",
         "file": "File"

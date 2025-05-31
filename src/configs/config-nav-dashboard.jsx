@@ -46,7 +46,7 @@ export const navData = (t) => [
     {
         subheader: t('management.title'),
         items: [
-            // { title: t('management.member.title'), path: paths.dashboard.member.list, icon: ICONS.member },
+            { title: t('management.member.title'), path: paths.dashboard.member.list, icon: ICONS.member },
             // {
             //     title: t('management.member.title'),
             //     path: paths.dashboard.member.root,
@@ -87,4 +87,16 @@ export const navData = (t) => [
             { title: t('management.list'), path: paths.dashboard.list, icon: ICONS.list },
         ],
     },
+    // {
+    //     subheader: t('misc.title'),
+    //     items: [
+    //         {
+    //             title: t('misc.permission.title'),
+    //             path: paths.dashboard.permission,
+    //             icon: ICONS.lock,
+    //             roles: ['admin', 'manager'],
+    //             caption: t('misc.permission.caption'),
+    //         },
+    //     ],
+    // },
 ];

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -11,15 +11,13 @@ import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 
 import { paths } from '~/configs/paths';
-import { useRouter } from '~/routes/hooks';
-import { RouterLink } from '~/components/router-link';
 
 import { useBoolean } from '~/hooks/use-boolean';
 import { useSetState } from '~/hooks/use-set-state';
 
 import { varAlpha } from '~/theme/styles';
 import { DashboardContent } from '~/layouts/dashboard';
-import { _roles, _userList, USER_STATUS_OPTIONS } from '~/_mock';
+import { _roles, MEMBER_STATUS_OPTIONS } from '~/_mock';
 
 import { Label } from '~/components/label';
 import { toast } from '~/components/snackbar';
@@ -39,34 +37,36 @@ import {
     TablePaginationCustom,
 } from '~/components/table';
 
-import { UserTableRow } from '../user-table-row';
-import { UserTableToolbar } from '../user-table-toolbar';
-import { UserTableFiltersResult } from '../user-table-filters-result';
+import { MemberTableRow } from '../member-table-row';
+import { MemberTableToolbar } from '../member-table-toolbar';
+import { MemberTableFiltersResult } from '../member-table-filters-result';
+import { useGetMembers } from '~/actions/member';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
+const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...MEMBER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
     { id: 'name', label: 'Name' },
-    { id: 'email', label: 'Eame' },
-    { id: 'phoneNumber', label: 'Phone number', width: 180 },
-    { id: 'company', label: 'Company', width: 220 },
+    { id: 'email', label: 'Email' },
     { id: 'role', label: 'Role', width: 180 },
-    { id: 'status', label: 'Status', width: 100 },
+    { id: 'active', label: 'Active', width: 100 },
     { id: '', width: 88 },
 ];
 
-// ----------------------------------------------------------------------
-
-export function UserListView() {
+export function MemberListView() {
     const table = useTable();
 
-    const router = useRouter();
+    const { members } = useGetMembers(1, 'team');
 
     const confirm = useBoolean();
 
-    const [tableData, setTableData] = useState(_userList);
+    const [tableData, setTableData] = useState([]);
+
+    // Cập nhật tableData khi list thay đổi
+    useEffect(() => {
+        setTableData(members);
+    }, [members]);
 
     const filters = useSetState({ name: '', role: [], status: 'all' });
 
@@ -108,13 +108,6 @@ export function UserListView() {
         });
     }, [dataFiltered.length, dataInPage.length, table, tableData]);
 
-    const handleEditRow = useCallback(
-        (id) => {
-            router.push(paths.dashboard.user.edit(id));
-        },
-        [router],
-    );
-
     const handleFilterStatus = useCallback(
         (event, newValue) => {
             table.onResetPage();
@@ -130,19 +123,9 @@ export function UserListView() {
                     heading="List"
                     links={[
                         { name: 'Dashboard', href: paths.dashboard.root },
-                        { name: 'User', href: paths.dashboard.user.root },
+                        { name: 'Member', href: paths.dashboard.member.root },
                         { name: 'List' },
                     ]}
-                    action={
-                        <Button
-                            component={RouterLink}
-                            href={paths.dashboard.user.new}
-                            variant="contained"
-                            startIcon={<Iconify icon="mingcute:add-line" />}
-                        >
-                            New user
-                        </Button>
-                    }
                     sx={{ mb: { xs: 3, md: 5 } }}
                 />
 
@@ -171,12 +154,11 @@ export function UserListView() {
                                         color={
                                             (tab.value === 'active' && 'success') ||
                                             (tab.value === 'pending' && 'warning') ||
-                                            (tab.value === 'banned' && 'error') ||
                                             'default'
                                         }
                                     >
-                                        {['active', 'pending', 'banned', 'rejected'].includes(tab.value)
-                                            ? tableData.filter((user) => user.status === tab.value).length
+                                        {['active', 'pending', 'rejected'].includes(tab.value)
+                                            ? tableData.filter((member) => member.status === tab.value).length
                                             : tableData.length}
                                     </Label>
                                 }
@@ -184,10 +166,14 @@ export function UserListView() {
                         ))}
                     </Tabs>
 
-                    <UserTableToolbar filters={filters} onResetPage={table.onResetPage} options={{ roles: _roles }} />
+                    <MemberTableToolbar
+                        filters={filters}
+                        onResetPage={table.onResetPage}
+                        options={{ roles: ['admin', 'member'] }}
+                    />
 
                     {canReset && (
-                        <UserTableFiltersResult
+                        <MemberTableFiltersResult
                             filters={filters}
                             totalResults={dataFiltered.length}
                             onResetPage={table.onResetPage}
@@ -239,13 +225,12 @@ export function UserListView() {
                                             table.page * table.rowsPerPage + table.rowsPerPage,
                                         )
                                         .map((row) => (
-                                            <UserTableRow
+                                            <MemberTableRow
                                                 key={row.id}
                                                 row={row}
                                                 selected={table.selected.includes(row.id)}
                                                 onSelectRow={() => table.onSelectRow(row.id)}
                                                 onDeleteRow={() => handleDeleteRow(row.id)}
-                                                onEditRow={() => handleEditRow(row.id)}
                                             />
                                         ))}
 
@@ -312,15 +297,23 @@ function applyFilter({ inputData, comparator, filters }) {
     inputData = stabilizedThis.map((el) => el[0]);
 
     if (name) {
-        inputData = inputData.filter((user) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1);
+        inputData = inputData.filter((member) => member.displayName.toLowerCase().indexOf(name.toLowerCase()) !== -1);
+        // ||     inputData.filter((member) => member.email.toLowerCase().indexOf(name.toLowerCase()) !== -1);
     }
 
     if (status !== 'all') {
-        inputData = inputData.filter((user) => user.status === status);
+        inputData = inputData.filter((member) => {
+            if (status === 'active') {
+                return member.active === true;
+            } else if (status === 'pending') {
+                return member.active === false && member.status === 'pending';
+            }
+            return member.status === status;
+        });
     }
 
     if (role.length) {
-        inputData = inputData.filter((user) => role.includes(user.role));
+        inputData = inputData.filter((member) => role.includes(member.role));
     }
 
     return inputData;

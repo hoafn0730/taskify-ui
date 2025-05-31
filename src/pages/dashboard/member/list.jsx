@@ -2,11 +2,11 @@ import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from '~/configs/config-global';
 
-import { UserListView } from '~/sections/user/view';
+import { MemberListView } from '~/sections/member/view';
 
 // ----------------------------------------------------------------------
 
-const metadata = { title: `User list | Dashboard - ${CONFIG.site.name}` };
+const metadata = { title: `Member list | Dashboard - ${CONFIG.site.name}` };
 
 export default function Page() {
     return (
@@ -15,7 +15,7 @@ export default function Page() {
                 <title> {metadata.title}</title>
             </Helmet>
 
-            <UserListView />
+            <MemberListView />
         </>
     );
 }

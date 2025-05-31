@@ -71,7 +71,7 @@ export const navData = (t) => [
                 items: [
                     {
                         title: t('pages.dashboard.dashboard'),
-                        path: CONFIG.auth.redirectPath,
+                        path: CONFIG.auth.redirectPath[1],
                     },
                 ],
             },

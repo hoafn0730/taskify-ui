@@ -77,11 +77,11 @@ export const endpoints = {
         latest: '/api/post/latest',
         search: '/api/post/search',
     },
+    members: '/api/v1/members',
     admin: {
         users: '/api/v1/users',
         boards: '/api/v1/admin/boards',
         cards: '/api/v1/admin/cards',
         columns: '/api/v1/admin/columns',
-        members: '/api/v1/admin/members',
     },
 };

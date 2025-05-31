@@ -23,6 +23,7 @@ import { Iconify, SocialIcon } from '~/components/iconify';
 import { Form, Field } from '~/components/hook-form';
 
 import { signIn } from '~/store/actions/userAction';
+import { CONFIG } from '~/configs/config-global';
 // import { checkUserSession } from '~/store/slices/userSlice';
 
 // ----------------------------------------------------------------------
@@ -61,8 +62,8 @@ export function SignInView() {
 
     const onSubmit = handleSubmit(async (data) => {
         try {
-            dispatch(signIn({ email: data.email, password: data.password }));
-            router.push('/dashboard');
+            const res = await dispatch(signIn({ email: data.email, password: data.password }));
+            router.push(res.payload.role === 'admin' ? CONFIG.auth.redirectPath[1] : CONFIG.auth.redirectPath[0]);
             // dispatch(checkUserSession());
         } catch (error) {
             console.error(error);

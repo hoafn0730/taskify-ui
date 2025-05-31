@@ -19,7 +19,7 @@ export const CONFIG = {
     auth: {
         method: 'auth',
         skip: false,
-        redirectPath: paths.dashboard.root,
+        redirectPath: [paths.dashboard.summary, paths.dashboard.root],
     },
     /**
      * Mapbox

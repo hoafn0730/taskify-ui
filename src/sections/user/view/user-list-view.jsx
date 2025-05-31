@@ -11,7 +11,6 @@ import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 
 import { paths } from '~/configs/paths';
-import { useRouter } from '~/routes/hooks';
 import { RouterLink } from '~/components/router-link';
 
 import { useBoolean } from '~/hooks/use-boolean';
@@ -42,7 +41,6 @@ import {
 import { UserTableRow } from '../user-table-row';
 import { UserTableToolbar } from '../user-table-toolbar';
 import { UserTableFiltersResult } from '../user-table-filters-result';
-import { userService } from '~/services/userService';
 import { useGetUsers } from '~/actions/user';
 
 // ----------------------------------------------------------------------

@@ -103,10 +103,45 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
 
     const handleChangePriority = useCallback(
         (newValue) => {
+            // Update the local state
+            const newBoard = cloneDeep(board);
+            const column = newBoard.columns.find((col) => col.id === task.columnId);
+
+            if (!column) return;
+
+            const tasksInColumn = newBoard.tasks[column.uuid] || [];
+            const taskIndex = tasksInColumn.findIndex((t) => t.id === task.id);
+
+            if (taskIndex !== -1) {
+                // Update the task priority in the board
+                tasksInColumn[taskIndex] = {
+                    ...task,
+                    priority: newValue,
+                };
+
+                // Sort tasks by priority within the column
+                // Priority order: high -> medium -> low
+                const priorityOrder = { high: 3, medium: 2, low: 1 };
+                tasksInColumn.sort((a, b) => {
+                    const priorityA = priorityOrder[a.priority] || 0;
+                    const priorityB = priorityOrder[b.priority] || 0;
+                    return priorityB - priorityA; // Descending order (high to low)
+                });
+
+                column.cardOrderIds = tasksInColumn.map((t) => t.uuid);
+                kanbanService.updateColumn(column.id, {
+                    cardOrderIds: column.cardOrderIds,
+                });
+
+                newBoard.tasks[column.uuid] = tasksInColumn;
+                dispatch(updateBoardData(newBoard));
+            }
+
+            // Update the task via callback and local state
             onUpdateTask({ ...task, priority: newValue });
             setPriority(newValue);
         },
-        [onUpdateTask, task],
+        [onUpdateTask, task, board, dispatch],
     );
 
     const handleSaveDescription = useCallback(() => {

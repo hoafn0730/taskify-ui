@@ -28,7 +28,7 @@ export function MemberQuickEditForm({ currentMember, open, onClose }) {
     const { mutateMembers } = useGetMembers();
     const defaultValues = useMemo(
         () => ({
-            status: currentMember?.status,
+            status: currentMember?.active ? 'active' : 'pending',
         }),
         [currentMember],
     );
@@ -47,7 +47,7 @@ export function MemberQuickEditForm({ currentMember, open, onClose }) {
 
     const onSubmit = handleSubmit(async (data) => {
         const promise = memberService.updateMember(currentMember.id, {
-            status: data.status,
+            active: data.status === 'active',
         });
 
         try {

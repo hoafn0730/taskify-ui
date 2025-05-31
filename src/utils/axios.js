@@ -67,9 +67,9 @@ export const endpoints = {
         signOut: '/api/v1/auth/sign-out',
     },
     mail: {
-        list: '/api/mail/list',
-        details: '/api/mail/details',
-        labels: '/api/mail/labels',
+        list: '/api/v1/mails/list',
+        details: '/api/v1/mails',
+        labels: '/api/v1/mails/labels',
     },
     post: {
         list: '/api/v1/posts',

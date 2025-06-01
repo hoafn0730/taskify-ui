@@ -18,19 +18,22 @@ import {
     MeasuringStrategy,
     closestCorners,
 } from '@dnd-kit/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { cloneDeep } from 'lodash';
+import { toast } from 'sonner';
 
 import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
 
 import { hideScrollY } from '~/theme/styles';
 import { DashboardContent } from '~/layouts/dashboard';
 import { useGetBoard } from '~/actions/kanban';
 
-import { EmptyContent } from '~/components/empty-content';
+import { Iconify } from '~/components/iconify';
 
 import { kanbanClasses } from '../classes';
 import { coordinateGetter } from '../utils';
@@ -43,6 +46,12 @@ import { KanbanDragOverlay } from '../components/kanban-drag-overlay';
 import { updateBoardData } from '~/store/slices/kanbanSlice';
 import { kanbanService } from '~/services/kanbanService';
 import { mapOrder } from '~/utils/sort';
+import KanbanMenu from '../menu/kanban-menu';
+import { KanbanShareDialog } from '../components/kanban-share-dialog';
+
+import { useBoolean } from '~/hooks/use-boolean';
+import { useCopyToClipboard } from '~/hooks/use-copy-to-clipboard';
+import { KanbanGuard } from '~/auth/guard/kanban-guard';
 
 const PLACEHOLDER_ID = 'placeholder';
 
@@ -57,7 +66,29 @@ const cssVars = {
 
 export function KanbanView() {
     const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.user);
     const { board, boardLoading } = useGetBoard();
+
+    const openMenu = useBoolean();
+
+    const share = useBoolean();
+    const { copy } = useCopyToClipboard();
+    const [inviteEmail, setInviteEmail] = useState('');
+
+    const handleChangeInvite = useCallback((event) => {
+        setInviteEmail(event.target.value);
+    }, []);
+
+    const handleCopy = useCallback(() => {
+        toast.success('Copied!');
+        copy(`${window.location.origin}/dashboard/kanban/${board?.slug}`);
+    }, [board?.slug, copy]);
+
+    const handleSendInvite = useCallback(async () => {
+        await kanbanService.invite(board?.id, inviteEmail);
+        setInviteEmail('');
+        toast.success(`Invitation sent to ${inviteEmail}`);
+    }, [board?.id, inviteEmail]);
 
     const [columnFixed, setColumnFixed] = useState(true);
 
@@ -379,8 +410,6 @@ export function KanbanView() {
         </Stack>
     );
 
-    const renderEmpty = <EmptyContent filled sx={{ py: 10, maxHeight: { md: 480 } }} />;
-
     const renderList = (
         <DndContext
             id="dnd-kanban"
@@ -458,31 +487,67 @@ export function KanbanView() {
                 flexDirection: 'column',
             }}
         >
-            <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="space-between"
-                sx={{ pr: { sm: 3 }, mb: { xs: 3, md: 5 } }}
+            <KanbanGuard
+                hasContent
+                boardMembers={board?.members}
+                user={user}
+                acceptRoles={['member', 'admin', 'owner']}
+                isActive={true}
+                sx={{ py: 10 }}
             >
-                <Typography variant="h4">Kanban</Typography>
+                <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    sx={{ pr: { sm: 3, md: 3, lg: 0 }, mb: { xs: 3, md: 5 } }}
+                >
+                    <Typography variant="h4">{board?.title}</Typography>
 
-                <FormControlLabel
-                    label="Column fixed"
-                    labelPlacement="start"
-                    control={
-                        <Switch
-                            checked={columnFixed}
-                            onChange={(event) => {
-                                setColumnFixed(event.target.checked);
-                            }}
-                            inputProps={{ id: 'column-fixed-switch' }}
+                    <Box sx={{ display: 'flex', gap: 2 }}>
+                        <FormControlLabel
+                            label="Column fixed"
+                            labelPlacement="start"
+                            control={
+                                <Switch
+                                    checked={columnFixed}
+                                    onChange={(event) => {
+                                        setColumnFixed(event.target.checked);
+                                    }}
+                                    inputProps={{ id: 'column-fixed-switch' }}
+                                />
+                            }
                         />
-                    }
-                />
-            </Stack>
+                        <IconButton onClick={share.onTrue}>
+                            <Iconify icon="solar:users-group-rounded-bold" />
+                        </IconButton>
 
-            {/* {boardLoading ? renderLoading : <>{boardEmpty ? renderEmpty : renderList}</>} */}
-            {boardLoading ? renderLoading : renderList}
+                        <IconButton onClick={share.onTrue}>
+                            <Iconify icon="ic:round-filter-list" />
+                        </IconButton>
+
+                        <IconButton onClick={openMenu.onTrue}>
+                            <Iconify icon="eva:more-horizontal-fill" />
+                        </IconButton>
+                    </Box>
+                </Stack>
+
+                {boardLoading ? renderLoading : renderList}
+
+                <KanbanMenu open={openMenu.value} onClose={openMenu.onFalse} />
+
+                <KanbanShareDialog
+                    open={share.value}
+                    members={board?.members}
+                    inviteEmail={inviteEmail}
+                    onChangeInvite={handleChangeInvite}
+                    onCopyLink={handleCopy}
+                    onSendInvite={handleSendInvite}
+                    onClose={() => {
+                        share.onFalse();
+                        setInviteEmail('');
+                    }}
+                />
+            </KanbanGuard>
         </DashboardContent>
     );
 }

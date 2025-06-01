@@ -26,6 +26,7 @@ import { useMockedUser } from '~/auth/hooks';
 import { UpgradeBlock } from './nav-upgrade';
 import { AccountButton } from './account-button';
 import { SignOutButton } from './sign-out-button';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -36,7 +37,7 @@ export function AccountDrawer({ data = [], sx, ...other }) {
 
     const pathname = usePathname();
 
-    const { user } = useMockedUser();
+    const { user } = useSelector((state) => state.user);
 
     const [open, setOpen] = useState(false);
 
@@ -60,7 +61,7 @@ export function AccountDrawer({ data = [], sx, ...other }) {
         <AnimateAvatar
             width={96}
             slotProps={{
-                avatar: { src: user?.photoURL, alt: user?.displayName },
+                avatar: { src: user?.avatar, alt: user?.displayName },
                 overlay: {
                     border: 2,
                     spacing: 3,
@@ -79,7 +80,7 @@ export function AccountDrawer({ data = [], sx, ...other }) {
             <AccountButton
                 open={open}
                 onClick={handleOpenDrawer}
-                photoURL={user?.photoURL}
+                photoURL={user?.avatar}
                 displayName={user?.displayName}
                 sx={sx}
                 {...other}

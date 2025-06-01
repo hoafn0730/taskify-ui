@@ -20,6 +20,7 @@ import { WorkspacesPopover } from '../components/workspaces-popover';
 import { NotificationsDrawer } from '../components/notifications-drawer';
 import { SignUpButton } from '../components/sign-up-button';
 import { GoToDashboardButton } from '../components/go-to-dashboard-button';
+import { useTranslate } from '~/locales';
 
 // ----------------------------------------------------------------------
 
@@ -77,6 +78,7 @@ export function HeaderBase({
     ...other
 }) {
     const theme = useTheme();
+    const { t } = useTranslate('header');
 
     return (
         <HeaderSection
@@ -135,7 +137,7 @@ export function HeaderBase({
                                     color="inherit"
                                     sx={{ typography: 'subtitle2' }}
                                 >
-                                    Need help?
+                                    {t('header.navigation.needHelp')}
                                 </Link>
                             )}
 
@@ -183,7 +185,7 @@ export function HeaderBase({
                                         },
                                     }}
                                 >
-                                    Purchase
+                                    {t('header.navigation.purchase')}
                                 </Button>
                             )}
                         </Box>

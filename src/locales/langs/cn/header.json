@@ -1,0 +1,148 @@
+{
+    "header": {
+        "navigation": {
+            "home": "首页",
+            "pages": "页面",
+            "needHelp": "需要帮助？",
+            "goToDashboard": "前往仪表板",
+            "signIn": "登录",
+            "signUp": "注册",
+            "signOut": "退出"
+        },
+        "search": {
+            "placeholder": "搜索...",
+            "searching": "搜索中...",
+            "clear": "清除搜索",
+            "enterKeywords": "请输入关键词",
+            "notFound": {
+                "title": "未找到",
+                "noResults": "没有找到结果",
+                "suggestions": "请检查拼写或使用完整词语"
+            }
+        }
+    },
+    "pages": {
+        "other": {
+            "title": "其他",
+            "aboutUs": "关于我们",
+            "contactUs": "联系我们",
+            "faqs": "常见问题",
+            "pricing": "定价",
+            "payment": "支付",
+            "maintenance": "维护",
+            "comingSoon": "即将推出"
+        },
+        "concepts": {
+            "title": "概念",
+            "shop": "商店",
+            "product": "产品",
+            "checkout": "结账",
+            "posts": "文章",
+            "post": "发布"
+        },
+        "authDemo": {
+            "title": "认证演示",
+            "signIn": "登录",
+            "signUp": "注册",
+            "resetPassword": "重置密码",
+            "updatePassword": "更新密码",
+            "verify": "验证",
+            "signInCentered": "登录（居中）",
+            "signUpCentered": "注册（居中）",
+            "resetPasswordCentered": "重置密码（居中）",
+            "updatePasswordCentered": "更新密码（居中）",
+            "verifyCentered": "验证（居中）"
+        },
+        "error": {
+            "title": "错误",
+            "page403": "403页面",
+            "page404": "404页面",
+            "page500": "500页面"
+        },
+        "dashboard": {
+            "title": "仪表板",
+            "dashboard": "仪表板"
+        }
+    },
+    "settings": {
+        "title": "设置",
+        "tooltips": {
+            "reset": "重置",
+            "close": "关闭",
+            "expand": "展开",
+            "fullScreen": "全屏",
+            "exit": "退出",
+            "minimize": "最小化",
+            "maximize": "最大化",
+            "dashboardOnly": "仅显示仪表板"
+        },
+        "appearance": {
+            "darkMode": "深色模式",
+            "contrast": "对比度",
+            "rightToLeft": "从右到左",
+            "compact": "紧凑"
+        },
+        "navigation": {
+            "title": "导航",
+            "label": "导航"
+        },
+        "layout": {
+            "title": "布局"
+        },
+        "color": {
+            "title": "颜色",
+            "integrate": "集成",
+            "apparent": "显著"
+        },
+        "presets": {
+            "title": "预设"
+        },
+        "font": {
+            "title": "字体"
+        }
+    },
+    "notifications": {
+        "title": "通知",
+        "tooltips": {
+            "markAllAsRead": "标记所有为已读",
+            "close": "关闭",
+            "settings": "设置"
+        },
+        "tabs": {
+            "all": "全部",
+            "unread": "未读",
+            "archived": "已归档"
+        },
+        "actions": {
+            "viewAll": "查看全部",
+            "accept": "接受",
+            "decline": "拒绝",
+            "reply": "回复",
+            "download": "下载",
+            "pay": "支付"
+        },
+        "types": {
+            "friend": "好友",
+            "project": "项目",
+            "file": "文件",
+            "tags": "标签",
+            "payment": "支付",
+            "order": "订单",
+            "chat": "聊天",
+            "mail": "邮件",
+            "delivery": "配送"
+        },
+        "labels": {
+            "design": "设计",
+            "dashboard": "仪表板",
+            "designSystem": "设计系统"
+        },
+        "feedback": {
+            "askQuestions": "提问或留下感谢",
+            "leaveNote": "留下评价"
+        }
+    },
+    "friends": {
+        "title": "好友"
+    }
+}

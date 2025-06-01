@@ -1,33 +1,28 @@
 import { useMemo, useState, useCallback, memo } from 'react';
+import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
 
 import Paper from '@mui/material/Paper';
 import FormHelperText from '@mui/material/FormHelperText';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import InputBase, { inputBaseClasses } from '@mui/material/InputBase';
 
-import { uuidv4 } from '~/utils/uuidv4';
-
 import { _mock } from '~/_mock';
 
-// ----------------------------------------------------------------------
-
-function KanbanTaskAdd({ status, openAddTask, onAddTask, onCloseAddTask }) {
+function KanbanTaskAdd({ openAddTask, onAddTask, onCloseAddTask }) {
     const [taskName, setTaskName] = useState('');
+    const { activeBoard } = useSelector((state) => state.kanban);
 
     const defaultTask = useMemo(
         () => ({
-            id: uuidv4(),
-            status,
             title: taskName.trim() ? taskName : 'Untitled',
             priority: 'medium',
-            attachments: [],
-            labels: [],
-            comments: [],
-            assignee: [],
-            due: [null, null],
-            reporter: { id: _mock.id(16), name: _mock.fullName(16), avatarUrl: _mock.image.avatar(16) },
+            description: '',
+            labels: activeBoard.tags,
+            dueStart: dayjs().toDate(),
+            dueDate: dayjs().add(1, 'day').toDate(),
         }),
-        [status, taskName],
+        [activeBoard.tags, taskName],
     );
 
     const handleChangeName = useCallback((event) => {

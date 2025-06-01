@@ -1,18 +1,19 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { useState, useEffect, useCallback, memo } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useBoolean } from '~/hooks/use-boolean';
-
-import { deleteTask, updateTask } from '~/actions/kanban';
 
 import { toast } from '~/components/snackbar';
 import { imageClasses } from '~/components/image';
 
 import ItemBase from './item-base';
 import KanbanDetails from '../details/kanban-details';
+import { deleteTask, updateTask } from '~/store/actions/kanbanAction';
 
 function KanbanTaskItem({ task, disabled, columnId, sx }) {
     const openDetails = useBoolean();
+    const dispatch = useDispatch();
 
     const { setNodeRef, listeners, isDragging, isSorting, transform, transition } = useSortable({
         id: task?.uuid,
@@ -23,26 +24,16 @@ function KanbanTaskItem({ task, disabled, columnId, sx }) {
 
     const mountedWhileDragging = isDragging && !mounted;
 
-    // [ ]: handleDeleteTask
     const handleDeleteTask = useCallback(async () => {
-        try {
-            deleteTask(columnId, task.id);
-            toast.success('Delete success!', { position: 'top-center' });
-        } catch (error) {
-            console.error(error);
-        }
-    }, [columnId, task.id]);
+        dispatch(deleteTask({ columnId, taskId: task.id }));
+        toast.success('Delete success!', { position: 'top-center' });
+    }, [columnId, dispatch, task.id]);
 
-    // [ ]: handleUpdateTask
     const handleUpdateTask = useCallback(
         async (taskData) => {
-            try {
-                updateTask(columnId, taskData);
-            } catch (error) {
-                console.error(error);
-            }
+            dispatch(updateTask({ columnId, taskData }));
         },
-        [columnId],
+        [columnId, dispatch],
     );
 
     return (
@@ -72,8 +63,6 @@ function KanbanTaskItem({ task, disabled, columnId, sx }) {
         </>
     );
 }
-
-// ----------------------------------------------------------------------
 
 function useMountStatus() {
     const [isMounted, setIsMounted] = useState(false);

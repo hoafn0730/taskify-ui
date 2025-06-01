@@ -1,0 +1,148 @@
+{
+    "header": {
+        "navigation": {
+            "home": "Accueil",
+            "pages": "Pages",
+            "needHelp": "Besoin d'aide ?",
+            "goToDashboard": "Aller au tableau de bord",
+            "signIn": "Se connecter",
+            "signUp": "S'inscrire",
+            "signOut": "Se déconnecter"
+        },
+        "search": {
+            "placeholder": "Rechercher...",
+            "searching": "Recherche en cours...",
+            "clear": "Effacer la recherche",
+            "enterKeywords": "Veuillez saisir des mots-clés",
+            "notFound": {
+                "title": "Non trouvé",
+                "noResults": "Aucun résultat pour",
+                "suggestions": "Vérifiez l'orthographe ou utilisez des mots complets."
+            }
+        }
+    },
+    "pages": {
+        "other": {
+            "title": "Autre",
+            "aboutUs": "À propos",
+            "contactUs": "Contactez-nous",
+            "faqs": "FAQ",
+            "pricing": "Tarifs",
+            "payment": "Paiement",
+            "maintenance": "Maintenance",
+            "comingSoon": "Bientôt disponible"
+        },
+        "concepts": {
+            "title": "Concepts",
+            "shop": "Boutique",
+            "product": "Produit",
+            "checkout": "Paiement",
+            "posts": "Articles",
+            "post": "Article"
+        },
+        "authDemo": {
+            "title": "Démo Auth",
+            "signIn": "Connexion",
+            "signUp": "Inscription",
+            "resetPassword": "Réinitialiser le mot de passe",
+            "updatePassword": "Mettre à jour le mot de passe",
+            "verify": "Vérifier",
+            "signInCentered": "Connexion (Centré)",
+            "signUpCentered": "Inscription (Centré)",
+            "resetPasswordCentered": "Réinitialiser le mot de passe (Centré)",
+            "updatePasswordCentered": "Mettre à jour le mot de passe (Centré)",
+            "verifyCentered": "Vérifier (Centré)"
+        },
+        "error": {
+            "title": "Erreur",
+            "page403": "Page 403",
+            "page404": "Page 404",
+            "page500": "Page 500"
+        },
+        "dashboard": {
+            "title": "Tableau de bord",
+            "dashboard": "Tableau de bord"
+        }
+    },
+    "settings": {
+        "title": "Paramètres",
+        "tooltips": {
+            "reset": "Réinitialiser",
+            "close": "Fermer",
+            "expand": "Agrandir",
+            "fullScreen": "Plein écran",
+            "exit": "Quitter",
+            "minimize": "Réduire",
+            "maximize": "Maximiser",
+            "dashboardOnly": "Tableau de bord uniquement"
+        },
+        "appearance": {
+            "darkMode": "Mode sombre",
+            "contrast": "Contraste",
+            "rightToLeft": "De droite à gauche",
+            "compact": "Compact"
+        },
+        "navigation": {
+            "title": "Navigation",
+            "label": "Nav"
+        },
+        "layout": {
+            "title": "Mise en page"
+        },
+        "color": {
+            "title": "Couleur",
+            "integrate": "Intégrer",
+            "apparent": "Apparent"
+        },
+        "presets": {
+            "title": "Préréglages"
+        },
+        "font": {
+            "title": "Police"
+        }
+    },
+    "notifications": {
+        "title": "Notifications",
+        "tooltips": {
+            "markAllAsRead": "Tout marquer comme lu",
+            "close": "Fermer",
+            "settings": "Paramètres"
+        },
+        "tabs": {
+            "all": "Tout",
+            "unread": "Non lu",
+            "archived": "Archivé"
+        },
+        "actions": {
+            "viewAll": "Voir tout",
+            "accept": "Accepter",
+            "decline": "Refuser",
+            "reply": "Répondre",
+            "download": "Télécharger",
+            "pay": "Payer"
+        },
+        "types": {
+            "friend": "Ami",
+            "project": "Projet",
+            "file": "Fichier",
+            "tags": "Tags",
+            "payment": "Paiement",
+            "order": "Commande",
+            "chat": "Chat",
+            "mail": "Mail",
+            "delivery": "Livraison"
+        },
+        "labels": {
+            "design": "Design",
+            "dashboard": "Tableau de bord",
+            "designSystem": "Système de design"
+        },
+        "feedback": {
+            "askQuestions": "posez des questions ou laissez simplement un message de remerciement",
+            "leaveNote": "laissez un avis"
+        }
+    },
+    "friends": {
+        "title": "Amis"
+    }
+}

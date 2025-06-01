@@ -20,6 +20,7 @@ import { SettingsDrawer, defaultSettings, SettingsProvider } from '~/components/
 import { CheckoutProvider } from '~/sections/checkout/context';
 
 import { persistor, store } from './store';
+import ModernChatbot from './components/chatbot';
 
 export default function App() {
     useScrollToTop();
@@ -37,6 +38,7 @@ export default function App() {
                                         <ProgressBar />
                                         <SettingsDrawer />
                                         <Router />
+                                        <ModernChatbot />
                                     </CheckoutProvider>
                                 </MotionLazy>
                             </ThemeProvider>

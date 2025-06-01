@@ -2,6 +2,7 @@
     "overview": {
         "title": "Overview",
         "app": "App",
+        "summary": "Summary",
         "analytics": "Analytics",
         "banking": "Banking",
         "file": "File"
@@ -17,13 +18,15 @@
             "edit": "Edit",
             "account": "Account"
         },
-        "product": {
-            "title": "Product",
+        "member": {
+            "title": "Member",
+            "profile": "Profile",
+            "cards": "Cards",
             "list": "List",
-            "details": "Details",
             "create": "Create",
             "edit": "Edit"
         },
+
         "invoice": {
             "title": "Invoice",
             "list": "List",
@@ -38,18 +41,13 @@
             "create": "Create",
             "edit": "Edit"
         },
-        "job": {
-            "title": "Job",
-            "list": "List",
-            "details": "Details",
-            "create": "Create",
-            "edit": "Edit"
-        },
+
         "fileManager": "File Manager",
         "mail": "Mail",
         "chat": "Chat",
         "calendar": "Calendar",
-        "kanban": "Kanban"
+        "kanban": "Kanban",
+        "list": "List"
     },
     "misc": {
         "title": "Misc",

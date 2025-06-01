@@ -1,6 +1,8 @@
 import { useEffect, useCallback } from 'react';
 
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 import { paths } from '~/configs/paths';
 import { useRouter, useSearchParams } from '~/routes/hooks';
@@ -17,6 +19,9 @@ import { MailList } from '../mail-list';
 import { MailHeader } from '../mail-header';
 import { MailCompose } from '../mail-compose';
 import { MailDetails } from '../mail-details';
+import { Iconify } from '~/components/iconify';
+
+import { MailQuickEditForm } from '../mail-quick-edit-form';
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +45,8 @@ export function MailView() {
     const openMail = useBoolean();
 
     const openCompose = useBoolean();
+
+    const openAddMail = useBoolean();
 
     const { labels, labelsLoading, labelsEmpty } = useGetLabels();
 
@@ -110,9 +117,18 @@ export function MailView() {
     return (
         <>
             <DashboardContent maxWidth={false} sx={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column' }}>
-                <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
-                    Mail
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
+                    <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
+                        Mail
+                    </Typography>
+                    {/* <Button
+                        variant="contained"
+                        startIcon={<Iconify icon="mingcute:add-line" />}
+                        onClick={openAddMail.onTrue}
+                    >
+                        Add Mail
+                    </Button> */}
+                </Box>
 
                 <Layout
                     sx={{
@@ -164,6 +180,8 @@ export function MailView() {
                     }}
                 />
             </DashboardContent>
+
+            <MailQuickEditForm open={openAddMail.value} onClose={openAddMail.onFalse} />
 
             {openCompose.value && <MailCompose onCloseCompose={openCompose.onFalse} />}
         </>

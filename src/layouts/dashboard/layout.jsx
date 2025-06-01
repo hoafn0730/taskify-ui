@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
 import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
@@ -7,7 +8,7 @@ import { iconButtonClasses } from '@mui/material/IconButton';
 import { useBoolean } from '~/hooks/use-boolean';
 
 import { allLangs, useTranslate } from '~/locales';
-import { _contacts, _notifications } from '~/_mock';
+import { _notifications } from '~/_mock';
 import { varAlpha, stylesMode } from '~/theme/styles';
 
 import { bulletColor } from '~/components/nav-section';
@@ -22,10 +23,14 @@ import { HeaderBase } from '../core/header-base';
 import { LayoutSection } from '../core/layout-section';
 
 import { navData as dashboardNavData } from '~/configs/config-nav-dashboard';
+import { navData as adminNavData } from '~/configs/config-nav-admin';
+
 import { _account } from '~/configs/config-nav-account';
 import { _workspaces } from '~/configs/config-nav-workspace';
 
 export function DashboardLayout({ sx, children, data }) {
+    const { user } = useSelector((state) => state.user);
+
     const theme = useTheme();
 
     const mobileNavOpen = useBoolean();
@@ -38,7 +43,7 @@ export function DashboardLayout({ sx, children, data }) {
 
     const { t: tnav } = useTranslate('navbar');
 
-    const navData = data?.nav ?? dashboardNavData(tnav);
+    const navData = data?.nav ?? user?.role === 'admin' ? adminNavData(tnav) : dashboardNavData(tnav);
 
     const isNavMini = settings.navLayout === 'mini';
 
@@ -68,7 +73,7 @@ export function DashboardLayout({ sx, children, data }) {
                             nav: navData,
                             langs: allLangs,
                             account: _account,
-                            contacts: _contacts,
+                            contacts: user?.friends,
                             workspaces: _workspaces,
                             notifications: _notifications,
                         }}

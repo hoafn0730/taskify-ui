@@ -14,8 +14,7 @@ import { Iconify } from '~/components/iconify';
 import { imageClasses } from '~/components/image';
 
 import { kanbanClasses } from '../classes';
-
-// ----------------------------------------------------------------------
+import { Chip } from '@mui/material';
 
 export const StyledItemWrap = styled(ListItem)(() => ({
     '@keyframes fadeIn': { '0%': { opacity: 0 }, '100%': { opacity: 1 } },
@@ -62,7 +61,6 @@ const ItemBase = forwardRef(({ task, stateProps, sx, ...other }, ref) => {
 
         document.body.style.cursor = 'grabbing';
 
-        // eslint-disable-next-line consistent-return
         return () => {
             document.body.style.cursor = '';
         };
@@ -82,32 +80,29 @@ const ItemBase = forwardRef(({ task, stateProps, sx, ...other }, ref) => {
             '',
     );
 
-    // [ ] TODO: Uncomment when priority is available
     const renderPriority = (
-        <Iconify
-            icon={
-                (task.priority === 'low' && 'solar:double-alt-arrow-down-bold-duotone') ||
-                (task.priority === 'medium' && 'solar:double-alt-arrow-right-bold-duotone') ||
-                'solar:double-alt-arrow-up-bold-duotone'
-            }
+        <Chip
+            key={task.priority}
+            label={task.priority}
+            size="small"
+            variant="soft"
             sx={{
-                top: 4,
-                right: 4,
-                position: 'absolute',
-                ...(task.priority === 'low' && { color: 'info.main' }),
-                ...(task.priority === 'medium' && { color: 'warning.main' }),
-                ...(task.priority === 'hight' && { color: 'error.main' }),
+                ...(task.priority === 'low' && { bgcolor: 'info.main' }),
+                ...(task.priority === 'medium' && { bgcolor: 'warning.main' }),
+                ...(task.priority === 'high' && { bgcolor: 'error.main' }),
+                color: 'common.white',
+                ml: 1,
             }}
         />
     );
 
-    const renderImg = !!task?.attachments?.length && (
+    const renderImg = !!task?.cover?.length && (
         <Box sx={{ p: theme.spacing(1, 1, 0, 1) }}>
             <Box
                 component="img"
                 className={imageClasses.root}
-                alt={task?.cover?.fileUrl}
-                src={task?.cover?.fileUrl}
+                alt={task?.cover?.[0].name}
+                src={task?.cover?.[0].preview}
                 sx={{
                     width: 320,
                     height: 'auto',
@@ -135,11 +130,12 @@ const ItemBase = forwardRef(({ task, stateProps, sx, ...other }, ref) => {
 
                 <Iconify width={16} icon="eva:attach-2-fill" sx={{ mr: 0.25 }} />
                 <Box component="span">{task?.attachments?.length ?? 0}</Box>
+                {renderPriority}
             </Stack>
 
             <AvatarGroup sx={{ [`& .${avatarGroupClasses.avatar}`]: { width: 24, height: 24 } }}>
-                {task?.assignee?.map((user) => (
-                    <Avatar key={user.id} alt={user.name} src={user.avatarUrl} />
+                {task?.assignees?.map((user) => (
+                    <Avatar key={user.id} alt={user.displayName} src={user.avatar} />
                 ))}
             </AvatarGroup>
         </Stack>
@@ -171,8 +167,6 @@ const ItemBase = forwardRef(({ task, stateProps, sx, ...other }, ref) => {
                 {renderImg}
 
                 <Stack spacing={2} sx={{ px: 2, py: 2.5, position: 'relative' }}>
-                    {/* {renderPriority} */}
-
                     <Typography variant="subtitle2">{task?.title}</Typography>
 
                     {renderInfo}

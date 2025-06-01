@@ -6,12 +6,14 @@ import { setFont, varAlpha, stylesMode } from '~/theme/styles';
 
 import { Block } from './styles';
 import { SvgColor } from '../../svg-color';
+import { useTranslate } from '~/locales';
 
 // ----------------------------------------------------------------------
 
 export function FontOptions({ value, options, onClickOption }) {
+    const { t } = useTranslate('header');
     return (
-        <Block title="Font">
+        <Block title={t('settings.font.title')}>
             <Box component="ul" gap={1.5} display="grid" gridTemplateColumns="repeat(2, 1fr)">
                 {options.map((option) => {
                     const selected = value === option;

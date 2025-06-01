@@ -1,0 +1,150 @@
+{
+    "header": {
+        "navigation": {
+            "home": "Trang chủ",
+            "pages": "Trang",
+            "needHelp": "Cần trợ giúp?",
+            "goToDashboard": "Đi tới dashboard",
+            "signIn": "Đăng nhập",
+            "signUp": "Đăng ký",
+            "signOut": "Đăng xuất"
+        },
+        "search": {
+            "placeholder": "Tìm kiếm...",
+            "searching": "Đang tìm kiếm...",
+            "clear": "Xóa tìm kiếm",
+            "enterKeywords": "Vui lòng nhập từ khóa",
+            "notFound": {
+                "title": "Không tìm thấy",
+                "noResults": "Không có kết quả nào cho",
+                "suggestions": "Hãy thử kiểm tra lỗi chính tả hoặc sử dụng từ hoàn chỉnh."
+            }
+        }
+    },
+    "pages": {
+        "other": {
+            "title": "Khác",
+            "aboutUs": "Về chúng tôi",
+            "contactUs": "Liên hệ",
+            "faqs": "Câu hỏi thường gặp",
+            "pricing": "Bảng giá",
+            "payment": "Thanh toán",
+            "maintenance": "Bảo trì",
+            "comingSoon": "Sắp ra mắt"
+        },
+        "concepts": {
+            "title": "Khái niệm",
+            "shop": "Cửa hàng",
+            "product": "Sản phẩm",
+            "checkout": "Thanh toán",
+            "posts": "Bài viết",
+            "post": "Bài viết"
+        },
+        "authDemo": {
+            "title": "Demo Xác thực",
+            "signIn": "Đăng nhập",
+            "signUp": "Đăng ký",
+            "resetPassword": "Đặt lại mật khẩu",
+            "updatePassword": "Cập nhật mật khẩu",
+            "verify": "Xác minh",
+            "signInCentered": "Đăng nhập (căn giữa)",
+            "signUpCentered": "Đăng ký (căn giữa)",
+            "resetPasswordCentered": "Đặt lại mật khẩu (căn giữa)",
+            "updatePasswordCentered": "Cập nhật mật khẩu (căn giữa)",
+            "verifyCentered": "Xác minh (căn giữa)"
+        },
+        "error": {
+            "title": "Lỗi",
+            "page403": "Trang 403",
+            "page404": "Trang 404",
+            "page500": "Trang 500"
+        },
+        "dashboard": {
+            "title": "Dashboard",
+            "dashboard": "Dashboard"
+        }
+    },
+
+    "settings": {
+        "title": "Cài đặt",
+        "tooltips": {
+            "reset": "Đặt lại",
+            "close": "Đóng",
+            "expand": "Mở rộng",
+            "fullScreen": "Toàn màn hình",
+            "exit": "Thoát",
+            "minimize": "Thu nhỏ",
+            "maximize": "Phóng to",
+            "dashboardOnly": "Chỉ dành cho dashboard"
+        },
+        "appearance": {
+            "darkMode": "Chế độ tối",
+            "contrast": "Độ tương phản",
+            "rightToLeft": "Từ phải sang trái",
+            "compact": "Gọn nhẹ"
+        },
+        "navigation": {
+            "title": "Điều hướng",
+            "label": "Nav"
+        },
+        "layout": {
+            "title": "Bố cục"
+        },
+        "color": {
+            "title": "Màu sắc",
+            "integrate": "Tích hợp",
+            "apparent": "Rõ ràng"
+        },
+        "presets": {
+            "title": "Cài đặt sẵn"
+        },
+        "font": {
+            "title": "Phông chữ"
+        }
+    },
+
+    "notifications": {
+        "title": "Thông báo",
+        "tooltips": {
+            "markAllAsRead": "Đánh dấu tất cả đã đọc",
+            "close": "Đóng",
+            "settings": "Cài đặt"
+        },
+        "tabs": {
+            "all": "Tất cả",
+            "unread": "Chưa đọc",
+            "archived": "Đã lưu trữ"
+        },
+        "actions": {
+            "viewAll": "Xem tất cả",
+            "accept": "Chấp nhận",
+            "decline": "Từ chối",
+            "reply": "Trả lời",
+            "download": "Tải xuống",
+            "pay": "Thanh toán"
+        },
+        "types": {
+            "friend": "Bạn bè",
+            "project": "Dự án",
+            "file": "Tập tin",
+            "tags": "Thẻ",
+            "payment": "Thanh toán",
+            "order": "Đơn hàng",
+            "chat": "Trò chuyện",
+            "mail": "Email",
+            "delivery": "Giao hàng"
+        },
+        "labels": {
+            "design": "Thiết kế",
+            "dashboard": "Dashboard",
+            "designSystem": "Hệ thống thiết kế"
+        },
+        "feedback": {
+            "askQuestions": "đặt câu hỏi hoặc chỉ để lại lời cảm ơn",
+            "leaveNote": "để lại ghi chú đánh giá"
+        }
+    },
+    "friends": {
+        "title": "Bạn bè"
+    }
+}

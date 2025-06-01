@@ -17,145 +17,94 @@ import DialogContent from '@mui/material/DialogContent';
 import { USER_STATUS_OPTIONS } from '~/_mock';
 
 import { toast } from '~/components/snackbar';
-import { Form, Field, schemaHelper } from '~/components/hook-form';
+import { Form, Field } from '~/components/hook-form';
+import { userService } from '~/services/userService';
+import { useGetUsers } from '~/actions/user';
 
-// ----------------------------------------------------------------------
-
-export const UserQuickEditSchema = zod.object({
-  name: zod.string().min(1, { message: 'Name is required!' }),
-  email: zod
-    .string()
-    .min(1, { message: 'Email is required!' })
-    .email({ message: 'Email must be a valid email address!' }),
-  phoneNumber: schemaHelper.phoneNumber({ isValidPhoneNumber }),
-  country: schemaHelper.objectOrNull({
-    message: { required_error: 'Country is required!' },
-  }),
-  state: zod.string().min(1, { message: 'State is required!' }),
-  city: zod.string().min(1, { message: 'City is required!' }),
-  address: zod.string().min(1, { message: 'Address is required!' }),
-  zipCode: zod.string().min(1, { message: 'Zip code is required!' }),
-  company: zod.string().min(1, { message: 'Company is required!' }),
-  role: zod.string().min(1, { message: 'Role is required!' }),
-  // Not required
-  status: zod.string(),
+const UserQuickEditSchema = zod.object({
+    status: zod.string(),
 });
 
-// ----------------------------------------------------------------------
-
 export function UserQuickEditForm({ currentUser, open, onClose }) {
-  const defaultValues = useMemo(
-    () => ({
-      name: currentUser?.name || '',
-      email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || '',
-      address: currentUser?.address || '',
-      country: currentUser?.country || '',
-      state: currentUser?.state || '',
-      city: currentUser?.city || '',
-      zipCode: currentUser?.zipCode || '',
-      status: currentUser?.status,
-      company: currentUser?.company || '',
-      role: currentUser?.role || '',
-    }),
-    [currentUser]
-  );
+    const { mutateUsers } = useGetUsers();
+    const defaultValues = useMemo(
+        () => ({
+            status: currentUser?.status,
+        }),
+        [currentUser],
+    );
 
-  const methods = useForm({
-    mode: 'all',
-    resolver: zodResolver(UserQuickEditSchema),
-    defaultValues,
-  });
+    const methods = useForm({
+        mode: 'all',
+        resolver: zodResolver(UserQuickEditSchema),
+        defaultValues,
+    });
 
-  const {
-    reset,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
+    const {
+        reset,
+        handleSubmit,
+        formState: { isSubmitting },
+    } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
-    const promise = new Promise((resolve) => setTimeout(resolve, 1000));
+    const onSubmit = handleSubmit(async (data) => {
+        const promise = userService.updateUser(currentUser.id, {
+            status: data.status,
+        });
 
-    try {
-      reset();
-      onClose();
+        try {
+            toast.promise(promise, {
+                loading: 'Loading...',
+                success: 'Update success!',
+                error: 'Update error!',
+            });
 
-      toast.promise(promise, {
-        loading: 'Loading...',
-        success: 'Update success!',
-        error: 'Update error!',
-      });
+            await promise;
 
-      await promise;
+            reset();
+            onClose();
 
-      console.info('DATA', data);
-    } catch (error) {
-      console.error(error);
-    }
-  });
+            mutateUsers();
+        } catch (error) {
+            console.error(error);
+        }
+    });
 
-  return (
-    <Dialog
-      fullWidth
-      maxWidth={false}
-      open={open}
-      onClose={onClose}
-      PaperProps={{ sx: { maxWidth: 720 } }}
-    >
-      <Form methods={methods} onSubmit={onSubmit}>
-        <DialogTitle>Quick Update</DialogTitle>
+    return (
+        <Dialog fullWidth maxWidth={'sm'} open={open} onClose={onClose}>
+            <Form methods={methods} onSubmit={onSubmit}>
+                <DialogTitle>Quick Update</DialogTitle>
 
-        <DialogContent>
-          <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
-            Account is waiting for confirmation
-          </Alert>
+                <DialogContent>
+                    <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
+                        Account is waiting for confirmation
+                    </Alert>
 
-          <Box
-            rowGap={3}
-            columnGap={2}
-            display="grid"
-            gridTemplateColumns={{ xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' }}
-          >
-            <Field.Select name="status" label="Status">
-              {USER_STATUS_OPTIONS.map((status) => (
-                <MenuItem key={status.value} value={status.value}>
-                  {status.label}
-                </MenuItem>
-              ))}
-            </Field.Select>
+                    <Box
+                        rowGap={3}
+                        columnGap={2}
+                        display="grid"
+                        gridTemplateColumns={{ xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' }}
+                    >
+                        <Field.Select name="status" label="Status">
+                            {USER_STATUS_OPTIONS.map((status) => (
+                                <MenuItem key={status.value} value={status.value}>
+                                    {status.label}
+                                </MenuItem>
+                            ))}
+                        </Field.Select>
+                    </Box>
+                </DialogContent>
 
-            <Box sx={{ display: { xs: 'none', sm: 'block' } }} />
+                <DialogActions>
+                    <Button variant="outlined" onClick={onClose}>
+                        Cancel
+                    </Button>
 
-            <Field.Text name="name" label="Full name" />
-            <Field.Text name="email" label="Email address" />
-            <Field.Phone name="phoneNumber" label="Phone number" />
-
-            <Field.CountrySelect
-              fullWidth
-              name="country"
-              label="Country"
-              placeholder="Choose a country"
-            />
-
-            <Field.Text name="state" label="State/region" />
-            <Field.Text name="city" label="City" />
-            <Field.Text name="address" label="Address" />
-            <Field.Text name="zipCode" label="Zip/code" />
-            <Field.Text name="company" label="Company" />
-            <Field.Text name="role" label="Role" />
-          </Box>
-        </DialogContent>
-
-        <DialogActions>
-          <Button variant="outlined" onClick={onClose}>
-            Cancel
-          </Button>
-
-          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-            Update
-          </LoadingButton>
-        </DialogActions>
-      </Form>
-    </Dialog>
-  );
+                    <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                        Update
+                    </LoadingButton>
+                </DialogActions>
+            </Form>
+        </Dialog>
+    );
 }

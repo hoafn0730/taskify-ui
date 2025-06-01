@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 
@@ -11,12 +13,15 @@ import { NavDesktop } from './nav/desktop';
 import { Footer, HomeFooter } from './footer';
 import { HeaderBase } from '../core/header-base';
 import { LayoutSection } from '../core/layout-section';
-import { navData as mainNavData } from '../config-nav-main';
+import { navData as mainNavData } from '~/configs/config-nav-main';
+import { useTranslate } from '~/locales';
 
 // ----------------------------------------------------------------------
 
 export function MainLayout({ sx, data, children }) {
     const theme = useTheme();
+    const { user } = useSelector((state) => state.user);
+    const { t } = useTranslate('header');
 
     const pathname = usePathname();
 
@@ -26,7 +31,7 @@ export function MainLayout({ sx, data, children }) {
 
     const layoutQuery = 'md';
 
-    const navData = data?.nav ?? mainNavData;
+    const navData = data?.nav ?? mainNavData(t);
 
     return (
         <>
@@ -41,10 +46,12 @@ export function MainLayout({ sx, data, children }) {
                         layoutQuery={layoutQuery}
                         onOpenNav={mobileNavOpen.onTrue}
                         slotsDisplay={{
-                            goToDashboard: false,
+                            goToDashboard: user,
+                            signIn: !user,
+                            signUp: !user,
+
                             purchase: false,
                             account: false,
-                            helpLink: false,
                             contacts: false,
                             searchbar: false,
                             workspaces: false,

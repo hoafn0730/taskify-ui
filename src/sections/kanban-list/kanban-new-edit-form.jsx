@@ -60,7 +60,14 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
             members: currentBoard?.members.filter((f) => f.id !== user.id) || [],
             tags: currentBoard?.tags.split(',') || [],
         }),
-        [currentBoard],
+        [
+            currentBoard?.description,
+            currentBoard?.image,
+            currentBoard?.members,
+            currentBoard?.tags,
+            currentBoard?.title,
+            user.id,
+        ],
     );
 
     const methods = useForm({
@@ -81,7 +88,6 @@ export function KanbanNewEditForm({ currentBoard, onCancel }) {
             reset(defaultValues);
         }
     }, [currentBoard, defaultValues, reset]);
-
 
     // [ ] TODO: Handle update kanban
     const onSubmit = handleSubmit(async (data) => {

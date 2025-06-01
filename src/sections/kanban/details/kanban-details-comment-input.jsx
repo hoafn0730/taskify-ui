@@ -6,17 +6,16 @@ import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 
 import { Iconify } from '~/components/iconify';
-
-import { useMockedUser } from '~/auth/hooks';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
 export function KanbanDetailsCommentInput() {
-    const { user } = useMockedUser();
+    const { user } = useSelector((state) => state.user);
 
     return (
         <Stack direction="row" spacing={2} sx={{ py: 3, px: 2.5 }}>
-            <Avatar src={user?.photoURL} alt={user?.displayName}>
+            <Avatar src={user?.avatar} alt={user?.displayName}>
                 {user?.displayName?.charAt(0).toUpperCase()}
             </Avatar>
 

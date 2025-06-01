@@ -14,11 +14,14 @@ export function GuestGuard({ children }) {
 
     const searchParams = useSearchParams();
 
-    const { status, isLoading } = useSelector((state) => state.user);
+    const { status, isLoading, user } = useSelector((state) => state.user);
 
     const [isChecking, setIsChecking] = useState(true);
 
-    const returnTo = searchParams.get('returnTo') || CONFIG.auth.redirectPath;
+    const returnTo =
+        searchParams.get('returnTo') || user.role === 'admin'
+            ? CONFIG.auth.redirectPath[1]
+            : CONFIG.auth.redirectPath[0];
 
     const checkPermissions = async () => {
         if (isLoading) {

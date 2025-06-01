@@ -15,6 +15,7 @@ import { _socials } from '~/_mock';
 
 import { Logo } from '~/components/logo';
 import { SocialIcon } from '~/components/iconify';
+import { useTranslate } from '~/locales';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +42,7 @@ const LINKS = [
 
 export function Footer({ layoutQuery, sx }) {
     const theme = useTheme();
+    const { t } = useTranslate('footer');
 
     return (
         <Box component="footer" sx={{ position: 'relative', bgcolor: 'background.default', ...sx }}>
@@ -144,6 +146,7 @@ export function Footer({ layoutQuery, sx }) {
 // ----------------------------------------------------------------------
 
 export function HomeFooter({ sx }) {
+    const { t } = useTranslate('footer');
     return (
         <Box
             component="footer"
@@ -160,7 +163,7 @@ export function HomeFooter({ sx }) {
                 <Box sx={{ mt: 1, typography: 'caption' }}>
                     © All rights reserved.
                     <br /> made by
-                    <Link href="https://minimals.cc/"> minimals.cc </Link>
+                    <Link href="https://minimals.cc/"> Taskify </Link>
                 </Box>
             </Container>
         </Box>

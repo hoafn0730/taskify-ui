@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -15,13 +16,12 @@ import { _userAbout, _userFeeds, _userFriends, _userGallery, _userFollowers } fr
 import { Iconify } from '~/components/iconify';
 import { CustomBreadcrumbs } from '~/components/custom-breadcrumbs';
 
-import { useMockedUser } from '~/auth/hooks';
-
 import { ProfileHome } from '../profile-home';
 import { ProfileCover } from '../profile-cover';
 import { ProfileFriends } from '../profile-friends';
 import { ProfileGallery } from '../profile-gallery';
 import { ProfileFollowers } from '../profile-followers';
+import { RoleBasedGuard } from '~/auth/guard';
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ const TABS = [
 // ----------------------------------------------------------------------
 
 export function UserProfileView() {
-    const { user } = useMockedUser();
+    const { user } = useSelector((state) => state.user);
 
     const [searchFriends, setSearchFriends] = useState('');
 
@@ -67,9 +67,9 @@ export function UserProfileView() {
 
             <Card sx={{ mb: 3, height: 290 }}>
                 <ProfileCover
-                    role={_userAbout.role}
+                    username={'@' + user?.username}
                     name={user?.displayName}
-                    avatarUrl={user?.photoURL}
+                    avatarUrl={user?.avatar}
                     coverUrl={_userAbout.coverUrl}
                 />
 

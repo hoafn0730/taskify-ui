@@ -40,7 +40,7 @@ export function PostItem({ post }) {
                     }}
                 />
 
-                <Avatar
+                {/* <Avatar
                     alt={post.author.name}
                     src={post.author.avatarUrl}
                     sx={{
@@ -49,7 +49,7 @@ export function PostItem({ post }) {
                         bottom: -24,
                         position: 'absolute',
                     }}
-                />
+                /> */}
 
                 <Image alt={post.title} src={post.coverUrl} ratio="4/3" />
             </Box>
@@ -90,7 +90,8 @@ export function PostItemLatest({ post, index }) {
 
     return (
         <Card>
-            <Avatar
+            {/* [ ] Avatar author */}
+            {/* <Avatar
                 alt={post.author.name}
                 src={post.author.avatarUrl}
                 sx={{
@@ -99,7 +100,7 @@ export function PostItemLatest({ post, index }) {
                     zIndex: 9,
                     position: 'absolute',
                 }}
-            />
+            /> */}
 
             <Image
                 alt={post.title}

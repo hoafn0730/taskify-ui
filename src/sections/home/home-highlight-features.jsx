@@ -19,11 +19,13 @@ import { varFade, MotionViewport } from '~/components/animate';
 
 import { SectionTitle } from './components/section-title';
 import { FloatLine, FloatPlusIcon } from './components/svg-elements';
+import { useTranslate } from '~/locales';
 
 // ----------------------------------------------------------------------
 
 export function HomeHighlightFeatures({ sx, ...other }) {
     const containerRoot = useClientRect();
+    const { t } = useTranslate('home');
 
     const renderLines = (
         <>
@@ -45,7 +47,11 @@ export function HomeHighlightFeatures({ sx, ...other }) {
                         alignItems={{ xs: 'center', md: 'flex-start' }}
                         sx={{ textAlign: { xs: 'center', md: 'left' } }}
                     >
-                        <SectionTitle caption="App Features" title="Highlight" txtGradient="features" />
+                        <SectionTitle
+                            caption={t('highlights.sectionTitle.title')}
+                            title={t('highlights.sectionTitle.title')}
+                            txtGradient={t('highlights.sectionTitle.subtitle')}
+                        />
 
                         <SvgIcon
                             component={m.svg}

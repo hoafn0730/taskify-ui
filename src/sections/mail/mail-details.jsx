@@ -50,22 +50,22 @@ export function MailDetails({ mail, renderLabel, empty, loading }) {
     const renderHead = (
         <>
             <Stack direction="row" spacing={1} flexGrow={1}>
-                {mail.labelIds.map((labelId) => {
-                    const label = renderLabel(labelId);
-
-                    return label ? (
-                        <Label
-                            key={label.id}
-                            sx={{
-                                color: darken(label.color, 0.24),
-                                bgcolor: hexAlpha(label.color, 0.16),
-                                [stylesMode.dark]: { color: lighten(label.color, 0.24) },
-                            }}
-                        >
-                            {label.name}
-                        </Label>
-                    ) : null;
-                })}
+                {/* {mail.labelIds.map((labelId) => {
+                        const label = renderLabel(labelId);
+    
+                        return label ? (
+                            <Label
+                                key={label.id}
+                                sx={{
+                                    color: darken(label.color, 0.24),
+                                    bgcolor: hexAlpha(label.color, 0.16),
+                                    [stylesMode.dark]: { color: lighten(label.color, 0.24) },
+                                }}
+                            >
+                                {label.name}
+                            </Label>
+                        ) : null;
+                    })} */}
             </Stack>
 
             <Stack direction="row" alignItems="center">
@@ -140,27 +140,31 @@ export function MailDetails({ mail, renderLabel, empty, loading }) {
 
     const renderSender = (
         <>
-            <Avatar alt={mail.from.name} src={mail.from.avatarUrl ? `${mail.from.avatarUrl}` : ''} sx={{ mr: 2 }}>
-                {mail.from.name.charAt(0).toUpperCase()}
+            <Avatar
+                alt={mail.sender.displayName}
+                src={mail.sender.avatar ? `${mail.sender.avatar}` : ''}
+                sx={{ mr: 2 }}
+            >
+                {mail.sender.displayName.charAt(0).toUpperCase()}
             </Avatar>
 
             <Stack spacing={0.5} sx={{ width: 0, flexGrow: 1 }}>
                 <Stack spacing={0.5} direction="row">
                     <Typography component="span" variant="subtitle2" sx={{ flexShrink: 0 }}>
-                        {mail.from.name}
+                        {mail.sender.displayName}
                     </Typography>
                     <Typography component="span" noWrap variant="body2" sx={{ color: 'text.secondary' }}>
-                        {`<${mail.from.email}>`}
+                        {`<${mail.sender.email}>`}
                     </Typography>
                 </Stack>
 
                 <Typography noWrap component="span" variant="caption" sx={{ color: 'text.secondary' }}>
                     {`To: `}
-                    {mail.to.map((person) => (
-                        <Link key={person.email} color="inherit" sx={{ '&:hover': { color: 'text.primary' } }}>
-                            {`${person.email}, `}
-                        </Link>
-                    ))}
+                    {/* {mail.to.map((person) => ( */}
+                    <Link key={mail.recipient.email} color="inherit" sx={{ '&:hover': { color: 'text.primary' } }}>
+                        {`${mail.recipient.email}, `}
+                    </Link>
+                    {/* ))} */}
                 </Typography>
             </Stack>
         </>
@@ -174,7 +178,7 @@ export function MailDetails({ mail, renderLabel, empty, loading }) {
                     sx={{ borderRadius: 0.5, typography: 'caption', color: 'text.secondary' }}
                 >
                     <Iconify icon="eva:attach-2-fill" sx={{ mr: 0.5 }} />
-                    {mail.attachments.length} attachments
+                    {mail?.attachments?.length || 0} attachments
                     <Iconify
                         icon={showAttachments.value ? 'eva:arrow-ios-upward-fill' : 'eva:arrow-ios-downward-fill'}
                         width={16}
@@ -198,17 +202,18 @@ export function MailDetails({ mail, renderLabel, empty, loading }) {
 
             <Collapse in={showAttachments.value} unmountOnExit timeout="auto">
                 <Stack direction="row" flexWrap="wrap" spacing={0.75}>
-                    {mail.attachments.map((attachment) => (
-                        <FileThumbnail
-                            key={attachment.id}
-                            tooltip
-                            imageView
-                            file={attachment.preview}
-                            onDownload={() => console.info('DOWNLOAD')}
-                            sx={{ width: 48, height: 48, backgroundColor: 'background.neutral' }}
-                            slotProps={{ icon: { width: 24, height: 24 } }}
-                        />
-                    ))}
+                    {mail?.attachments?.length &&
+                        mail.attachments.map((attachment) => (
+                            <FileThumbnail
+                                key={attachment.id}
+                                tooltip
+                                imageView
+                                file={attachment.preview}
+                                onDownload={() => console.info('DOWNLOAD')}
+                                sx={{ width: 48, height: 48, backgroundColor: 'background.neutral' }}
+                                slotProps={{ icon: { width: 24, height: 24 } }}
+                            />
+                        ))}
                 </Stack>
             </Collapse>
         </Stack>
@@ -261,7 +266,7 @@ export function MailDetails({ mail, renderLabel, empty, loading }) {
                 {renderSender}
             </Stack>
 
-            {!!mail.attachments.length && <Stack sx={{ px: 2, mt: 2 }}> {renderAttachments} </Stack>}
+            {!!mail?.attachments?.length && <Stack sx={{ px: 2, mt: 2 }}> {renderAttachments} </Stack>}
 
             <Scrollbar sx={{ mt: 3, flex: '1 1 240px' }}>{renderContent}</Scrollbar>
 

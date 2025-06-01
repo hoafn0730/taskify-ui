@@ -25,11 +25,13 @@ import { SearchNotFound } from '~/components/search-not-found';
 
 import { ResultItem } from './result-item';
 import { groupItems, applyFilter, getAllItems } from './utils';
+import { useTranslate } from '~/locales';
 
 // ----------------------------------------------------------------------
 
 export function Searchbar({ data: navItems = [], sx, ...other }) {
     const theme = useTheme();
+    const { t } = useTranslate('header');
 
     const router = useRouter();
 
@@ -162,7 +164,7 @@ export function Searchbar({ data: navItems = [], sx, ...other }) {
                     <InputBase
                         fullWidth
                         autoFocus
-                        placeholder="Search..."
+                        placeholder={t('header.search.placeholder')}
                         value={searchQuery}
                         onChange={handleSearch}
                         startAdornment={

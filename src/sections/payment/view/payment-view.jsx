@@ -8,8 +8,11 @@ import Typography from '@mui/material/Typography';
 import { PaymentSummary } from '../payment-summary';
 import { PaymentMethods } from '../payment-methods';
 import { PaymentBillingAddress } from '../payment-billing-address';
+import { useSearchParams } from '~/routes/hooks';
 
 export function PaymentView() {
+    const searchParams = useSearchParams();
+    const { plan } = Object.fromEntries(searchParams.entries());
     const [method, setMethod] = useState('paypal');
 
     return (
@@ -41,7 +44,7 @@ export function PaymentView() {
                 </Grid>
 
                 <Grid xs={12} md={4}>
-                    <PaymentSummary method={method} />
+                    <PaymentSummary method={method} plan={plan} />
                 </Grid>
             </Grid>
         </Container>

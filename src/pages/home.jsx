@@ -5,9 +5,9 @@ import { HomeView } from '~/sections/home/view';
 // ----------------------------------------------------------------------
 
 const metadata = {
-    title: 'Minimals UI: The starting point for your next project',
+    title: 'Taskify: Simplify Your Project Management',
     description:
-        'The starting point for your next project with Minimal UI Kit, built on the newest version of Material-UI ©, ready to be customized to your style',
+        'Streamline your workflow with Taskify - The modern Kanban board tool for efficient project management. Organize tasks, collaborate with teams, and boost productivity.',
 };
 
 export default function Page() {

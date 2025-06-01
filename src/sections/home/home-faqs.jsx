@@ -54,7 +54,7 @@ const FAQs = [
                 </li>
                 <li>
                     Learn more about the
-                    <Link href="https://docs.minimals.cc/package/" target="_blank" rel="noopener" sx={{ mx: 0.5 }}>
+                    <Link href="https://docs.taskify.cc/package/" target="_blank" rel="noopener" sx={{ mx: 0.5 }}>
                         package & license
                     </Link>
                 </li>
@@ -226,7 +226,7 @@ export function HomeFAQs({ sx, ...other }) {
                 <Button
                     color="inherit"
                     variant="contained"
-                    href="mailto:support@minimals.cc?subject=[Feedback] from Customer"
+                    href="mailto:support@taskify.cc?subject=[Feedback] from Customer"
                     startIcon={<Iconify icon="fluent:mail-24-filled" />}
                 >
                     {t('contact.button')}

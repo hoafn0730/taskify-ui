@@ -35,7 +35,7 @@ const LINKS = [
             { name: 'Privacy policy', href: '#' },
         ],
     },
-    { headline: 'Contact', children: [{ name: 'support@minimals.cc', href: '#' }] },
+    { headline: 'Contact', children: [{ name: 'support@taskify.cc', href: '#' }] },
 ];
 
 // ----------------------------------------------------------------------
@@ -162,7 +162,7 @@ export function HomeFooter({ sx }) {
                 <Box sx={{ mt: 1, typography: 'caption' }}>
                     © All rights reserved.
                     <br /> made by
-                    <Link href="https://minimals.cc/"> Taskify </Link>
+                    <Link href="https://taskify.cc/"> Taskify </Link>
                 </Box>
             </Container>
         </Box>

@@ -74,7 +74,7 @@ export async function setSession(accessToken) {
 
             axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
-            const decodedToken = jwtDecode(accessToken); // ~3 days by minimals server
+            const decodedToken = jwtDecode(accessToken); // ~3 days by taskify server
 
             if (decodedToken && 'exp' in decodedToken) {
                 tokenExpired(decodedToken.exp);

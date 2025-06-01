@@ -28,7 +28,7 @@ export const paths = {
     page404: '/error/404',
     page500: '/error/500',
     components: '/components',
-    docs: 'https://docs.minimals.cc',
+    docs: 'https://docs.taskify.cc',
     zoneStore: 'https://mui.com/store/items/zone-landing-page/',
     minimalStore: 'https://mui.com/store/items/minimal-dashboard/',
     freeUI: 'https://mui.com/store/items/minimal-dashboard-free/',

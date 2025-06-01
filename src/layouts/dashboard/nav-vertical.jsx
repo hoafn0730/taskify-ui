@@ -3,7 +3,7 @@ import { useTheme } from '@mui/material/styles';
 
 import { varAlpha, hideScrollY } from '~/theme/styles';
 
-import Logo from '~/components/logo/logo';
+import Logo from '~/components/logo';
 import { Scrollbar } from '~/components/scrollbar';
 import { NavSectionMini, NavSectionVertical } from '~/components/nav-section';
 

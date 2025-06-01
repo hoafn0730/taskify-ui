@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 
 import { varAlpha } from '~/theme/styles';
 
-import Logo from '../logo';
+import Logo from '~/components/logo';
 
 // ----------------------------------------------------------------------
 

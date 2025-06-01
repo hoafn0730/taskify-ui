@@ -46,6 +46,7 @@ export default [
             'no-console': 1,
 
             'react/no-children-prop': 0,
+            'no-undef': 0,
         },
     },
 ];

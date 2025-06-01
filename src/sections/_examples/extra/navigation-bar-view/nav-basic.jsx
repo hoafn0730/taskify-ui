@@ -7,7 +7,7 @@ import { useBoolean } from '~/hooks/use-boolean';
 
 import { CONFIG } from '~/configs/config-global';
 
-import Logo from '~/components/logo';
+import { Logo } from '~/components/logo';
 import { Label } from '~/components/label';
 import { Iconify } from '~/components/iconify';
 import { SvgColor } from '~/components/svg-color';

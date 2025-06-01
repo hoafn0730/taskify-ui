@@ -5,7 +5,7 @@ import Drawer, { drawerClasses } from '@mui/material/Drawer';
 
 import { usePathname } from '~/routes/hooks';
 
-import Logo from '~/components/logo';
+import { Logo } from '~/components/logo';
 import { Scrollbar } from '~/components/scrollbar';
 import { NavSectionVertical } from '~/components/nav-section';
 

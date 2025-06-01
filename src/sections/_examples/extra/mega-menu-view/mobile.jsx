@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 
-import Logo from '~/components/logo';
+import { Logo } from '~/components/logo';
 import { Iconify } from '~/components/iconify';
 import { MegaMenuMobile } from '~/components/mega-menu';
 

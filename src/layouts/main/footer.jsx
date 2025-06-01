@@ -42,7 +42,6 @@ const LINKS = [
 
 export function Footer({ layoutQuery, sx }) {
     const theme = useTheme();
-    const { t } = useTranslate('footer');
 
     return (
         <Box component="footer" sx={{ position: 'relative', bgcolor: 'background.default', ...sx }}>

@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import { paths } from '~/configs/paths';
 import { usePathname } from '~/routes/hooks';
 
-import { Logo } from '~/components/logo';
+import Logo from '~/components/logo';
 import { NavUl } from '~/components/nav-section';
 import { Scrollbar } from '~/components/scrollbar';
 

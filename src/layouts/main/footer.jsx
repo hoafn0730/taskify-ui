@@ -13,7 +13,7 @@ import { RouterLink } from '~/components/router-link';
 
 import { _socials } from '~/_mock';
 
-import { Logo } from '~/components/logo';
+import Logo from '~/components/logo/logo';
 import { SocialIcon } from '~/components/iconify';
 import { useTranslate } from '~/locales';
 

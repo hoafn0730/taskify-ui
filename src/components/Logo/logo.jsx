@@ -10,7 +10,7 @@ import { logoClasses } from './classes';
 
 // ----------------------------------------------------------------------
 
-export const Logo = forwardRef(
+const Logo = forwardRef(
     ({ width = 40, height = 40, disableLink = false, className, href = '/', sx, ...other }, ref) => {
         const theme = useTheme();
 
@@ -102,3 +102,5 @@ export const Logo = forwardRef(
         );
     },
 );
+
+export default Logo;

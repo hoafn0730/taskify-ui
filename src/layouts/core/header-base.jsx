@@ -6,7 +6,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import { paths } from '~/configs/paths';
 import { RouterLink } from '~/components/router-link';
 
-import { Logo } from '~/components/logo';
+import Logo from '~/components/logo/logo';
 
 import { HeaderSection } from './header-section';
 import { Searchbar } from '../components/searchbar';

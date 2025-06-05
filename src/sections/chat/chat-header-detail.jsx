@@ -21,126 +21,125 @@ import { ChatHeaderSkeleton } from './chat-skeleton';
 
 // ----------------------------------------------------------------------
 
-export function ChatHeaderDetail({ collapseNav, participants, loading }) {
-  const popover = usePopover();
+export function ChatHeaderDetail({ collapseNav, participants, type, loading }) {
+    const popover = usePopover();
 
-  const lgUp = useResponsive('up', 'lg');
+    const lgUp = useResponsive('up', 'lg');
 
-  const group = participants.length > 1;
+    const group = participants?.length > 1 && type === 'group';
 
-  const singleParticipant = participants[0];
+    const singleParticipant = participants?.[0];
+    console.log('🚀 ~ ChatHeaderDetail ~ singleParticipant:', singleParticipant);
 
-  const { collapseDesktop, onCollapseDesktop, onOpenMobile } = collapseNav;
+    const { collapseDesktop, onCollapseDesktop, onOpenMobile } = collapseNav;
 
-  const handleToggleNav = useCallback(() => {
-    if (lgUp) {
-      onCollapseDesktop();
-    } else {
-      onOpenMobile();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lgUp]);
-
-  const renderGroup = (
-    <AvatarGroup max={3} sx={{ [`& .${avatarGroupClasses.avatar}`]: { width: 32, height: 32 } }}>
-      {participants.map((participant) => (
-        <Avatar key={participant.id} alt={participant.name} src={participant.avatarUrl} />
-      ))}
-    </AvatarGroup>
-  );
-
-  const renderSingle = (
-    <Stack direction="row" alignItems="center" spacing={2}>
-      <Badge
-        variant={singleParticipant?.status}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-      >
-        <Avatar src={singleParticipant?.avatarUrl} alt={singleParticipant?.name} />
-      </Badge>
-
-      <ListItemText
-        primary={singleParticipant?.name}
-        secondary={
-          singleParticipant?.status === 'offline'
-            ? fToNow(singleParticipant?.lastActivity)
-            : singleParticipant?.status
+    const handleToggleNav = useCallback(() => {
+        if (lgUp) {
+            onCollapseDesktop();
+        } else {
+            onOpenMobile();
         }
-        secondaryTypographyProps={{
-          component: 'span',
-          ...(singleParticipant?.status !== 'offline' && { textTransform: 'capitalize' }),
-        }}
-      />
-    </Stack>
-  );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [lgUp]);
 
-  if (loading) {
-    return <ChatHeaderSkeleton />;
-  }
+    const renderGroup = (
+        <AvatarGroup max={3} sx={{ [`& .${avatarGroupClasses.avatar}`]: { width: 32, height: 32 } }}>
+            {participants?.length &&
+                participants.map((participant) => (
+                    <Avatar key={participant.id} alt={participant.displayName} src={participant.avatar} />
+                ))}
+        </AvatarGroup>
+    );
 
-  return (
-    <>
-      {group ? renderGroup : renderSingle}
+    const renderSingle = (
+        <Stack direction="row" alignItems="center" spacing={2}>
+            <Badge variant={singleParticipant?.status} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                <Avatar src={singleParticipant?.avatar} alt={singleParticipant?.displayName} />
+            </Badge>
 
-      <Stack direction="row" flexGrow={1} justifyContent="flex-end">
-        <IconButton>
-          <Iconify icon="solar:phone-bold" />
-        </IconButton>
+            <ListItemText
+                primary={singleParticipant?.displayName}
+                secondary={
+                    singleParticipant?.status === 'offline'
+                        ? fToNow(singleParticipant?.lastActivity)
+                        : singleParticipant?.status
+                }
+                secondaryTypographyProps={{
+                    component: 'span',
+                    ...(singleParticipant?.status !== 'offline' && { textTransform: 'capitalize' }),
+                }}
+            />
+        </Stack>
+    );
 
-        <IconButton>
-          <Iconify icon="solar:videocamera-record-bold" />
-        </IconButton>
+    if (loading) {
+        return <ChatHeaderSkeleton />;
+    }
 
-        <IconButton onClick={handleToggleNav}>
-          <Iconify icon={!collapseDesktop ? 'ri:sidebar-unfold-fill' : 'ri:sidebar-fold-fill'} />
-        </IconButton>
+    return (
+        <>
+            {group ? renderGroup : renderSingle}
 
-        <IconButton onClick={popover.onOpen}>
-          <Iconify icon="eva:more-vertical-fill" />
-        </IconButton>
-      </Stack>
+            <Stack direction="row" flexGrow={1} justifyContent="flex-end">
+                <IconButton>
+                    <Iconify icon="solar:phone-bold" />
+                </IconButton>
 
-      <CustomPopover open={popover.open} anchorEl={popover.anchorEl} onClose={popover.onClose}>
-        <MenuList>
-          <MenuItem
-            onClick={() => {
-              popover.onClose();
-            }}
-          >
-            <Iconify icon="solar:bell-off-bold" />
-            Hide notifications
-          </MenuItem>
+                <IconButton>
+                    <Iconify icon="solar:videocamera-record-bold" />
+                </IconButton>
 
-          <MenuItem
-            onClick={() => {
-              popover.onClose();
-            }}
-          >
-            <Iconify icon="solar:forbidden-circle-bold" />
-            Block
-          </MenuItem>
+                <IconButton onClick={handleToggleNav}>
+                    <Iconify icon={!collapseDesktop ? 'ri:sidebar-unfold-fill' : 'ri:sidebar-fold-fill'} />
+                </IconButton>
 
-          <MenuItem
-            onClick={() => {
-              popover.onClose();
-            }}
-          >
-            <Iconify icon="solar:danger-triangle-bold" />
-            Report
-          </MenuItem>
+                <IconButton onClick={popover.onOpen}>
+                    <Iconify icon="eva:more-vertical-fill" />
+                </IconButton>
+            </Stack>
 
-          <Divider sx={{ borderStyle: 'dashed' }} />
+            <CustomPopover open={popover.open} anchorEl={popover.anchorEl} onClose={popover.onClose}>
+                <MenuList>
+                    <MenuItem
+                        onClick={() => {
+                            popover.onClose();
+                        }}
+                    >
+                        <Iconify icon="solar:bell-off-bold" />
+                        Hide notifications
+                    </MenuItem>
 
-          <MenuItem
-            onClick={() => {
-              popover.onClose();
-            }}
-            sx={{ color: 'error.main' }}
-          >
-            <Iconify icon="solar:trash-bin-trash-bold" />
-            Delete
-          </MenuItem>
-        </MenuList>
-      </CustomPopover>
-    </>
-  );
+                    <MenuItem
+                        onClick={() => {
+                            popover.onClose();
+                        }}
+                    >
+                        <Iconify icon="solar:forbidden-circle-bold" />
+                        Block
+                    </MenuItem>
+
+                    <MenuItem
+                        onClick={() => {
+                            popover.onClose();
+                        }}
+                    >
+                        <Iconify icon="solar:danger-triangle-bold" />
+                        Report
+                    </MenuItem>
+
+                    <Divider sx={{ borderStyle: 'dashed' }} />
+
+                    <MenuItem
+                        onClick={() => {
+                            popover.onClose();
+                        }}
+                        sx={{ color: 'error.main' }}
+                    >
+                        <Iconify icon="solar:trash-bin-trash-bold" />
+                        Delete
+                    </MenuItem>
+                </MenuList>
+            </CustomPopover>
+        </>
+    );
 }

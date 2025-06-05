@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -18,14 +19,10 @@ import { fToNow } from '~/utils/format-time';
 
 import { clickConversation } from '~/actions/chat';
 
-import { useMockedUser } from '~/auth/hooks';
-
 import { useNavItem } from './hooks/use-nav-item';
 
-// ----------------------------------------------------------------------
-
 export function ChatNavItem({ selected, collapse, conversation, onCloseMobile }) {
-    const { user } = useMockedUser();
+    const { user } = useSelector((state) => state.user);
 
     const mdUp = useResponsive('up', 'md');
 
@@ -33,12 +30,12 @@ export function ChatNavItem({ selected, collapse, conversation, onCloseMobile })
 
     const { group, displayName, displayText, participants, lastActivity, hasOnlineInGroup } = useNavItem({
         conversation,
-        currentUserId: `${user?.id}`,
+        currentUserId: user?.id,
     });
 
     const singleParticipant = participants[0];
 
-    const { name, avatarUrl, status } = singleParticipant;
+    const { displayName: displayNameParticipant, avatar, status } = singleParticipant;
 
     const handleClickConversation = useCallback(async () => {
         try {
@@ -61,7 +58,7 @@ export function ChatNavItem({ selected, collapse, conversation, onCloseMobile })
         >
             <AvatarGroup variant="compact" sx={{ width: 48, height: 48 }}>
                 {participants.slice(0, 2).map((participant) => (
-                    <Avatar key={participant.id} alt={participant.name} src={participant.avatarUrl} />
+                    <Avatar key={participant.id} alt={participant.displayName} src={participant.avatar} />
                 ))}
             </AvatarGroup>
         </Badge>
@@ -69,7 +66,7 @@ export function ChatNavItem({ selected, collapse, conversation, onCloseMobile })
 
     const renderSingle = (
         <Badge key={status} variant={status} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-            <Avatar alt={name} src={avatarUrl} sx={{ width: 48, height: 48 }} />
+            <Avatar alt={displayNameParticipant} src={avatar} sx={{ width: 48, height: 48 }} />
         </Badge>
     );
 

@@ -1,38 +1,34 @@
 // ----------------------------------------------------------------------
 
 export function useNavItem({ currentUserId, conversation }) {
-  const { messages, participants } = conversation;
+    const { messages, participants, type } = conversation;
 
-  const participantsInConversation = participants.filter(
-    (participant) => participant.id !== currentUserId
-  );
+    const participantsInConversation = participants.filter((participant) => participant.id !== currentUserId);
 
-  const lastMessage = messages[messages.length - 1];
+    const lastMessage = messages[messages.length - 1];
 
-  const group = participantsInConversation.length > 1;
+    const group = participantsInConversation.length > 1 && type === 'group';
 
-  const displayName = participantsInConversation.map((participant) => participant.name).join(', ');
+    const displayName = participantsInConversation.map((participant) => participant.displayName).join(', ');
 
-  const hasOnlineInGroup = group
-    ? participantsInConversation.map((item) => item.status).includes('online')
-    : false;
+    const hasOnlineInGroup = group ? participantsInConversation.map((item) => item.status).includes('online') : false;
 
-  let displayText = '';
+    let displayText = '';
 
-  if (lastMessage) {
-    const sender = lastMessage.senderId === currentUserId ? 'You: ' : '';
+    if (lastMessage) {
+        const sender = lastMessage.senderId === currentUserId ? 'You: ' : '';
 
-    const message = lastMessage.contentType === 'image' ? 'Sent a photo' : lastMessage.body;
+        const message = lastMessage.contentType === 'image' ? 'Sent a photo' : lastMessage.content;
 
-    displayText = `${sender}${message}`;
-  }
+        displayText = `${sender}${message}`;
+    }
 
-  return {
-    group,
-    displayName,
-    displayText,
-    participants: participantsInConversation,
-    lastActivity: lastMessage.createdAt,
-    hasOnlineInGroup,
-  };
+    return {
+        group,
+        displayName,
+        displayText,
+        participants: participantsInConversation,
+        lastActivity: lastMessage.createdAt,
+        hasOnlineInGroup,
+    };
 }

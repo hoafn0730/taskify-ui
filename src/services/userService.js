@@ -6,6 +6,12 @@ const getUsers = () => {
     });
 };
 
+const getOnlineUsers = () => {
+    return axiosInstance.get(import.meta.env.VITE_SERVER_BE_URL + '/api/v1/users/online', {
+        withCredentials: true,
+    });
+};
+
 const updateUser = async (userId, userData) => {
     const res = await axiosInstance.put(
         `${import.meta.env.VITE_SERVER_BE_URL}${endpoints.admin.users}/${userId}`,
@@ -35,4 +41,4 @@ const transaction = (data) => {
     );
 };
 
-export const userService = { getUsers, updateUser, getInvoices, transaction };
+export const userService = { getUsers, getOnlineUsers, updateUser, getInvoices, transaction };

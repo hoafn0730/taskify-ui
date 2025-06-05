@@ -63,6 +63,7 @@ export function ChatNav({ loading, contacts, conversations, collapseNav, selecte
         router.push(paths.dashboard.chat);
     }, [mdUp, onCloseMobile, router]);
 
+    // [ ] handleSearchContacts
     const handleSearchContacts = useCallback(
         (inputValue) => {
             setSearchContacts((prevState) => ({ ...prevState, query: inputValue }));

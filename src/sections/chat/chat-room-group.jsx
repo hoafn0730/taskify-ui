@@ -14,58 +14,50 @@ import { ChatRoomParticipantDialog } from './chat-room-participant-dialog';
 // ----------------------------------------------------------------------
 
 export function ChatRoomGroup({ participants }) {
-  const collapse = useBoolean(true);
+    const collapse = useBoolean(true);
 
-  const [selected, setSelected] = useState(null);
+    const [selected, setSelected] = useState(null);
 
-  const handleOpen = useCallback((participant) => {
-    setSelected(participant);
-  }, []);
+    const handleOpen = useCallback((participant) => {
+        setSelected(participant);
+    }, []);
 
-  const handleClose = useCallback(() => {
-    setSelected(null);
-  }, []);
+    const handleClose = useCallback(() => {
+        setSelected(null);
+    }, []);
 
-  const totalParticipants = participants.length;
+    const totalParticipants = participants?.length;
 
-  const renderList = (
-    <>
-      {participants.map((participant) => (
-        <ListItemButton key={participant.id} onClick={() => handleOpen(participant)}>
-          <Badge
-            variant={participant.status}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-          >
-            <Avatar alt={participant.name} src={participant.avatarUrl} />
-          </Badge>
+    const renderList = (
+        <>
+            {participants &&
+                participants.map((participant) => (
+                    <ListItemButton key={participant.id} onClick={() => handleOpen(participant)}>
+                        <Badge variant={participant.status} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                            <Avatar alt={participant.name} src={participant.avatarUrl} />
+                        </Badge>
 
-          <ListItemText
-            sx={{ ml: 2 }}
-            primary={participant.name}
-            secondary={participant.role}
-            primaryTypographyProps={{ noWrap: true, typography: 'subtitle2' }}
-            secondaryTypographyProps={{ noWrap: true, component: 'span', typography: 'caption' }}
-          />
-        </ListItemButton>
-      ))}
-    </>
-  );
+                        <ListItemText
+                            sx={{ ml: 2 }}
+                            primary={participant.name}
+                            secondary={participant.role}
+                            primaryTypographyProps={{ noWrap: true, typography: 'subtitle2' }}
+                            secondaryTypographyProps={{ noWrap: true, component: 'span', typography: 'caption' }}
+                        />
+                    </ListItemButton>
+                ))}
+        </>
+    );
 
-  return (
-    <>
-      <CollapseButton
-        selected={collapse.value}
-        disabled={!totalParticipants}
-        onClick={collapse.onToggle}
-      >
-        {`In room (${totalParticipants})`}
-      </CollapseButton>
+    return (
+        <>
+            <CollapseButton selected={collapse.value} disabled={!totalParticipants} onClick={collapse.onToggle}>
+                {`In room (${totalParticipants})`}
+            </CollapseButton>
 
-      <Collapse in={collapse.value}>{renderList}</Collapse>
+            <Collapse in={collapse.value}>{renderList}</Collapse>
 
-      {selected && (
-        <ChatRoomParticipantDialog participant={selected} open={!!selected} onClose={handleClose} />
-      )}
-    </>
-  );
+            {selected && <ChatRoomParticipantDialog participant={selected} open={!!selected} onClose={handleClose} />}
+        </>
+    );
 }

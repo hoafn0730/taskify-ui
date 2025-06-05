@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import Alert from '@mui/material/Alert';
@@ -27,9 +27,11 @@ import { navData as adminNavData } from '~/configs/config-nav-admin';
 
 import { _account } from '~/configs/config-nav-account';
 import { _workspaces } from '~/configs/config-nav-workspace';
+import { useSocket } from '~/hooks/use-socket';
 
 export function DashboardLayout({ sx, children, data }) {
     const { user } = useSelector((state) => state.user);
+    const { on, off } = useSocket();
 
     const theme = useTheme();
 
@@ -50,6 +52,11 @@ export function DashboardLayout({ sx, children, data }) {
     const isNavHorizontal = settings.navLayout === 'horizontal';
 
     const isNavVertical = isNavMini || settings.navLayout === 'vertical';
+
+    useEffect(() => {
+        on('login');
+        return () => off('login');
+    }, [off, on]);
 
     return (
         <>

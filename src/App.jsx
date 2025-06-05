@@ -21,9 +21,16 @@ import { CheckoutProvider } from '~/sections/checkout/context';
 
 import { persistor, store } from './store';
 import ModernChatbot from './components/chatbot';
+import { useSocket } from './hooks/use-socket';
+import { useEffect } from 'react';
 
 export default function App() {
+    const { connect } = useSocket();
     useScrollToTop();
+
+    useEffect(() => {
+        connect();
+    }, [connect]);
 
     return (
         <Provider store={store}>

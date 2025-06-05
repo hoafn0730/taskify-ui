@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
 import Typography from '@mui/material/Typography';
 
@@ -11,8 +12,6 @@ import { useGetContacts, useGetConversation, useGetConversations } from '~/actio
 
 import { EmptyContent } from '~/components/empty-content';
 
-import { useMockedUser } from '~/auth/hooks';
-
 import { Layout } from '../layout';
 import { ChatNav } from '../chat-nav';
 import { ChatRoom } from '../chat-room';
@@ -21,33 +20,52 @@ import { ChatMessageInput } from '../chat-message-input';
 import { ChatHeaderDetail } from '../chat-header-detail';
 import { ChatHeaderCompose } from '../chat-header-compose';
 import { useCollapseNav } from '../hooks/use-collapse-nav';
-
-// ----------------------------------------------------------------------
+import { useSocket } from '~/hooks/use-socket';
 
 export function ChatView() {
     const router = useRouter();
 
-    const { user } = useMockedUser();
+    const { user } = useSelector((state) => state.user);
+
+    const { emit, on, off } = useSocket();
 
     const { contacts } = useGetContacts();
 
     const searchParams = useSearchParams();
 
-    const selectedConversationId = searchParams.get('id') || '';
-
     const [recipients, setRecipients] = useState([]);
 
     const { conversations, conversationsLoading } = useGetConversations();
 
-    const { conversation, conversationError, conversationLoading } = useGetConversation(`${selectedConversationId}`);
+    const selectedConversationId = searchParams.get('id') || '';
+
+    const { conversation, conversationError, conversationLoading } = useGetConversation(selectedConversationId || 1);
 
     const roomNav = useCollapseNav();
 
     const conversationsNav = useCollapseNav();
 
     const participants = conversation
-        ? conversation.participants.filter((participant) => participant.id !== `${user?.id}`)
+        ? conversation?.participants?.filter((participant) => participant.id !== user?.id)
         : [];
+
+    //
+    useEffect(() => {
+        // Setup message listener
+        on('newMessage', (message) => {
+            setMessages((prev) => [...prev, message]);
+        });
+
+        // Cleanup
+        return () => off('newMessage');
+    }, [on, off]);
+
+    // Send message
+    const sendMessage = () => {
+        emit('sendMessage', { content: 'Hello!' });
+    };
+
+    //
 
     useEffect(() => {
         if (conversationError || !selectedConversationId) {
@@ -79,6 +97,7 @@ export function ChatView() {
                         <ChatHeaderDetail
                             collapseNav={roomNav}
                             participants={participants}
+                            type={conversation?.type}
                             loading={conversationLoading}
                         />
                     ) : (
@@ -121,6 +140,7 @@ export function ChatView() {
                         <ChatRoom
                             collapseNav={roomNav}
                             participants={participants}
+                            type={conversation?.type}
                             loading={conversationLoading}
                             messages={conversation?.messages ?? []}
                         />

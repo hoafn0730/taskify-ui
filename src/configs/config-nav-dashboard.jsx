@@ -46,19 +46,21 @@ export const navData = (t) => [
     {
         subheader: t('management.title'),
         items: [
+            { title: t('management.kanban'), path: paths.dashboard.kanban.root, icon: ICONS.kanban },
+            { title: t('management.calendar'), path: paths.dashboard.calendar, icon: ICONS.calendar },
+            { title: t('management.list'), path: paths.dashboard.list, icon: ICONS.list },
+            { title: t('management.chat'), path: paths.dashboard.chat, icon: ICONS.chat },
+            {
+                title: t('management.mail'),
+                path: paths.dashboard.mail,
+                icon: ICONS.mail,
+                info: (
+                    <Label color="error" variant="inverted">
+                        +32
+                    </Label>
+                ),
+            },
             { title: t('management.member.title'), path: paths.dashboard.member.list, icon: ICONS.member },
-            // {
-            //     title: t('management.member.title'),
-            //     path: paths.dashboard.member.root,
-            //     icon: ICONS.member,
-            //     children: [
-            //         { title: t('management.member.profile'), path: paths.dashboard.member.root },
-            //         { title: t('management.member.cards'), path: paths.dashboard.member.cards },
-            //         { title: t('management.member.list'), path: paths.dashboard.member.list },
-            //         { title: t('management.member.create'), path: paths.dashboard.member.new },
-            //         { title: t('management.member.edit'), path: paths.dashboard.member.demo.edit },
-            //     ],
-            // },
             {
                 title: t('management.blog.title'),
                 path: paths.dashboard.post.root,
@@ -71,20 +73,6 @@ export const navData = (t) => [
                 // ],
             },
             { title: t('management.fileManager'), path: paths.dashboard.fileManager, icon: ICONS.folder },
-            {
-                title: t('management.mail'),
-                path: paths.dashboard.mail,
-                icon: ICONS.mail,
-                info: (
-                    <Label color="error" variant="inverted">
-                        +32
-                    </Label>
-                ),
-            },
-            { title: t('management.chat'), path: paths.dashboard.chat, icon: ICONS.chat },
-            { title: t('management.kanban'), path: paths.dashboard.kanban.root, icon: ICONS.kanban },
-            { title: t('management.calendar'), path: paths.dashboard.calendar, icon: ICONS.calendar },
-            { title: t('management.list'), path: paths.dashboard.list, icon: ICONS.list },
         ],
     },
     // {

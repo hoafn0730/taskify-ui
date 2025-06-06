@@ -43,7 +43,8 @@ export function ChatNavItem({ selected, collapse, conversation, onCloseMobile })
                 onCloseMobile();
             }
 
-            await clickConversation(conversation.id);
+            // [ ] clickConversation
+            // await clickConversation(conversation.id);
 
             router.push(`${paths.dashboard.chat}?id=${conversation.id}`);
         } catch (error) {

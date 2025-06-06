@@ -16,14 +16,10 @@ const getMessages = (conversationId, page = 1) => {
     );
 };
 
-const createConversation = ({ participantIds, title, type = 'private' }) => {
-    return axiosInstance.post(
-        `${import.meta.env.VITE_SERVER_BE_URL}${'/api/v1/conversations'}`,
-        { participantIds, title, type },
-        {
-            withCredentials: true,
-        },
-    );
+const createConversation = (conversationData) => {
+    return axiosInstance.post(`${import.meta.env.VITE_SERVER_BE_URL}${'/api/v1/conversations'}`, conversationData, {
+        withCredentials: true,
+    });
 };
 
 const updateConversation = async (conversationId, conversationData) => {

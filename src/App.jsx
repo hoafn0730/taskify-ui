@@ -21,16 +21,10 @@ import { CheckoutProvider } from '~/sections/checkout/context';
 
 import { persistor, store } from './store';
 import ModernChatbot from './components/chatbot';
-import { useSocket } from './hooks/use-socket';
-import { useEffect } from 'react';
+import { SocketProvider } from './hooks/use-socket';
 
 export default function App() {
-    const { connect } = useSocket();
     useScrollToTop();
-
-    useEffect(() => {
-        connect();
-    }, [connect]);
 
     return (
         <Provider store={store}>
@@ -41,11 +35,13 @@ export default function App() {
                             <ThemeProvider>
                                 <MotionLazy>
                                     <CheckoutProvider>
-                                        <Snackbar />
-                                        <ProgressBar />
-                                        <SettingsDrawer />
-                                        <Router />
-                                        <ModernChatbot />
+                                        <SocketProvider serverURL="http://localhost:5000">
+                                            <Snackbar />
+                                            <ProgressBar />
+                                            <SettingsDrawer />
+                                            <Router />
+                                            <ModernChatbot />
+                                        </SocketProvider>
                                     </CheckoutProvider>
                                 </MotionLazy>
                             </ThemeProvider>

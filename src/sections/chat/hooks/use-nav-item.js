@@ -3,7 +3,7 @@
 export function useNavItem({ currentUserId, conversation }) {
     const { messages, participants, type } = conversation;
 
-    const participantsInConversation = participants.filter((participant) => participant.id !== currentUserId);
+    const participantsInConversation = participants.filter((participant) => participant.userId !== currentUserId);
 
     const lastMessage = messages[messages.length - 1];
 
@@ -28,7 +28,7 @@ export function useNavItem({ currentUserId, conversation }) {
         displayName,
         displayText,
         participants: participantsInConversation,
-        lastActivity: lastMessage.createdAt,
+        lastActivity: lastMessage?.createdAt,
         hasOnlineInGroup,
     };
 }

@@ -63,13 +63,12 @@ export function ChatNav({ loading, contacts, conversations, collapseNav, selecte
         router.push(paths.dashboard.chat);
     }, [mdUp, onCloseMobile, router]);
 
-    // [ ] handleSearchContacts
     const handleSearchContacts = useCallback(
         (inputValue) => {
             setSearchContacts((prevState) => ({ ...prevState, query: inputValue }));
 
             if (inputValue) {
-                const results = contacts.filter((contact) => contact.name.toLowerCase().includes(inputValue));
+                const results = contacts.filter((contact) => contact.displayName.toLowerCase().includes(inputValue));
 
                 setSearchContacts((prevState) => ({ ...prevState, results }));
             }

@@ -18,18 +18,19 @@ import { Iconify } from '~/components/iconify';
 import { usePopover, CustomPopover } from '~/components/custom-popover';
 
 import { ChatHeaderSkeleton } from './chat-skeleton';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
 export function ChatHeaderDetail({ collapseNav, participants, type, loading }) {
     const popover = usePopover();
+    const { user } = useSelector((state) => state.user);
 
     const lgUp = useResponsive('up', 'lg');
 
     const group = participants?.length > 1 && type === 'group';
 
-    const singleParticipant = participants?.[0];
-    console.log('🚀 ~ ChatHeaderDetail ~ singleParticipant:', singleParticipant);
+    const singleParticipant = participants.find((p) => p.userId !== user?.id);
 
     const { collapseDesktop, onCollapseDesktop, onOpenMobile } = collapseNav;
 
@@ -43,12 +44,31 @@ export function ChatHeaderDetail({ collapseNav, participants, type, loading }) {
     }, [lgUp]);
 
     const renderGroup = (
-        <AvatarGroup max={3} sx={{ [`& .${avatarGroupClasses.avatar}`]: { width: 32, height: 32 } }}>
-            {participants?.length &&
-                participants.map((participant) => (
-                    <Avatar key={participant.id} alt={participant.displayName} src={participant.avatar} />
-                ))}
-        </AvatarGroup>
+        <Stack direction="row" alignItems="center" spacing={2}>
+            <AvatarGroup max={3} sx={{ [`& .${avatarGroupClasses.avatar}`]: { width: 32, height: 32 } }}>
+                {participants?.length &&
+                    participants.map((participant) => (
+                        <Avatar key={participant.id} alt={participant.displayName} src={participant.avatar} />
+                    ))}
+            </AvatarGroup>
+
+            <ListItemText
+                primary={participants
+                    .map((p) => p.displayName)
+                    .slice(0, 3)
+                    .join(', ')}
+                // [ ] lastActivity
+                // secondary={
+                //     singleParticipant?.status === 'offline'
+                //         ? fToNow(singleParticipant?.lastActivity)
+                //         : singleParticipant?.status
+                // }
+                secondaryTypographyProps={{
+                    component: 'span',
+                    ...(singleParticipant?.status !== 'offline' && { textTransform: 'capitalize' }),
+                }}
+            />
+        </Stack>
     );
 
     const renderSingle = (

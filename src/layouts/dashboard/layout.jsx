@@ -31,7 +31,8 @@ import { useSocket } from '~/hooks/use-socket';
 
 export function DashboardLayout({ sx, children, data }) {
     const { user } = useSelector((state) => state.user);
-    const { on, off } = useSocket();
+
+    const { connect } = useSocket();
 
     const theme = useTheme();
 
@@ -54,9 +55,8 @@ export function DashboardLayout({ sx, children, data }) {
     const isNavVertical = isNavMini || settings.navLayout === 'vertical';
 
     useEffect(() => {
-        on('login');
-        return () => off('login');
-    }, [off, on]);
+        connect();
+    }, [connect]);
 
     return (
         <>

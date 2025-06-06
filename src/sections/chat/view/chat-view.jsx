@@ -8,7 +8,7 @@ import { useRouter, useSearchParams } from '~/routes/hooks';
 
 import { CONFIG } from '~/configs/config-global';
 import { DashboardContent } from '~/layouts/dashboard';
-import { useGetContacts, useGetConversation, useGetConversations } from '~/actions/chat';
+import { sendMessage, useGetContacts, useGetConversation, useGetConversations } from '~/actions/chat';
 
 import { EmptyContent } from '~/components/empty-content';
 
@@ -20,7 +20,7 @@ import { ChatMessageInput } from '../chat-message-input';
 import { ChatHeaderDetail } from '../chat-header-detail';
 import { ChatHeaderCompose } from '../chat-header-compose';
 import { useCollapseNav } from '../hooks/use-collapse-nav';
-import { useSocket } from '~/hooks/use-socket';
+import { useSocket, useSocketEvent } from '~/hooks/use-socket';
 
 export function ChatView() {
     const router = useRouter();
@@ -49,23 +49,19 @@ export function ChatView() {
         ? conversation?.participants?.filter((participant) => participant.id !== user?.id)
         : [];
 
-    //
     useEffect(() => {
         // Setup message listener
-        on('newMessage', (message) => {
-            setMessages((prev) => [...prev, message]);
-        });
+        if (conversation) {
+            emit('joinConversation', { conversationId: conversation?.id });
+        }
 
         // Cleanup
-        return () => off('newMessage');
-    }, [on, off]);
+    }, [on, off, emit, conversation]);
 
-    // Send message
-    const sendMessage = () => {
-        emit('sendMessage', { content: 'Hello!' });
-    };
-
-    //
+    // ✅ Listen events với useSocketEvent
+    useSocketEvent('newMessage', async (message) => {
+        await sendMessage(conversation.id, message);
+    });
 
     useEffect(() => {
         if (conversationError || !selectedConversationId) {
@@ -139,7 +135,7 @@ export function ChatView() {
                     details: selectedConversationId && (
                         <ChatRoom
                             collapseNav={roomNav}
-                            participants={participants}
+                            participants={conversation?.participants}
                             type={conversation?.type}
                             loading={conversationLoading}
                             messages={conversation?.messages ?? []}

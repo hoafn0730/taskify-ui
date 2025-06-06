@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { useState, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
@@ -17,107 +18,105 @@ import Badge, { badgeClasses } from '@mui/material/Badge';
 import { Iconify } from '~/components/iconify';
 import { usePopover, CustomPopover } from '~/components/custom-popover';
 
-import { useMockedUser } from '~/auth/hooks';
-
 // ----------------------------------------------------------------------
 
 export function ChatNavAccount() {
-  const { user } = useMockedUser();
+    const { user } = useSelector((state) => state.user);
 
-  const popover = usePopover();
+    const popover = usePopover();
 
-  const [status, setStatus] = useState('online');
+    const [status, setStatus] = useState(user?.activityStatus || 'online');
 
-  const handleChangeStatus = useCallback((event) => {
-    setStatus(event.target.value);
-  }, []);
+    const handleChangeStatus = useCallback((event) => {
+        setStatus(event.target.value);
+    }, []);
 
-  return (
-    <>
-      <Badge variant={status} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-        <Avatar
-          src={user?.photoURL}
-          alt={user?.displayName}
-          onClick={popover.onOpen}
-          sx={{ cursor: 'pointer', width: 48, height: 48 }}
-        >
-          {user?.displayName?.charAt(0).toUpperCase()}
-        </Avatar>
-      </Badge>
+    return (
+        <>
+            <Badge variant={status} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                <Avatar
+                    src={user?.avatar}
+                    alt={user?.displayName}
+                    onClick={popover.onOpen}
+                    sx={{ cursor: 'pointer', width: 48, height: 48 }}
+                >
+                    {user?.displayName?.charAt(0).toUpperCase()}
+                </Avatar>
+            </Badge>
 
-      <CustomPopover
-        open={popover.open}
-        anchorEl={popover.anchorEl}
-        onClose={popover.onClose}
-        slotProps={{
-          paper: { sx: { p: 0 } },
-          arrow: { placement: 'top-left' },
-        }}
-      >
-        <Stack direction="row" alignItems="center" spacing={2} sx={{ py: 2, pr: 1, pl: 2 }}>
-          <ListItemText
-            primary={user?.displayName}
-            secondary={user?.email}
-            secondaryTypographyProps={{ component: 'span' }}
-          />
-
-          <Tooltip title="Log out">
-            <IconButton color="error">
-              <Iconify icon="ic:round-power-settings-new" />
-            </IconButton>
-          </Tooltip>
-        </Stack>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <MenuList sx={{ my: 0.5, px: 0.5 }}>
-          <MenuItem>
-            <Badge
-              variant={status}
-              sx={{
-                [`& .${badgeClasses.badge}`]: {
-                  m: 0.75,
-                  width: 12,
-                  height: 12,
-                  flexShrink: 0,
-                  position: 'static',
-                },
-              }}
-            />
-
-            <FormControl fullWidth>
-              <Select
-                native
-                fullWidth
-                value={status}
-                onChange={handleChangeStatus}
-                input={<InputBase />}
-                inputProps={{
-                  id: 'chat-status-select',
-                  sx: { textTransform: 'capitalize' },
+            <CustomPopover
+                open={popover.open}
+                anchorEl={popover.anchorEl}
+                onClose={popover.onClose}
+                slotProps={{
+                    paper: { sx: { p: 0 } },
+                    arrow: { placement: 'top-left' },
                 }}
-                sx={{ [`& .${svgIconClasses.root}`]: { right: 0 } }}
-              >
-                {['online', 'alway', 'busy', 'offline'].map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </Select>
-            </FormControl>
-          </MenuItem>
+            >
+                <Stack direction="row" alignItems="center" spacing={2} sx={{ py: 2, pr: 1, pl: 2 }}>
+                    <ListItemText
+                        primary={user?.displayName}
+                        secondary={user?.email}
+                        secondaryTypographyProps={{ component: 'span' }}
+                    />
 
-          <MenuItem>
-            <Iconify icon="solar:user-id-bold" width={24} />
-            Profile
-          </MenuItem>
+                    <Tooltip title="Log out">
+                        <IconButton color="error">
+                            <Iconify icon="ic:round-power-settings-new" />
+                        </IconButton>
+                    </Tooltip>
+                </Stack>
 
-          <MenuItem>
-            <Iconify icon="eva:settings-2-fill" width={24} />
-            Settings
-          </MenuItem>
-        </MenuList>
-      </CustomPopover>
-    </>
-  );
+                <Divider sx={{ borderStyle: 'dashed' }} />
+
+                <MenuList sx={{ my: 0.5, px: 0.5 }}>
+                    <MenuItem>
+                        <Badge
+                            variant={status}
+                            sx={{
+                                [`& .${badgeClasses.badge}`]: {
+                                    m: 0.75,
+                                    width: 12,
+                                    height: 12,
+                                    flexShrink: 0,
+                                    position: 'static',
+                                },
+                            }}
+                        />
+
+                        <FormControl fullWidth>
+                            <Select
+                                native
+                                fullWidth
+                                value={status}
+                                onChange={handleChangeStatus}
+                                input={<InputBase />}
+                                inputProps={{
+                                    id: 'chat-status-select',
+                                    sx: { textTransform: 'capitalize' },
+                                }}
+                                sx={{ [`& .${svgIconClasses.root}`]: { right: 0 } }}
+                            >
+                                {['online', 'alway', 'busy', 'offline'].map((option) => (
+                                    <option key={option} value={option}>
+                                        {option}
+                                    </option>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </MenuItem>
+
+                    <MenuItem>
+                        <Iconify icon="solar:user-id-bold" width={24} />
+                        Profile
+                    </MenuItem>
+
+                    <MenuItem>
+                        <Iconify icon="eva:settings-2-fill" width={24} />
+                        Settings
+                    </MenuItem>
+                </MenuList>
+            </CustomPopover>
+        </>
+    );
 }

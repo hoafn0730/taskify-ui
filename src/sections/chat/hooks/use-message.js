@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------------
 
 export function useMessage({ message, participants, currentUserId }) {
-    const sender = participants?.find((participant) => participant.id === message.senderId);
+    const sender = participants?.find((participant) => participant.userId === +message.senderId);
 
     const senderDetails =
         message.senderId === currentUserId

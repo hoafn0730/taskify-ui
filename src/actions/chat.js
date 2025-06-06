@@ -19,19 +19,20 @@ const swrOptions = {
 // ----------------------------------------------------------------------
 
 export function useGetContacts() {
-    const url = [CHART_ENDPOINT, { params: { endpoint: 'contacts' } }];
+    // const url = [CHART_ENDPOINT, { params: { endpoint: 'contacts' } }];
+    const url = import.meta.env.VITE_SERVER_BE_URL + '/api/v1/users/online';
 
-    const { data, isLoading, error, isValidating } = useSWR(url, fetcher, swrOptions);
+    const { data, isLoading, error, isValidating } = useSWR(url, fetcher1, swrOptions);
 
     const memoizedValue = useMemo(
         () => ({
-            contacts: data?.contacts || [],
+            contacts: data?.data || [],
             contactsLoading: isLoading,
             contactsError: error,
             contactsValidating: isValidating,
-            contactsEmpty: !isLoading && !data?.contacts.length,
+            contactsEmpty: !isLoading && !data?.data.length,
         }),
-        [data?.contacts, error, isLoading, isValidating],
+        [data?.data, error, isLoading, isValidating],
     );
 
     return memoizedValue;
@@ -85,17 +86,9 @@ export function useGetConversation(conversationId) {
 // ----------------------------------------------------------------------
 
 export async function sendMessage(conversationId, messageData) {
-    const conversationsUrl = [CHART_ENDPOINT, { params: { endpoint: 'conversations' } }];
+    const conversationsUrl = import.meta.env.VITE_SERVER_BE_URL + '/api/v1/conversations';
 
-    const conversationUrl = [CHART_ENDPOINT, { params: { conversationId, endpoint: 'conversation' } }];
-
-    /**
-     * Work on server
-     */
-    if (enableServer) {
-        const data = { conversationId, messageData };
-        await axios.put(CHART_ENDPOINT, data);
-    }
+    const conversationUrl = conversationsUrl + '/' + conversationId;
 
     /**
      * Work in local
@@ -103,14 +96,14 @@ export async function sendMessage(conversationId, messageData) {
     mutate(
         conversationUrl,
         (currentData) => {
-            const currentConversation = currentData.conversation;
+            const currentConversation = currentData.data;
 
             const conversation = {
                 ...currentConversation,
                 messages: [...currentConversation.messages, messageData],
             };
 
-            return { ...currentData, conversation };
+            return { ...currentData, data: conversation };
         },
         false,
     );
@@ -118,15 +111,15 @@ export async function sendMessage(conversationId, messageData) {
     mutate(
         conversationsUrl,
         (currentData) => {
-            const currentConversations = currentData.conversations;
+            const currentConversations = currentData.data;
 
             const conversations = currentConversations.map((conversation) =>
-                conversation.id === conversationId
+                conversation.id === +conversationId
                     ? { ...conversation, messages: [...conversation.messages, messageData] }
                     : conversation,
             );
 
-            return { ...currentData, conversations };
+            return { ...currentData, data: conversations };
         },
         false,
     );

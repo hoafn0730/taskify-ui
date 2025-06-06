@@ -34,12 +34,12 @@ export function ChatRoomGroup({ participants }) {
                 participants.map((participant) => (
                     <ListItemButton key={participant.id} onClick={() => handleOpen(participant)}>
                         <Badge variant={participant.status} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-                            <Avatar alt={participant.name} src={participant.avatarUrl} />
+                            <Avatar alt={participant.displayName} src={participant.avatar} />
                         </Badge>
 
                         <ListItemText
                             sx={{ ml: 2 }}
-                            primary={participant.name}
+                            primary={participant.displayName}
                             secondary={participant.role}
                             primaryTypographyProps={{ noWrap: true, typography: 'subtitle2' }}
                             secondaryTypographyProps={{ noWrap: true, component: 'span', typography: 'caption' }}

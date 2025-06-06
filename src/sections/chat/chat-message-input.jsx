@@ -1,4 +1,5 @@
 import { useRef, useMemo, useState, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
 import Stack from '@mui/material/Stack';
 import InputBase from '@mui/material/InputBase';
@@ -10,18 +11,20 @@ import { useRouter } from '~/routes/hooks';
 import { uuidv4 } from '~/utils/uuidv4';
 import { fSub, today } from '~/utils/format-time';
 
-import { sendMessage, createConversation } from '~/actions/chat';
+import { sendMessage } from '~/actions/chat';
 
 import { Iconify } from '~/components/iconify';
 
-import { useMockedUser } from '~/auth/hooks';
+import { useSocket } from '~/hooks/use-socket';
+import { conversationService } from '~/services/conversationService';
 
 // ----------------------------------------------------------------------
 
 export function ChatMessageInput({ disabled, recipients, onAddRecipients, selectedConversationId }) {
     const router = useRouter();
+    const { emit } = useSocket();
 
-    const { user } = useMockedUser();
+    const { user } = useSelector((state) => state.user);
 
     const fileRef = useRef(null);
 
@@ -29,13 +32,13 @@ export function ChatMessageInput({ disabled, recipients, onAddRecipients, select
 
     const myContact = useMemo(
         () => ({
-            id: `${user?.id}`,
+            id: user?.id,
             role: `${user?.role}`,
             email: `${user?.email}`,
             address: `${user?.address}`,
-            name: `${user?.displayName}`,
+            displayName: `${user?.displayName}`,
             lastActivity: today(),
-            avatarUrl: `${user?.photoURL}`,
+            avatar: `${user?.photoURL}`,
             phoneNumber: `${user?.phoneNumber}`,
             status: 'online',
         }),
@@ -46,7 +49,7 @@ export function ChatMessageInput({ disabled, recipients, onAddRecipients, select
         () => ({
             id: uuidv4(),
             attachments: [],
-            body: message,
+            content: message,
             contentType: 'text',
             createdAt: fSub({ minutes: 1 }),
             senderId: myContact.id,
@@ -56,10 +59,10 @@ export function ChatMessageInput({ disabled, recipients, onAddRecipients, select
 
     const conversationData = useMemo(
         () => ({
-            id: uuidv4(),
             messages: [messageData],
-            participants: [...recipients, myContact],
-            type: recipients.length > 1 ? 'GROUP' : 'ONE_TO_ONE',
+            participants: [...recipients.map((user) => user.id), myContact.id],
+            type: recipients.length > 1 ? 'group' : 'private',
+            title: recipients.map((user) => user.displayName).join(', '),
             unreadCount: 0,
         }),
         [messageData, myContact, recipients],
@@ -81,11 +84,17 @@ export function ChatMessageInput({ disabled, recipients, onAddRecipients, select
                 if (event.key === 'Enter') {
                     if (message) {
                         if (selectedConversationId) {
+                            emit('sendMessage', {
+                                conversationId: selectedConversationId,
+                                content: message.trim(),
+                                contentType: 'text',
+                            });
+
                             await sendMessage(selectedConversationId, messageData);
                         } else {
-                            const res = await createConversation(conversationData);
+                            const res = await conversationService.createConversation(conversationData);
 
-                            router.push(`${paths.dashboard.chat}?id=${res.conversation.id}`);
+                            router.push(`${paths.dashboard.chat}?id=${res.data.id}`);
 
                             onAddRecipients([]);
                         }
@@ -96,7 +105,7 @@ export function ChatMessageInput({ disabled, recipients, onAddRecipients, select
                 console.error(error);
             }
         },
-        [conversationData, message, messageData, onAddRecipients, router, selectedConversationId],
+        [conversationData, emit, message, messageData, onAddRecipients, router, selectedConversationId],
     );
 
     return (

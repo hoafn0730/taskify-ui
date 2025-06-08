@@ -79,11 +79,11 @@ function RowItem({ row }) {
     return (
         <>
             <TableRow>
-                <TableCell>{row.invoiceNumber}</TableCell>
+                <TableCell>{row.code}</TableCell>
 
-                <TableCell>{row.category}</TableCell>
+                <TableCell>{row?.category || 'Hoàn Trần'}</TableCell>
 
-                <TableCell>{fCurrency(row.price)}</TableCell>
+                <TableCell>{fCurrency(row.amount)}</TableCell>
 
                 <TableCell>
                     <Label

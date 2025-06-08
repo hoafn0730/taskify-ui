@@ -151,8 +151,6 @@ export function SocketProvider({ children, serverURL = 'http://localhost:5000' }
         off,
     };
 
-    console.log(value);
-
     return <SocketContext.Provider value={value}>{children}</SocketContext.Provider>;
 }
 

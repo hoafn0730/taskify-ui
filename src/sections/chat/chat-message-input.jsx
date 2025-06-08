@@ -125,15 +125,39 @@ export function ChatMessageInput({ disabled, recipients, onAddRecipients, select
                 }
                 endAdornment={
                     <Stack direction="row" sx={{ flexShrink: 0 }}>
-                        <IconButton onClick={handleAttach}>
-                            <Iconify icon="solar:gallery-add-bold" />
+                        <IconButton
+                            onClick={async () => {
+                                if (message) {
+                                    if (selectedConversationId) {
+                                        emit('sendMessage', {
+                                            conversationId: selectedConversationId,
+                                            content: message.trim(),
+                                            contentType: 'text',
+                                        });
+
+                                        await sendMessage(selectedConversationId, messageData);
+                                    } else {
+                                        const res = await conversationService.createConversation(conversationData);
+
+                                        router.push(`${paths.dashboard.chat}?id=${res.data.id}`);
+
+                                        onAddRecipients([]);
+                                    }
+                                }
+                                setMessage('');
+                            }}
+                        >
+                            <Iconify icon="solar:plain-bold" />
                         </IconButton>
-                        <IconButton onClick={handleAttach}>
+                        {/* <IconButton onClick={handleAttach}>
+                            <Iconify icon="solar:gallery-add-bold" />
+                        </IconButton> */}
+                        {/* <IconButton onClick={handleAttach}>
                             <Iconify icon="eva:attach-2-fill" />
                         </IconButton>
                         <IconButton>
                             <Iconify icon="solar:microphone-bold" />
-                        </IconButton>
+                        </IconButton> */}
                     </Stack>
                 }
                 sx={{

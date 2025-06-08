@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
@@ -9,8 +11,6 @@ import { _appAuthors, _appRelated, _appFeatured, _appInvoices, _appInstalled } f
 
 import { svgColorClasses } from '~/components/svg-color';
 
-import { useMockedUser } from '~/auth/hooks';
-
 import { AppWidget } from '../app-widget';
 import { AppWelcome } from '../app-welcome';
 import { AppFeatured } from '../app-featured';
@@ -21,13 +21,21 @@ import { AppAreaInstalled } from '../app-area-installed';
 import { AppWidgetSummary } from '../app-widget-summary';
 import { AppCurrentDownload } from '../app-current-download';
 import { AppTopInstalledCountries } from '../app-top-installed-countries';
+import { invoiceService } from '~/services/invoiceService';
+import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
 export function OverviewAppView() {
-    const { user } = useMockedUser();
+    const { user } = useSelector((state) => state.user);
+
+    const [invoices, setInvoices] = useState([]);
 
     const theme = useTheme();
+
+    useEffect(() => {
+        invoiceService.getInvoices().then((res) => setInvoices(res.data.data));
+    }, []);
 
     return (
         <DashboardContent maxWidth="xl">
@@ -35,7 +43,7 @@ export function OverviewAppView() {
                 <Grid xs={12} md={8}>
                     <AppWelcome
                         title={`Welcome back 👋 \n ${user?.displayName}`}
-                        description="If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything."
+                        description="Quản lý hiệu quả công việc và theo dõi tiến độ nhóm tại đây."
                         img={<SeoIllustration hideBackground />}
                         action={
                             <Button variant="contained" color="primary">
@@ -51,7 +59,7 @@ export function OverviewAppView() {
 
                 <Grid xs={12} md={4}>
                     <AppWidgetSummary
-                        title="Total active users"
+                        title="Tổng người dùng đang hoạt động"
                         percent={2.6}
                         total={18765}
                         chart={{
@@ -63,7 +71,7 @@ export function OverviewAppView() {
 
                 <Grid xs={12} md={4}>
                     <AppWidgetSummary
-                        title="Total installed"
+                        title="Tổng số lượt cài đặt"
                         percent={0.2}
                         total={4876}
                         chart={{
@@ -76,7 +84,7 @@ export function OverviewAppView() {
 
                 <Grid xs={12} md={4}>
                     <AppWidgetSummary
-                        title="Total downloads"
+                        title="Tổng lượt tải xuống"
                         percent={-0.1}
                         total={678}
                         chart={{
@@ -89,8 +97,8 @@ export function OverviewAppView() {
 
                 <Grid xs={12} md={6} lg={4}>
                     <AppCurrentDownload
-                        title="Current download"
-                        subheader="Downloaded by operating system"
+                        title="Lượt tải"
+                        // subheader="Downloaded by operating system"
                         chart={{
                             series: [
                                 { label: 'Mac', value: 12244 },
@@ -102,7 +110,7 @@ export function OverviewAppView() {
                     />
                 </Grid>
 
-                <Grid xs={12} md={6} lg={8}>
+                {/* <Grid xs={12} md={6} lg={8}>
                     <AppAreaInstalled
                         title="Area installed"
                         subheader="(+43%) than last year"
@@ -149,15 +157,15 @@ export function OverviewAppView() {
                             ],
                         }}
                     />
-                </Grid>
+                </Grid> */}
 
                 <Grid xs={12} lg={8}>
                     <AppNewInvoice
                         title="New invoice"
-                        tableData={_appInvoices}
+                        tableData={invoices}
                         headLabel={[
                             { id: 'id', label: 'Invoice ID' },
-                            { id: 'category', label: 'Category' },
+                            { id: 'user', label: 'User' },
                             { id: 'price', label: 'Price' },
                             { id: 'status', label: 'Status' },
                             { id: '' },
@@ -165,11 +173,11 @@ export function OverviewAppView() {
                     />
                 </Grid>
 
-                <Grid xs={12} md={6} lg={4}>
+                {/* <Grid xs={12} md={6} lg={4}>
                     <AppTopRelated title="Related applications" list={_appRelated} />
-                </Grid>
+                </Grid> */}
 
-                <Grid xs={12} md={6} lg={4}>
+                {/* <Grid xs={12} md={6} lg={4}>
                     <AppTopInstalledCountries title="Top installed countries" list={_appInstalled} />
                 </Grid>
 
@@ -197,7 +205,7 @@ export function OverviewAppView() {
                             sx={{ bgcolor: 'info.dark', [`& .${svgColorClasses.root}`]: { color: 'info.light' } }}
                         />
                     </Box>
-                </Grid>
+                </Grid> */}
             </Grid>
         </DashboardContent>
     );

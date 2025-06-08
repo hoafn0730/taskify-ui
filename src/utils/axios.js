@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'sonner';
 
 import { CONFIG } from '~/configs/config-global';
 
@@ -10,9 +11,9 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
     (response) => response?.data,
     (error) => {
-        // if (error?.response?.status !== 410) {
-        //     toast.error(error.response.data.message)
-        // }
+        if (error?.response?.status !== 410 || error?.response?.status !== 401) {
+            toast.error(error.response.data.message);
+        }
 
         return Promise.reject(error || 'Something went wrong!');
     },

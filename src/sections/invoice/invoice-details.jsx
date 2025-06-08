@@ -52,37 +52,37 @@ export function InvoiceDetails({ invoice }) {
                 </TableCell>
                 <TableCell width={120} sx={{ typography: 'subtitle2' }}>
                     <Box sx={{ mt: 2 }} />
-                    {fCurrency(invoice?.subtotal)}
+                    {fCurrency(invoice?.amount || 149000)}
                 </TableCell>
             </StyledTableRow>
 
-            <StyledTableRow>
+            {/* <StyledTableRow>
                 <TableCell colSpan={3} />
                 <TableCell sx={{ color: 'text.secondary' }}>Shipping</TableCell>
                 <TableCell width={120} sx={{ color: 'error.main', typography: 'body2' }}>
                     - {fCurrency(invoice?.shipping)}
                 </TableCell>
-            </StyledTableRow>
+            </StyledTableRow> */}
 
-            <StyledTableRow>
+            {/* <StyledTableRow>
                 <TableCell colSpan={3} />
                 <TableCell sx={{ color: 'text.secondary' }}>Discount</TableCell>
                 <TableCell width={120} sx={{ color: 'error.main', typography: 'body2' }}>
-                    - {fCurrency(invoice?.discount)}
+                    - {fCurrency(invoice?.discount) }|
                 </TableCell>
-            </StyledTableRow>
+            </StyledTableRow> */}
 
-            <StyledTableRow>
+            {/* <StyledTableRow>
                 <TableCell colSpan={3} />
                 <TableCell sx={{ color: 'text.secondary' }}>Taxes</TableCell>
                 <TableCell width={120}>{fCurrency(invoice?.taxes)}</TableCell>
-            </StyledTableRow>
+            </StyledTableRow> */}
 
             <StyledTableRow>
                 <TableCell colSpan={3} />
                 <TableCell sx={{ typography: 'subtitle1' }}>Total</TableCell>
                 <TableCell width={140} sx={{ typography: 'subtitle1' }}>
-                    {fCurrency(invoice?.totalAmount)}
+                    {fCurrency(invoice?.amount)}
                 </TableCell>
             </StyledTableRow>
         </>
@@ -126,27 +126,25 @@ export function InvoiceDetails({ invoice }) {
                 </TableHead>
 
                 <TableBody>
-                    {invoice?.items.map((row, index) => (
-                        <TableRow key={index}>
-                            <TableCell>{index + 1}</TableCell>
+                    <TableRow>
+                        <TableCell>{1}</TableCell>
 
-                            <TableCell>
-                                <Box sx={{ maxWidth: 560 }}>
-                                    <Typography variant="subtitle2">{row.title}</Typography>
+                        <TableCell>
+                            <Box sx={{ maxWidth: 560 }}>
+                                <Typography variant="subtitle2">{invoice?.code}</Typography>
 
-                                    <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                                        {row.description}
-                                    </Typography>
-                                </Box>
-                            </TableCell>
+                                {/* <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                                    {invoice?.code}
+                                </Typography> */}
+                            </Box>
+                        </TableCell>
 
-                            <TableCell>{row.quantity}</TableCell>
+                        <TableCell>{invoice?.quantity || 1}</TableCell>
 
-                            <TableCell align="right">{fCurrency(row.price)}</TableCell>
+                        <TableCell align="right">{fCurrency(invoice?.amount)}</TableCell>
 
-                            <TableCell align="right">{fCurrency(row.price * row.quantity)}</TableCell>
-                        </TableRow>
-                    ))}
+                        <TableCell align="right">{fCurrency(invoice?.amount)}</TableCell>
+                    </TableRow>
 
                     {renderTotal}
                 </TableBody>
@@ -158,7 +156,7 @@ export function InvoiceDetails({ invoice }) {
         <>
             <InvoiceToolbar
                 invoice={invoice}
-                currentStatus={currentStatus || ''}
+                currentStatus={currentStatus || invoice?.status}
                 onChangeStatus={handleChangeStatus}
                 statusOptions={INVOICE_STATUS_OPTIONS}
             />
@@ -192,31 +190,31 @@ export function InvoiceDetails({ invoice }) {
                         <Typography variant="subtitle2" sx={{ mb: 1 }}>
                             Invoice from
                         </Typography>
-                        {invoice?.invoiceFrom.name}
-                        <br />
+                        {invoice?.invoiceFrom?.name || 'Taskify'}
+                        {/* <br />
                         {invoice?.invoiceFrom.fullAddress}
                         <br />
                         Phone: {invoice?.invoiceFrom.phoneNumber}
-                        <br />
+                        <br /> */}
                     </Stack>
 
                     <Stack sx={{ typography: 'body2' }}>
                         <Typography variant="subtitle2" sx={{ mb: 1 }}>
                             Invoice to
                         </Typography>
-                        {invoice?.invoiceTo.name}
-                        <br />
+                        {invoice?.invoiceTo?.name || 'Hoàn Trần'}
+                        {/* <br />
                         {invoice?.invoiceTo.fullAddress}
                         <br />
                         Phone: {invoice?.invoiceTo.phoneNumber}
-                        <br />
+                        <br /> */}
                     </Stack>
 
                     <Stack sx={{ typography: 'body2' }}>
                         <Typography variant="subtitle2" sx={{ mb: 1 }}>
                             Date create
                         </Typography>
-                        {fDate(invoice?.createDate)}
+                        {fDate(invoice?.createdAt)}
                     </Stack>
 
                     <Stack sx={{ typography: 'body2' }}>

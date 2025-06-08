@@ -184,10 +184,10 @@ export function KanbanView() {
         newBoard.columns = orderedColumns;
         newBoard.columnOrderIds = dndOrderedColumnsIds;
 
-        dispatch(updateBoardData(newBoard));
-
         // fetch API update board
-        kanbanService.updateBoard(board.id, { columnOrderIds: orderedColumns.map((col) => col.uuid) });
+        kanbanService
+            .updateBoard(board.id, { columnOrderIds: orderedColumns.map((col) => col.uuid) })
+            .then(() => dispatch(updateBoardData(newBoard)));
     };
 
     const moveTaskInSameColumn = (updateTasks, orderedTasks, columnId) => {
@@ -199,9 +199,9 @@ export function KanbanView() {
         newColumn.cardOrderIds = dndOrderedTasksIds;
 
         // Cập nhật store với trạng thái mới sau khi kéo thả
-        dispatch(updateBoardData(newBoard));
-
-        kanbanService.updateColumn(columnId, { cardOrderIds: orderedTasks.map((task) => task.uuid) });
+        kanbanService
+            .updateColumn(columnId, { cardOrderIds: orderedTasks.map((task) => task.uuid) })
+            .then(() => dispatch(updateBoardData(newBoard)));
     };
 
     const moveTaskToDifferentColumn = (
@@ -219,16 +219,16 @@ export function KanbanView() {
             tasks: updateTasks,
         };
 
-        dispatch(updateBoardData(newBoard));
-
         // fetch API update board
-        kanbanService.moveCardToDifferentColumn(board.id, {
-            currentCardId,
-            prevColumnId,
-            prevCardOrderIds,
-            nextColumnId,
-            nextCardOrderIds,
-        });
+        kanbanService
+            .moveCardToDifferentColumn(board.id, {
+                currentCardId,
+                prevColumnId,
+                prevCardOrderIds,
+                nextColumnId,
+                nextCardOrderIds,
+            })
+            .then(() => dispatch(updateBoardData(newBoard)));
     };
 
     /**

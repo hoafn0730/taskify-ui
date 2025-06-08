@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -49,6 +49,7 @@ import { InvoiceAnalytic } from '../invoice-analytic';
 import { InvoiceTableRow } from '../invoice-table-row';
 import { InvoiceTableToolbar } from '../invoice-table-toolbar';
 import { InvoiceTableFiltersResult } from '../invoice-table-filters-result';
+import { invoiceService } from '~/services/invoiceService';
 
 // ----------------------------------------------------------------------
 
@@ -74,6 +75,10 @@ export function InvoiceListView() {
     const confirm = useBoolean();
 
     const [tableData, setTableData] = useState(_invoices);
+
+    useEffect(() => {
+        invoiceService.getInvoices().then((res) => setTableData(res.data.data));
+    }, []);
 
     const filters = useSetState({
         name: '',
@@ -203,16 +208,16 @@ export function InvoiceListView() {
                         { name: 'Invoice', href: paths.dashboard.invoice.root },
                         { name: 'List' },
                     ]}
-                    action={
-                        <Button
-                            component={RouterLink}
-                            href={paths.dashboard.invoice.new}
-                            variant="contained"
-                            startIcon={<Iconify icon="mingcute:add-line" />}
-                        >
-                            New invoice
-                        </Button>
-                    }
+                    // action={
+                    //     <Button
+                    //         component={RouterLink}
+                    //         href={paths.dashboard.invoice.new}
+                    //         variant="contained"
+                    //         startIcon={<Iconify icon="mingcute:add-line" />}
+                    //     >
+                    //         New invoice
+                    //     </Button>
+                    // }
                     sx={{ mb: { xs: 3, md: 5 } }}
                 />
 

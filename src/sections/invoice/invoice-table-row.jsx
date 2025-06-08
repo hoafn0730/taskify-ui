@@ -42,7 +42,7 @@ export function InvoiceTableRow({ row, selected, onSelectRow, onViewRow, onEditR
 
                 <TableCell>
                     <Stack spacing={2} direction="row" alignItems="center">
-                        <Avatar alt={row.invoiceTo.name}>{'Hoàn Trần'.charAt(0).toUpperCase()}</Avatar>
+                        <Avatar alt={'Hoàn Trần'}>{'Hoàn Trần'.charAt(0).toUpperCase()}</Avatar>
 
                         <ListItemText
                             disableTypography
@@ -59,7 +59,7 @@ export function InvoiceTableRow({ row, selected, onSelectRow, onViewRow, onEditR
                                     onClick={onViewRow}
                                     sx={{ color: 'text.disabled', cursor: 'pointer' }}
                                 >
-                                    {row.invoiceNumber}
+                                    {row.code}
                                 </Link>
                             }
                         />
@@ -68,8 +68,8 @@ export function InvoiceTableRow({ row, selected, onSelectRow, onViewRow, onEditR
 
                 <TableCell>
                     <ListItemText
-                        primary={fDate(new Date())} //row.createDate
-                        secondary={fTime(new Date())}
+                        primary={fDate(row.createdAt)}
+                        secondary={fTime(row.createdAt)}
                         primaryTypographyProps={{ typography: 'body2', noWrap: true }}
                         secondaryTypographyProps={{ mt: 0.5, component: 'span', typography: 'caption' }}
                     />
@@ -77,8 +77,8 @@ export function InvoiceTableRow({ row, selected, onSelectRow, onViewRow, onEditR
 
                 <TableCell>
                     <ListItemText
-                        primary={fDate(new Date())} //row.dueDate
-                        secondary={fTime(new Date())}
+                        primary={fDate(row.dueDate)} //row.dueDate
+                        secondary={fTime(row.dueDate)}
                         primaryTypographyProps={{ typography: 'body2', noWrap: true }}
                         secondaryTypographyProps={{ mt: 0.5, component: 'span', typography: 'caption' }}
                     />

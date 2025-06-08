@@ -12,11 +12,11 @@ export function InvoiceDetailsView({ invoice }) {
     return (
         <DashboardContent>
             <CustomBreadcrumbs
-                heading={invoice?.invoiceNumber}
+                heading={invoice?.code || 'Invoice'}
                 links={[
                     { name: 'Dashboard', href: paths.dashboard.root },
                     { name: 'Invoice', href: paths.dashboard.invoice.root },
-                    { name: invoice?.invoiceNumber },
+                    { name: invoice?.code || 'Invoice' },
                 ]}
                 sx={{ mb: { xs: 3, md: 5 } }}
             />

@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
+import Chip from '@mui/material/Chip';
 import { styled, useTheme } from '@mui/material/styles';
 import AvatarGroup, { avatarGroupClasses } from '@mui/material/AvatarGroup';
 
@@ -14,7 +15,6 @@ import { Iconify } from '~/components/iconify';
 import { imageClasses } from '~/components/image';
 
 import { kanbanClasses } from '../classes';
-import { Chip } from '@mui/material';
 
 export const StyledItemWrap = styled(ListItem)(() => ({
     '@keyframes fadeIn': { '0%': { opacity: 0 }, '100%': { opacity: 1 } },

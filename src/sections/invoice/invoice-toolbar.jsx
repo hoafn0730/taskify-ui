@@ -33,27 +33,27 @@ export function InvoiceToolbar({ invoice, currentStatus, statusOptions, onChange
         router.push(paths.dashboard.invoice.edit(`${invoice?.id}`));
     }, [invoice?.id, router]);
 
-    const renderDownload = (
-        <NoSsr>
-            <PDFDownloadLink
-                document={invoice ? <InvoicePDF invoice={invoice} currentStatus={currentStatus} /> : <span />}
-                fileName={invoice?.invoiceNumber}
-                style={{ textDecoration: 'none' }}
-            >
-                {({ loading }) => (
-                    <Tooltip title="Download">
-                        <IconButton>
-                            {loading ? (
-                                <CircularProgress size={24} color="inherit" />
-                            ) : (
-                                <Iconify icon="eva:cloud-download-fill" />
-                            )}
-                        </IconButton>
-                    </Tooltip>
-                )}
-            </PDFDownloadLink>
-        </NoSsr>
-    );
+    // const renderDownload = (
+    //     <NoSsr>
+    //         <PDFDownloadLink
+    //             document={invoice ? <InvoicePDF invoice={invoice} currentStatus={currentStatus} /> : <span />}
+    //             fileName={invoice?.code}
+    //             style={{ textDecoration: 'none' }}
+    //         >
+    //             {({ loading }) => (
+    //                 <Tooltip title="Download">
+    //                     <IconButton>
+    //                         {loading ? (
+    //                             <CircularProgress size={24} color="inherit" />
+    //                         ) : (
+    //                             <Iconify icon="eva:cloud-download-fill" />
+    //                         )}
+    //                     </IconButton>
+    //                 </Tooltip>
+    //             )}
+    //         </PDFDownloadLink>
+    //     </NoSsr>
+    // );
 
     return (
         <>
@@ -76,7 +76,7 @@ export function InvoiceToolbar({ invoice, currentStatus, statusOptions, onChange
                         </IconButton>
                     </Tooltip>
 
-                    {renderDownload}
+                    {/* {renderDownload} */}
 
                     <Tooltip title="Print">
                         <IconButton>
@@ -124,9 +124,11 @@ export function InvoiceToolbar({ invoice, currentStatus, statusOptions, onChange
                     </DialogActions>
 
                     <Box sx={{ flexGrow: 1, height: 1, overflow: 'hidden' }}>
-                        <PDFViewer width="100%" height="100%" style={{ border: 'none' }}>
-                            {invoice && <InvoicePDF invoice={invoice} currentStatus={currentStatus} />}
-                        </PDFViewer>
+                        {invoice && (
+                            <PDFViewer width="100%" height="100%" style={{ border: 'none' }}>
+                                <InvoicePDF invoice={invoice} currentStatus={currentStatus} />
+                            </PDFViewer>
+                        )}
                     </Box>
                 </Box>
             </Dialog>

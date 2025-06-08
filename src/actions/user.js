@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { useMemo } from 'react';
 
-import { fetcher, endpoints, fetcher1 } from '~/utils/axios';
+import { endpoints, fetcher1 } from '~/utils/axios';
 
 const swrOptions = {
     revalidateIfStale: false,

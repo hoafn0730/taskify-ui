@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import useSWR, { mutate } from 'swr';
 
 import { keyBy } from '~/utils/helper';
-import axios, { fetcher, endpoints, fetcher1 } from '~/utils/axios';
+import axios, { endpoints, fetcher1 } from '~/utils/axios';
 
 // ----------------------------------------------------------------------
 

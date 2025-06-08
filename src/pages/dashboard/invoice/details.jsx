@@ -6,6 +6,8 @@ import { CONFIG } from '~/configs/config-global';
 import { _invoices } from '~/_mock/_invoice';
 
 import { InvoiceDetailsView } from '~/sections/invoice/view';
+import { invoiceService } from '~/services/invoiceService';
+import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -13,8 +15,11 @@ const metadata = { title: `Invoice details | Dashboard - ${CONFIG.site.name}` };
 
 export default function Page() {
     const { id = '' } = useParams();
+    const [invoice, setInvoice] = useState();
 
-    const currentInvoice = _invoices.find((invoice) => invoice.id === id);
+    useEffect(() => {
+        invoiceService.getInvoice(id).then((res) => setInvoice(res.data));
+    }, [id]);
 
     return (
         <>
@@ -22,7 +27,7 @@ export default function Page() {
                 <title> {metadata.title}</title>
             </Helmet>
 
-            <InvoiceDetailsView invoice={currentInvoice} />
+            <InvoiceDetailsView invoice={invoice} />
         </>
     );
 }

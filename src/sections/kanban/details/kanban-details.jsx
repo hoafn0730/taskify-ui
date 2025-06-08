@@ -129,12 +129,13 @@ function KanbanDetails({ task, openDetails, onUpdateTask, onDeleteTask, onCloseD
                 });
 
                 column.cardOrderIds = tasksInColumn.map((t) => t.uuid);
-                kanbanService.updateColumn(column.id, {
-                    cardOrderIds: column.cardOrderIds,
-                });
-
                 newBoard.tasks[column.uuid] = tasksInColumn;
-                dispatch(updateBoardData(newBoard));
+
+                kanbanService
+                    .updateColumn(column.id, {
+                        cardOrderIds: column.cardOrderIds,
+                    })
+                    .then(() => dispatch(updateBoardData(newBoard)));
             }
 
             // Update the task via callback and local state

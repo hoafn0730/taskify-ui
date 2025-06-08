@@ -10,16 +10,23 @@ import DialogContent from '@mui/material/DialogContent';
 import Typography from '@mui/material/Typography';
 
 import { Image } from '~/components/image';
-import socket from '~/utils/socket';
 import { fNumber } from '~/utils/format-number';
 import { userService } from '~/services/userService';
+
+import io from 'socket.io-client';
+import { useRouter } from '~/routes/hooks';
 
 const ACC = '0975882405';
 const BANK = 'MBBank';
 
+const socket = io('http://localhost:5000', {
+    withCredentials: true,
+});
+
 export function QrCodeDialog({ currentPlan, onClose, ...other }) {
     const des = `Upgrade plan ${currentPlan.subscription}`;
     const amount = currentPlan.price;
+    const router = useRouter();
 
     useEffect(() => {
         const handleTransaction = async (data) => {
@@ -31,6 +38,8 @@ export function QrCodeDialog({ currentPlan, onClose, ...other }) {
             });
 
             onClose();
+
+            await setTimeout(() => router.push('/dashboard/summary'), 3000);
         };
 
         socket.on('transaction', handleTransaction);

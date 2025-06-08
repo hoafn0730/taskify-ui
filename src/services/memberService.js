@@ -10,15 +10,10 @@ const getMembers = (id, type) => {
     });
 };
 
-const updateMember = async (memberId, memberData) => {
-    const res = await axiosInstance.put(
-        `${import.meta.env.VITE_SERVER_BE_URL}${endpoints.admin.members}/${memberId}`,
-        memberData,
-        {
-            withCredentials: true,
-        },
-    );
-    return res.data;
+const updateMember = (memberData) => {
+    return axiosInstance.put(`${import.meta.env.VITE_SERVER_BE_URL}${endpoints.members}`, memberData, {
+        withCredentials: true,
+    });
 };
 
 const getInvoices = () => {

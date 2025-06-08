@@ -1,4 +1,4 @@
-import { z as zod } from 'zod';
+import { object, z as zod } from 'zod';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,6 +25,7 @@ const MemberQuickEditSchema = zod.object({
 });
 
 export function MemberQuickEditForm({ currentMember, open, onClose }) {
+    console.log('🚀 ~ MemberQuickEditForm ~ currentMember:', currentMember);
     const { mutateMembers } = useGetMembers();
     const defaultValues = useMemo(
         () => ({
@@ -46,8 +47,11 @@ export function MemberQuickEditForm({ currentMember, open, onClose }) {
     } = methods;
 
     const onSubmit = handleSubmit(async (data) => {
-        const promise = memberService.updateMember(currentMember.id, {
+        const promise = memberService.updateMember({
+            userId: currentMember.userId,
             active: data.status === 'active',
+            objectId: 1,
+            objectType: 'team',
         });
 
         try {

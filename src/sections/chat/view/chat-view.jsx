@@ -97,7 +97,10 @@ export function ChatView() {
                             loading={conversationLoading}
                         />
                     ) : (
-                        <ChatHeaderCompose contacts={contacts} onAddRecipients={handleAddRecipients} />
+                        <ChatHeaderCompose
+                            contacts={contacts.filter((c) => c.id !== user?.id)}
+                            onAddRecipients={handleAddRecipients}
+                        />
                     ),
                     nav: (
                         <ChatNav
